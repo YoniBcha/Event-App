@@ -67,7 +67,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   const designs = data?.eventType?.eventDesigns || [];
 
   return (
-    <div className="flex flex-col justify-center h-screen gap-4 items-center p-4">
+    <div className="flex flex-col justify-center gap-4 items-center p-4">
       <div className="text-primary font-bold text-2xl">Choose Designs</div>
 
       <button

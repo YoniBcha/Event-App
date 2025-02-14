@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { useRouter } from "next/navigation";
+
 const initializeUser = () => {
   if (typeof window !== "undefined") {
     const item = window?.localStorage.getItem("user-info");

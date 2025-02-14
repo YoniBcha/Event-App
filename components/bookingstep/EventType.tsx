@@ -42,7 +42,7 @@ const EventType = ({
   };
 
   return (
-    <div className="flex flex-col justify-center h-full gap-4 items-center">
+    <div className="flex flex-col justify-center gap-4 items-center">
       <div className="text-primary font-bold text-4xl">Event Type</div>
 
       {isLoading ? (
@@ -50,29 +50,29 @@ const EventType = ({
       ) : error ? (
         <div className="text-center text-red-500">Error: {error.message}</div>
       ) : (
-        <div className="w-full px-4">
+        <div className="w-[85%] px-4">
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={20}
-            slidesPerView={1} 
+            slidesPerView={1}
             pagination={{ type: "fraction", el: ".swiper-pagination" }}
             navigation={true}
             breakpoints={{
-              640: { slidesPerView: 3 }, 
-              1024: { slidesPerView: 4 }, 
+              640: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
             }}
           >
             {eventTypes.map((eventType: EventType) => (
               <SwiperSlide
                 key={eventType._id}
                 onClick={() => handleEventTypeSelect(eventType._id)}
-                className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
+                className={`flex flex-col items-center cursor-pointer px-1 py-2 rounded-lg transition-all duration-300 ${
                   selectedEventTypeId === eventType._id
-                    ? "border-4 border-primary scale-105"
+                    ? "border-2 border-primary scale-105"
                     : "border border-gray-300"
                 }`}
               >
-                <div className="relative w-full h-96">
+                <div className="relative w-full h-80">
                   <Image
                     src={eventType.image}
                     alt={eventType.nameOfEvent}
