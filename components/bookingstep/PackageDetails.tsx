@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useGetPackageDetailQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
 
 function PackageDetails({ packageId, onNextClick, onBack }) {
-  // Fetch package details using Redux Toolkit Query
   const {
     data: packageData,
     isLoading,
@@ -15,7 +14,6 @@ function PackageDetails({ packageId, onNextClick, onBack }) {
 
   const [selectedImage, setSelectedImage] = useState("");
 
-  // Set the default selected image when data is fetched
   React.useEffect(() => {
     if (packageData?.eventPackage?.image?.length > 0) {
       setSelectedImage(packageData.eventPackage.image[0]);
@@ -38,10 +36,9 @@ function PackageDetails({ packageId, onNextClick, onBack }) {
     setSelectedImage(imageUrl);
   };
 
-  // Handle the "Next" button click
   const handleNextClick = () => {
     if (onNextClick) {
-      onNextClick(packageId); // Send the packageId to the parent component
+      onNextClick(packageId);
     }
   };
 
@@ -51,7 +48,6 @@ function PackageDetails({ packageId, onNextClick, onBack }) {
         Package Details
       </div>
       <div className="flex flex-col md:flex-row bg-[#FDFDF9] w-full md:w-2/3 h-auto md:h-4/5 p-3 rounded-xl">
-        {/* Image Gallery Section */}
         <div className="flex flex-col w-full md:w-1/4 h-full">
           <div className="h-[50%] flex flex-col">
             <div className="h-full rounded bg-slate-500 flex items-center justify-center relative">
@@ -104,7 +100,6 @@ function PackageDetails({ packageId, onNextClick, onBack }) {
           </div>
         </div>
 
-        {/* Package Details Section */}
         <div className="w-full md:w-3/4 ml-0 md:ml-5 mt-5">
           <div className="mb-6">
             <h3 className="text-xl font-semibold">
@@ -124,7 +119,6 @@ function PackageDetails({ packageId, onNextClick, onBack }) {
         </div>
       </div>
 
-      {/* Navigation Buttons */}
       <div className="flex flex-row gap-5">
         <button
           onClick={onBack}
@@ -133,7 +127,7 @@ function PackageDetails({ packageId, onNextClick, onBack }) {
           &lt; Back
         </button>
         <button
-          onClick={handleNextClick} // Call handleNextClick when the button is clicked
+          onClick={handleNextClick}
           className="p-2 rounded-lg bg-primary text-gray-100 hover:bg-primary-dark transition-colors duration-200"
         >
           Next &gt;

@@ -38,7 +38,7 @@ function ChooseAdditional() {
       <div className="text-primary text-center font-bold text-4xl">
         Choose Additional
       </div>
-      <div className="flex flex-col justify-between h-[70vh] gap-4 items-center mt-5 md:mt-10">
+      <div className="flex flex-col justify-between gap-4 items-center mt-5 md:mt-10">
         <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-4 gap-5 w-full px-20">
           {packageAdditions.map((addition) => (
             <div
@@ -93,8 +93,17 @@ function ChooseAdditional() {
                         key={type._id}
                         className="flex items-center justify-between"
                       >
-                        <div className="text-primary text-sm">
-                          {type.typeName}
+                        <div className="flex items-center gap-2">
+                          <Image
+                            src={type.typePicture}
+                            width={20}
+                            height={20}
+                            alt={type.typeName}
+                            className="rounded-full"
+                          />
+                          <div className="text-primary text-sm">
+                            {type.typeName}
+                          </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <button
@@ -152,7 +161,7 @@ function ChooseAdditional() {
           ))}
         </div>
 
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-row gap-5 mt-2 md:mt-10">
           <div className="p-2 rounded-lg border border-primary text-primary">
             &lt; Back
           </div>
