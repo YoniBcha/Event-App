@@ -23,7 +23,7 @@ const RootPage = () => {
   const handleBookingData = (data: FormData) => {
     setBookingData(data);
     console.log("Booking Data:", data);
-    setCurrentStep(2); // Move to the next step (EventType)
+    setCurrentStep(2);
   };
 
   const handleEventTypeSelect = (eventTypeId: string) => {
@@ -35,15 +35,15 @@ const RootPage = () => {
     setSelectedDesignId(designId);
     console.log("Selected Design ID:", designId);
     if (designId) {
-      handleNext(); // Automatically move to the next step after selecting a design
+      handleNext();
     }
   };
 
   const handleNext = () => {
     if (currentStep === 2 && selectedEventTypeId) {
-      setCurrentStep(3); // Move to ChooseDesigns
+      setCurrentStep(3);
     } else if (currentStep === 3 && selectedDesignId) {
-      setCurrentStep(4); // Move to ChoosePackage
+      setCurrentStep(4);
     } else {
       console.error("No selection made.");
     }
@@ -51,7 +51,7 @@ const RootPage = () => {
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1); // Go back to the previous step
+      setCurrentStep(currentStep - 1);
     }
   };
 
@@ -76,11 +76,12 @@ const RootPage = () => {
             onBackClick={handleBack}
           />
         )}
-        {currentStep === 4 && selectedDesignId && (
+        {currentStep === 4 && selectedDesignId && bookingData && (
           <ChoosePackage
-            designId={selectedDesignId}
+            place={bookingData.place}
+            eventDesign={selectedDesignId}
+            eventType={selectedEventTypeId}
             onNext={() => {
-              // Handle the next step after ChoosePackage
               console.log("Proceeding to the next step after ChoosePackage");
             }}
             onBack={handleBack}
