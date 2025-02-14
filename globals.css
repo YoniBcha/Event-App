@@ -107,7 +107,7 @@ body::after {
       var(--primary) 15%,
       rgba(0, 0, 0, 0) 60%
     ),
-    radial-gradient(circle at 40% 40%, red 10%, rgba(0, 0, 0, 0) 70%);
+    radial-gradient(circle at 40% 40%, var(--primary) 10%, rgba(0, 0, 0, 0) 70%);
 }
 
 .bottom-right::before,
