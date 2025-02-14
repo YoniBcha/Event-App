@@ -64,6 +64,7 @@ function ChoosePackage({
 
   const handleCardClick = (packageId: string) => {
     setSelectedPackageId(packageId); // Set the selected package ID
+    onNext(packageId); // Immediately pass the selected package ID to the parent
   };
 
   const closeModal = () => {
@@ -73,14 +74,6 @@ function ChoosePackage({
 
   const toggleView = () => {
     setIsGridView(!isGridView);
-  };
-
-  const handleNextClick = () => {
-    if (selectedPackageId) {
-      onNext(selectedPackageId); // Send the selected package ID to the parent
-    } else {
-      alert("Please select a package before proceeding.");
-    }
   };
 
   if (isLoading) return <p>Loading packages...</p>;
@@ -223,7 +216,7 @@ function ChoosePackage({
           &lt; Back
         </button>
         <button
-          onClick={handleNextClick} // Use handleNextClick to send the selected package ID
+          onClick={() => onNext(selectedPackageId)} // Pass the selected package ID to the parent
           className="p-2 rounded-lg bg-primary text-gray-100 cursor-pointer"
         >
           Next &gt;

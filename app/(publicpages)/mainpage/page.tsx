@@ -5,6 +5,7 @@ import BookingPage from "@/components/bookingstep/BookingPage";
 import EventType from "@/components/bookingstep/EventType";
 import ChooseDesigns from "@/components/bookingstep/ChooseDesigns";
 import ChoosePackage from "@/components/bookingstep/ChoosePackage";
+import PackageDetails from "@/components/bookingstep/PackageDetails";
 
 interface FormData {
   city: string;
@@ -19,6 +20,9 @@ const RootPage = () => {
     null
   );
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
+  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
+    null
+  );
 
   const handleBookingData = (data: FormData) => {
     setBookingData(data);
@@ -39,11 +43,21 @@ const RootPage = () => {
     }
   };
 
+  const handlePackageSelect = (packageId: string | null) => {
+    setSelectedPackageId(packageId);
+    console.log("Selected Package ID:", packageId);
+    if (packageId) {
+      handleNext();
+    }
+  };
+
   const handleNext = () => {
     if (currentStep === 2 && selectedEventTypeId) {
       setCurrentStep(3);
     } else if (currentStep === 3 && selectedDesignId) {
       setCurrentStep(4);
+    } else if (currentStep === 4 && selectedPackageId) {
+      setCurrentStep(5);
     } else {
       console.error("No selection made.");
     }
@@ -81,9 +95,13 @@ const RootPage = () => {
             place={bookingData.place}
             eventDesign={selectedDesignId}
             eventType={selectedEventTypeId}
-            onNext={() => {
-              console.log("Proceeding to the next step after ChoosePackage");
-            }}
+            onNext={handlePackageSelect} // Pass the selected package ID to the parent
+            onBackClick={handleBack}
+          />
+        )}
+        {currentStep === 5 && selectedPackageId && (
+          <PackageDetails
+            packageId={selectedPackageId} // Pass the selected package ID to the PackageDetails component
             onBack={handleBack}
           />
         )}
