@@ -117,7 +117,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
       <form onSubmit={handleSubmit(onSubmit)} className="h-full">
         <section className="flex flex-col md:flex-row w-full h-full gap-5 px-5">
           <div className="flex justify-center items-center md:justify-end h-full w-full">
-            <div className="flex flex-col justify-center items-center h-[80%] w-full md:w-[60%] gap-5 rounded-2xl shadow-xl">
+            <div className="flex flex-col justify-center items-center h-full md:h-[80%] w-full md:w-[60%] gap-5 rounded-2xl shadow-xl">
               <div className="flex flex-col gap-5 relative w-[80%]">
                 <div className="">
                   <div
