@@ -28,6 +28,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <div className="bottom-left -z-10"></div>
+        <div className="bottom-right -z-10"></div>
         <Withstore>{children}</Withstore>
       </body>
     </html>
