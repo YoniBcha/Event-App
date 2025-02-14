@@ -3,6 +3,7 @@ import { authEndpoints } from "./authEndpoints";
 import { eventTypeEndpoints } from "./eventTypeEndpoint";
 import { chooseDesignsEndpoints } from "./chooseDesignsEndpoints";
 import { ChoosePackageEndpoints } from "./choosePackageEndpoints";
+import { themeEndpoints } from "./themeEndpoints";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -26,6 +27,7 @@ export const apiSlice = createApi({
     ...eventTypeEndpoints(builder),
     ...chooseDesignsEndpoints(builder),
     ...ChoosePackageEndpoints(builder),
+    ...themeEndpoints(builder),
   }),
   refetchOnMountOrArgChange: true,
   keepUnusedDataFor: 30,
@@ -39,4 +41,5 @@ export const {
   useGetEventTypesQuery,
   useGetChooseDesignsQuery,
   useGetPackageQuery,
+  useGetThemeColorQuery,
 } = apiSlice;

@@ -1,7 +1,7 @@
 export const ChoosePackageEndpoints = (builder) => ({
   getPackage: builder.query({
     query: () => ({
-      url: "event/getEventPackageAdditions",
+      url: "event/getEventPackage",
       method: "GET",
     }),
   }),
