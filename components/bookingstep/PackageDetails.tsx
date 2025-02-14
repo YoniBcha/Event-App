@@ -2,10 +2,9 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useGetPackageDetailQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
 
-function PackageDetails({ packageId }) {
+function PackageDetails({ packageId, onNextClick, onBack }) {
   // Fetch package details using Redux Toolkit Query
   const {
     data: packageData,
@@ -37,6 +36,13 @@ function PackageDetails({ packageId }) {
 
   const handleImageClick = (imageUrl) => {
     setSelectedImage(imageUrl);
+  };
+
+  // Handle the "Next" button click
+  const handleNextClick = () => {
+    if (onNextClick) {
+      onNextClick(packageId); // Send the packageId to the parent component
+    }
   };
 
   return (
@@ -120,14 +126,18 @@ function PackageDetails({ packageId }) {
 
       {/* Navigation Buttons */}
       <div className="flex flex-row gap-5">
-        <button className="p-2 rounded-lg border border-primary text-primary hover:bg-primary hover:text-gray-100 transition-colors duration-200">
+        <button
+          onClick={onBack}
+          className="p-2 rounded-lg border border-primary text-primary hover:bg-primary hover:text-gray-100 transition-colors duration-200"
+        >
           &lt; Back
         </button>
-        <Link href={"/chooseAdditional"}>
-          <button className="p-2 rounded-lg bg-primary text-gray-100 hover:bg-primary-dark transition-colors duration-200">
-            Next &gt;
-          </button>
-        </Link>
+        <button
+          onClick={handleNextClick} // Call handleNextClick when the button is clicked
+          className="p-2 rounded-lg bg-primary text-gray-100 hover:bg-primary-dark transition-colors duration-200"
+        >
+          Next &gt;
+        </button>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import EventType from "@/components/bookingstep/EventType";
 import ChooseDesigns from "@/components/bookingstep/ChooseDesigns";
 import ChoosePackage from "@/components/bookingstep/ChoosePackage";
 import PackageDetails from "@/components/bookingstep/PackageDetails";
+import ChooseAdditional from "@/components/bookingstep/ChooseAdditional";
 
 interface FormData {
   city: string;
@@ -49,6 +50,11 @@ const RootPage = () => {
     if (packageId) {
       handleNext();
     }
+  };
+
+  const handlePackageDetailsNext = (packageId: string) => {
+    console.log("Package ID from PackageDetails:", packageId);
+    setCurrentStep(6);
   };
 
   const handleNext = () => {
@@ -95,15 +101,19 @@ const RootPage = () => {
             place={bookingData.place}
             eventDesign={selectedDesignId}
             eventType={selectedEventTypeId}
-            onNext={handlePackageSelect} // Pass the selected package ID to the parent
+            onNext={handlePackageSelect}
             onBackClick={handleBack}
           />
         )}
         {currentStep === 5 && selectedPackageId && (
           <PackageDetails
-            packageId={selectedPackageId} // Pass the selected package ID to the PackageDetails component
+            packageId={selectedPackageId}
+            onNextClick={handlePackageDetailsNext}
             onBack={handleBack}
           />
+        )}
+        {currentStep === 6 && selectedPackageId && (
+          <ChooseAdditional packageId={selectedPackageId} onBack={handleBack} />
         )}
       </section>
     </main>

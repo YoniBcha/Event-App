@@ -4,7 +4,8 @@ import { eventTypeEndpoints } from "./eventTypeEndpoint";
 import { chooseDesignsEndpoints } from "./chooseDesignsEndpoints";
 import { ChoosePackageEndpoints } from "./choosePackageEndpoints";
 import { themeEndpoints } from "./themeEndpoints";
-import { packageDetail } from "./packageDetail"; // ✅ Import packageDetail
+import { packageDetail } from "./packageDetail";
+import { chooseAdditionalEndpoints } from "./chooseAdditionalEndpoints"; // ✅ Import chooseAdditionalEndpoints
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -29,7 +30,8 @@ export const apiSlice = createApi({
     ...chooseDesignsEndpoints(builder),
     ...ChoosePackageEndpoints(builder),
     ...themeEndpoints(builder),
-    ...packageDetail(builder), // ✅ Added packageDetail
+    ...packageDetail(builder),
+    ...chooseAdditionalEndpoints(builder), // ✅ Added chooseAdditionalEndpoints
   }),
   refetchOnMountOrArgChange: true,
   keepUnusedDataFor: 30,
@@ -39,10 +41,11 @@ export const {
   useLoginUserMutation,
   useRegisterUserMutation,
   useForgotPasswordMutation,
-  useVerifyCodeMutation, // ✅ Ensure this exists in authEndpoints
+  useVerifyCodeMutation,
   useGetEventTypesQuery,
   useGetChooseDesignsQuery,
   useGetPackageQuery,
   useGetThemeColorQuery,
-  useGetPackageDetailQuery, // ✅ Added package detail query
+  useGetPackageDetailQuery,
+  useGetAdditionalEndpointsQuery,
 } = apiSlice;
