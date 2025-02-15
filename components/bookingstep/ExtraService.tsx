@@ -40,6 +40,19 @@ interface Categories {
   };
 }
 
+interface Dj {
+  _id: string;
+  providerName: string;
+  profile: string;
+}
+
+interface Package {
+  _id: string;
+  packageName: string;
+  packageDescription: string;
+  packageLogo: string;
+}
+
 const ParentComponent: React.FC<{ extraServices: any[] }> = ({
   extraServices,
 }) => {
@@ -53,9 +66,9 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [showFinalPackages, setShowFinalPackages] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<string | null>(null);
-  const [djList, setDjList] = useState<any[]>([]);
-  const [selectedDj, setSelectedDj] = useState<any>(null);
-  const [djPackages, setDjPackages] = useState<any[]>([]);
+  const [djList, setDjList] = useState<Dj[]>([]);
+  const [selectedDj, setSelectedDj] = useState<Dj | null>(null);
+  const [djPackages, setDjPackages] = useState<Package[]>([]);
 
   const categories: Categories = extraServices.reduce((acc, service) => {
     acc[service.serviceName] = {
@@ -87,7 +100,7 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
     }
   };
 
-  const handleServiceProviderSelect = (category: string, provider: any) => {
+  const handleServiceProviderSelect = (category: string, provider: Dj) => {
     const updatedServiceProviders = { ...selectedServiceProviders };
     if (!updatedServiceProviders[category]) {
       updatedServiceProviders[category] = [];
@@ -234,42 +247,23 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
           </h2>
           <ul className="flex justify-center items-center gap-8">
             {djList.map((dj, index) => (
-              <div key={index} className="px-6 py-5 rounded-3xl shadow-lg">
+              <div
+                key={index}
+                className={`px-6 py-5 rounded-3xl shadow-lg cursor-pointer ${
+                  selectedServiceProviders[currentCategory]?.includes(
+                    dj.providerName
+                  )
+                    ? "border-b-2 border-primary"
+                    : ""
+                }`}
+                onClick={() => handleServiceProviderSelect(currentCategory, dj)}
+              >
                 <div className="relative h-36 w-36 rounded-full">
                   <Image src={dj.profile} alt="hj" fill objectFit="cover" />
                 </div>
-                <li className="flex items-center justify-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={dj._id}
-                    name="provider"
-                    value={dj.providerName}
-                    checked={
-                      selectedServiceProviders[currentCategory]?.includes(
-                        dj.providerName
-                      ) || false
-                    }
-                    onChange={() =>
-                      handleServiceProviderSelect(currentCategory, dj)
-                    }
-                  />
-                  <label
-                    htmlFor={dj._id}
-                    className="text-center mt-2 text-primary font-bold text-lg"
-                  >
-                    {dj.providerName}
-                  </label>
-                  {/* Update Profile Button */}
-                  <button
-                    onClick={() => {
-                      // Add functionality to update the profile
-                      console.log("Update profile for:", dj.providerName);
-                    }}
-                    className="text-sm text-blue-500 underline"
-                  >
-                    Update Profile
-                  </button>
-                </li>
+                <div className="text-center mt-2 text-primary font-bold text-lg">
+                  {dj.providerName}
+                </div>
               </div>
             ))}
           </ul>
@@ -300,13 +294,39 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
               Select Packages for {currentCategory}
             </h2>
             {selectedDj && (
-              <div>
-                <h3 className="text-center mt-2 text-primary font-bold text-lg">
-                  {selectedDj.providerName}
-                </h3>
-                <ul className="flex flex-col gap-3">
+              <div className="flex flex-col md:flex-row gap-5 mx-2 md:mx-14">
+                <div className="flex flex-col items-center justify-center w-[15%] h-[30%] bg-white rounded-3xl p-2">
+                  <div className="relative h-36 w-36 rounded-full">
+                    <Image
+                      src={selectedDj.profile}
+                      alt="hj"
+                      fill
+                      objectFit="cover"
+                    />
+                  </div>
+                  <h3 className="text-center mt-2 text-primary font-bold text-lg">
+                    {selectedDj.providerName}
+                  </h3>
+                </div>
+                <div className="grid grid-cols-1  md:grid-cols-2 w-[85%] gap-5">
                   {djPackages.map((pkg, index) => (
-                    <li key={index} className="flex items-center gap-2">
+                    <div
+                      key={index}
+                      className={`flex items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
+                        selectedPackages[currentCategory]?.[
+                          selectedDj.providerName
+                        ]?.includes(pkg.packageName)
+                          ? "border-b-2 border-primary"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        handlePackageSelect(
+                          currentCategory,
+                          selectedDj.providerName,
+                          pkg.packageName
+                        )
+                      }
+                    >
                       <div className="relative h-20 w-20">
                         <Image
                           src={pkg.packageLogo}
@@ -323,27 +343,9 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
                           {pkg.packageDescription}
                         </p>
                       </div>
-                      <input
-                        type="checkbox"
-                        id={pkg._id}
-                        name="package"
-                        value={pkg.packageName}
-                        checked={
-                          selectedPackages[currentCategory]?.[
-                            selectedDj.providerName
-                          ]?.includes(pkg.packageName) || false
-                        }
-                        onChange={() =>
-                          handlePackageSelect(
-                            currentCategory,
-                            selectedDj.providerName,
-                            pkg.packageName
-                          )
-                        }
-                      />
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
             <div className="flex gap-5 mt-5">
