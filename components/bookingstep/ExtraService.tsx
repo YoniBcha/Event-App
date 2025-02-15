@@ -161,7 +161,9 @@ const ParentComponent: React.FC = () => {
 
   return (
     <div className="w-full">
-      <h1 className="text-primary text-2xl text-center">Choose Extra Services</h1>
+      <h1 className="text-primary text-2xl text-center">
+        Choose Extra Services
+      </h1>
 
       {!showFinalPackages && currentStep === 0 && (
         <>
@@ -178,12 +180,23 @@ const ParentComponent: React.FC = () => {
               </div>
             ))}
           </div>
-          <button
-            onClick={handleNext}
-            disabled={selectedCategories.length === 0}
-          >
-            Next
-          </button>
+          <div className="flex justify-center items-center mt-5 md:mt-16 bg-primary w-20 md:w-28 mx-auto rounded-lg px-4">
+            <button
+              onClick={handleNext}
+              disabled={selectedCategories.length === 0}
+              className="flex items-center justify-between gap-2 bg-primary text-white py-2 w-full"
+            >
+              Next
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="20"
+                viewBox="0 0 20 20"
+              >
+                <path fill="#fff" d="M7 1L5.6 2.5L13 10l-7.4 7.5L7 19l9-9z" />
+              </svg>
+            </button>
+          </div>
         </>
       )}
 
