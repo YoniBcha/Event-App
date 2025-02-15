@@ -29,16 +29,10 @@ interface ExtraServiceData {
 const RootPage = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [bookingData, setBookingData] = useState<FormData | null>(null);
-  const [selectedEventTypeId, setSelectedEventTypeId] = useState<string | null>(
-    null
-  );
+  const [selectedEventTypeId, setSelectedEventTypeId] = useState<string | null>(null);
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
-  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
-    null
-  );
-  const [eventPackageAdditions, setEventPackageAdditions] = useState<
-    EventPackageAddition[]
-  >([]);
+  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null);
+  const [eventPackageAdditions, setEventPackageAdditions] = useState<EventPackageAddition[]>([]);
   const [extraServices, setExtraServices] = useState<ExtraServiceData[]>([]);
 
   const handleBookingData = (data: FormData) => {
@@ -73,12 +67,35 @@ const RootPage = () => {
     setCurrentStep(6); // Move to the "Choose Additional" step
   };
 
-  const handleAdditionalDataSubmit = (data: {
-    eventPackageAdditions: EventPackageAddition[];
-  }) => {
+  const handleAdditionalDataSubmit = (data: { eventPackageAdditions: EventPackageAddition[] }) => {
     setEventPackageAdditions(data.eventPackageAdditions);
     console.log("Event Package Additions:", data.eventPackageAdditions);
     setCurrentStep(7); // Move to the "Extra Service" step
+  };
+
+  // Define the function to handle extra service selection
+  const handleExtraServiceSelect = (data: {
+    selectedServices: string[];
+    djPackage?: string;
+    dancersPackage?: string;
+    organizerPackage?: string;
+  }) => {
+    console.log("Selected Extra Services:", data.selectedServices);
+    console.log("DJ Package:", data.djPackage);
+    console.log("Dancers Package:", data.dancersPackage);
+    console.log("Organizer Package:", data.organizerPackage);
+
+    // Update the state or perform any other action with the selected data
+    setExtraServices((prev) => [
+      ...prev,
+      {
+        servicesProvider_id: "example-id", // Replace with actual data
+        packageName: "example-package", // Replace with actual data
+      },
+    ]);
+
+    // Optionally, move to the next step
+    // setCurrentStep(8); // If there's a next step
   };
 
   const handleNext = () => {
@@ -102,9 +119,7 @@ const RootPage = () => {
   return (
     <main className="h-full w-full">
       <section className="h-full w-full">
-        {currentStep === 1 && (
-          <BookingPage setBookingPageData={handleBookingData} />
-        )}
+        {currentStep === 1 && <BookingPage setBookingPageData={handleBookingData} />}
         {currentStep === 2 && (
           <EventType
             bookingData={bookingData}
@@ -148,6 +163,7 @@ const RootPage = () => {
             eventPackageAdditions={eventPackageAdditions}
             extraServices={extraServices}
             onBack={handleBack}
+            onExtraServiceSelect={handleExtraServiceSelect} // Pass the function here
           />
         )}
       </section>
