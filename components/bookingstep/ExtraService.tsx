@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import DjList from "@/components/pages/DjList"; // Import the DjList component
 
 interface CategoryCardProps {
   imageSrc: string;
@@ -56,14 +57,8 @@ const ParentComponent: React.FC = () => {
       "DJ 3": ["DJ 3 Package 1", "DJ 3 Package 2"],
     },
     Dancers: {
-      "Dancer Group 1": [
-        "Dancer Group 1 Package 1",
-        "Dancer Group 1 Package 2",
-      ],
-      "Dancer Group 2": [
-        "Dancer Group 2 Package 1",
-        "Dancer Group 2 Package 2",
-      ],
+      "Dancer Group 1": ["Dancer Group 1 Package 1", "Dancer Group 1 Package 2"],
+      "Dancer Group 2": ["Dancer Group 2 Package 1", "Dancer Group 2 Package 2"],
     },
     Organizer: {
       "Organizer 1": ["Organizer 1 Package 1", "Organizer 1 Package 2"],
@@ -203,27 +198,15 @@ const ParentComponent: React.FC = () => {
       {!showFinalPackages && currentStep === 1 && currentCategory && (
         <div>
           <h2>Select {currentCategory}</h2>
-          <ul>
-            {Object.keys(categories[currentCategory]).map((provider, index) => (
-              <li key={index}>
-                <input
-                  type="checkbox"
-                  id={provider}
-                  name="provider"
-                  value={provider}
-                  checked={
-                    selectedServiceProviders[currentCategory]?.includes(
-                      provider
-                    ) || false
-                  }
-                  onChange={() =>
-                    handleServiceProviderSelect(currentCategory, provider)
-                  }
-                />
-                <label htmlFor={provider}>{provider}</label>
-              </li>
-            ))}
-          </ul>
+          <DjList
+            providers={Object.keys(categories[currentCategory])}
+            selectedProviders={
+              selectedServiceProviders[currentCategory] || []
+            }
+            onSelectProvider={(provider) =>
+              handleServiceProviderSelect(currentCategory, provider)
+            }
+          />
           <button onClick={handleBack}>Back</button>
           <button
             onClick={handleNext}
