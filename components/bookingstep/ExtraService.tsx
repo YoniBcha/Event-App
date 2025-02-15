@@ -54,6 +54,8 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
   const [showFinalPackages, setShowFinalPackages] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<string | null>(null);
   const [djList, setDjList] = useState<any[]>([]);
+  const [selectedDj, setSelectedDj] = useState<any>(null);
+  const [djPackages, setDjPackages] = useState<any[]>([]);
 
   const categories: Categories = extraServices.reduce((acc, service) => {
     acc[service.serviceName] = {
@@ -85,24 +87,39 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
     }
   };
 
-  const handleServiceProviderSelect = (category: string, provider: string) => {
+  const handleServiceProviderSelect = (category: string, provider: any) => {
     const updatedServiceProviders = { ...selectedServiceProviders };
     if (!updatedServiceProviders[category]) {
       updatedServiceProviders[category] = [];
     }
-    if (updatedServiceProviders[category].includes(provider)) {
+    if (updatedServiceProviders[category].includes(provider.providerName)) {
       updatedServiceProviders[category] = updatedServiceProviders[
         category
-      ].filter((p) => p !== provider);
+      ].filter((p) => p !== provider.providerName);
       const updatedPackages = { ...selectedPackages };
-      if (updatedPackages[category]?.[provider]) {
-        delete updatedPackages[category][provider];
+      if (updatedPackages[category]?.[provider.providerName]) {
+        delete updatedPackages[category][provider.providerName];
       }
       setSelectedPackages(updatedPackages);
     } else {
-      updatedServiceProviders[category].push(provider);
+      updatedServiceProviders[category].push(provider.providerName);
+      setSelectedDj(provider); // Set the selected DJ
+      fetchDjPackages(provider._id); // Fetch packages for the selected DJ
     }
     setSelectedServiceProviders(updatedServiceProviders);
+  };
+
+  const fetchDjPackages = (djId: string) => {
+    fetch(
+      `https://eventapp-back-cr86.onrender.com/api/v1/event/getSingleServiceProvider/${djId}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status) {
+          setDjPackages(data.data.packageList || []); // Update to use `data.data.packageList`
+        }
+      })
+      .catch((error) => console.error("Error fetching DJ packages:", error));
   };
 
   const handlePackageSelect = (
@@ -197,17 +214,21 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
               </div>
             ))}
           </div>
-          <button
-            onClick={handleNext}
-            disabled={selectedCategories.length === 0}
-          >
-            Next
-          </button>
+
+          <div className="flex justify-center items-center mt-5 md:mt-10">
+            <button
+              onClick={handleNext}
+              disabled={selectedCategories.length === 0}
+              className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+            >
+              Next
+            </button>
+          </div>
         </>
       )}
 
       {!showFinalPackages && currentStep === 1 && currentCategory && (
-        <div className="flex flex-col gap-5 justify-center items-center mt-5 md:mt-16">
+        <div className="flex flex-col gap-5 justify-center items-center mt-5 md:mt-10">
           <h2 className="text-center mt-2 text-primary font-bold text-lg">
             Select {currentCategory}
           </h2>
@@ -229,10 +250,7 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
                       ) || false
                     }
                     onChange={() =>
-                      handleServiceProviderSelect(
-                        currentCategory,
-                        dj.providerName
-                      )
+                      handleServiceProviderSelect(currentCategory, dj)
                     }
                   />
                   <label
@@ -241,6 +259,16 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
                   >
                     {dj.providerName}
                   </label>
+                  {/* Update Profile Button */}
+                  <button
+                    onClick={() => {
+                      // Add functionality to update the profile
+                      console.log("Update profile for:", dj.providerName);
+                    }}
+                    className="text-sm text-blue-500 underline"
+                  >
+                    Update Profile
+                  </button>
                 </li>
               </div>
             ))}
@@ -267,46 +295,80 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
         currentStep === 2 &&
         currentCategory &&
         selectedServiceProviders[currentCategory]?.length > 0 && (
-          <div>
-            <h2>Select Packages for {currentCategory}</h2>
-            {selectedServiceProviders[currentCategory].map((provider) => (
-              <div key={provider}>
-                <h3>{provider}</h3>
-                <ul>
-                  {categories[currentCategory][provider].map(
-                    (packageOption, index) => (
-                      <li key={index}>
-                        <input
-                          type="checkbox"
-                          id={packageOption}
-                          name="package"
-                          value={packageOption}
-                          checked={
-                            selectedPackages[currentCategory]?.[
-                              provider
-                            ]?.includes(packageOption) || false
-                          }
-                          onChange={() =>
-                            handlePackageSelect(
-                              currentCategory,
-                              provider,
-                              packageOption
-                            )
-                          }
+          <div className="flex flex-col gap-5 justify-center items-center mt-5 md:mt-10">
+            <h2 className="text-center mt-2 text-primary font-bold text-lg">
+              Select Packages for {currentCategory}
+            </h2>
+            {selectedDj && (
+              <div>
+                <h3 className="text-center mt-2 text-primary font-bold text-lg">
+                  {selectedDj.providerName}
+                </h3>
+                <ul className="flex flex-col gap-3">
+                  {djPackages.map((pkg, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                      <div className="relative h-20 w-20">
+                        <Image
+                          src={pkg.packageLogo}
+                          alt={pkg.packageName}
+                          fill
+                          objectFit="cover"
                         />
-                        <label htmlFor={packageOption}>{packageOption}</label>
-                      </li>
-                    )
-                  )}
+                      </div>
+                      <div>
+                        <p className="text-primary font-bold text-lg">
+                          {pkg.packageName}
+                        </p>
+                        <p className="text-primary text-sm">
+                          {pkg.packageDescription}
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        id={pkg._id}
+                        name="package"
+                        value={pkg.packageName}
+                        checked={
+                          selectedPackages[currentCategory]?.[
+                            selectedDj.providerName
+                          ]?.includes(pkg.packageName) || false
+                        }
+                        onChange={() =>
+                          handlePackageSelect(
+                            currentCategory,
+                            selectedDj.providerName,
+                            pkg.packageName
+                          )
+                        }
+                      />
+                    </li>
+                  ))}
                 </ul>
               </div>
-            ))}
-            <button onClick={handleBack}>Back</button>
-            {currentCategoryIndex < selectedCategories.length - 1 ? (
-              <button onClick={handleNext}>Next Category</button>
-            ) : (
-              <button onClick={() => setShowFinalPackages(true)}>Submit</button>
             )}
+            <div className="flex gap-5 mt-5">
+              <button
+                onClick={handleBack}
+                className="text-center mt-2 text-primary font-medium text-lg border border-primary rounded-lg px-6 py-1"
+              >
+                Back
+              </button>
+              {currentCategoryIndex < selectedCategories.length - 1 ? (
+                <button
+                  onClick={handleNext}
+                  className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+                >
+                  Next Category
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowFinalPackages(true)}
+                  className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+                >
+                  Submit
+                </button>
+              )}
+            </div>
           </div>
         )}
 
