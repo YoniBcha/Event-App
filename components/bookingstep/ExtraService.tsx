@@ -207,15 +207,17 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
       )}
 
       {!showFinalPackages && currentStep === 1 && currentCategory && (
-        <div className="flex flex-col justify-center items-center bg-red-500 mt-5 md:mt-16">
-          <h2>Select {currentCategory}</h2>
+        <div className="flex flex-col gap-5 justify-center items-center mt-5 md:mt-16">
+          <h2 className="text-center mt-2 text-primary font-bold text-lg">
+            Select {currentCategory}
+          </h2>
           <ul className="flex justify-center items-center gap-8">
             {djList.map((dj, index) => (
-              <div key={index} className="bg-green-500 px-6 py-5 rounded-3xl">
+              <div key={index} className="px-6 py-5 rounded-3xl shadow-lg">
                 <div className="relative h-36 w-36 rounded-full">
                   <Image src={dj.profile} alt="hj" fill objectFit="cover" />
                 </div>
-                <li className="flex gap-2">
+                <li className="flex items-center justify-center gap-2">
                   <input
                     type="checkbox"
                     id={dj._id}
@@ -233,14 +235,25 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
                       )
                     }
                   />
-                  <label htmlFor={dj._id}>{dj.providerName}</label>
+                  <label
+                    htmlFor={dj._id}
+                    className="text-center mt-2 text-primary font-bold text-lg"
+                  >
+                    {dj.providerName}
+                  </label>
                 </li>
               </div>
             ))}
           </ul>
-          <div className="flex">
-            <button onClick={handleBack}>Back</button>
+          <div className="flex gap-5 mt-5">
             <button
+              onClick={handleBack}
+              className="text-center mt-2 text-primary font-medium text-lg border border-primary rounded-lg px-6 py-1"
+            >
+              Back
+            </button>
+            <button
+              className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
               onClick={handleNext}
               disabled={!selectedServiceProviders[currentCategory]?.length}
             >
