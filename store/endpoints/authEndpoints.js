@@ -9,7 +9,7 @@ export const authEndpoints = (builder) => ({
 
   registerUser: builder.mutation({
     query: (userData) => ({
-      url: "register",
+      url: "user/register",
       method: "POST",
       body: userData,
     }),
@@ -23,11 +23,19 @@ export const authEndpoints = (builder) => ({
     }),
   }),
 
-  verifyCode: builder.mutation({
-    query: (codeData) => ({
-      url: "verify_code",
+  sendVerificationCode: builder.mutation({
+    query: (phoneNumber) => ({
+      url: "user/sendVerificationCode",
       method: "POST",
-      body: codeData,
+      body: { phoneNumber },
+    }),
+  }),
+
+  verifyUser: builder.mutation({
+    query: (data) => ({
+      url: "user/verifyUser",
+      method: "POST",
+      body: data, 
     }),
   }),
 });

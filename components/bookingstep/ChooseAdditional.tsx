@@ -2,12 +2,32 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useGetAdditionalEndpointsQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
 
-function ChooseAdditional() {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [quantities, setQuantities] = useState({});
+interface Addition {
+  _id: string;
+  additionName: string;
+  logo: string;
+  typeDetail: {
+    _id: string;
+    typeName: string;
+    typePicture: string;
+  }[];
+}
+
+interface EventPackageAddition {
+  additionId: string;
+  additionTypeName: string;
+  quantity: number;
+}
+
+interface ChooseAdditionalProps {
+  onSubmit: (data: { eventPackageAdditions: EventPackageAddition[] }) => void;
+}
+
+function ChooseAdditional({ onSubmit }: ChooseAdditionalProps) {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
 
   // Use the Redux Toolkit query hook to fetch data
   const { data, isLoading, isError } = useGetAdditionalEndpointsQuery();
@@ -16,21 +36,63 @@ function ChooseAdditional() {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
 
-  const packageAdditions = data?.packageAdditions || [];
+  const packageAdditions: Addition[] = data?.packageAdditions || [];
 
-  const handleCategoryClick = (category) => {
+  const handleCategoryClick = (category: string) => {
     setSelectedCategory(selectedCategory === category ? null : category);
   };
 
-  const handleQuantityChange = (category, type, delta) => {
+  const handleQuantityChange = (
+    category: string,
+    type: string,
+    delta: number
+  ) => {
     const key = `${category}-${type}`;
     const newQuantity = (quantities[key] || 0) + delta;
     setQuantities({ ...quantities, [key]: newQuantity < 0 ? 0 : newQuantity });
   };
 
-  const handleInputChange = (category, type, value) => {
+  const handleInputChange = (category: string, type: string, value: number) => {
     const key = `${category}-${type}`;
     setQuantities({ ...quantities, [key]: value < 0 ? 0 : value });
+  };
+
+  const handleNextClick = () => {
+    const eventPackageAdditions: EventPackageAddition[] = Object.keys(
+      quantities
+    )
+      .map((key) => {
+        const [additionName, typeName] = key.split("-");
+
+        // Find the addition by name
+        const addition = packageAdditions.find(
+          (addition) => addition.additionName === additionName
+        );
+
+        if (!addition) {
+          console.error(`Addition not found: ${additionName}`);
+          return null;
+        }
+
+        // Find the type by name
+        const type = addition.typeDetail.find(
+          (type) => type.typeName === typeName
+        );
+
+        if (!type) {
+          console.error(`Type not found: ${typeName}`);
+          return null;
+        }
+
+        return {
+          additionId: type._id, 
+          additionTypeName: typeName,
+          quantity: quantities[key],
+        };
+      })
+      .filter(Boolean) as EventPackageAddition[];
+
+    onSubmit({ eventPackageAdditions });
   };
 
   return (
@@ -165,12 +227,12 @@ function ChooseAdditional() {
           <div className="p-2 rounded-lg border border-primary text-primary">
             &lt; Back
           </div>
-          <Link href={"/extraService"}>
-            {" "}
-            <div className="p-2 rounded-lg bg-primary text-gray-100">
-              Next &gt;
-            </div>
-          </Link>
+          <div
+            className="p-2 rounded-lg bg-primary text-gray-100 cursor-pointer"
+            onClick={handleNextClick}
+          >
+            Next &gt;
+          </div>
         </div>
       </div>
     </>

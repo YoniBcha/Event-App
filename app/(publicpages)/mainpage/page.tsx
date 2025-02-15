@@ -7,11 +7,23 @@ import ChooseDesigns from "@/components/bookingstep/ChooseDesigns";
 import ChoosePackage from "@/components/bookingstep/ChoosePackage";
 import PackageDetails from "@/components/bookingstep/PackageDetails";
 import ChooseAdditional from "@/components/bookingstep/ChooseAdditional";
+import ExtraService from "@/components/bookingstep/ExtraService";
 
 interface FormData {
   city: string;
   place: string;
   date: Date | null;
+}
+
+interface EventPackageAddition {
+  additionId: string;
+  additionTypeName: string;
+  quantity: number;
+}
+
+interface ExtraServiceData {
+  servicesProvider_id: string;
+  packageName: string;
 }
 
 const RootPage = () => {
@@ -24,6 +36,10 @@ const RootPage = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
   );
+  const [eventPackageAdditions, setEventPackageAdditions] = useState<
+    EventPackageAddition[]
+  >([]);
+  const [extraServices, setExtraServices] = useState<ExtraServiceData[]>([]);
 
   const handleBookingData = (data: FormData) => {
     setBookingData(data);
@@ -54,7 +70,15 @@ const RootPage = () => {
 
   const handlePackageDetailsNext = (packageId: string) => {
     console.log("Package ID from PackageDetails:", packageId);
-    setCurrentStep(6);
+    setCurrentStep(6); // Move to the "Choose Additional" step
+  };
+
+  const handleAdditionalDataSubmit = (data: {
+    eventPackageAdditions: EventPackageAddition[];
+  }) => {
+    setEventPackageAdditions(data.eventPackageAdditions);
+    console.log("Event Package Additions:", data.eventPackageAdditions);
+    setCurrentStep(7); // Move to the "Extra Service" step
   };
 
   const handleNext = () => {
@@ -113,7 +137,18 @@ const RootPage = () => {
           />
         )}
         {currentStep === 6 && selectedPackageId && (
-          <ChooseAdditional packageId={selectedPackageId} onBack={handleBack} />
+          <ChooseAdditional
+            packageId={selectedPackageId}
+            onBack={handleBack}
+            onSubmit={handleAdditionalDataSubmit}
+          />
+        )}
+        {currentStep === 7 && (
+          <ExtraService
+            eventPackageAdditions={eventPackageAdditions}
+            extraServices={extraServices}
+            onBack={handleBack}
+          />
         )}
       </section>
     </main>
