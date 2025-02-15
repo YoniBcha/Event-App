@@ -10,7 +10,6 @@ function Profile() {
         <div className="max-md:flex max-md:justify-center ">
           <div className="rounded-full h-20 w-20 bg-slate-500 mb-2 sm:mb-0 sm:mr-4 flex items-center justify-center"></div>
         </div>
-        {/* Username input field */}
         <div className="flex flex-col flex-1 w-full  ">
           <div className="font-bold">userName</div>
           <div>
