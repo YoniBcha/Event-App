@@ -5,19 +5,22 @@ interface RootLayoutProps {
 }
 function layout({ children }: RootLayoutProps) {
   return (
-    <div className="flex w-full mb-10 flex-col md:flex-row gap-6  px-5">
-      <div className="hidden  md:block   flex-col md:gap-4 items-center ">
-        <div className=" flex px-6 w-full  flex-row gap-3 py-1  mb-6 rounded-lg bg-[#f7e2ce]  text-red-500 font-bold">
-          {" "}
-          <div className="w-1/4">🔎</div>
-          <div className="w-3/4">Profile</div>
-        </div>
-        <div className=" py-1 rounded bg-ter text-center text-black font-bold">
-          {" "}
-          Profile
+    <div className="flex w-full mb-10 gap-6 p-5">
+      <div className="w-[20%] flex-col items-center">
+        <div className="flex flex-col gap-5 bg-[#fbf4e8] rounded-sm m-4 px-5 py-3">
+          <div className="flex gap-3 py-1 px-2 rounded text-primary hover:bg-primary hover:text-white font-bold">
+            <div className="">🔎</div>
+            <div className="">Profile</div>
+          </div>
+          <div className="flex gap-3 py-1 px-2 rounded text-primary hover:bg-primary hover:text-white font-bold">
+            <div className="">🔎</div>
+            <div className=" py-1 rounded text-primary hover:bg-primary hover:text-white font-bold">
+              My Orders
+            </div>{" "}
+          </div>
         </div>
       </div>
-      <div className="md:w-3/4">{children}</div>
+      <div className="md:w-[80%]">{children}</div>
     </div>
   );
 }

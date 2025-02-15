@@ -7,7 +7,7 @@ import { themeEndpoints } from "./themeEndpoints";
 import { packageDetail } from "./packageDetail";
 import { chooseAdditionalEndpoints } from "./chooseAdditionalEndpoints";
 import { getExtraServiceEndpoint } from "./getExtraServiceEndpoint";
-import { contactUsEndpoints } from "./constactus"; // Import contactUsEndpoints
+import { contactUsEndpoints } from "./constactus";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -35,7 +35,7 @@ export const apiSlice = createApi({
     ...packageDetail(builder),
     ...chooseAdditionalEndpoints(builder),
     ...getExtraServiceEndpoint(builder),
-    ...contactUsEndpoints(builder), // Add contactUs endpoint
+    ...contactUsEndpoints(builder),
   }),
   refetchOnMountOrArgChange: true,
   keepUnusedDataFor: 30,
@@ -54,5 +54,8 @@ export const {
   useGetPackageDetailQuery,
   useGetAdditionalEndpointsQuery,
   useGetExtraServiceQuery,
-  useContactUsMutation, // Export mutation hook
+  useContactUsMutation,
+  useGetDancerQuery,
+  useGetOrganizerQuery,
+  useGetDjQuery,
 } = apiSlice;

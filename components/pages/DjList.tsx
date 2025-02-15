@@ -1,21 +1,19 @@
-"use client";
-
 import React, { useState } from "react";
 import Image from "next/image";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 
-interface ServiceCardProps {
+interface CategoryCardProps {
   imageSrc: string;
   altText: string;
-  serviceName: string;
+  category: string;
   isSelected: boolean;
   onClick: () => void;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({
+const CategoryCard: React.FC<CategoryCardProps> = ({
   imageSrc,
   altText,
-  serviceName,
+  category,
   isSelected,
   onClick,
 }) => {
@@ -29,155 +27,279 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       <div className="relative rounded-full h-28 w-28 bg-[#c2937b]">
         <Image src={imageSrc} layout="fill" objectFit="contain" alt={altText} />
       </div>
-      <div className="text-primary text-center font-bold mt-2">
-        {serviceName}
-      </div>
+      <div className="text-primary text-center font-bold mt-2">{category}</div>
     </div>
   );
 };
 
-interface ChooseExtraServiceProps {
-  onExtraServiceSelect: (data: {
-    selectedServices: string[];
-    djPackage?: string;
-    dancersPackage?: string;
-    organizerPackage?: string;
-  }) => void;
+interface ExtraService {
+  _id: string;
+  serviceName: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
-const ChooseExtraService: React.FC<ChooseExtraServiceProps> = ({
-  onExtraServiceSelect,
-}) => {
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [currentStep, setCurrentStep] = useState<
-    "services" | "dj" | "dancers" | "organizer"
-  >("services");
-  const [djPackage, setDjPackage] = useState<string | null>(null);
-  const [dancersPackage, setDancersPackage] = useState<string | null>(null);
-  const [organizerPackage, setOrganizerPackage] = useState<string | null>(null);
+interface ExtraServiceResponse {
+  status: boolean;
+  message: string;
+  extraServices: ExtraService[];
+}
 
-  const {
-    data: extraServicesResponse,
-    isLoading,
-    isError,
-  } = useGetExtraServiceQuery();
+const ParentComponent: React.FC = () => {
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedServiceProviders, setSelectedServiceProviders] = useState<{
+    [key: string]: string[];
+  }>({});
+  const [selectedPackages, setSelectedPackages] = useState<{
+    [key: string]: { [key: string]: string[] };
+  }>({});
+  const [currentStep, setCurrentStep] = useState(0);
+  const [showFinalPackages, setShowFinalPackages] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState<string | null>(null);
 
-  const handleCardClick = (id: string) => {
-    if (selectedServices.includes(id)) {
-      setSelectedServices((prev) =>
-        prev.filter((serviceId) => serviceId !== id)
+  const { data: extraServicesResponse, isLoading, isError } = useGetExtraServiceQuery();
+
+  const handleCategorySelect = (category: string) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(
+        selectedCategories.filter((cat) => cat !== category)
       );
+      const updatedServiceProviders = { ...selectedServiceProviders };
+      const updatedPackages = { ...selectedPackages };
+      delete updatedServiceProviders[category];
+      delete updatedPackages[category];
+      setSelectedServiceProviders(updatedServiceProviders);
+      setSelectedPackages(updatedPackages);
     } else {
-      setSelectedServices((prev) => [...prev, id]);
+      setSelectedCategories([...selectedCategories, category]);
     }
-    setCurrentStep(id as "dj" | "dancers" | "organizer"); // Set the current step based on the selected service
   };
 
-  const handleNextClick = () => {
-    console.log("Selected Services:", selectedServices);
-    console.log("Current Step:", currentStep);
-
-    if (selectedServices.length === 0) {
-      console.error("No services selected.");
-      return;
+  const handleServiceProviderSelect = (category: string, provider: string) => {
+    const updatedServiceProviders = { ...selectedServiceProviders };
+    if (!updatedServiceProviders[category]) {
+      updatedServiceProviders[category] = [];
     }
-
-    onExtraServiceSelect({
-      selectedServices,
-      djPackage: djPackage || undefined,
-      dancersPackage: dancersPackage || undefined,
-      organizerPackage: organizerPackage || undefined,
-    });
+    if (updatedServiceProviders[category].includes(provider)) {
+      updatedServiceProviders[category] = updatedServiceProviders[
+        category
+      ].filter((p) => p !== provider);
+      const updatedPackages = { ...selectedPackages };
+      if (updatedPackages[category]?.[provider]) {
+        delete updatedPackages[category][provider];
+      }
+      setSelectedPackages(updatedPackages);
+    } else {
+      updatedServiceProviders[category].push(provider);
+    }
+    setSelectedServiceProviders(updatedServiceProviders);
   };
 
-  const handleBackClick = () => {
-    setCurrentStep("services"); // Go back to services
+  const handlePackageSelect = (
+    category: string,
+    provider: string,
+    packageOption: string
+  ) => {
+    const updatedPackages = { ...selectedPackages };
+    if (!updatedPackages[category]) {
+      updatedPackages[category] = {};
+    }
+    if (!updatedPackages[category][provider]) {
+      updatedPackages[category][provider] = [];
+    }
+    if (updatedPackages[category][provider].includes(packageOption)) {
+      updatedPackages[category][provider] = updatedPackages[category][
+        provider
+      ].filter((pkg) => pkg !== packageOption);
+    } else {
+      updatedPackages[category][provider].push(packageOption);
+    }
+    setSelectedPackages(updatedPackages);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const handleNext = () => {
+    if (currentStep === 0) {
+      setCurrentCategory(selectedCategories[currentStep]);
+      setCurrentStep(1);
+    } else if (currentStep === 1) {
+      setCurrentStep(2);
+    } else if (currentStep === 2) {
+      if (currentCategoryIndex < selectedCategories.length - 1) {
+        setCurrentCategory(selectedCategories[currentCategoryIndex + 1]);
+        setCurrentStep(1);
+      } else {
+        setShowFinalPackages(true);
+      }
+    }
+  };
 
-  if (isError || !extraServicesResponse?.status) {
-    return <div>Error fetching extra services.</div>;
-  }
+  const handleBack = () => {
+    if (currentStep === 1) {
+      setCurrentStep(0);
+      setCurrentCategory(null);
+    } else if (currentStep === 2) {
+      setCurrentStep(1);
+    }
+  };
 
-  const services = extraServicesResponse.extraServices;
+  const currentCategoryIndex = selectedCategories.indexOf(
+    currentCategory || ""
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching data</div>;
+
+  const extraServices = extraServicesResponse?.extraServices || [];
 
   return (
-    <div className="">
- 
-      <div className="flex flex-row justify-center gap-5 mt-5 md:mt-10">
-        {services.map((service) => (
-          <ServiceCard
-            key={service._id}
-            imageSrc={service.image}
-            altText={service.serviceName}
-            serviceName={service.serviceName}
-            isSelected={selectedServices.includes(service._id)}
-            onClick={() => handleCardClick(service._id)}
-          />
-        ))}
-      </div>
+    <div className="w-full">
+      <h1 className="text-primary text-2xl text-center">
+        Choose Extra Services
+      </h1>
 
-      {currentStep === "dj" && (
-        <div className="mt-10">
-          <h2>Select DJ Package</h2>
-          <input
-            type="text"
-            placeholder="Select DJ Package"
-            value={djPackage || ""}
-            onChange={(e) => setDjPackage(e.target.value)}
-          />
-        </div>
+      {!showFinalPackages && currentStep === 0 && (
+        <>
+          <div className="flex items-center justify-center gap-10 mt-10">
+            {extraServices.map((service) => (
+              <div key={service._id} className="">
+                <CategoryCard
+                  imageSrc={service.image}
+                  altText={service.serviceName}
+                  category={service.serviceName}
+                  isSelected={selectedCategories.includes(service.serviceName)}
+                  onClick={() => handleCategorySelect(service.serviceName)}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-center items-center mt-5 md:mt-16 bg-primary w-20 md:w-28 mx-auto rounded-lg px-4">
+            <button
+              onClick={handleNext}
+              disabled={selectedCategories.length === 0}
+              className="flex items-center justify-between gap-2 bg-primary text-white py-2 w-full"
+            >
+              Next
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="20"
+                viewBox="0 0 20 20"
+              >
+                <path fill="#fff" d="M7 1L5.6 2.5L13 10l-7.4 7.5L7 19l9-9z" />
+              </svg>
+            </button>
+          </div>
+        </>
       )}
 
-      {currentStep === "dancers" && (
-        <div className="mt-10">
-          <h2>Select Dancers Package</h2>
-          <input
-            type="text"
-            placeholder="Select Dancers Package"
-            value={dancersPackage || ""}
-            onChange={(e) => setDancersPackage(e.target.value)}
-          />
-        </div>
-      )}
-
-      {currentStep === "organizer" && (
-        <div className="mt-10">
-          <h2>Select Organizer Package</h2>
-          <input
-            type="text"
-            placeholder="Select Organizer Package"
-            value={organizerPackage || ""}
-            onChange={(e) => setOrganizerPackage(e.target.value)}
-          />
-        </div>
-      )}
-
-      <div className="flex flex-row justify-center gap-5 mt-5 md:mt-10">
-        {currentStep !== "services" && (
-          <div
-            className="p-2 rounded-lg border border-primary text-primary cursor-pointer"
-            onClick={handleBackClick}
+      {!showFinalPackages && currentStep === 1 && currentCategory && (
+        <div>
+          <h2>Select {currentCategory}</h2>
+          <ul>
+            {Object.keys(categories[currentCategory]).map((provider, index) => (
+              <li key={index}>
+                <input
+                  type="checkbox"
+                  id={provider}
+                  name="provider"
+                  value={provider}
+                  checked={
+                    selectedServiceProviders[currentCategory]?.includes(
+                      provider
+                    ) || false
+                  }
+                  onChange={() =>
+                    handleServiceProviderSelect(currentCategory, provider)
+                  }
+                />
+                <label htmlFor={provider}>{provider}</label>
+              </li>
+            ))}
+          </ul>
+          <button onClick={handleBack}>Back</button>
+          <button
+            onClick={handleNext}
+            disabled={!selectedServiceProviders[currentCategory]?.length}
           >
-            &lt; Back
+            Next
+          </button>
+        </div>
+      )}
+
+      {!showFinalPackages &&
+        currentStep === 2 &&
+        currentCategory &&
+        selectedServiceProviders[currentCategory]?.length > 0 && (
+          <div>
+            <h2>Select Packages for {currentCategory}</h2>
+            {selectedServiceProviders[currentCategory].map((provider) => (
+              <div key={provider}>
+                <h3>{provider}</h3>
+                <ul>
+                  {categories[currentCategory][provider].map(
+                    (packageOption, index) => (
+                      <li key={index}>
+                        <input
+                          type="checkbox"
+                          id={packageOption}
+                          name="package"
+                          value={packageOption}
+                          checked={
+                            selectedPackages[currentCategory]?.[
+                              provider
+                            ]?.includes(packageOption) || false
+                          }
+                          onChange={() =>
+                            handlePackageSelect(
+                              currentCategory,
+                              provider,
+                              packageOption
+                            )
+                          }
+                        />
+                        <label htmlFor={packageOption}>{packageOption}</label>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+            ))}
+            <button onClick={handleBack}>Back</button>
+            {currentCategoryIndex < selectedCategories.length - 1 ? (
+              <button onClick={handleNext}>Next Category</button>
+            ) : (
+              <button onClick={() => setShowFinalPackages(true)}>Submit</button>
+            )}
           </div>
         )}
-        <div
-          className={`p-2 rounded-lg ${
-            selectedServices.length > 0
-              ? "bg-primary text-gray-100"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          }`}
-          onClick={handleNextClick}
-        >
-          {currentStep === "organizer" ? "Done" : "Next &gt;"}
+
+      {showFinalPackages && (
+        <div>
+          <h2>Final Selected Packages:</h2>
+          {selectedCategories.map((category) => (
+            <div key={category}>
+              <h3>{category} Packages:</h3>
+              {Object.keys(selectedPackages[category] || {}).map((provider) => (
+                <div key={provider}>
+                  <h4>{provider}:</h4>
+                  <ul>
+                    {selectedPackages[category][provider].map(
+                      (packageOption, index) => (
+                        <li key={index}>{packageOption}</li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ))}
+          <button onClick={() => setShowFinalPackages(false)}>Go Back</button>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
-export default ChooseExtraService;
+export default ParentComponent;

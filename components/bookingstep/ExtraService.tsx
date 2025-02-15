@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import DjList from "@/components/pages/DjList"; // Import the DjList component
+import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 
 interface CategoryCardProps {
   imageSrc: string;
@@ -38,7 +40,9 @@ interface Categories {
   };
 }
 
-const ParentComponent: React.FC = () => {
+const ParentComponent: React.FC<{ extraServices: any[] }> = ({
+  extraServices,
+}) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedServiceProviders, setSelectedServiceProviders] = useState<{
     [key: string]: string[];
@@ -49,23 +53,21 @@ const ParentComponent: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showFinalPackages, setShowFinalPackages] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<string | null>(null);
+  const [djList, setDjList] = useState<any[]>([]);
 
-  const categories: Categories = {
-    DJ: {
-      "DJ 1": ["DJ 1 Package 1", "DJ 1 Package 2"],
-      "DJ 2": ["DJ 2 Package 1", "DJ 2 Package 2"],
-      "DJ 3": ["DJ 3 Package 1", "DJ 3 Package 2"],
-    },
-    Dancers: {
-      "Dancer Group 1": ["Dancer Group 1 Package 1", "Dancer Group 1 Package 2"],
-      "Dancer Group 2": ["Dancer Group 2 Package 1", "Dancer Group 2 Package 2"],
-    },
-    Organizer: {
-      "Organizer 1": ["Organizer 1 Package 1", "Organizer 1 Package 2"],
-      "Organizer 2": ["Organizer 2 Package 1", "Organizer 2 Package 2"],
-      "Organizer 3": ["Organizer 3 Package 1", "Organizer 3 Package 2"],
-    },
-  };
+  const categories: Categories = extraServices.reduce((acc, service) => {
+    acc[service.serviceName] = {
+      [`${service.serviceName} 1`]: [
+        `${service.serviceName} 1 Package 1`,
+        `${service.serviceName} 1 Package 2`,
+      ],
+      [`${service.serviceName} 2`]: [
+        `${service.serviceName} 2 Package 1`,
+        `${service.serviceName} 2 Package 2`,
+      ],
+    };
+    return acc;
+  }, {} as Categories);
 
   const handleCategorySelect = (category: string) => {
     if (selectedCategories.includes(category)) {
@@ -154,6 +156,26 @@ const ParentComponent: React.FC = () => {
     currentCategory || ""
   );
 
+  useEffect(() => {
+    if (currentCategory) {
+      const categoryId = extraServices.find(
+        (service) => service.serviceName === currentCategory
+      )?._id;
+      if (categoryId) {
+        fetch(
+          `https://eventapp-back-cr86.onrender.com/api/v1/event/getExtraServiceProviders/${categoryId}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status) {
+              setDjList(data.servicesProviders);
+            }
+          })
+          .catch((error) => console.error("Error fetching DJ list:", error));
+      }
+    }
+  }, [currentCategory, extraServices]);
+
   return (
     <div className="w-full">
       <h1 className="text-primary text-2xl text-center">
@@ -163,57 +185,68 @@ const ParentComponent: React.FC = () => {
       {!showFinalPackages && currentStep === 0 && (
         <>
           <div className="flex items-center justify-center gap-10 mt-10">
-            {Object.keys(categories).map((category, index) => (
+            {extraServices.map((service, index) => (
               <div key={index} className="">
                 <CategoryCard
-                  imageSrc={`/images/${category.toLowerCase()}.jpg`}
-                  altText={category}
-                  category={category}
-                  isSelected={selectedCategories.includes(category)}
-                  onClick={() => handleCategorySelect(category)}
+                  imageSrc={service.image}
+                  altText={service.serviceName}
+                  category={service.serviceName}
+                  isSelected={selectedCategories.includes(service.serviceName)}
+                  onClick={() => handleCategorySelect(service.serviceName)}
                 />
               </div>
             ))}
           </div>
-          <div className="flex justify-center items-center mt-5 md:mt-16 bg-primary w-20 md:w-28 mx-auto rounded-lg px-4">
-            <button
-              onClick={handleNext}
-              disabled={selectedCategories.length === 0}
-              className="flex items-center justify-between gap-2 bg-primary text-white py-2 w-full"
-            >
-              Next
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="20"
-                viewBox="0 0 20 20"
-              >
-                <path fill="#fff" d="M7 1L5.6 2.5L13 10l-7.4 7.5L7 19l9-9z" />
-              </svg>
-            </button>
-          </div>
+          <button
+            onClick={handleNext}
+            disabled={selectedCategories.length === 0}
+          >
+            Next
+          </button>
         </>
       )}
 
       {!showFinalPackages && currentStep === 1 && currentCategory && (
-        <div>
+        <div className="flex flex-col justify-center items-center bg-red-500 mt-5 md:mt-16">
           <h2>Select {currentCategory}</h2>
-          <DjList
-            providers={Object.keys(categories[currentCategory])}
-            selectedProviders={
-              selectedServiceProviders[currentCategory] || []
-            }
-            onSelectProvider={(provider) =>
-              handleServiceProviderSelect(currentCategory, provider)
-            }
-          />
-          <button onClick={handleBack}>Back</button>
-          <button
-            onClick={handleNext}
-            disabled={!selectedServiceProviders[currentCategory]?.length}
-          >
-            Next
-          </button>
+          <ul className="flex justify-center items-center gap-8">
+            {djList.map((dj, index) => (
+              <div key={index} className="bg-green-500 px-6 py-5 rounded-3xl">
+                <div className="relative h-36 w-36 rounded-full">
+                  <Image src={dj.profile} alt="hj" fill objectFit="cover" />
+                </div>
+                <li className="flex gap-2">
+                  <input
+                    type="checkbox"
+                    id={dj._id}
+                    name="provider"
+                    value={dj.providerName}
+                    checked={
+                      selectedServiceProviders[currentCategory]?.includes(
+                        dj.providerName
+                      ) || false
+                    }
+                    onChange={() =>
+                      handleServiceProviderSelect(
+                        currentCategory,
+                        dj.providerName
+                      )
+                    }
+                  />
+                  <label htmlFor={dj._id}>{dj.providerName}</label>
+                </li>
+              </div>
+            ))}
+          </ul>
+          <div className="flex">
+            <button onClick={handleBack}>Back</button>
+            <button
+              onClick={handleNext}
+              disabled={!selectedServiceProviders[currentCategory]?.length}
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
 
@@ -291,4 +324,13 @@ const ParentComponent: React.FC = () => {
   );
 };
 
-export default ParentComponent;
+const ExtraServicesPage: React.FC = () => {
+  const { data, error, isLoading } = useGetExtraServiceQuery();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading extra services</div>;
+
+  return <ParentComponent extraServices={data?.extraServices || []} />;
+};
+
+export default ExtraServicesPage;
