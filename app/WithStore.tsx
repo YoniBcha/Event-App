@@ -14,11 +14,12 @@ interface WithStoreProps {
 const WithStore = ({ children }: WithStoreProps) => {
   return (
     <div className="h-screen flex flex-col">
-      <Header className="h-14" />
+      <Header />
       <Provider store={store}>{children}</Provider>
-      <Footer className="h-14" />
+      <Footer />
     </div>
   );
 };
+
 
 export default WithStore;

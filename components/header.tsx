@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -15,7 +16,7 @@ function Header() {
     setIsOpen(false);
   };
 
-  const switchLanguage = (lang) => {
+  const switchLanguage = (lang : any) => {
     setSelectedLang(lang);
   };
 

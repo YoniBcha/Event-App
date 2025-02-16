@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
 import Image from "next/image";
 import { useGetPackageDetailQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
 
-function PackageDetails({ packageId, onNextClick, onBack }) {
+function PackageDetails({ packageId, onNextClick, onBack } : {packageId : any, onNextClick : any, onBack : any}) {
   const {
     data: packageData,
     isLoading,
     isError,
     error,
-  } = useGetPackageDetailQuery(packageId);
+  } = useGetPackageDetailQuery<any>(packageId);
 
   const [selectedImage, setSelectedImage] = useState("");
 
@@ -32,7 +33,7 @@ function PackageDetails({ packageId, onNextClick, onBack }) {
     return <div>No package data found.</div>;
   }
 
-  const handleImageClick = (imageUrl) => {
+  const handleImageClick = (imageUrl : any) => {
     setSelectedImage(imageUrl);
   };
 
@@ -66,7 +67,7 @@ function PackageDetails({ packageId, onNextClick, onBack }) {
           </div>
 
           <div className="py-2 grid grid-cols-4 gap-2">
-            {packageData.eventPackage.image.map((imageUrl, index) => (
+            {packageData.eventPackage.image.map((imageUrl: any , index : any) => (
               <div
                 key={index}
                 className="rounded cursor-pointer overflow-hidden relative w-full h-12 md:h-6"
@@ -84,7 +85,7 @@ function PackageDetails({ packageId, onNextClick, onBack }) {
 
           {/* Additions Section */}
           <div className="h-14 grid grid-cols-2 gap-2 pt-1">
-            {packageData.eventPackage.additions.map((addition, index) => (
+            {packageData.eventPackage.additions.map((addition : any, index : any) => (
               <div key={index} className="flex items-center gap-5">
                 <Image
                   src={addition.additionId.logo}
