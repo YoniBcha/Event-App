@@ -30,7 +30,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     error?: unknown;
     isLoading: boolean;
   };
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
@@ -66,7 +66,6 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     onBackClick();
   };
 
-  if (isLoading) return <p>Loading designs...</p>;
   if (error) return <p>Failed to load designs</p>;
 
   const designs: Design[] = data?.eventType?.eventDesigns ?? [];
@@ -83,7 +82,11 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
       </button>
 
       <div className="w-full md:w-2/3 h-full overflow-y-auto">
-        {isGridView ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+          </div>
+        ) : isGridView ? (
           <Swiper
             slidesPerView={4}
             grid={{

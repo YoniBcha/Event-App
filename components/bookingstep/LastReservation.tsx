@@ -1,6 +1,14 @@
 import React from "react";
 
-const LastReservation: React.FC = () => {
+interface LastReservationProps {
+  onNext: (value: boolean) => void; // Callback to send `true` to the parent
+}
+
+const LastReservation: React.FC<LastReservationProps> = ({ onNext }) => {
+  const handleNextClick = () => {
+    onNext(true); // Send `true` to the parent when the "Next" button is clicked
+  };
+
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
@@ -10,7 +18,10 @@ const LastReservation: React.FC = () => {
           <br />
           Please complete your personal information to view the costs.
         </p>
-        <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+        <button
+          onClick={handleNextClick}
+          className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+        >
           Next
         </button>
       </div>

@@ -9,6 +9,7 @@ import PackageDetails from "@/components/bookingstep/PackageDetails";
 import ChooseAdditional from "@/components/bookingstep/ChooseAdditional";
 import ExtraService from "@/components/bookingstep/ExtraService";
 import LastReservation from "@/components/bookingstep/LastReservation";
+import PersonalDataComonents from "@/components/bookingstep/PersonalData";
 
 interface FormData {
   city: string;
@@ -27,8 +28,17 @@ interface ExtraServiceData {
   packageName: string;
 }
 
+interface PersonalData {
+  fullName: string;
+  mobileNumber: string;
+  secondMobileNumber?: string; // Optional field
+  favoriteColors: string; // Updated to match PersonalDataComonents
+  notes?: string; // Optional field
+}
+
 const RootPage = () => {
   const [extraServices, setExtraServices] = useState<ExtraServiceData[]>([]);
+  const [personalData, setPersonalData] = useState<PersonalData | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [bookingData, setBookingData] = useState<FormData>({
     city: "",
@@ -83,8 +93,24 @@ const RootPage = () => {
   };
 
   const handleExtraServiceSelect = (selectedService: ExtraServiceData) => {
-    setExtraServices((prev) => [...prev, selectedService]);
-    console.log("Updated Extra Services:", [...extraServices, selectedService]);
+    setExtraServices((prev) => {
+      const updatedServices = [...prev, selectedService];
+      console.log("Updated Extra Services:", updatedServices);
+      setCurrentStep(8);
+      return updatedServices;
+    });
+  };
+
+  const handleLastReservationNext = (value: boolean) => {
+    if (value) {
+      setCurrentStep(9); // Move to the "PersonalData" step
+    }
+  };
+
+  const handlePersonalDataSubmit = (data: PersonalData) => {
+    console.log("Received Personal Data:", data);
+    setPersonalData(data); // Store the personal data in the parent's state
+    setCurrentStep(10); // Move to the next step (if any)
   };
 
   const handleNext = () => {
@@ -164,7 +190,18 @@ const RootPage = () => {
             onExtraServiceSelect={handleExtraServiceSelect}
           />
         )}
-        {currentStep === 8 && <LastReservation />}
+        {currentStep === 8 && (
+          <LastReservation onNext={handleLastReservationNext} />
+        )}
+        {currentStep === 9 && (
+          <PersonalDataComonents onSubmit={handlePersonalDataSubmit} />
+        )}
+        {currentStep === 10 && personalData && (
+          <div>
+            <h2>Personal Data Submitted:</h2>
+            <pre>{JSON.stringify(personalData, null, 2)}</pre>
+          </div>
+        )}
       </section>
     </main>
   );

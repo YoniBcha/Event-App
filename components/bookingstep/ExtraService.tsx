@@ -183,7 +183,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
       })),
     };
     console.log("Selected Data:", selectedData);
-    onExtraServiceSelect(selectedData); // Send data back to the parent
+    onExtraServiceSelect(selectedData); // Pass the selected data to the parent
   };
 
   const currentCategoryIndex = selectedCategories.indexOf(
@@ -383,7 +383,7 @@ const ExtraServicesPage: React.FC<ExtraServiceProps> = ({
 
   const handleExtraServiceSelect = (selectedData: SelectedData) => {
     console.log("Selected Data from Child:", selectedData);
-    // Handle the selected data in the parent component
+    onExtraServiceSelect(selectedData);
   };
 
   if (isLoading) return <div>Loading...</div>;

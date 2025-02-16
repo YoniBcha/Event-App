@@ -71,7 +71,6 @@ interface FormData {
   date: Date | null;
 }
 
-
 interface BookingPageProps {
   setBookingPageData: (data: FormData) => void;
 }
@@ -96,9 +95,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   } = useForm<FormData>({
     resolver: yupResolver(validationSchema) as Resolver<FormData>, // Explicitly cast the resolver
   });
-  
-  
-  
+
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
     setValue("date", date);
@@ -106,8 +103,9 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   };
 
   const handleCityChange = (city: string) => {
-    setSelectedCity(city);
-    setValue("city", city);
+    setSelectedCity(city); // Set the selected city
+    setValue("city", city); // Update the form value
+    setShowCityDropdown(false); // Close the dropdown
   };
 
   const onSubmit = (data: FormData) => {

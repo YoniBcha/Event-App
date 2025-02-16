@@ -8,8 +8,7 @@
 // import { toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 // import { useRegisterUserMutation } from "@/store/endpoints/apiSlice";
-// import { useDispatch, useSelector } from "react-redux";
-// // import RootState from "@/store/authReducer";
+// import { useDispatch } from "react-redux";
 // import { authenticateUser } from "@/store/authReducer";
 
 // interface PasswordFormInputs {
@@ -34,6 +33,9 @@
 //   const [registerUser] = useRegisterUserMutation();
 //   const [loading, setLoading] = useState<boolean>(false);
 
+//   const [fullName, setFullName] = useState<string>("");
+//   const [phoneNumber, setPhoneNumber] = useState<string>("");
+
 //   const {
 //     register,
 //     handleSubmit,
@@ -55,12 +57,15 @@
 //       if (response?.data) {
 //         dispatch(authenticateUser(response.data));
 //         toast.success("Registration successful!");
-//         router.push("/dashboard"); // Redirect to the main page
+//         router.push("/dashboard"); 
 //       } else {
 //         throw new Error("Registration failed");
 //       }
 //     } catch (error) {
-//       toast.error(error?.data?.message || "Failed to register. Try again.");
+//       const errorMessage =
+//         (error as { data?: { message?: string } })?.data?.message ||
+//         "Failed to register. Try again.";
+//       toast.error(errorMessage);
 //     } finally {
 //       setLoading(false);
 //     }

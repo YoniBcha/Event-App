@@ -11,6 +11,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
+// Custom CSS for Swiper navigation and pagination
+import "./swiper-custom.css"; // Create this file for custom styles
+
 interface EventTypeData {
   _id: string;
   nameOfEvent: string;
@@ -55,7 +58,9 @@ const EventTypeComponent = ({
       <div className="text-primary font-bold text-4xl">Event Type</div>
 
       {isLoading ? (
-        <div className="text-center">Loading event types...</div>
+        <div className="flex justify-center items-center h-64">
+          <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+        </div>
       ) : error ? (
         <div className="text-center text-red-500">
           Error: {error instanceof Error ? error.message : "An error occurred"}

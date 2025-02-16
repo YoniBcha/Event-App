@@ -8,6 +8,7 @@ import { useGetPackageQuery } from "@/store/endpoints/apiSlice";
 import "swiper/css";
 import "swiper/css/grid";
 import "swiper/css/pagination";
+import "./swiper-custom.css"; // Import custom Swiper styles
 
 interface Package {
   _id: string;
@@ -64,7 +65,6 @@ function ChoosePackage({
 
   const handleCardClick = (packageId: string) => {
     setSelectedPackageId(packageId); // Set the selected package ID
-    onNext(packageId); // Immediately pass the selected package ID to the parent
   };
 
   const closeModal = () => {
@@ -76,7 +76,6 @@ function ChoosePackage({
     setIsGridView(!isGridView);
   };
 
-  if (isLoading) return <p>Loading packages...</p>;
   if (error) return <p>Failed to load packages</p>;
 
   const packages = (data as { eventPackages: Package[] })?.eventPackages || [];
@@ -93,7 +92,12 @@ function ChoosePackage({
       </button>
 
       <div className="w-full md:w-2/3 h-full overflow-y-auto">
-        {isGridView ? (
+        {isLoading ? (
+          // Loader for Swiper
+          <div className="flex justify-center items-center h-64">
+            <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+          </div>
+        ) : isGridView ? (
           <Swiper
             slidesPerView={4}
             grid={{
@@ -217,7 +221,12 @@ function ChoosePackage({
         </button>
         <button
           onClick={() => onNext(selectedPackageId)} // Pass the selected package ID to the parent
-          className="p-2 rounded-lg bg-primary text-gray-100 cursor-pointer"
+          className={`p-2 rounded-lg ${
+            selectedPackageId
+              ? "bg-primary text-gray-100 cursor-pointer"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+          disabled={!selectedPackageId} // Disable the button if no package is selected
         >
           Next &gt;
         </button>
