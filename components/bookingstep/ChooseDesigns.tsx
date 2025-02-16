@@ -25,7 +25,12 @@ interface ChooseDesignsProps {
 }
 
 function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
-  const { data, error, isLoading } = useGetChooseDesignsQuery(id);
+  const { data, error, isLoading } = useGetChooseDesignsQuery(id) as {
+    data?: { eventType?: { eventDesigns?: Design[] } };
+    error?: unknown;
+    isLoading: boolean;
+  };
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
@@ -64,7 +69,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   if (isLoading) return <p>Loading designs...</p>;
   if (error) return <p>Failed to load designs</p>;
 
-  const designs = data?.eventType?.eventDesigns || [];
+  const designs: Design[] = data?.eventType?.eventDesigns ?? [];
 
   return (
     <div className="flex flex-col justify-center gap-4 items-center p-4">

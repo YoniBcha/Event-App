@@ -2,16 +2,20 @@
 
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
 
-const validationSchema = yup.object().shape({
-  city: yup.string().required("Please select a city"),
-  place: yup.string().required("Please select a place"),
-  date: yup.date().required("Please select a date"),
+const validationSchema = yup.object({
+  city: yup.string().required("City is required"),
+  place: yup.string().required("Place is required"),
+  date: yup
+    .date()
+    .nullable()
+    .transform((value, originalValue) => (originalValue === "" ? null : value))
+    .required("Date is required"),
 });
 
 const saudiCities = [
@@ -67,10 +71,10 @@ interface FormData {
   date: Date | null;
 }
 
+
 interface BookingPageProps {
   setBookingPageData: (data: FormData) => void;
 }
-
 const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
   const [showPlaceDropdown, setShowPlaceDropdown] = useState<boolean>(false);
@@ -84,16 +88,17 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const filteredCities = sortedCities.filter((city) =>
     city.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
   const {
     handleSubmit,
     formState: { errors },
     setValue,
     control,
   } = useForm<FormData>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema) as Resolver<FormData>, // Explicitly cast the resolver
   });
-
+  
+  
+  
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
     setValue("date", date);

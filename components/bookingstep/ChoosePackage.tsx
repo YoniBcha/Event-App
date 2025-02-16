@@ -79,7 +79,7 @@ function ChoosePackage({
   if (isLoading) return <p>Loading packages...</p>;
   if (error) return <p>Failed to load packages</p>;
 
-  const packages = data?.eventPackages || [];
+  const packages = (data as { eventPackages: Package[] })?.eventPackages || [];
 
   return (
     <div className="flex flex-col justify-center gap-4 items-center p-4">

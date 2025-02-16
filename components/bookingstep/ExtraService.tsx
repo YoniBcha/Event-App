@@ -1,9 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 
+interface ExtraServiceProps {
+  extraServices: any;
+  onExtraServiceSelect: (selectedService: any) => void;
+}
 interface CategoryCardProps {
   imageSrc: string;
   altText: string;
@@ -47,12 +53,6 @@ interface Package {
   packageLogo: string;
 }
 
-interface ExtraService {
-  _id: string;
-  serviceName: string;
-  image: string;
-}
-
 interface SelectedData {
   extraServices: {
     servicesProvider_id: string;
@@ -61,13 +61,13 @@ interface SelectedData {
 }
 
 interface ParentComponentProps {
-  extraServices: ExtraService[];
-  onExtraServicesSelected: (selectedData: SelectedData) => void;
+  extraServices: any[];
+  onExtraServiceSelect: (selectedData: SelectedData) => void;
 }
 
 const ParentComponent: React.FC<ParentComponentProps> = ({
   extraServices,
-  onExtraServicesSelected,
+  onExtraServiceSelect,
 }) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedServiceProviders, setSelectedServiceProviders] = useState<{
@@ -106,12 +106,12 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     provider: ServiceProvider
   ) => {
     const updatedServiceProviders = { ...selectedServiceProviders };
-    if (updatedServiceProviders[category] === provider._id) {
+    if (updatedServiceProviders[category] === provider.providerName) {
       delete updatedServiceProviders[category];
       setSelectedProvider(null);
       setPackages([]);
     } else {
-      updatedServiceProviders[category] = provider._id; // Store provider ID instead of name
+      updatedServiceProviders[category] = provider.providerName;
       setSelectedProvider(provider);
       fetchPackages(provider._id);
     }
@@ -178,12 +178,12 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
   const handleDone = () => {
     const selectedData: SelectedData = {
       extraServices: selectedCategories.map((category) => ({
-        servicesProvider_id: selectedServiceProviders[category] || "",
+        servicesProvider_id: selectedProvider?._id || "",
         packageName: selectedPackages[category] || "",
       })),
     };
     console.log("Selected Data:", selectedData);
-    onExtraServicesSelected(selectedData); // Send data to parent
+    onExtraServiceSelect(selectedData); // Send data back to the parent
   };
 
   const currentCategoryIndex = selectedCategories.indexOf(
@@ -256,7 +256,8 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               <div
                 key={index}
                 className={`px-6 py-5 rounded-3xl shadow-lg cursor-pointer ${
-                  selectedServiceProviders[currentCategory] === provider._id
+                  selectedServiceProviders[currentCategory] ===
+                  provider.providerName
                     ? "border-b-2 border-primary"
                     : ""
                 }`}
@@ -374,12 +375,15 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
   );
 };
 
-const ExtraServicesPage: React.FC = () => {
-  const { data, error, isLoading } = useGetExtraServiceQuery({});
+const ExtraServicesPage: React.FC<ExtraServiceProps> = ({
+  extraServices,
+  onExtraServiceSelect,
+}) => {
+  const { data, error, isLoading } = useGetExtraServiceQuery<any>({});
 
-  const handleExtraServicesSelected = (selectedData: SelectedData) => {
-    console.log("Selected Data in Parent:", selectedData);
-    // You can now use the selectedData in the parent component as needed
+  const handleExtraServiceSelect = (selectedData: SelectedData) => {
+    console.log("Selected Data from Child:", selectedData);
+    // Handle the selected data in the parent component
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -388,7 +392,7 @@ const ExtraServicesPage: React.FC = () => {
   return (
     <ParentComponent
       extraServices={data?.extraServices || []}
-      onExtraServicesSelected={handleExtraServicesSelected}
+      onExtraServiceSelect={handleExtraServiceSelect}
     />
   );
 };

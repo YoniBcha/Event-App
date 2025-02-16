@@ -22,21 +22,32 @@ interface EventPackageAddition {
 }
 
 interface ChooseAdditionalProps {
+  packageId: string;
+  onBack: () => void;
   onSubmit: (data: { eventPackageAdditions: EventPackageAddition[] }) => void;
 }
+
+interface PackageAdditionsResponse {
+  packageAdditions: Addition[];
+}
+
 
 function ChooseAdditional({ onSubmit }: ChooseAdditionalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
 
-  // Use the Redux Toolkit query hook to fetch data
-  const { data, isLoading, isError } = useGetAdditionalEndpointsQuery();
+  const queryResult = useGetAdditionalEndpointsQuery({});
 
-  // Handle loading and error states
+  const { data, isLoading, isError } = queryResult as {
+    data?: PackageAdditionsResponse;
+    isLoading: boolean;
+    isError: boolean;
+  };
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
 
-  const packageAdditions: Addition[] = data?.packageAdditions || [];
+  const packageAdditions: Addition[] =
+  data && "packageAdditions" in data ? data.packageAdditions : [];
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(selectedCategory === category ? null : category);

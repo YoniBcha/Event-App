@@ -28,8 +28,13 @@ interface ExtraServiceData {
 }
 
 const RootPage = () => {
+  const [extraServices, setExtraServices] = useState<ExtraServiceData[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [bookingData, setBookingData] = useState<FormData | null>(null);
+  const [bookingData, setBookingData] = useState<FormData>({
+    city: "",
+    place: "",
+    date: null,
+  });
   const [selectedEventTypeId, setSelectedEventTypeId] = useState<string | null>(
     null
   );
@@ -37,10 +42,6 @@ const RootPage = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
   );
-  const [eventPackageAdditions, setEventPackageAdditions] = useState<
-    EventPackageAddition[]
-  >([]);
-  const [extraServices, setExtraServices] = useState<ExtraServiceData[]>([]);
 
   const handleBookingData = (data: FormData) => {
     setBookingData(data);
@@ -77,26 +78,34 @@ const RootPage = () => {
   const handleAdditionalDataSubmit = (data: {
     eventPackageAdditions: EventPackageAddition[];
   }) => {
-    setEventPackageAdditions(data.eventPackageAdditions);
     console.log("Event Package Additions:", data.eventPackageAdditions);
     setCurrentStep(7);
   };
 
-  const handleExtraServiceSelect = (data: ExtraServiceData[]) => {
-    setExtraServices(data); // Update the extra services state
-    console.log("Selected Extra Services:", data);
-    setCurrentStep(8);
+  const handleExtraServiceSelect = (selectedService: ExtraServiceData) => {
+    setExtraServices((prev) => [...prev, selectedService]);
+    console.log("Updated Extra Services:", [...extraServices, selectedService]);
   };
 
   const handleNext = () => {
-    if (currentStep === 2 && selectedEventTypeId) {
-      setCurrentStep(3);
-    } else if (currentStep === 3 && selectedDesignId) {
-      setCurrentStep(4);
-    } else if (currentStep === 4 && selectedPackageId) {
-      setCurrentStep(5);
-    } else {
-      console.error("No selection made.");
+    switch (currentStep) {
+      case 2:
+        if (selectedEventTypeId) {
+          setCurrentStep(3);
+        }
+        break;
+      case 3:
+        if (selectedDesignId) {
+          setCurrentStep(4);
+        }
+        break;
+      case 4:
+        if (selectedPackageId) {
+          setCurrentStep(5);
+        }
+        break;
+      default:
+        console.error("No selection made.");
     }
   };
 
@@ -114,7 +123,6 @@ const RootPage = () => {
         )}
         {currentStep === 2 && (
           <EventType
-            bookingData={bookingData}
             onEventTypeSelect={handleEventTypeSelect}
             onNext={handleNext}
             onBack={handleBack}
@@ -129,9 +137,9 @@ const RootPage = () => {
         )}
         {currentStep === 4 && selectedDesignId && bookingData && (
           <ChoosePackage
-            place={bookingData.place}
-            eventDesign={selectedDesignId}
-            eventType={selectedEventTypeId}
+            place={bookingData?.place ?? ""}
+            eventDesign={selectedDesignId ?? ""}
+            eventType={selectedEventTypeId ?? ""}
             onNext={handlePackageSelect}
             onBackClick={handleBack}
           />
@@ -145,29 +153,18 @@ const RootPage = () => {
         )}
         {currentStep === 6 && selectedPackageId && (
           <ChooseAdditional
-            packageId={selectedPackageId}
+            packageId={selectedPackageId ?? ""}
             onBack={handleBack}
             onSubmit={handleAdditionalDataSubmit}
           />
         )}
         {currentStep === 7 && (
           <ExtraService
-            eventPackageAdditions={eventPackageAdditions}
             extraServices={extraServices}
-            onBack={handleBack}
             onExtraServiceSelect={handleExtraServiceSelect}
           />
         )}
-        {currentStep === 8 && (
-          <LastReservation
-            bookingData={bookingData}
-            selectedEventTypeId={selectedEventTypeId}
-            selectedDesignId={selectedDesignId}
-            selectedPackageId={selectedPackageId}
-            eventPackageAdditions={eventPackageAdditions}
-            extraServices={extraServices}
-          />
-        )}
+        {currentStep === 8 && <LastReservation />}
       </section>
     </main>
   );

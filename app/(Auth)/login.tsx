@@ -6,16 +6,25 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useLoginUserMutation } from "@/store/endpoints/apiSlice";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { authenticateUser } from "@/store/authReducer";
 
-toast.configure(); // Ensure toast notifications work properly
-
 interface LoginFormInputs {
   phoneNumber: string;
   password: string;
+}
+
+interface LoginResponse {
+  data: {
+    id: string;
+    phoneNumber: string;
+    email_verified_at: string | null;
+    type: "User" | "Admin" | "Other";
+  };
+  message?: string;
+  status?: boolean;
 }
 
 const schema = yup.object({
@@ -32,7 +41,7 @@ const schema = yup.object({
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser] = useLoginUserMutation<LoginResponse>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const {
@@ -47,17 +56,18 @@ const Login: React.FC = () => {
   const handleLogin = async (data: LoginFormInputs) => {
     setLoading(true);
     try {
-      const response = await loginUser({
+      const response = (await loginUser({
         phoneNumber: data.phoneNumber,
         password: data.password,
-      }).unwrap();
-
+      }).unwrap()) as unknown as LoginResponse;
+      
+  
       if (response?.data) {
         const userData = response.data;
         dispatch(authenticateUser(userData));
-
+  
         toast.success("Login Successful! Welcome back.", { autoClose: 2000 });
-
+  
         if (!userData.email_verified_at) {
           router.push("/confirm-email");
         } else if (userData.type === "User") {
@@ -77,6 +87,7 @@ const Login: React.FC = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
@@ -128,6 +139,7 @@ const Login: React.FC = () => {
           <span>I agree to the Terms of Service</span>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
+
 import { useGetEventTypesQuery } from "@/store/endpoints/apiSlice";
 import { useState } from "react";
 
@@ -10,10 +11,14 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-interface EventType {
+interface EventTypeData {
   _id: string;
   nameOfEvent: string;
   image: string;
+}
+
+interface EventTypesResponse {
+  eventTypes: EventTypeData[];
 }
 
 interface EventTypeProps {
@@ -22,17 +27,23 @@ interface EventTypeProps {
   onBack: () => void;
 }
 
-const EventType = ({
+const EventTypeComponent = ({
   onEventTypeSelect,
   onNext,
   onBack,
 }: EventTypeProps) => {
-  const { data, error, isLoading } = useGetEventTypesQuery();
+  const { data, error, isLoading } = useGetEventTypesQuery({}) as {
+    data?: EventTypesResponse;
+    error?: unknown;
+    isLoading: boolean;
+  };
+
   const [selectedEventTypeId, setSelectedEventTypeId] = useState<string | null>(
     null
   );
 
-  const eventTypes = data?.eventTypes || [];
+  // ✅ Ensure data is properly typed
+  const eventTypes: EventTypeData[] = data?.eventTypes ?? [];
 
   const handleEventTypeSelect = (eventTypeId: string) => {
     setSelectedEventTypeId(eventTypeId);
@@ -46,7 +57,9 @@ const EventType = ({
       {isLoading ? (
         <div className="text-center">Loading event types...</div>
       ) : error ? (
-        <div className="text-center text-red-500">Error: {error.message}</div>
+        <div className="text-center text-red-500">
+          Error: {error instanceof Error ? error.message : "An error occurred"}
+        </div>
       ) : (
         <div className="w-[85%] px-4">
           <Swiper
@@ -60,7 +73,7 @@ const EventType = ({
               1024: { slidesPerView: 4 },
             }}
           >
-            {eventTypes.map((eventType: EventType) => (
+            {eventTypes.map((eventType) => (
               <SwiperSlide
                 key={eventType._id}
                 onClick={() => handleEventTypeSelect(eventType._id)}
@@ -111,4 +124,4 @@ const EventType = ({
   );
 };
 
-export default EventType;
+export default EventTypeComponent;
