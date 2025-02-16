@@ -5,11 +5,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useRegisterUserMutation } from "@/store/endpoints/apiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { authenticateUser } from "@/store/slices/authSlice";
+// import RootState from "@/store/authReducer";
+import { authenticateUser } from "@/store/authReducer";
 
 interface PasswordFormInputs {
   password: string;
@@ -32,11 +33,6 @@ const EnterPasswordPage: React.FC = () => {
   const router = useRouter();
   const [registerUser] = useRegisterUserMutation();
   const [loading, setLoading] = useState<boolean>(false);
-
-  // Get fullName & phoneNumber from Redux store (saved from Signup Page)
-  const { fullName, phoneNumber } = useSelector(
-    (state: RootState) => state.auth
-  );
 
   const {
     register,

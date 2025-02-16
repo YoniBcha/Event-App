@@ -1,9 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React from "react"; // No need to import useState
 
 function Profile() {
-  const [checked, setChecked] = useState(false);
-
   return (
     <div className="flex w-full gap-6  px-4 flex-col">
       <div className="flex flex-1 flex-col md:flex-row  gap-8 w-full items-center">

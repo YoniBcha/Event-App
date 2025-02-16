@@ -1,8 +1,18 @@
 import React from "react";
 
+// Define a type for the data rows
+interface RowData {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+  city: string;
+  profession: string;
+}
+
 const BulkTable2 = () => {
   // Declare bulk data directly inside the component
-  const data = Array.from({ length: 5 }, (_, index) => ({
+  const data: RowData[] = Array.from({ length: 5 }, (_, index) => ({
     id: index + 1,
     name: `User ${index + 1}`,
     email: `user${index + 1}@example.com`,
@@ -37,16 +47,16 @@ const BulkTable2 = () => {
         </thead>
         {/* Table Body */}
         <tbody>
-          {data.map((row: any, rowIndex: any) => (
+          {data.map((row: RowData, rowIndex: number) => (
             <tr key={rowIndex} className="border-b-2 border-[#EFE7DF]">
-              {headers.map((header: any, colIndex: any) => (
+              {headers.map((header, colIndex: number) => (
                 <td
                   key={colIndex}
                   className={`border-r whitespace-nowrap px-4 py-2 font-medium text-primary ${
                     header === "Email" ? "break-all" : ""
                   } md:px-6 md:py-4`}
                 >
-                  {row[header.toLowerCase()]}
+                  {row[header.toLowerCase() as keyof RowData]}
                 </td>
               ))}
             </tr>

@@ -6,9 +6,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useLoginUserMutation } from "@/store/endpoints/apiSlice";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
-import { authenticateUser } from "@/store/slices/authSlice";
+import { authenticateUser } from "@/store/authReducer";
+
+toast.configure(); // Ensure toast notifications work properly
 
 interface LoginFormInputs {
   phoneNumber: string;
@@ -53,7 +56,7 @@ const Login: React.FC = () => {
         const userData = response.data;
         dispatch(authenticateUser(userData));
 
-        toast.success("Login Successful! Welcome back.");
+        toast.success("Login Successful! Welcome back.", { autoClose: 2000 });
 
         if (!userData.email_verified_at) {
           router.push("/confirm-email");
@@ -65,8 +68,11 @@ const Login: React.FC = () => {
       } else {
         throw new Error("Invalid phone number or password");
       }
-    } catch (error: any) {
-      toast.error(error?.data?.message || "Login Failed. Please try again.");
+    } catch (error) {
+      const errorMessage =
+        (error as { data?: { message?: string } })?.data?.message ||
+        "Login Failed. Please try again.";
+      toast.error(errorMessage, { autoClose: 2000 });
     } finally {
       setLoading(false);
     }
@@ -75,8 +81,8 @@ const Login: React.FC = () => {
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
       <div className="w-96 text-center">
-        <div className="text-primary text-3xl font-extrabold">Login</div>
-        <div className="text-sm text-primary mb-9">Welcome Back!</div>
+        <h2 className="text-primary text-3xl font-extrabold">Login</h2>
+        <p className="text-sm text-primary mb-9">Welcome Back!</p>
 
         <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
           <div className="py-2 px-1 w-full bg-[#EEE7DF] rounded-xl mb-3">
@@ -84,7 +90,7 @@ const Login: React.FC = () => {
               type="text"
               placeholder="Enter your mobile number"
               {...register("phoneNumber")}
-              className="bg-transparent outline-none flex justify-start px-3 text-tertiary w-full"
+              className="bg-transparent outline-none px-3 text-tertiary w-full"
             />
           </div>
           {errors.phoneNumber && (
@@ -96,7 +102,7 @@ const Login: React.FC = () => {
               type="password"
               placeholder="Password"
               {...register("password")}
-              className="bg-transparent outline-none flex justify-start px-3 text-tertiary w-full"
+              className="bg-transparent outline-none px-3 text-tertiary w-full"
             />
           </div>
           {errors.password && (
@@ -105,17 +111,17 @@ const Login: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full bg-primary text-center rounded-xl py-2 text-gray-100 cursor-pointer"
+            className="w-full bg-primary text-center rounded-xl py-2 text-gray-100 cursor-pointer disabled:opacity-50"
             disabled={loading}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <div className="font-bold text-tertiary py-5">
+        <p className="font-bold text-tertiary py-5">
           Do You Have An Account?
           <span className="text-primary font-bold cursor-pointer"> Signup</span>
-        </div>
+        </p>
 
         <div className="flex items-center justify-center text-sm text-[#7c6d68]">
           <input type="checkbox" className="mr-2" />

@@ -1,8 +1,17 @@
 import React from "react";
 
-const BulkTable = () => {
+interface TableRow {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+  city: string;
+  profession: string;
+}
+
+const BulkTable: React.FC = () => {
   // Declare bulk data directly inside the component
-  const data = Array.from({ length: 5 }, (_, index) => ({
+  const data: TableRow[] = Array.from({ length: 5 }, (_, index) => ({
     id: index + 1,
     name: `User ${index + 1}`,
     email: `user${index + 1}@example.com`,
@@ -15,8 +24,15 @@ const BulkTable = () => {
     ], // Random profession
   }));
 
-  // Define headers directly inside the component
-  const headers = ["ID", "Name", "Email", "Age", "City", "Profession"];
+  // Define headers as tuples for better type safety
+  const headers: { key: keyof TableRow; label: string }[] = [
+    { key: "id", label: "ID" },
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "age", label: "Age" },
+    { key: "city", label: "City" },
+    { key: "profession", label: "Profession" },
+  ];
 
   return (
     <div className="overflow-x-auto">
@@ -25,28 +41,28 @@ const BulkTable = () => {
         {/* Table Head */}
         <thead className="bg-[#F3EFE7]">
           <tr>
-            {headers.map((header, index) => (
+            {headers.map(({ label }, index) => (
               <th
                 key={index}
                 className="border-b-2 border-r border-[#EFE7DF] px-4 py-3 font-medium md:px-6 md:py-4"
               >
-                {header}
+                {label}
               </th>
             ))}
           </tr>
         </thead>
         {/* Table Body */}
         <tbody>
-          {data.map((row: any, rowIndex) => (
+          {data.map((row, rowIndex) => (
             <tr key={rowIndex} className="border-b border-[#EFE7DF]">
-              {headers.map((header, colIndex) => (
+              {headers.map(({ key }, colIndex) => (
                 <td
                   key={colIndex}
                   className={`border-r border-[#EFE7DF] whitespace-nowrap px-4 py-2 font-medium text-primary ${
-                    header === "Email" ? "break-all" : ""
+                    key === "email" ? "break-all" : ""
                   } md:px-6 md:py-4`}
                 >
-                  {row[header.toLowerCase()]}
+                  {row[key]}
                 </td>
               ))}
             </tr>

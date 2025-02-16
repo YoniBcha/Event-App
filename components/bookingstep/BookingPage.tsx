@@ -86,7 +86,6 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   );
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     setValue,

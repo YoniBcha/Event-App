@@ -17,14 +17,12 @@ interface EventType {
 }
 
 interface EventTypeProps {
-  bookingData: any;
   onEventTypeSelect: (eventTypeId: string) => void;
   onNext: (selectedEventTypeId: string | null) => void;
   onBack: () => void;
 }
 
 const EventType = ({
-  bookingData,
   onEventTypeSelect,
   onNext,
   onBack,

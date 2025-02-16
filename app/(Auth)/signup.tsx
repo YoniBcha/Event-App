@@ -5,8 +5,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
-import { useSendVerificationCodeMutation } from "@/store/endpoints/apiSlice"; // ✅ Import sendVerificationCode
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useSendVerificationCodeMutation } from "@/store/endpoints/apiSlice"; 
 
 const schema = yup.object({
   name: yup.string().required("Name is required"),

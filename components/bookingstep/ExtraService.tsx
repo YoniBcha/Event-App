@@ -34,13 +34,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   );
 };
 
-interface Categories {
-  [key: string]: {
-    [key: string]: string[];
-  };
-}
-
-interface Dj {
+interface ServiceProvider {
   _id: string;
   providerName: string;
   profile: string;
@@ -53,36 +47,43 @@ interface Package {
   packageLogo: string;
 }
 
-const ParentComponent: React.FC<{ extraServices: any[] }> = ({
+interface ExtraService {
+  _id: string;
+  serviceName: string;
+  image: string;
+}
+
+interface SelectedData {
+  extraServices: {
+    servicesProvider_id: string;
+    packageName: string;
+  }[];
+}
+
+interface ParentComponentProps {
+  extraServices: ExtraService[];
+  onExtraServicesSelected: (selectedData: SelectedData) => void;
+}
+
+const ParentComponent: React.FC<ParentComponentProps> = ({
   extraServices,
+  onExtraServicesSelected,
 }) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedServiceProviders, setSelectedServiceProviders] = useState<{
-    [key: string]: string[];
+    [key: string]: string;
   }>({});
   const [selectedPackages, setSelectedPackages] = useState<{
-    [key: string]: { [key: string]: string[] };
+    [key: string]: string;
   }>({});
   const [currentStep, setCurrentStep] = useState(0);
-  const [showFinalPackages, setShowFinalPackages] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<string | null>(null);
-  const [djList, setDjList] = useState<Dj[]>([]);
-  const [selectedDj, setSelectedDj] = useState<Dj | null>(null);
-  const [djPackages, setDjPackages] = useState<Package[]>([]);
-
-  const categories: Categories = extraServices.reduce((acc, service) => {
-    acc[service.serviceName] = {
-      [`${service.serviceName} 1`]: [
-        `${service.serviceName} 1 Package 1`,
-        `${service.serviceName} 1 Package 2`,
-      ],
-      [`${service.serviceName} 2`]: [
-        `${service.serviceName} 2 Package 1`,
-        `${service.serviceName} 2 Package 2`,
-      ],
-    };
-    return acc;
-  }, {} as Categories);
+  const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>(
+    []
+  );
+  const [selectedProvider, setSelectedProvider] =
+    useState<ServiceProvider | null>(null);
+  const [packages, setPackages] = useState<Package[]>([]);
 
   const handleCategorySelect = (category: string) => {
     if (selectedCategories.includes(category)) {
@@ -100,59 +101,42 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
     }
   };
 
-  const handleServiceProviderSelect = (category: string, provider: Dj) => {
+  const handleServiceProviderSelect = (
+    category: string,
+    provider: ServiceProvider
+  ) => {
     const updatedServiceProviders = { ...selectedServiceProviders };
-    if (!updatedServiceProviders[category]) {
-      updatedServiceProviders[category] = [];
-    }
-    if (updatedServiceProviders[category].includes(provider.providerName)) {
-      updatedServiceProviders[category] = updatedServiceProviders[
-        category
-      ].filter((p) => p !== provider.providerName);
-      const updatedPackages = { ...selectedPackages };
-      if (updatedPackages[category]?.[provider.providerName]) {
-        delete updatedPackages[category][provider.providerName];
-      }
-      setSelectedPackages(updatedPackages);
+    if (updatedServiceProviders[category] === provider._id) {
+      delete updatedServiceProviders[category];
+      setSelectedProvider(null);
+      setPackages([]);
     } else {
-      updatedServiceProviders[category].push(provider.providerName);
-      setSelectedDj(provider); // Set the selected DJ
-      fetchDjPackages(provider._id); // Fetch packages for the selected DJ
+      updatedServiceProviders[category] = provider._id; // Store provider ID instead of name
+      setSelectedProvider(provider);
+      fetchPackages(provider._id);
     }
     setSelectedServiceProviders(updatedServiceProviders);
   };
 
-  const fetchDjPackages = (djId: string) => {
+  const fetchPackages = (providerId: string) => {
     fetch(
-      `https://eventapp-back-cr86.onrender.com/api/v1/event/getSingleServiceProvider/${djId}`
+      `https://eventapp-back-cr86.onrender.com/api/v1/event/getSingleServiceProvider/${providerId}`
     )
       .then((response) => response.json())
       .then((data) => {
         if (data.status) {
-          setDjPackages(data.data.packageList || []); // Update to use `data.data.packageList`
+          setPackages(data.data.packageList || []);
         }
       })
-      .catch((error) => console.error("Error fetching DJ packages:", error));
+      .catch((error) => console.error("Error fetching packages:", error));
   };
 
-  const handlePackageSelect = (
-    category: string,
-    provider: string,
-    packageOption: string
-  ) => {
+  const handlePackageSelect = (category: string, packageOption: string) => {
     const updatedPackages = { ...selectedPackages };
-    if (!updatedPackages[category]) {
-      updatedPackages[category] = {};
-    }
-    if (!updatedPackages[category][provider]) {
-      updatedPackages[category][provider] = [];
-    }
-    if (updatedPackages[category][provider].includes(packageOption)) {
-      updatedPackages[category][provider] = updatedPackages[category][
-        provider
-      ].filter((pkg) => pkg !== packageOption);
+    if (updatedPackages[category] === packageOption) {
+      delete updatedPackages[category];
     } else {
-      updatedPackages[category][provider].push(packageOption);
+      updatedPackages[category] = packageOption;
     }
     setSelectedPackages(updatedPackages);
   };
@@ -162,13 +146,22 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
       setCurrentCategory(selectedCategories[currentStep]);
       setCurrentStep(1);
     } else if (currentStep === 1) {
-      setCurrentStep(2);
+      if (packages.length > 0) {
+        setCurrentStep(2);
+      } else {
+        if (currentCategoryIndex < selectedCategories.length - 1) {
+          setCurrentCategory(selectedCategories[currentCategoryIndex + 1]);
+          setCurrentStep(1);
+        } else {
+          handleDone();
+        }
+      }
     } else if (currentStep === 2) {
       if (currentCategoryIndex < selectedCategories.length - 1) {
         setCurrentCategory(selectedCategories[currentCategoryIndex + 1]);
         setCurrentStep(1);
       } else {
-        setShowFinalPackages(true);
+        handleDone();
       }
     }
   };
@@ -180,6 +173,17 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
     } else if (currentStep === 2) {
       setCurrentStep(1);
     }
+  };
+
+  const handleDone = () => {
+    const selectedData: SelectedData = {
+      extraServices: selectedCategories.map((category) => ({
+        servicesProvider_id: selectedServiceProviders[category] || "",
+        packageName: selectedPackages[category] || "",
+      })),
+    };
+    console.log("Selected Data:", selectedData);
+    onExtraServicesSelected(selectedData); // Send data to parent
   };
 
   const currentCategoryIndex = selectedCategories.indexOf(
@@ -198,10 +202,12 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
           .then((response) => response.json())
           .then((data) => {
             if (data.status) {
-              setDjList(data.servicesProviders);
+              setServiceProviders(data.servicesProviders);
             }
           })
-          .catch((error) => console.error("Error fetching DJ list:", error));
+          .catch((error) =>
+            console.error("Error fetching service providers:", error)
+          );
       }
     }
   }, [currentCategory, extraServices]);
@@ -212,7 +218,7 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
         Choose Extra Services
       </h1>
 
-      {!showFinalPackages && currentStep === 0 && (
+      {currentStep === 0 && (
         <>
           <div className="flex items-center justify-center gap-10 mt-10">
             {extraServices.map((service, index) => (
@@ -240,29 +246,34 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
         </>
       )}
 
-      {!showFinalPackages && currentStep === 1 && currentCategory && (
+      {currentStep === 1 && currentCategory && (
         <div className="flex flex-col gap-5 justify-center items-center mt-5 md:mt-10">
           <h2 className="text-center mt-2 text-primary font-bold text-lg">
             Select {currentCategory}
           </h2>
           <ul className="flex justify-center items-center gap-8">
-            {djList.map((dj, index) => (
+            {serviceProviders.map((provider, index) => (
               <div
                 key={index}
                 className={`px-6 py-5 rounded-3xl shadow-lg cursor-pointer ${
-                  selectedServiceProviders[currentCategory]?.includes(
-                    dj.providerName
-                  )
+                  selectedServiceProviders[currentCategory] === provider._id
                     ? "border-b-2 border-primary"
                     : ""
                 }`}
-                onClick={() => handleServiceProviderSelect(currentCategory, dj)}
+                onClick={() =>
+                  handleServiceProviderSelect(currentCategory, provider)
+                }
               >
                 <div className="relative h-36 w-36 rounded-full">
-                  <Image src={dj.profile} alt="hj" fill objectFit="cover" />
+                  <Image
+                    src={provider.profile}
+                    alt="provider"
+                    fill
+                    objectFit="cover"
+                  />
                 </div>
                 <div className="text-center mt-2 text-primary font-bold text-lg">
-                  {dj.providerName}
+                  {provider.providerName}
                 </div>
               </div>
             ))}
@@ -277,7 +288,7 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
             <button
               className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
               onClick={handleNext}
-              disabled={!selectedServiceProviders[currentCategory]?.length}
+              disabled={!selectedServiceProviders[currentCategory]}
             >
               Next
             </button>
@@ -285,46 +296,39 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
         </div>
       )}
 
-      {!showFinalPackages &&
-        currentStep === 2 &&
+      {currentStep === 2 &&
         currentCategory &&
-        selectedServiceProviders[currentCategory]?.length > 0 && (
+        selectedServiceProviders[currentCategory] && (
           <div className="flex flex-col gap-5 justify-center items-center mt-5 md:mt-10">
             <h2 className="text-center mt-2 text-primary font-bold text-lg">
               Select Packages for {currentCategory}
             </h2>
-            {selectedDj && (
+            {selectedProvider && (
               <div className="flex flex-col md:flex-row gap-5 mx-2 md:mx-14">
                 <div className="flex flex-col items-center justify-center w-[15%] h-[30%] bg-white rounded-3xl p-2">
                   <div className="relative h-36 w-36 rounded-full">
                     <Image
-                      src={selectedDj.profile}
-                      alt="hj"
+                      src={selectedProvider.profile}
+                      alt="provider"
                       fill
                       objectFit="cover"
                     />
                   </div>
                   <h3 className="text-center mt-2 text-primary font-bold text-lg">
-                    {selectedDj.providerName}
+                    {selectedProvider.providerName}
                   </h3>
                 </div>
-                <div className="grid grid-cols-1  md:grid-cols-2 w-[85%] gap-5">
-                  {djPackages.map((pkg, index) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 w-[85%] gap-5">
+                  {packages.map((pkg, index) => (
                     <div
                       key={index}
                       className={`flex items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
-                        selectedPackages[currentCategory]?.[
-                          selectedDj.providerName
-                        ]?.includes(pkg.packageName)
+                        selectedPackages[currentCategory] === pkg.packageName
                           ? "border-b-2 border-primary"
                           : ""
                       }`}
                       onClick={() =>
-                        handlePackageSelect(
-                          currentCategory,
-                          selectedDj.providerName,
-                          pkg.packageName
-                        )
+                        handlePackageSelect(currentCategory, pkg.packageName)
                       }
                     >
                       <div className="relative h-20 w-20">
@@ -355,59 +359,38 @@ const ParentComponent: React.FC<{ extraServices: any[] }> = ({
               >
                 Back
               </button>
-              {currentCategoryIndex < selectedCategories.length - 1 ? (
-                <button
-                  onClick={handleNext}
-                  className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
-                >
-                  Next Category
-                </button>
-              ) : (
-                <button
-                  onClick={() => setShowFinalPackages(true)}
-                  className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
-                >
-                  Submit
-                </button>
-              )}
+              <button
+                onClick={handleNext}
+                className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+              >
+                {currentCategoryIndex < selectedCategories.length - 1
+                  ? "Next Category"
+                  : "Done"}
+              </button>
             </div>
           </div>
         )}
-
-      {showFinalPackages && (
-        <div>
-          <h2>Final Selected Packages:</h2>
-          {selectedCategories.map((category) => (
-            <div key={category}>
-              <h3>{category} Packages:</h3>
-              {Object.keys(selectedPackages[category] || {}).map((provider) => (
-                <div key={provider}>
-                  <h4>{provider}:</h4>
-                  <ul>
-                    {selectedPackages[category][provider].map(
-                      (packageOption, index) => (
-                        <li key={index}>{packageOption}</li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          ))}
-          <button onClick={() => setShowFinalPackages(false)}>Go Back</button>
-        </div>
-      )}
     </div>
   );
 };
 
 const ExtraServicesPage: React.FC = () => {
-  const { data, error, isLoading } = useGetExtraServiceQuery();
+  const { data, error, isLoading } = useGetExtraServiceQuery({});
+
+  const handleExtraServicesSelected = (selectedData: SelectedData) => {
+    console.log("Selected Data in Parent:", selectedData);
+    // You can now use the selectedData in the parent component as needed
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading extra services</div>;
 
-  return <ParentComponent extraServices={data?.extraServices || []} />;
+  return (
+    <ParentComponent
+      extraServices={data?.extraServices || []}
+      onExtraServicesSelected={handleExtraServicesSelected}
+    />
+  );
 };
 
 export default ExtraServicesPage;
