@@ -1,7 +1,7 @@
 export const authEndpoints = (builder) => ({
   loginUser: builder.mutation({
     query: (credentials) => ({
-      url: "login",
+      url: "user/login",
       method: "POST",
       body: credentials,
     }),
@@ -12,14 +12,6 @@ export const authEndpoints = (builder) => ({
       url: "user/register",
       method: "POST",
       body: userData,
-    }),
-  }),
-
-  forgotPassword: builder.mutation({
-    query: (email) => ({
-      url: "forgot_password",
-      method: "POST",
-      body: { email },
     }),
   }),
 
@@ -35,7 +27,7 @@ export const authEndpoints = (builder) => ({
     query: (data) => ({
       url: "user/verifyUser",
       method: "POST",
-      body: data, 
+      body: data,
     }),
   }),
 });

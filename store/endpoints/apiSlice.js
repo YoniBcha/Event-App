@@ -8,11 +8,12 @@ import { packageDetail } from "./packageDetail";
 import { chooseAdditionalEndpoints } from "./chooseAdditionalEndpoints";
 import { getExtraServiceEndpoint } from "./getExtraServiceEndpoint";
 import { contactUsEndpoints } from "./constactus";
+import { bookEventEndpoints } from "./bookEventEndpoints"; // ✅ Import booking API
 
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_BACKEND_REST_URL,
+    baseUrl: "https://eventapp-back-cr86.onrender.com/api/v1",
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
@@ -36,6 +37,7 @@ export const apiSlice = createApi({
     ...chooseAdditionalEndpoints(builder),
     ...getExtraServiceEndpoint(builder),
     ...contactUsEndpoints(builder),
+    ...bookEventEndpoints(builder), // ✅ Added booking endpoints
   }),
   refetchOnMountOrArgChange: true,
   keepUnusedDataFor: 30,
@@ -44,9 +46,8 @@ export const apiSlice = createApi({
 export const {
   useLoginUserMutation,
   useRegisterUserMutation,
-  useForgotPasswordMutation,
-  useVerifyCodeMutation,
   useSendVerificationCodeMutation,
+  useVerifyUserMutation,
   useGetEventTypesQuery,
   useGetChooseDesignsQuery,
   useGetPackageQuery,
@@ -58,4 +59,5 @@ export const {
   useGetDancerQuery,
   useGetOrganizerQuery,
   useGetDjQuery,
+  useBookEventMutation, // ✅ Export the new booking mutation
 } = apiSlice;

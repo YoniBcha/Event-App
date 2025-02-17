@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import BookingPage from "@/components/bookingstep/BookingPage";
 import EventType from "@/components/bookingstep/EventType";
 import ChooseDesigns from "@/components/bookingstep/ChooseDesigns";
@@ -31,12 +32,13 @@ interface ExtraServiceData {
 interface PersonalData {
   fullName: string;
   mobileNumber: string;
-  secondMobileNumber?: string; // Optional field
-  favoriteColors: string; // Updated to match PersonalDataComonents
-  notes?: string; // Optional field
+  secondMobileNumber?: string;
+  favoriteColors: string;
+  notes?: string;
 }
 
 const RootPage = () => {
+  const router = useRouter();
   const [extraServices, setExtraServices] = useState<ExtraServiceData[]>([]);
   const [personalData, setPersonalData] = useState<PersonalData | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -52,6 +54,9 @@ const RootPage = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
   );
+  const [eventPackageAdditions, setEventPackageAdditions] = useState<
+    EventPackageAddition[]
+  >([]);
 
   const handleBookingData = (data: FormData) => {
     setBookingData(data);
@@ -82,13 +87,17 @@ const RootPage = () => {
 
   const handlePackageDetailsNext = (packageId: string) => {
     console.log("Package ID from PackageDetails:", packageId);
-    setCurrentStep(6); // Move to the "Choose Additional" step
+    setCurrentStep(6);
   };
 
   const handleAdditionalDataSubmit = (data: {
     eventPackageAdditions: EventPackageAddition[];
   }) => {
-    console.log("Event Package Additions:", data.eventPackageAdditions);
+    console.log(
+      "Received Event Package Additions in Parent:",
+      data.eventPackageAdditions
+    );
+    setEventPackageAdditions(data.eventPackageAdditions);
     setCurrentStep(7);
   };
 
@@ -103,15 +112,32 @@ const RootPage = () => {
 
   const handleLastReservationNext = (value: boolean) => {
     if (value) {
-      setCurrentStep(9); // Move to the "PersonalData" step
+      setCurrentStep(9);
     }
   };
 
-  const handlePersonalDataSubmit = (data: PersonalData) => {
-    console.log("Received Personal Data:", data);
-    setPersonalData(data); // Store the personal data in the parent's state
-    setCurrentStep(10); // Move to the next step (if any)
-  };
+  const handlePersonalDataSubmit = async (data: PersonalData) => {
+    try {
+      console.log("Received Personal Data:", data);
+      setPersonalData(data);
+  
+      const payload = {
+        place: bookingData.place,
+        date: bookingData.date?.toISOString(),
+        city: bookingData.city,
+        eventType: selectedEventTypeId,
+        eventDesign: selectedDesignId,
+        eventPackage: selectedPackageId,
+        eventPackageAdditions: eventPackageAdditions,
+        extraServices: extraServices,
+        personalData: data,
+      };
+      console.log("Payload to be sent:", payload);
+      await router.push(`/sidebar?payload=${encodeURIComponent(JSON.stringify(payload))}`);
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
+  }
 
   const handleNext = () => {
     switch (currentStep) {

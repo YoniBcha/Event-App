@@ -220,13 +220,13 @@ function ChoosePackage({
           &lt; Back
         </button>
         <button
-          onClick={() => onNext(selectedPackageId)} // Pass the selected package ID to the parent
+          onClick={() => onNext(selectedPackageId)}
           className={`p-2 rounded-lg ${
             selectedPackageId
               ? "bg-primary text-gray-100 cursor-pointer"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
-          disabled={!selectedPackageId} // Disable the button if no package is selected
+          disabled={!selectedPackageId} 
         >
           Next &gt;
         </button>

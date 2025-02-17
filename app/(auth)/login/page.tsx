@@ -10,7 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { authenticateUser } from "@/store/authReducer";
-
+import Link from "next/link";
 interface LoginFormInputs {
   phoneNumber: string;
   password: string;
@@ -60,20 +60,19 @@ const Login: React.FC = () => {
         phoneNumber: data.phoneNumber,
         password: data.password,
       }).unwrap()) as unknown as LoginResponse;
-      
-  
+
       if (response?.data) {
         const userData = response.data;
         dispatch(authenticateUser(userData));
-  
+
         toast.success("Login Successful! Welcome back.", { autoClose: 2000 });
-  
+
         if (!userData.email_verified_at) {
-          router.push("/confirm-email");
+          router.push("/sidebar");
         } else if (userData.type === "User") {
-          router.push("/intro");
+          router.push("/");
         } else {
-          router.push("/(home)");
+          router.push("/");
         }
       } else {
         throw new Error("Invalid phone number or password");
@@ -87,7 +86,6 @@ const Login: React.FC = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
@@ -128,11 +126,15 @@ const Login: React.FC = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-
-        <p className="font-bold text-tertiary py-5">
-          Do You Have An Account?
-          <span className="text-primary font-bold cursor-pointer"> Signup</span>
-        </p>
+        <Link href={"/SendVerificationCode"}>
+          <p className="font-bold text-tertiary py-5">
+            Do You Have An Account?
+            <span className="text-primary font-bold cursor-pointer">
+              {" "}
+              Signup
+            </span>
+          </p>
+        </Link>
 
         <div className="flex items-center justify-center text-sm text-[#7c6d68]">
           <input type="checkbox" className="mr-2" />
@@ -145,3 +147,4 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+

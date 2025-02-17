@@ -75,10 +75,19 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   };
 
   const handleNextClick = () => {
-    const eventPackageAdditions: EventPackageAddition[] = Object.keys(quantities)
+    console.log("Quantities Object:", quantities);
+
+    const eventPackageAdditions: EventPackageAddition[] = Object.keys(
+      quantities
+    )
       .map((key) => {
-        const [additionName, typeName] = key.split("-");
-          const addition = packageAdditions.find(
+        const [additionName, ...typeParts] = key.split("-");
+        const typeName = typeParts.join("-");
+
+        console.log(`Processing key: ${key}`);
+        console.log(`Addition Name: ${additionName}, Type Name: ${typeName}`);
+
+        const addition = packageAdditions.find(
           (addition) => addition.additionName === additionName
         );
 
@@ -86,25 +95,27 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           console.error(`Addition not found: ${additionName}`);
           return null;
         }
-          const type = addition.typeDetail.find(
+
+        const type = addition.typeDetail.find(
           (type) => type.typeName === typeName
         );
-  
+
         if (!type) {
           console.error(`Type not found: ${typeName}`);
           return null;
         }
 
-        console.log("datas in the addinnaldkjf ",)
-  
         return {
-          additionId: type._id, 
-          additionTypeName: typeName, 
+          additionId: type._id,
+          additionTypeName: typeName,
           quantity: quantities[key],
         };
       })
-      .filter(Boolean) as EventPackageAddition[]; 
-      onSubmit({ eventPackageAdditions });
+      .filter(Boolean) as EventPackageAddition[];
+
+    console.log("Final Event Package Additions:", eventPackageAdditions);
+
+    onSubmit({ eventPackageAdditions });
   };
 
   return (
