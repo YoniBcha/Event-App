@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
+"use client";
 
 import React, { useEffect } from "react";
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-
+import Image from "next/image";
 interface AuthState {
   isAuthenticated: boolean;
-  user: any; 
+  user: any;
   token: string | null;
-  notifications: any[]; 
+  notifications: any[];
   csrf_token: string;
 }
 
@@ -41,16 +41,23 @@ function Layout({ children }: RootLayoutProps) {
   }
 
   return (
-    <div className="flex w-full mb-10 gap-6 p-5">
-      <div className="w-[20%] flex-col items-center">
-        <div className="flex flex-col gap-5 bg-[#fbf4e8] rounded-sm m-4 px-5 py-3">
+    <div className="flex flex-col md:flex-row w-full mb-10 gap-2 md:gap-6">
+      <div className="w-full md:w-[20%] flex-col items-center">
+        <div className="flex flex-col gap-5 bg-[#fbf4e8] rounded-sm m-4 p-2">
           <Link
             href="/sidebar/profile"
             className={`flex gap-3 py-1 px-2 rounded text-primary hover:bg-primary hover:text-white font-bold ${
               pathname === "/sidebar/profile" ? "bg-primary text-white" : ""
             }`}
           >
-            <div>🔎</div>
+            <div>
+              <Image
+                src={"/zip/setting-01.svg"}
+                width={18}
+                height={18}
+                alt="contact"
+              />
+            </div>
             <div>Profile</div>
           </Link>
 
@@ -60,7 +67,14 @@ function Layout({ children }: RootLayoutProps) {
               pathname === "/sidebar/my-orders" ? "bg-primary text-white" : ""
             }`}
           >
-            <div>🔎</div>
+            <div>
+              <Image
+                src={"/zip/file-02.svg"}
+                width={18}
+                height={18}
+                alt="contact"
+              />
+            </div>
             <div>My Orders</div>
           </Link>
         </div>
