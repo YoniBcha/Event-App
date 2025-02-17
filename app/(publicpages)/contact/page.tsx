@@ -18,7 +18,7 @@ const contactSchema = yup.object().shape({
     .string()
     .email("Invalid email address")
     .required("Email is required"),
-  phoneNumber: yup.string().required("Phone number is required"),
+  phone: yup.string().required("Phone number is required"),
   message: yup
     .string()
     .min(10, "Message must be at least 10 characters")
@@ -28,7 +28,7 @@ const contactSchema = yup.object().shape({
 interface ContactFormInputs {
   name: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   message: string;
 }
 
@@ -116,10 +116,10 @@ const ContactUs = () => {
                   <path
                     fill="none"
                     stroke="#c9a08a"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M9.5 13c13.687 13.574 14.825 13.09 29 0"
-                    stroke-width="1"
+                    strokeWidth="1"
                   />
                   <rect
                     width="37"
@@ -128,11 +128,11 @@ const ContactUs = () => {
                     y="8.5"
                     fill="none"
                     stroke="#c9a08a"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     rx="4"
                     ry="4"
-                    stroke-width="1"
+                    strokeWidth="1"
                   />
                 </svg>
                 <p className="text-primary underline text-lg">
@@ -151,7 +151,7 @@ const ContactUs = () => {
                   <path
                     fill="#c9a08a"
                     d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4zm9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8A1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5a5 5 0 0 1-5 5a5 5 0 0 1-5-5a5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3"
-                    stroke-width="0.5"
+                    strokeWidth="0.5"
                     stroke="#c9a08a"
                   />
                 </svg>
@@ -178,12 +178,12 @@ const ContactUs = () => {
                   <rect width="21" height="21" fill="none" />
                   <g
                     fill="none"
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     stroke="#c9a08a"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     transform="translate(4 2)"
-                    stroke-width="1"
+                    strokeWidth="1"
                   >
                     <path d="m6.5 16.54l.631-.711Q8.205 14.6 9.064 13.49l.473-.624Q12.5 8.875 12.5 6.533C12.5 3.201 9.814.5 6.5.5s-6 2.701-6 6.033q0 2.342 2.963 6.334l.473.624a55 55 0 0 0 2.564 3.05" />
                     <circle cx="6.5" cy="6.5" r="2.5" />
@@ -229,20 +229,18 @@ const ContactUs = () => {
             </div>
             <div>
               <label
-                htmlFor="phoneNumber"
+                htmlFor="phone"
                 className="block text-sm font-medium text-gray-700"
               >
                 Phone Number
               </label>
               <input
-                {...register("phoneNumber")}
+                {...register("phone")}
                 type="tel"
                 className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-[#f7f4e9]"
               />
-              {errors.phoneNumber && (
-                <p className="text-red-500 text-sm">
-                  {errors.phoneNumber.message}
-                </p>
+              {errors.phone && (
+                <p className="text-red-500 text-sm">{errors.phone.message}</p>
               )}
             </div>
             <div>

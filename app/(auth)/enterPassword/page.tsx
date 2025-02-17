@@ -52,7 +52,6 @@ const EnterPasswordForm = () => {
       }
     } catch (error) {
       console.error("Registration error:", error);
-      // toast.error(error || "Failed to register. Try again.");
     } finally {
       setLoading(false);
     }
