@@ -14,15 +14,14 @@
 .swiper-pagination-bullet-active {
   background-color: #c3927b;
 }
-/* Adjust the position of the Swiper pagination */
 .swiper-pagination {
-  position: relative; /* Change from absolute to relative */
-  margin-top: 40px; /* Add margin to push it down */
-  text-align: center; /* Center the pagination text */
+  position: relative;
+  margin-top: 40px;
+  text-align: center;
+  color: #c3927b;
 }
 
-/* Optional: Adjust the style of the pagination text */
 .swiper-pagination-fraction {
-  font-size: 16px; /* Adjust font size */
-  color: #000; /* Change text color */
+  font-size: 16px;
+  color: #000;
 }

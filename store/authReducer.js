@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useRouter } from "next/navigation";
 
 const initializeUser = () => {
   if (typeof window !== "undefined") {
@@ -39,7 +38,7 @@ export const authSlice = createSlice({
       window?.localStorage.setItem("user-info", JSON.stringify(state.user));
       window?.localStorage.setItem("token", state.token);
     },
-    logoutUser: (state, action) => {
+    logoutUser: (state) => {
       state.isAuthenticated = false;
       state.token = null;
       state.user = null;
@@ -60,7 +59,7 @@ export const authSlice = createSlice({
     pushNotification: (state, action) => {
       state.notifications.push(action.payload);
     },
-    removeNotifications: (state, action) => {
+    removeNotifications: (state) => {
       state.notifications = [];
     },
   },
