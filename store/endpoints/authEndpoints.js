@@ -16,12 +16,11 @@ export const authEndpoints = (builder) => ({
   }),
 
   sendVerificationCode: builder.mutation({
-    query: (phoneNumber) => ({
+    query: (payload) => ({
       url: "user/sendVerificationCode",
       method: "POST",
-      body: { phoneNumber },
-    }),
-  }),
+      body: payload,
+  }),}),
 
   verifyUser: builder.mutation({
     query: (data) => ({

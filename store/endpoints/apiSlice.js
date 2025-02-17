@@ -8,7 +8,8 @@ import { packageDetail } from "./packageDetail";
 import { chooseAdditionalEndpoints } from "./chooseAdditionalEndpoints";
 import { getExtraServiceEndpoint } from "./getExtraServiceEndpoint";
 import { contactUsEndpoints } from "./constactus";
-import { bookEventEndpoints } from "./bookEventEndpoints"; // ✅ Import booking API
+import { bookEventEndpoints } from "./bookEventEndpoints";
+import { getSelfBookedEventsEndpoints } from "./getSelfBookedEventsEndpoints"; // ✅ Import the new API
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -37,7 +38,8 @@ export const apiSlice = createApi({
     ...chooseAdditionalEndpoints(builder),
     ...getExtraServiceEndpoint(builder),
     ...contactUsEndpoints(builder),
-    ...bookEventEndpoints(builder), // ✅ Added booking endpoints
+    ...bookEventEndpoints(builder),
+    ...getSelfBookedEventsEndpoints(builder), // ✅ Added new API endpoint
   }),
   refetchOnMountOrArgChange: true,
   keepUnusedDataFor: 30,
@@ -59,5 +61,6 @@ export const {
   useGetDancerQuery,
   useGetOrganizerQuery,
   useGetDjQuery,
-  useBookEventMutation, // ✅ Export the new booking mutation
+  useBookEventMutation,
+  useGetSelfBookedEventsQuery,
 } = apiSlice;

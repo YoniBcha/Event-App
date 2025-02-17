@@ -1,20 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React from "react";
+import { useGetSelfBookedEventsQuery } from "@/store/endpoints/apiSlice";
+import Image from "next/image";
 
-interface Payload {
-  place: string;
-  date: string;
-  city: string;
-  eventType: string | null;
-  eventDesign: string | null;
-  eventPackage: string | null;
-  eventPackageAdditions: any[];
-  extraServices: any[];
+interface Event {
+  _id: string;
   personalData: {
     fullName: string;
     mobileNumber: string;
@@ -22,78 +13,110 @@ interface Payload {
     favoriteColors: string;
     notes?: string;
   };
+  city: string;
+  date: string;
+  eventType: {
+    nameOfEvent: string;
+    image: string;
+  };
+  eventDesign: {
+    eventDesign: string;
+  };
+  eventPackage: {
+    packageName: string;
+  };
+  orderStatus: string;
+  eventPackageAdditions: {
+    _id: string;
+    additionId: {
+      additionName: string;
+    };
+    additionTypeName: string;
+    quantity: number;
+  }[];
+  extraServices: {
+    _id: string;
+    packageName: string;
+  }[];
 }
 
-const MyOrders = () => {
-  const searchParams = useSearchParams();
-  const [payload, setPayload] = useState<Payload | null>(null);
+interface ApiResponse {
+  bookedEvents: Event[];
+  status: boolean;
+  message: string;
+}
 
-  useEffect(() => {
-    const payloadParam = searchParams.get("payload");
-    if (payloadParam) {
-      const decodedPayload = JSON.parse(decodeURIComponent(payloadParam));
-      setPayload(decodedPayload);
-    }
-  }, [searchParams]);
+const BookedEvents = () => {
+  const { data, isLoading } = useGetSelfBookedEventsQuery({});
 
-  const sendPayloadToAPI = async (payload: Payload) => {
-    try {
-      const response = await fetch(
-        "https://eventapp-back-cr86.onrender.com/api/v1/event/bookEvent",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
-      if (!response.ok) {
-        throw new Error("Failed to book event");
-      }
-
-      const result = await response.json();
-      console.log("API Response:", result);
-      toast.success("Event booked successfully!");
-    } catch (error) {
-      console.error("Error booking event:", error);
-      toast.error("Failed to book event. Please try again.");
-    }
-  };
-
-  const handleSubmit = () => {
-    if (payload) {
-      sendPayloadToAPI(payload);
-    } else {
-      toast.error("No payload data available to submit.");
-    }
-  };
+  const response = data as ApiResponse;
 
   return (
-    <div>
-      <h1>My Orders</h1>
-      {payload && (
-        <div>
-          <h2>Payload Data:</h2>
-          <pre>{JSON.stringify(payload, null, 2)}</pre>
-          <button
-            onClick={handleSubmit}
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#4CAF50",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Submit Payload
-          </button>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-5 text-primary">My Reservation</h1>
+      {response?.bookedEvents.map((event: Event) => (
+        <div
+          key={event._id}
+          className="flex w-[80%] gap-10 mb-6 p-4 border rounded-lg shadow-lg bg-white"
+        >
+          <div className="mb-4">
+            <Image
+              src={event.eventType.image}
+              alt="Event"
+              width={600}
+              height={400}
+              className="w-full h-40 object-cover rounded-xl"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="text-2xl text-primary">
+              {event.eventType.nameOfEvent} Event
+            </div>
+            <p className="text-sm text-tertiary">
+              Package: {event.eventPackage.packageName}
+            </p>
+            <p className="font-medium text-primary text-sm">
+              Event Design: {event.eventDesign.eventDesign}
+            </p>
+            <p className="text-tertiary text-sm">
+              {event.personalData.mobileNumber}
+            </p>
+            {event.personalData.secondMobileNumber && (
+              <p className="text-tertiary text-sm">
+                {event.personalData.secondMobileNumber}
+              </p>
+            )}
+            <div className="flex">
+              <p className="text-black">City:</p>
+              <p className="text-primary pl-2">{event.city}</p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-3 border-l-4 border-primary pl-5">
+            <div className="bg-primary w-40 text-white text-center py-1 rounded-xl text-lg">
+              {event.orderStatus}
+            </div>
+            <div className="bg-[#dedede] text-white text-center py-1 rounded-xl text-lg">
+              Quotation
+            </div>
+
+            <div className="mt-5">
+              <p className="text-primary text-sm font-semibold text-end">
+                {new Date(event.date).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
         </div>
-      )}
+      ))}
     </div>
   );
 };
 
-export default MyOrders;
+export default BookedEvents;

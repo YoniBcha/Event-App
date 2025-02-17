@@ -39,11 +39,12 @@ function SendVerificationCode() {
 
   const handleSendOTP: SubmitHandler<FormData> = async (data) => {
     setLoading(true);
-    console.log("data.phoneNumber", data.phoneNumber)
     try {
-      await sendVerificationCode({
-        phoneNumber: data.phoneNumber,
-      }).unwrap();
+      // Send only the phoneNumber in the payload
+      const payload = { phoneNumber: data.phoneNumber };
+      console.log("Payload being sent:", payload); // Debugging log
+
+      await sendVerificationCode(payload).unwrap();
 
       toast.success("Verification code sent to your phone!");
 

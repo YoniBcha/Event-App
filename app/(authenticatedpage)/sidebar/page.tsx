@@ -5,28 +5,17 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useBookEventMutation } from "@/store/endpoints/apiSlice"; // ✅ RTK Query API
-
-interface EventPackageAddition {
-  additionId: string;
-  additionTypeName: string;
-  quantity: number;
-}
-
-interface ExtraService {
-  servicesProvider_id: string;
-  packageName: string;
-}
+import { useBookEventMutation } from "@/store/endpoints/apiSlice"; 
 
 interface Payload {
-  place: "indoor" | "outdoor" | "both";
+  place: string;
   date: string;
   city: string;
-  eventType: string;
-  eventDesign: string;
-  eventPackage: string;
-  eventPackageAdditions: EventPackageAddition[];
-  extraServices: ExtraService[];
+  eventType: string | null;
+  eventDesign: string | null;
+  eventPackage: string | null;
+  eventPackageAdditions: any[];
+  extraServices: any[];
   personalData: {
     fullName: string;
     mobileNumber: string;
@@ -39,66 +28,28 @@ interface Payload {
 const MyOrders = () => {
   const searchParams = useSearchParams();
   const [payload, setPayload] = useState<Payload | null>(null);
-  const [bookEvent, { isLoading }] = useBookEventMutation();
+  const [bookEvent, { isLoading, isError, isSuccess }] = useBookEventMutation();
 
   useEffect(() => {
     const payloadParam = searchParams.get("payload");
     if (payloadParam) {
-      try {
-        const decodedPayload = JSON.parse(decodeURIComponent(payloadParam));
-
-        // Ensuring the structure matches the expected API format
-        const formattedPayload: Payload = {
-          place: decodedPayload.place || "both",
-          date: decodedPayload.date || new Date().toISOString(),
-          city: decodedPayload.city || "",
-          eventType: decodedPayload.eventType || "",
-          eventDesign: decodedPayload.eventDesign || "",
-          eventPackage: decodedPayload.eventPackage || "",
-          eventPackageAdditions:
-            decodedPayload.eventPackageAdditions?.map((item: any) => ({
-              additionId: item.additionId || "",
-              additionTypeName: item.additionTypeName || "",
-              quantity: item.quantity || 1,
-            })) || [],
-          extraServices:
-            decodedPayload.extraServices?.map((service: any) => ({
-              servicesProvider_id: service.servicesProvider_id || "",
-              packageName: service.packageName || "",
-            })) || [],
-          personalData: {
-            fullName: decodedPayload.personalData?.fullName || "",
-            mobileNumber: decodedPayload.personalData?.mobileNumber || "",
-            secondMobileNumber:
-              decodedPayload.personalData?.secondMobileNumber || "",
-            favoriteColors: decodedPayload.personalData?.favoriteColors || "",
-            notes: decodedPayload.personalData?.notes || "",
-          },
-        };
-
-        setPayload(formattedPayload);
-      } catch (error) {
-        console.error("Error parsing payload:", error);
-        toast.error("Invalid payload data.");
-      }
+      const decodedPayload = JSON.parse(decodeURIComponent(payloadParam));
+      setPayload(decodedPayload);
     }
   }, [searchParams]);
 
   const handleSubmit = async () => {
-    if (!payload) {
+    if (payload) {
+      try {
+        const result = await bookEvent(payload).unwrap(); // Use the mutation
+        console.log("API Response:", result);
+        toast.success("Event booked successfully!");
+      } catch (error) {
+        console.error("Error booking event:", error);
+        toast.error("Failed to book event. Please try again.");
+      }
+    } else {
       toast.error("No payload data available to submit.");
-      return;
-    }
-
-    try {
-      const response = await bookEvent(payload).unwrap();
-      toast.success("Event booked successfully!");
-      console.log("API Response:", response);
-    } catch (err: any) {
-      console.error("Error booking event:", err);
-      toast.error(
-        err.data?.message || "Failed to book event. Please try again."
-      );
     }
   };
 
@@ -123,6 +74,8 @@ const MyOrders = () => {
           >
             {isLoading ? "Submitting..." : "Submit Payload"}
           </button>
+          {isError && <p style={{ color: "red" }}>Error booking event. Please try again.</p>}
+          {isSuccess && <p style={{ color: "green" }}>Event booked successfully!</p>}
         </div>
       )}
     </div>
