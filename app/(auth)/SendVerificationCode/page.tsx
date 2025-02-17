@@ -59,8 +59,8 @@ function SendVerificationCode() {
   };
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="w-96 text-center">
+    <div className="flex items-center justify-center h-[75vh] w-full">
+      <div className="shadow-lg px-6 py-5 rounded-lg text-center">
         <div className="text-primary text-3xl font-extrabold">
           Verify Your Phone!
         </div>

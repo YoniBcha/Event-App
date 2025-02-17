@@ -6,14 +6,12 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
 import {
   useVerifyUserMutation,
   useSendVerificationCodeMutation,
 } from "@/store/endpoints/apiSlice";
-import { authenticateUser } from "@/store/authReducer";
 
 interface VerifyUserResponse {
   data: {
@@ -43,16 +41,18 @@ const schema = yup.object({
 
 const VerificationPage: React.FC = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <VerificationPageContent />
-    </Suspense>
+    <>
+      <Suspense fallback={<div>Loading...</div>}>
+        <VerificationPageContent />
+      </Suspense>
+      <ToastContainer /> {/* Add this line */}
+    </>
   );
 };
 
 const VerificationPageContent: React.FC = () => {
   const searchParams = useSearchParams(); // Now inside the Suspense boundary
   const router = useRouter();
-  const dispatch = useDispatch();
   const [verifyUser] = useVerifyUserMutation();
   const [sendVerificationCode] = useSendVerificationCodeMutation();
 
@@ -61,7 +61,12 @@ const VerificationPageContent: React.FC = () => {
   const [phoneNumberFromURL, setPhoneNumberFromURL] = useState<string>("");
   const [fullNameFromURL, setFullNameFromURL] = useState<string>("");
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<VerificationFormInputs>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<VerificationFormInputs>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
@@ -82,16 +87,18 @@ const VerificationPageContent: React.FC = () => {
   const handleVerify: SubmitHandler<VerificationFormInputs> = async (data) => {
     setLoading(true);
     try {
-      const response = (await verifyUser({ phoneNumber: data.phoneNumber, code: data.code }).unwrap()) as VerifyUserResponse;
-  
-      if (response?.data) {
-        dispatch(authenticateUser(response.data));
-        toast.success("Verification successful!");
-        router.push(`/enterPassword?phoneNumber=${encodeURIComponent(data.phoneNumber)}&fullName=${encodeURIComponent(fullNameFromURL)}`);
-      } else {
-        throw new Error("Invalid verification code");
-      }
+      console.log("Verifying user with:", data); // Debugging
+      (await verifyUser({
+        phoneNumber: data.phoneNumber,
+        code: data.code,
+      }).unwrap()) as VerifyUserResponse;
+      router.push(
+        `/enterPassword?phoneNumber=${encodeURIComponent(
+          data.phoneNumber
+        )}&fullName=${encodeURIComponent(fullNameFromURL)}`
+      );
     } catch (error: any) {
+      console.error("Verification error:", error); // Debugging
       toast.error(error?.data?.message || "Invalid code. Please try again.");
     } finally {
       setLoading(false);
@@ -117,9 +124,7 @@ const VerificationPageContent: React.FC = () => {
   return (
     <div className="flex items-center justify-center">
       <div className="p-6 rounded-lg shadow-md w-96 text-center">
-        <h2 className="text-2xl font-bold text-primary">
-          Verify Your Account
-        </h2>
+        <h2 className="text-2xl font-bold text-primary">Verify Your Account</h2>
         <p className="text-gray-600 mt-2 mb-6">
           Enter the 4-digit verification code sent to your phone.
         </p>
