@@ -11,7 +11,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-// Custom CSS for Swiper navigation and pagination
 import "./swiper-custom.css"; // Create this file for custom styles
 
 interface EventTypeData {
@@ -53,7 +52,7 @@ const EventTypeComponent = ({
   };
 
   return (
-    <div className="flex flex-col justify-center gap-4 items-center">
+    <div className="flex flex-col justify-center gap-4 items-center h-full">
       <div className="text-primary font-bold text-2xl md:text-3xl py-5">
         Event Type
       </div>

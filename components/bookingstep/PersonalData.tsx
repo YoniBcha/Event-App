@@ -76,7 +76,6 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           Personal data
         </div>
         <div className="flex flex-col gap-3">
-          {/* Full Name */}
           <div className="flex flex-col md:justify-evenly md:flex-row gap-2">
             <div className="">
               <div className="font-medium text-tertiary text-md">Full Name</div>
@@ -93,7 +92,6 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                 <div className="text-red-500 text-sm">{errors.fullName}</div>
               )}
             </div>
-            {/* Mobile Number */}
             <div className="">
               <div className="font-medium text-tertiary text-md">
                 Mobile number
@@ -107,11 +105,12 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                 } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
               />
               {errors.mobileNumber && (
-                <div className="text-red-500 text-sm">{errors.mobileNumber}</div>
+                <div className="text-red-500 text-sm">
+                  {errors.mobileNumber}
+                </div>
               )}
             </div>
           </div>
-          {/* Second Mobile Number and Favorite Colors */}
           <div className="flex flex-col md:justify-evenly md:flex-row gap-2">
             <div className="">
               <div className="font-medium text-tertiary text-md">
@@ -123,7 +122,9 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                 value={formData.secondMobileNumber}
                 onChange={handleInputChange}
                 className={`border ${
-                  errors.secondMobileNumber ? "border-red-500" : "border-primary"
+                  errors.secondMobileNumber
+                    ? "border-red-500"
+                    : "border-primary"
                 } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
               />
               {errors.secondMobileNumber && (
@@ -153,7 +154,6 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             </div>
           </div>
         </div>
-        {/* Notes */}
         <div className="mx-4">
           <div className="font-medium text-tertiary text-md">Notes</div>
           <textarea

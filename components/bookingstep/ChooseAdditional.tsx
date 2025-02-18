@@ -119,7 +119,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   };
 
   return (
-    <>
+    <div className="flex flex-col justify-center gap-4 items-center h-full">
       <div className="text-primary text-center font-bold text-4xl">
         Choose Additional
       </div>
@@ -271,7 +271,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

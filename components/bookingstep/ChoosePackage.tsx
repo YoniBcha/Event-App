@@ -81,8 +81,8 @@ function ChoosePackage({
   const packages = (data as { eventPackages: Package[] })?.eventPackages || [];
 
   return (
-    <div className="flex flex-col justify-center gap-4 items-center p-4">
-      <div className="text-primary font-bold text-2xl md:text-3xl pt-5">
+    <div className="flex flex-col gap-4  h-full">
+      <div className="text-primary font-bold text-2xl md:text-3xl pt-5 text-center">
         Choose Package
       </div>
 
@@ -228,23 +228,50 @@ function ChoosePackage({
         </div>
       )}
 
-      <div className="flex flex-row gap-5">
+      <div className="flex justify-center gap-5 mt-5">
         <button
           onClick={onBackClick}
-          className="p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
         >
-          &lt; Back
+          <span className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 12 24"
+            >
+              <path
+                fill="#c2937b"
+                fillRule="evenodd"
+                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+              />
+            </svg>
+          </span>
+          <span>Back</span>{" "}
         </button>
         <button
           onClick={() => onNext(selectedPackageId)}
-          className={`p-2 rounded-lg ${
+          className={`flex items-center p-2 rounded-lg ${
             selectedPackageId
               ? "bg-primary text-gray-100 cursor-pointer"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
           disabled={!selectedPackageId}
         >
-          Next &gt;
+          <span>Next</span>
+          <span className="ml-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 48 48"
+            >
+              <path
+                fill="#fff"
+                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
+              />
+            </svg>
+          </span>{" "}
         </button>
       </div>
     </div>

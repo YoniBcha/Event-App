@@ -114,7 +114,8 @@ function Header() {
 
         <div className="border p-2 border-primary rounded-sm">FENZO</div>
 
-        <div className="md:flex items-center hidden">
+        <div className="md:flex gap-3 items-center hidden">
+          <div className="flex">
           <div
             className={`flex justify-center items-center h-6 w-6 rounded-sm cursor-pointer ${
               selectedLang === "EN"
@@ -135,8 +136,9 @@ function Header() {
           >
             ع
           </div>
+          </div>
           <div
-            className="h-10 w-10 rounded-full bg-gray-500 ml-4 cursor-pointer"
+            className="h-10 w-10 rounded-full bg-gray-500 cursor-pointer"
             onClick={toggleAvatarDropdown}
             ref={avatarDropdownRef}
           >

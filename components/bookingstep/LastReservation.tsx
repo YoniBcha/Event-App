@@ -10,7 +10,7 @@ const LastReservation: React.FC<LastReservationProps> = ({ onNext }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4">
+    <div className="flex flex-col justify-center gap-4 items-center h-full">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
         <p className="text-gray-600 mb-6">Thank you</p>
         <p className="text-gray-700 mb-8">

@@ -71,8 +71,8 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   const designs: Design[] = data?.eventType?.eventDesigns ?? [];
 
   return (
-    <div className="flex flex-col justify-center gap-4 items-center">
-      <div className="text-primary font-bold text-2xl md:text-3xl pt-5">
+    <div className="flex flex-col gap-4  h-full">
+      <div className="text-primary font-bold text-2xl md:text-3xl pt-5 text-center">
         Choose Designs
       </div>
 
@@ -221,8 +221,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         </div>
       )}
 
-      {/* Navigation Buttons */}
-      <div className="flex flex-row gap-5 mt-5">
+      <div className="flex justify-center gap-5 mt-5">
         <button
           onClick={handleBackClick}
           className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
