@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import React, { useState } from "react";
@@ -83,7 +84,6 @@ function PackageDetails({
               )}
             </div>
 
-            {/* Additions Section */}
             <div className="h-14 grid grid-cols-2 gap-2 pt-1">
               {packageData.eventPackage.additions.map(
                 (addition: any, index: any) => (
@@ -128,13 +128,40 @@ function PackageDetails({
           onClick={onBack}
           className="p-2 rounded-lg border border-primary text-primary hover:bg-primary hover:text-gray-100 transition-colors duration-200"
         >
-          &lt; Back
+          <span className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 12 24"
+            >
+              <path
+                fill="#c2937b"
+                fillRule="evenodd"
+                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+              />
+            </svg>
+          </span>
+          <span>Back</span>
         </button>
         <button
           onClick={handleNextClick}
-          className="p-2 rounded-lg bg-primary text-gray-100 hover:bg-primary-dark transition-colors duration-200"
+          className="flex items-center p-2 rounded-lg bg-primary text-gray-100 hover:bg-primary-dark transition-colors duration-200"
         >
-          Next &gt;
+          <span>Next</span>
+          <span className="ml-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 48 48"
+            >
+              <path
+                fill="#fff"
+                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
+              />
+            </svg>
+          </span>{" "}
         </button>
       </div>
     </div>
