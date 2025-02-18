@@ -10,11 +10,12 @@ import { useRouter } from "next/navigation";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLang, setSelectedLang] = useState("EN");
+  // const [selectedLang, setSelectedLang] = useState("EN");
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isAvatarDropdownOpen, setIsAvatarDropdownOpen] = useState(false);
   const accountDropdownRef = useRef<HTMLDivElement>(null);
   const avatarDropdownRef = useRef<HTMLDivElement>(null);
+  const [currentLocale, setCurrentLocale] = useState("en");
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state: any) => state.auth.isAuthenticated
@@ -29,9 +30,26 @@ function Header() {
     setIsOpen(false);
   };
 
-  const switchLanguage = (lang: string) => {
-    setSelectedLang(lang);
+  const handleLanguageToggle = () => {
+    const newLocale = currentLocale === "en" ? "ar" : "en";
+    if (typeof window !== "undefined") {
+      localStorage.setItem("locale", newLocale);
+      setCurrentLocale(newLocale);
+
+      window.location.reload();
+    }
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedLocale = localStorage.getItem("locale") || "en";
+      setCurrentLocale(storedLocale);
+    }
+  }, []);
+
+  // const switchLanguage = (lang: string) => {
+  //   setSelectedLang(lang);
+  // };
 
   const toggleAccountDropdown = () => {
     setIsAccountDropdownOpen(!isAccountDropdownOpen);
@@ -46,8 +64,6 @@ function Header() {
     router.push("/login"); // Add a leading slash
     setIsAvatarDropdownOpen(false);
   };
-  
-  
 
   const handleLogout = () => {
     dispatch(authenticateUser(false));
@@ -118,21 +134,21 @@ function Header() {
           <div className="flex">
           <div
             className={`flex justify-center items-center h-6 w-6 rounded-sm cursor-pointer ${
-              selectedLang === "EN"
+              currentLocale === "en"
                 ? "bg-primary text-white"
                 : "border border-primary text-primary"
             }`}
-            onClick={() => switchLanguage("EN")}
+            onClick={handleLanguageToggle}
           >
             EN
           </div>
           <div
             className={`flex justify-center items-center h-6 w-6 rounded-sm cursor-pointer pb-2 ${
-              selectedLang === "AR"
+              currentLocale === "ar"
                 ? "bg-primary text-white"
                 : "border border-primary text-primary"
             }`}
-            onClick={() => switchLanguage("AR")}
+            onClick={handleLanguageToggle}
           >
             ع
           </div>
@@ -328,21 +344,21 @@ function Header() {
               <div className="flex items-center">
                 <div
                   className={`flex justify-center items-center h-6 w-6 rounded-sm cursor-pointer ${
-                    selectedLang === "EN"
+                    currentLocale === "en"
                       ? "bg-primary text-white"
                       : "border border-primary text-primary"
                   }`}
-                  onClick={() => switchLanguage("EN")}
+                  onClick={handleLanguageToggle}
                 >
                   EN
                 </div>
                 <div
                   className={`flex justify-center items-center h-6 w-6 rounded-sm cursor-pointer pb-2 ${
-                    selectedLang === "AR"
+                    currentLocale === "ar"
                       ? "bg-primary text-white"
                       : "border border-primary text-primary"
                   }`}
-                  onClick={() => switchLanguage("AR")}
+                  onClick={handleLanguageToggle}
                 >
                   ع
                 </div>
