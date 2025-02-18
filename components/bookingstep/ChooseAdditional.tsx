@@ -119,17 +119,17 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-4 items-center h-full">
-      <div className="text-primary text-center font-bold text-4xl">
+    <div className="flex flex-col gap-4 items-center h-full w-full">
+      <div className="text-primary font-bold text-2xl md:text-3xl py-5">
         Choose Additional
       </div>
-      <div className="flex flex-col justify-between gap-4 items-center mt-5 md:mt-10">
+      <div className="flex flex-col justify-between gap-4 items-center mt-5 md:mt-10 w-full mx-5">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-4 gap-5 w-full px-20">
+          <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-4 gap-5 w-full">
             {packageAdditions.map((addition) => (
               <div
                 key={addition._id}
@@ -145,7 +145,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                       alt={addition.additionName}
                     />
                   </div>
-                  <div className="flex items-center justify-between w-3/4 py-3">
+                  <div className="flex items-center justify-between w-full md:w-3/4 py-3">
                     <div className="text-primary font-semibold px-7 text-lg">
                       {addition.additionName}
                     </div>
@@ -254,12 +254,26 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
         <div className="flex flex-row gap-5 mt-2 md:mt-10">
           <button
             onClick={onBack}
-            className="p-2 rounded-lg border border-primary text-primary cursor-pointer hover:bg-gray-200 transition"
+            className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer hover:bg-gray-200 transition"
           >
-            &lt; Back
+            <span className="mr-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 12 24"
+              >
+                <path
+                  fill="#c2937b"
+                  fillRule="evenodd"
+                  d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+                />
+              </svg>
+            </span>
+            <span>Back</span>{" "}
           </button>
           <button
-            className={`p-2 rounded-lg text-gray-100 cursor-pointer transition ${
+            className={`flex items-center p-2 rounded-lg text-gray-100 cursor-pointer transition ${
               hasSelection
                 ? "bg-primary hover:bg-primary-dark"
                 : "bg-gray-400 cursor-not-allowed"
@@ -267,7 +281,20 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
             disabled={!hasSelection}
             onClick={handleNextClick}
           >
-            Next &gt;
+            <span>Next</span>
+            <span className="ml-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 48 48"
+              >
+                <path
+                  fill="#fff"
+                  d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
+                />
+              </svg>
+            </span>{" "}
           </button>
         </div>
       </div>

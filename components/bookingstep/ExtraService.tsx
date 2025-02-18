@@ -134,11 +134,11 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     }
     setSelectedServiceProviders(updatedServiceProviders);
   };
-  
+
   const handleDone = async () => {
     const isValid = await validateData();
     if (!isValid) return;
-  
+
     const selectedData: SelectedData = {
       extraServices: selectedCategories.map((category) => ({
         servicesProvider_id: selectedServiceProviders[category] || "", // This will now contain the provider ID
@@ -258,146 +258,75 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
   }, [currentCategory, extraServices]);
 
   return (
-    <div className="w-full">
-      <h1 className="text-primary text-2xl text-center">
-        Choose Extra Services
-      </h1>
+    <div className="h-full">
+      <div className="flex flex-col gap-4 items-center h-full">
+        <div className="text-primary font-bold text-2xl md:text-3xl py-5">
+          Choose Extra Services
+        </div>
 
-      {currentStep === 0 && (
-        <>
-          <div className="flex items-center justify-center gap-10 mt-10">
-            {extraServices.map((service, index) => (
-              <div key={index} className="">
-                <CategoryCard
-                  imageSrc={service.image}
-                  altText={service.serviceName}
-                  category={service.serviceName}
-                  isSelected={selectedCategories.includes(service.serviceName)}
-                  onClick={() => handleCategorySelect(service.serviceName)}
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-center items-center mt-5 md:mt-10">
-            <button
-              onClick={handleNext}
-              disabled={selectedCategories.length === 0}
-              className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
-            >
-              Next
-            </button>
-          </div>
-        </>
-      )}
-
-      {currentStep === 1 && currentCategory && (
-        <div className="flex flex-col gap-5 justify-center items-center mt-5 md:mt-10">
-          <h2 className="text-center mt-2 text-primary font-bold text-lg">
-            Select {currentCategory}
-          </h2>
-          <ul className="flex justify-center items-center gap-8">
-            {serviceProviders.map((provider, index) => (
-              <div
-                key={index}
-                className={`px-6 py-5 rounded-3xl shadow-lg cursor-pointer ${
-                  selectedServiceProviders[currentCategory] ===
-                  provider.providerName
-                    ? "border-b-2 border-primary"
-                    : ""
-                }`}
-                onClick={() =>
-                  handleServiceProviderSelect(currentCategory, provider)
-                }
-              >
-                <div className="relative h-36 w-36 rounded-full">
-                  <Image
-                    src={provider.profile}
-                    alt="provider"
-                    fill
-                    objectFit="cover"
+        {currentStep === 0 && (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-10 mt-10">
+              {extraServices.map((service, index) => (
+                <div key={index} className="">
+                  <CategoryCard
+                    imageSrc={service.image}
+                    altText={service.serviceName}
+                    category={service.serviceName}
+                    isSelected={selectedCategories.includes(
+                      service.serviceName
+                    )}
+                    onClick={() => handleCategorySelect(service.serviceName)}
                   />
                 </div>
-                <div className="text-center mt-2 text-primary font-bold text-lg">
-                  {provider.providerName}
-                </div>
-              </div>
-            ))}
-          </ul>
-          <div className="flex gap-5 mt-5">
-            <button
-              onClick={handleBack}
-              className="text-center mt-2 text-primary font-medium text-lg border border-primary rounded-lg px-6 py-1"
-            >
-              Back
-            </button>
-            <button
-              className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
-              onClick={handleNext}
-              disabled={!selectedServiceProviders[currentCategory]}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
+              ))}
+            </div>
 
-      {currentStep === 2 &&
-        currentCategory &&
-        selectedServiceProviders[currentCategory] && (
+            <div className="flex justify-center items-center mt-5 md:mt-10">
+              <button
+                onClick={handleNext}
+                disabled={selectedCategories.length === 0}
+                className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
+
+        {currentStep === 1 && currentCategory && (
           <div className="flex flex-col gap-5 justify-center items-center mt-5 md:mt-10">
             <h2 className="text-center mt-2 text-primary font-bold text-lg">
-              Select Packages for {currentCategory}
+              Select {currentCategory}
             </h2>
-            {selectedProvider && (
-              <div className="flex flex-col md:flex-row gap-5 mx-2 md:mx-14">
-                <div className="flex flex-col items-center justify-center w-[15%] h-[30%] bg-white rounded-3xl p-2">
+            <ul className="grid grid-cols-2 md:grid-cols-3 gap-8">
+              {serviceProviders.map((provider, index) => (
+                <div
+                  key={index}
+                  className={`px-6 py-5 rounded-3xl shadow-lg cursor-pointer ${
+                    selectedServiceProviders[currentCategory] ===
+                    provider.providerName
+                      ? "border-b-2 border-primary"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    handleServiceProviderSelect(currentCategory, provider)
+                  }
+                >
                   <div className="relative h-36 w-36 rounded-full">
                     <Image
-                      src={selectedProvider.profile}
+                      src={provider.profile}
                       alt="provider"
                       fill
                       objectFit="cover"
                     />
                   </div>
-                  <h3 className="text-center mt-2 text-primary font-bold text-lg">
-                    {selectedProvider.providerName}
-                  </h3>
+                  <div className="text-center mt-2 text-primary font-bold text-lg">
+                    {provider.providerName}
+                  </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 w-[85%] gap-5">
-                  {packages.map((pkg, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
-                        selectedPackages[currentCategory] === pkg.packageName
-                          ? "border-b-2 border-primary"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        handlePackageSelect(currentCategory, pkg.packageName)
-                      }
-                    >
-                      <div className="relative h-20 w-20">
-                        <Image
-                          src={pkg.packageLogo}
-                          alt={pkg.packageName}
-                          fill
-                          objectFit="cover"
-                        />
-                      </div>
-                      <div>
-                        <p className="text-primary font-bold text-lg">
-                          {pkg.packageName}
-                        </p>
-                        <p className="text-primary text-sm">
-                          {pkg.packageDescription}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+              ))}
+            </ul>
             <div className="flex gap-5 mt-5">
               <button
                 onClick={handleBack}
@@ -406,16 +335,92 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 Back
               </button>
               <button
-                onClick={handleNext}
                 className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+                onClick={handleNext}
+                disabled={!selectedServiceProviders[currentCategory]}
               >
-                {currentCategoryIndex < selectedCategories.length - 1
-                  ? "Next Category"
-                  : "Done"}
+                Next
               </button>
             </div>
           </div>
         )}
+
+        {currentStep === 2 &&
+          currentCategory &&
+          selectedServiceProviders[currentCategory] && (
+            <div className="flex flex-col gap-5 justify-center items-center mt-0 md:mt-10">
+              <h2 className="text-center mt-2 text-primary font-bold text-lg">
+                Select Packages for {currentCategory}
+              </h2>
+              {selectedProvider && (
+                <div className="flex flex-col md:flex-row gap-5 mx-2 md:mx-14">
+                  <div className="flex flex-col md:items-center justify-center w-[15%] h-[30%] bg-white rounded-3xl p-2">
+                    <div className="h-36 w-36 relative">
+                      <Image
+                        src={selectedProvider.profile}
+                        alt="provider"
+                        fill
+                        objectFit="cover"
+                        className=" rounded-full"
+                      />
+                    </div>
+                    <h3 className="text-center mt-2 text-primary font-bold text-lg">
+                      {selectedProvider.providerName}
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 w-[85%] gap-5">
+                    {packages.map((pkg, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
+                          selectedPackages[currentCategory] === pkg.packageName
+                            ? "border-b-2 border-primary"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handlePackageSelect(currentCategory, pkg.packageName)
+                        }
+                      >
+                        <div className="relative h-20 w-20">
+                          <Image
+                            src={pkg.packageLogo}
+                            alt={pkg.packageName}
+                            fill
+                            objectFit="cover"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-primary font-bold text-lg">
+                            {pkg.packageName}
+                          </p>
+                          <p className="text-primary text-sm">
+                            {pkg.packageDescription}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="flex gap-5 mt-5">
+                <button
+                  onClick={handleBack}
+                  className="text-center mt-2 text-primary font-medium text-lg border border-primary rounded-lg px-6 py-1"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+                >
+                  {currentCategoryIndex < selectedCategories.length - 1
+                    ? "Next Category"
+                    : "Done"}
+                </button>
+              </div>
+            </div>
+          )}
+      </div>
     </div>
   );
 };
@@ -431,7 +436,12 @@ const ExtraServicesPage: React.FC<ExtraServiceProps> = ({
     onExtraServiceSelect(selectedData);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+      </div>
+    );
   if (error) return <div>Error loading extra services</div>;
 
   return (

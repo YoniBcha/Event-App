@@ -10,7 +10,7 @@ import ChoosePackage from "@/components/bookingstep/ChoosePackage";
 import PackageDetails from "@/components/bookingstep/PackageDetails";
 import ChooseAdditional from "@/components/bookingstep/ChooseAdditional";
 import ExtraService from "@/components/bookingstep/ExtraService";
-import LastReservation from "@/components/bookingstep/LastReservation";
+// import LastReservation from "@/components/bookingstep/LastReservation";
 import PersonalDataComonents from "@/components/bookingstep/PersonalData";
 
 interface FormData {
@@ -112,17 +112,17 @@ const RootPage = () => {
     });
   };
 
-  const handleLastReservationNext = (value: boolean) => {
-    if (value) {
-      setCurrentStep(9);
-    }
-  };
+  // const handleLastReservationNext = (value: boolean) => {
+  //   if (value) {
+  //     setCurrentStep(9);
+  //   }
+  // };
 
   const handlePersonalDataSubmit = async (data: PersonalData) => {
     try {
       console.log("Received Personal Data:", data);
       setPersonalData(data);
-  
+
       const payload = {
         place: bookingData.place,
         date: bookingData.date?.toISOString(),
@@ -131,12 +131,18 @@ const RootPage = () => {
         eventDesign: selectedDesignId,
         eventPackage: selectedPackageId,
         eventPackageAdditions: eventPackageAdditions,
-        extraServices: extraServices.flatMap((service) => service.extraServices), // Fix: Flatten the nested array
+        extraServices: extraServices.flatMap(
+          (service) => service.extraServices
+        ), // Fix: Flatten the nested array
         personalData: data,
       };
-  
+
       console.log("Payload to be sent:", payload);
-      await router.push(`/sidebar?payload=${encodeURIComponent(JSON.stringify(payload))}`);
+      await router.push(
+        `/sidebar/booking?payload=${encodeURIComponent(
+          JSON.stringify(payload)
+        )}`
+      );
     } catch (error) {
       console.error("Navigation error:", error);
     }
@@ -219,13 +225,13 @@ const RootPage = () => {
             onExtraServiceSelect={handleExtraServiceSelect}
           />
         )}
-        {currentStep === 8 && (
+        {/* {currentStep === 8 && (
           <LastReservation onNext={handleLastReservationNext} />
-        )}
-        {currentStep === 9 && (
+        )} */}
+        {currentStep === 8 && (
           <PersonalDataComonents onSubmit={handlePersonalDataSubmit} />
         )}
-        {currentStep === 10 && personalData && (
+        {currentStep === 9 && personalData && (
           <div>
             <h2>Personal Data Submitted:</h2>
             <pre>{JSON.stringify(personalData, null, 2)}</pre>

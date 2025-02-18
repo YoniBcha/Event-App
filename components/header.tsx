@@ -154,7 +154,7 @@ function Header() {
           </div>
           </div>
           <div
-            className="h-10 w-10 rounded-full bg-gray-500 cursor-pointer"
+            className="h-10 w-10 rounded-full bg-gray-200 cursor-pointer"
             onClick={toggleAvatarDropdown}
             ref={avatarDropdownRef}
           >

@@ -64,16 +64,8 @@ const Login: React.FC = () => {
       if (response?.data) {
         const userData = response.data;
         dispatch(authenticateUser(userData));
-
         toast.success("Login Successful! Welcome back.", { autoClose: 2000 });
-
-        if (!userData.email_verified_at) {
-          router.push("/sidebar");
-        } else if (userData.type === "User") {
-          router.push("/");
-        } else {
-          router.push("/");
-        }
+        router.push("/sidebar/booking");
       } else {
         throw new Error("Invalid phone number or password");
       }
@@ -147,4 +139,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-

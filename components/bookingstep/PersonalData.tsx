@@ -70,110 +70,117 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   };
 
   return (
-    <div className="flex items-center justify-center h-full">
-      <div className="w-full md:w-[40%]">
-        <div className="text-center text-primary font-bold text-lg">
-          Personal data
+    <div className="flex items-center justify-center h-full p-4">
+      <div className="w-full max-w-4xl p-6 rounded-lg shadow-md">
+        <div className="text-center text-primary font-bold text-2xl mb-6">
+          Personal Data
         </div>
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-col md:justify-evenly md:flex-row gap-2">
-            <div className="">
-              <div className="font-medium text-tertiary text-md">Full Name</div>
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                className={`border ${
-                  errors.fullName ? "border-red-500" : "border-primary"
-                } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
-              />
-              {errors.fullName && (
-                <div className="text-red-500 text-sm">{errors.fullName}</div>
-              )}
-            </div>
-            <div className="">
-              <div className="font-medium text-tertiary text-md">
-                Mobile number
-              </div>
-              <input
-                name="mobileNumber"
-                value={formData.mobileNumber}
-                onChange={handleInputChange}
-                className={`border ${
-                  errors.mobileNumber ? "border-red-500" : "border-primary"
-                } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
-              />
-              {errors.mobileNumber && (
-                <div className="text-red-500 text-sm">
-                  {errors.mobileNumber}
-                </div>
-              )}
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Full Name */}
+          <div className="flex flex-col">
+            <label className="font-medium text-tertiary text-md mb-2">
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleInputChange}
+              className={`border ${
+                errors.fullName ? "border-red-500" : "border-primary"
+              } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
+            />
+            {errors.fullName && (
+              <div className="text-red-500 text-sm mt-1">{errors.fullName}</div>
+            )}
           </div>
-          <div className="flex flex-col md:justify-evenly md:flex-row gap-2">
-            <div className="">
-              <div className="font-medium text-tertiary text-md">
-                Second Mobile number
+
+          {/* Mobile Number */}
+          <div className="flex flex-col">
+            <label className="font-medium text-tertiary text-md mb-2">
+              Mobile Number
+            </label>
+            <input
+              type="text"
+              name="mobileNumber"
+              value={formData.mobileNumber}
+              onChange={handleInputChange}
+              className={`border ${
+                errors.mobileNumber ? "border-red-500" : "border-primary"
+              } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
+            />
+            {errors.mobileNumber && (
+              <div className="text-red-500 text-sm mt-1">
+                {errors.mobileNumber}
               </div>
-              <input
-                type="text"
-                name="secondMobileNumber"
-                value={formData.secondMobileNumber}
-                onChange={handleInputChange}
-                className={`border ${
-                  errors.secondMobileNumber
-                    ? "border-red-500"
-                    : "border-primary"
-                } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
-              />
-              {errors.secondMobileNumber && (
-                <div className="text-red-500 text-sm">
-                  {errors.secondMobileNumber}
-                </div>
-              )}
-            </div>
-            <div className="">
-              <div className="font-medium text-tertiary text-md">
-                Choose your favorite colors
+            )}
+          </div>
+
+          {/* Second Mobile Number */}
+          <div className="flex flex-col">
+            <label className="font-medium text-tertiary text-md mb-2">
+              Second Mobile Number
+            </label>
+            <input
+              type="text"
+              name="secondMobileNumber"
+              value={formData.secondMobileNumber}
+              onChange={handleInputChange}
+              className={`border ${
+                errors.secondMobileNumber ? "border-red-500" : "border-primary"
+              } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
+            />
+            {errors.secondMobileNumber && (
+              <div className="text-red-500 text-sm mt-1">
+                {errors.secondMobileNumber}
               </div>
-              <input
-                type="text"
-                name="favoriteColors"
-                value={formData.favoriteColors}
-                onChange={handleInputChange}
-                className={`border ${
-                  errors.favoriteColors ? "border-red-500" : "border-primary"
-                } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
-              />
-              {errors.favoriteColors && (
-                <div className="text-red-500 text-sm">
-                  {errors.favoriteColors}
-                </div>
-              )}
-            </div>
+            )}
+          </div>
+
+          {/* Favorite Colors */}
+          <div className="flex flex-col">
+            <label className="font-medium text-tertiary text-md mb-2">
+              Favorite Colors
+            </label>
+            <input
+              type="text"
+              name="favoriteColors"
+              value={formData.favoriteColors}
+              onChange={handleInputChange}
+              className={`border ${
+                errors.favoriteColors ? "border-red-500" : "border-primary"
+              } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
+            />
+            {errors.favoriteColors && (
+              <div className="text-red-500 text-sm mt-1">
+                {errors.favoriteColors}
+              </div>
+            )}
           </div>
         </div>
-        <div className="mx-4">
-          <div className="font-medium text-tertiary text-md">Notes</div>
+
+        {/* Notes */}
+        <div className="mt-6">
+          <label className="font-medium text-tertiary text-md mb-2">
+            Notes
+          </label>
           <textarea
             name="notes"
             value={formData.notes}
             onChange={handleInputChange}
-            cols={5}
-            rows={3}
+            rows={4}
             className={`border ${
               errors.notes ? "border-red-500" : "border-primary"
             } bg-[#f7f4e9] py-2 px-4 w-full rounded-lg`}
           ></textarea>
           {errors.notes && (
-            <div className="text-red-500 text-sm">{errors.notes}</div>
+            <div className="text-red-500 text-sm mt-1">{errors.notes}</div>
           )}
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center mt-8">
           <button
             onClick={handleSubmit}
-            className="p-2 rounded-lg bg-primary text-gray-100 cursor-pointer mt-4"
+            className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors duration-200"
           >
             Next &gt;
           </button>
