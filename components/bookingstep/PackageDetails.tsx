@@ -37,7 +37,7 @@ function PackageDetails({
 
   return (
     <div className="flex flex-col justify-center h-full gap-4 items-center p-4">
-      <div className="text-primary font-bold text-2xl md:text-3xl lg:text-4xl text-center">
+      <div className="text-primary font-bold text-2xl md:text-3xl py-5">
         Package Details
       </div>
 

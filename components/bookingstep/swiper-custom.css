@@ -1,27 +1,28 @@
 .swiper-button-next,
 .swiper-button-prev {
-  color: #c3927b;
+  color: #c2937b;
 }
 
 .swiper-pagination-fraction {
-  color: #c3927b;
+  color: #c2937b;
 }
 
 .swiper-pagination-bullet {
-  background-color: #c3927b;
+  background-color: #c2937b;
 }
 
 .swiper-pagination-bullet-active {
-  background-color: #c3927b;
+  background-color: #c2937b;
 }
+
 .swiper-pagination {
   position: relative;
   margin-top: 40px;
   text-align: center;
-  color: #c3927b;
+  color: #c2937b;
 }
 
 .swiper-pagination-fraction {
   font-size: 16px;
-  color: #000;
+  color: #c2937b;
 }

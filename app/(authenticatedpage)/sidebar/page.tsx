@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useBookEventMutation } from "@/store/endpoints/apiSlice"; 
+import { useBookEventMutation } from "@/store/endpoints/apiSlice";
 
 interface Payload {
   place: string;
@@ -41,7 +42,9 @@ const MyOrders = () => {
   const handleSubmit = async () => {
     if (payload) {
       try {
-        const result = await bookEvent(payload).unwrap(); // Use the mutation
+        console.log("API Response:", payload);
+
+        const result = await bookEvent(payload).unwrap();
         console.log("API Response:", result);
         toast.success("Event booked successfully!");
       } catch (error) {
@@ -74,8 +77,14 @@ const MyOrders = () => {
           >
             {isLoading ? "Submitting..." : "Submit Payload"}
           </button>
-          {isError && <p style={{ color: "red" }}>Error booking event. Please try again.</p>}
-          {isSuccess && <p style={{ color: "green" }}>Event booked successfully!</p>}
+          {isError && (
+            <p style={{ color: "red" }}>
+              Error booking event. Please try again.
+            </p>
+          )}
+          {isSuccess && (
+            <p style={{ color: "green" }}>Event booked successfully!</p>
+          )}
         </div>
       )}
     </div>

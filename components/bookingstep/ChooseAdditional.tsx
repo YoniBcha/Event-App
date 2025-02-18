@@ -106,7 +106,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
         }
 
         return {
-          additionId: type._id,
+          additionId: addition._id,
           additionTypeName: typeName,
           quantity: quantities[key],
         };

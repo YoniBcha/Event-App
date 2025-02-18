@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { authenticateUser } from "@/store/authReducer";
+import { useRouter } from "next/navigation";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +19,7 @@ function Header() {
   const isAuthenticated = useSelector(
     (state: any) => state.auth.isAuthenticated
   );
+  const router = useRouter();
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
@@ -41,8 +43,11 @@ function Header() {
 
   const handleLogin = () => {
     dispatch(authenticateUser(true));
+    router.push("/login"); // Add a leading slash
     setIsAvatarDropdownOpen(false);
   };
+  
+  
 
   const handleLogout = () => {
     dispatch(authenticateUser(false));
@@ -287,7 +292,7 @@ function Header() {
               </div>
             </Link>
 
-            <Link href="/about" onClick={toggleDrawer}>
+            <Link href="/mainpage" onClick={toggleDrawer}>
               <div className="flex items-center gap-2">
                 <div className="">
                   <Image

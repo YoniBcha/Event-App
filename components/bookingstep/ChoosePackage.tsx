@@ -8,7 +8,7 @@ import { useGetPackageQuery } from "@/store/endpoints/apiSlice";
 import "swiper/css";
 import "swiper/css/grid";
 import "swiper/css/pagination";
-import "./swiper-custom.css"; // Import custom Swiper styles
+import "./swiper-custom.css";
 
 interface Package {
   _id: string;
@@ -64,7 +64,7 @@ function ChoosePackage({
   };
 
   const handleCardClick = (packageId: string) => {
-    setSelectedPackageId(packageId); // Set the selected package ID
+    setSelectedPackageId(packageId);
   };
 
   const closeModal = () => {
@@ -82,22 +82,39 @@ function ChoosePackage({
 
   return (
     <div className="flex flex-col justify-center gap-4 items-center p-4">
-      <div className="text-primary font-bold text-2xl">Choose Package</div>
+      <div className="text-primary font-bold text-2xl md:text-3xl pt-5">
+        Choose Package
+      </div>
 
-      <button
-        onClick={toggleView}
-        className="md:hidden p-2 rounded-lg bg-primary text-gray-100 cursor-pointer"
-      >
-        {isGridView ? "Switch to List View" : "Switch to Grid View"}
-      </button>
+      <div className="flex justify-end items-center w-full">
+        <button
+          onClick={toggleView}
+          className=" md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
+        >
+          {isGridView ? (
+            <Image
+              src={"/zip/menu.svg"}
+              width={32}
+              height={32}
+              alt="List View"
+            />
+          ) : (
+            <Image
+              src={"/zip/dashboard-square-01.svg"}
+              width={32}
+              height={32}
+              alt="Grid View"
+            />
+          )}
+        </button>
+      </div>
 
-      <div className="w-full md:w-2/3 h-full overflow-y-auto">
-        {isLoading ? (
-          // Loader for Swiper
-          <div className="flex justify-center items-center h-64">
-            <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-          </div>
-        ) : isGridView ? (
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+        </div>
+      ) : isGridView ? (
+        <div className="w-full px-4">
           <Swiper
             slidesPerView={4}
             grid={{
@@ -136,7 +153,7 @@ function ChoosePackage({
                 }`}
               >
                 <div
-                  className="relative w-full h-48"
+                  className="relative w-full h-64"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleImageClick(eventPackage.image[0]);
@@ -156,42 +173,41 @@ function ChoosePackage({
               </SwiperSlide>
             ))}
           </Swiper>
-        ) : (
-          // List View (1 column)
-          <div className="flex flex-col gap-4">
-            {packages.map((eventPackage: Package, index: number) => (
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {packages.map((eventPackage: Package, index: number) => (
+            <div
+              key={eventPackage._id || index}
+              className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
+                selectedPackageId === eventPackage._id
+                  ? "border-4 border-primary scale-105"
+                  : "border border-gray-300"
+              }`}
+              onClick={() => handleCardClick(eventPackage._id)} // Pass the package ID
+            >
               <div
-                key={eventPackage._id || index}
-                className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
-                  selectedPackageId === eventPackage._id
-                    ? "border-4 border-primary scale-105"
-                    : "border border-gray-300"
-                }`}
-                onClick={() => handleCardClick(eventPackage._id)} // Pass the package ID
+                className="relative w-full h-48"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleImageClick(eventPackage.image[0]);
+                }}
               >
-                <div
-                  className="relative w-full h-48"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleImageClick(eventPackage.image[0]);
-                  }}
-                >
-                  <Image
-                    src={eventPackage.image[0]}
-                    alt={eventPackage.packageName}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-lg"
-                  />
-                </div>
-                <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                  {eventPackage.packageName} - ${eventPackage.packagePrice}
-                </p>
+                <Image
+                  src={eventPackage.image[0]}
+                  alt={eventPackage.packageName}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg"
+                />
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+              <p className="mt-2 text-sm text-tertiary font-medium text-center">
+                {eventPackage.packageName} - ${eventPackage.packagePrice}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
 
       {isModalOpen && (
         <div
@@ -226,7 +242,7 @@ function ChoosePackage({
               ? "bg-primary text-gray-100 cursor-pointer"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
-          disabled={!selectedPackageId} 
+          disabled={!selectedPackageId}
         >
           Next &gt;
         </button>

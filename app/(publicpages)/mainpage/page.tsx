@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -25,6 +26,7 @@ interface EventPackageAddition {
 }
 
 interface ExtraServiceData {
+  extraServices: any;
   servicesProvider_id: string;
   packageName: string;
 }
@@ -129,15 +131,16 @@ const RootPage = () => {
         eventDesign: selectedDesignId,
         eventPackage: selectedPackageId,
         eventPackageAdditions: eventPackageAdditions,
-        extraServices: extraServices,
+        extraServices: extraServices.flatMap((service) => service.extraServices), // Fix: Flatten the nested array
         personalData: data,
       };
+  
       console.log("Payload to be sent:", payload);
       await router.push(`/sidebar?payload=${encodeURIComponent(JSON.stringify(payload))}`);
     } catch (error) {
       console.error("Navigation error:", error);
     }
-  }
+  };
 
   const handleNext = () => {
     switch (currentStep) {

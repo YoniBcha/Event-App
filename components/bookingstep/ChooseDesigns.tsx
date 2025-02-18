@@ -71,22 +71,41 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   const designs: Design[] = data?.eventType?.eventDesigns ?? [];
 
   return (
-    <div className="flex flex-col justify-center gap-4 items-center p-4">
-      <div className="text-primary font-bold text-2xl">Choose Designs</div>
+    <div className="flex flex-col justify-center gap-4 items-center">
+      <div className="text-primary font-bold text-2xl md:text-3xl pt-5">
+        Choose Designs
+      </div>
 
-      <button
-        onClick={toggleView}
-        className="md:hidden p-2 rounded-lg bg-primary text-gray-100 cursor-pointer"
-      >
-        {isGridView ? "Switch to List View" : "Switch to Grid View"}
-      </button>
+      <div className="flex justify-end items-center w-full">
+        <button
+          onClick={toggleView}
+          className=" md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
+        >
+          {isGridView ? (
+            <Image
+              src={"/zip/menu.svg"}
+              width={32}
+              height={32}
+              alt="List View"
+            />
+          ) : (
+            <Image
+              src={"/zip/dashboard-square-01.svg"}
+              width={32}
+              height={32}
+              alt="Grid View"
+            />
+          )}
+        </button>
+      </div>
 
-      <div className="w-full md:w-2/3 h-full overflow-y-auto">
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-          </div>
-        ) : isGridView ? (
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+        </div>
+      ) : isGridView ? (
+        // Grid View
+        <div className="w-full px-4">
           <Swiper
             slidesPerView={4}
             grid={{
@@ -125,7 +144,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                 }`}
               >
                 <div
-                  className="relative w-full h-48"
+                  className="relative w-full h-64"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleImageClick(design.image);
@@ -145,43 +164,44 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
               </SwiperSlide>
             ))}
           </Swiper>
-        ) : (
-          // List View (1 column)
-          <div className="flex flex-col gap-4">
-            {designs.map((design: Design, index: number) => (
+        </div>
+      ) : (
+        // List View
+        <div className="flex flex-col gap-4 w-full px-4">
+          {designs.map((design: Design, index: number) => (
+            <div
+              key={design._id || index}
+              className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
+                selectedDesignId === design._id
+                  ? "border-4 border-primary scale-105"
+                  : "border border-gray-300"
+              }`}
+              onClick={() => handleCardClick(design._id)} // Pass the design ID
+            >
               <div
-                key={design._id || index}
-                className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
-                  selectedDesignId === design._id
-                    ? "border-4 border-primary scale-105"
-                    : "border border-gray-300"
-                }`}
-                onClick={() => handleCardClick(design._id)} // Pass the design ID
+                className="relative w-full h-48"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleImageClick(design.image);
+                }}
               >
-                <div
-                  className="relative w-full h-48"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleImageClick(design.image);
-                  }}
-                >
-                  <Image
-                    src={design.image}
-                    alt={design.eventDesign}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-lg"
-                  />
-                </div>
-                <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                  {design.eventDesign}
-                </p>
+                <Image
+                  src={design.image}
+                  alt={design.eventDesign}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg"
+                />
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+              <p className="mt-2 text-sm text-tertiary font-medium text-center">
+                {design.eventDesign}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
 
+      {/* Modal for Enlarged Image */}
       {isModalOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50"
@@ -201,18 +221,51 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         </div>
       )}
 
-      <div className="flex flex-row gap-5">
+      {/* Navigation Buttons */}
+      <div className="flex flex-row gap-5 mt-5">
         <button
           onClick={handleBackClick}
-          className="p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
         >
-          &lt; Back
+          <span className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 12 24"
+            >
+              <path
+                fill="#c2937b"
+                fillRule="evenodd"
+                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+              />
+            </svg>
+          </span>
+          <span>Back</span>
         </button>
         <button
-          onClick={handleNextClick} // Use handleNextClick to send the selected design ID
-          className="p-2 rounded-lg bg-primary text-gray-100 cursor-pointer"
+          onClick={handleNextClick}
+          disabled={!selectedDesignId} // Disable if no design is selected
+          className={`flex items-center p-2 rounded-lg ${
+            selectedDesignId
+              ? "bg-primary text-gray-100 cursor-pointer"
+              : "bg-gray-400 text-gray-100 cursor-not-allowed"
+          }`}
         >
-          Next &gt;
+          <span>Next</span>
+          <span className="ml-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 48 48"
+            >
+              <path
+                fill="#fff"
+                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
+              />
+            </svg>
+          </span>
         </button>
       </div>
     </div>

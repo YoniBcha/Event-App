@@ -123,16 +123,30 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     provider: ServiceProvider
   ) => {
     const updatedServiceProviders = { ...selectedServiceProviders };
-    if (updatedServiceProviders[category] === provider.providerName) {
+    if (updatedServiceProviders[category] === provider._id) {
       delete updatedServiceProviders[category];
       setSelectedProvider(null);
       setPackages([]);
     } else {
-      updatedServiceProviders[category] = provider.providerName;
+      updatedServiceProviders[category] = provider._id; // Store provider ID instead of name
       setSelectedProvider(provider);
       fetchPackages(provider._id);
     }
     setSelectedServiceProviders(updatedServiceProviders);
+  };
+  
+  const handleDone = async () => {
+    const isValid = await validateData();
+    if (!isValid) return;
+  
+    const selectedData: SelectedData = {
+      extraServices: selectedCategories.map((category) => ({
+        servicesProvider_id: selectedServiceProviders[category] || "", // This will now contain the provider ID
+        packageName: selectedPackages[category] || "",
+      })),
+    };
+    console.log("Selected Data:", selectedData);
+    onExtraServiceSelect(selectedData);
   };
 
   const fetchPackages = (providerId: string) => {
@@ -215,20 +229,6 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     } else if (currentStep === 2) {
       setCurrentStep(1);
     }
-  };
-
-  const handleDone = async () => {
-    const isValid = await validateData();
-    if (!isValid) return;
-
-    const selectedData: SelectedData = {
-      extraServices: selectedCategories.map((category) => ({
-        servicesProvider_id: selectedServiceProviders[category] || "",
-        packageName: selectedPackages[category] || "",
-      })),
-    };
-    console.log("Selected Data:", selectedData);
-    onExtraServiceSelect(selectedData);
   };
 
   const currentCategoryIndex = selectedCategories.indexOf(

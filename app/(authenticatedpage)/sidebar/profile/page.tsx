@@ -3,7 +3,7 @@ import React from "react"; // No need to import useState
 
 function Profile() {
   return (
-    <div className="flex w-full gap-6  px-4 flex-col">
+    <div className="flex w-full gap-6 flex-col">
       <div className="flex flex-1 flex-col md:flex-row  gap-8 w-full items-center">
         <div className="max-md:flex max-md:justify-center ">
           <div className="rounded-full h-20 w-20 bg-slate-500 mb-2 sm:mb-0 sm:mr-4 flex items-center justify-center"></div>

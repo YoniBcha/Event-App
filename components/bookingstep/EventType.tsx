@@ -45,7 +45,6 @@ const EventTypeComponent = ({
     null
   );
 
-  // ✅ Ensure data is properly typed
   const eventTypes: EventTypeData[] = data?.eventTypes ?? [];
 
   const handleEventTypeSelect = (eventTypeId: string) => {
@@ -55,10 +54,12 @@ const EventTypeComponent = ({
 
   return (
     <div className="flex flex-col justify-center gap-4 items-center">
-      <div className="text-primary font-bold text-4xl">Event Type</div>
+      <div className="text-primary font-bold text-2xl md:text-3xl py-5">
+        Event Type
+      </div>
 
       {isLoading ? (
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center h-60">
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
         </div>
       ) : error ? (
@@ -66,7 +67,7 @@ const EventTypeComponent = ({
           Error: {error instanceof Error ? error.message : "An error occurred"}
         </div>
       ) : (
-        <div className="w-[85%] px-4">
+        <div className="w-[90%] px-4">
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={20}
@@ -88,7 +89,7 @@ const EventTypeComponent = ({
                     : "border border-gray-300"
                 }`}
               >
-                <div className="relative w-full h-80">
+                <div className="relative w-full h-64">
                   <Image
                     src={eventType.image}
                     alt={eventType.nameOfEvent}
@@ -109,20 +110,47 @@ const EventTypeComponent = ({
       <div className="flex flex-row gap-5 mt-4">
         <button
           onClick={onBack}
-          className="p-2 rounded-lg border border-primary text-primary cursor-pointer hover:bg-gray-200 transition"
+          className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer hover:bg-gray-200 transition"
         >
-          &lt; Back
+          <span className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 12 24"
+            >
+              <path
+                fill="#c2937b"
+                fillRule="evenodd"
+                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+              />
+            </svg>
+          </span>
+          <span>Back</span>
         </button>
         <button
           onClick={() => onNext(selectedEventTypeId)}
-          className={`p-2 rounded-lg text-gray-100 cursor-pointer transition ${
+          className={`flex items-center p-2 rounded-lg text-gray-100 cursor-pointer transition ${
             selectedEventTypeId
               ? "bg-primary hover:bg-primary-dark"
               : "bg-gray-400 cursor-not-allowed"
           }`}
           disabled={!selectedEventTypeId}
         >
-          Next &gt;
+          <span>Next</span>
+          <span className="ml-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 48 48"
+            >
+              <path
+                fill="#fff"
+                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
+              />
+            </svg>
+          </span>
         </button>
       </div>
     </div>
