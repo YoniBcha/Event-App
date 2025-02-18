@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import * as Yup from "yup";
+import { ChromePicker, ColorResult } from "react-color";
 
 interface PersonalData {
   fullName: string;
@@ -12,7 +13,7 @@ interface PersonalData {
 }
 
 interface PersonalDataProps {
-  onSubmit: (personalData: PersonalData) => void; // Callback to send data to the parent
+  onSubmit: (personalData: PersonalData) => void;
 }
 
 // Yup validation schema
@@ -33,11 +34,12 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     fullName: "",
     mobileNumber: "",
     secondMobileNumber: "",
-    favoriteColors: "",
+    favoriteColors: "#ffffff", // Default color
     notes: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showColorPicker, setShowColorPicker] = useState(false); // State to toggle color picker
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -48,6 +50,10 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     if (errors[name]) {
       setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
     }
+  };
+
+  const handleColorChange = (color: ColorResult) => {
+    setFormData({ ...formData, favoriteColors: color.hex }); // Update the color in form data
   };
 
   const handleSubmit = async () => {
@@ -76,7 +82,6 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           Personal Data
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Full Name */}
           <div className="flex flex-col">
             <label className="font-medium text-tertiary text-md mb-2">
               Full Name
@@ -140,17 +145,23 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           {/* Favorite Colors */}
           <div className="flex flex-col">
             <label className="font-medium text-tertiary text-md mb-2">
-              Favorite Colors
+              Click this to pick a color
             </label>
-            <input
-              type="text"
-              name="favoriteColors"
-              value={formData.favoriteColors}
-              onChange={handleInputChange}
-              className={`border ${
-                errors.favoriteColors ? "border-red-500" : "border-primary"
-              } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
-            />
+            <div className="relative">
+              <div
+                className="w-10 h-10 rounded-lg cursor-pointer border border-primary"
+                style={{ backgroundColor: formData.favoriteColors }}
+                onClick={() => setShowColorPicker(!showColorPicker)}
+              />
+              {showColorPicker && (
+                <div className="absolute z-10 mt-2">
+                  <ChromePicker
+                    color={formData.favoriteColors}
+                    onChange={handleColorChange}
+                  />
+                </div>
+              )}
+            </div>
             {errors.favoriteColors && (
               <div className="text-red-500 text-sm mt-1">
                 {errors.favoriteColors}
