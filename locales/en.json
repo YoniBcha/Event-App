@@ -1,4 +1,5 @@
 {
+  "welcome": "Welcome To",
   "browse": "Browse",
   "browseSubTitle": "or drop image to upload",
   "selectImage": "Select Image",
@@ -15,11 +16,6 @@
   "Success": "Forgot password code sent successfully.",
   "Error": "Failed to send reset code.",
   "TryAgain": "An error occurred. Please try again later.",
-  "welcome": {
-    "title": "Welcome to Digital Card",
-    "subtitle": "Seamlessly create and manage your digital identity.",
-    "getStarted": "Get Started"
-  },
   "login": {
     "title": "Welcome Back!!",
     "emailUsernamePlaceholder": "Email or Username",

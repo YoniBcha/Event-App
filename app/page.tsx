@@ -1,6 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Home: React.FC = () => {
+  // const currentLocale = useSelector(
+  //   (state: any) => state.language.currentLocale
+  // );
+  const translations = useSelector((state: any) => state.language.translations);
   return (
     <div className="h-full w-full flex flex-col md:flex-row">
       <div className="w-full md:hidden flex gap-2 justify-evenly">
@@ -31,7 +38,7 @@ const Home: React.FC = () => {
       </div>
 
       <div className="w-full mt-5 md:w-1/2 flex flex-col gap-3 text-start items-start md:justify-center">
-        <div className="text-start">Welcome to</div>
+        <div className="text-start">{translations.welcome}</div>
         <div className="text-5xl text-primary font-bold">FENZO</div>
         <div>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro odio
