@@ -295,7 +295,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
         )}
 
         {currentStep === 1 && currentCategory && (
-          <div className="flex flex-col gap-5 justify-center items-center mt-5 md:mt-10">
+          <div className="flex flex-col gap-5 justify-center items-center">
             <h2 className="text-center mt-2 text-primary font-bold text-lg">
               Select {currentCategory}
             </h2>
@@ -304,8 +304,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 <div
                   key={index}
                   className={`px-6 py-5 rounded-3xl shadow-lg cursor-pointer ${
-                    selectedServiceProviders[currentCategory] ===
-                    provider.providerName
+                    selectedServiceProviders[currentCategory] === provider._id
                       ? "border-b-2 border-primary"
                       : ""
                   }`}
@@ -313,12 +312,13 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     handleServiceProviderSelect(currentCategory, provider)
                   }
                 >
-                  <div className="relative h-36 w-36 rounded-full">
+                  <div className="relative h-36 w-36">
                     <Image
                       src={provider.profile}
                       alt="provider"
                       fill
                       objectFit="cover"
+                      className="rounded-full"
                     />
                   </div>
                   <div className="text-center mt-2 text-primary font-bold text-lg">
@@ -348,27 +348,27 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
         {currentStep === 2 &&
           currentCategory &&
           selectedServiceProviders[currentCategory] && (
-            <div className="flex flex-col gap-5 justify-center items-center mt-0 md:mt-10">
+            <div className="flex flex-col gap-5 justify-center items-center">
               <h2 className="text-center mt-2 text-primary font-bold text-lg">
                 Select Packages for {currentCategory}
               </h2>
               {selectedProvider && (
-                <div className="flex flex-col md:flex-row gap-5 mx-2 md:mx-14">
-                  <div className="flex flex-col md:items-center justify-center w-[15%] h-[30%] bg-white rounded-3xl p-2">
-                    <div className="h-36 w-36 relative">
+                <div className="flex flex-col md:flex-row gap-5 mx-2">
+                  <div className="bg-white px-6 py-3 rounded-2xl">
+                    <div className="h-28 w-28 relative">
                       <Image
                         src={selectedProvider.profile}
                         alt="provider"
                         fill
                         objectFit="cover"
-                        className=" rounded-full"
+                        className="rounded-full"
                       />
                     </div>
                     <h3 className="text-center mt-2 text-primary font-bold text-lg">
                       {selectedProvider.providerName}
                     </h3>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 w-[85%] gap-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
                     {packages.map((pkg, index) => (
                       <div
                         key={index}
@@ -381,12 +381,13 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                           handlePackageSelect(currentCategory, pkg.packageName)
                         }
                       >
-                        <div className="relative h-20 w-20">
+                        <div className="relative h-32 w-32">
                           <Image
                             src={pkg.packageLogo}
                             alt={pkg.packageName}
                             fill
                             objectFit="cover"
+                            className="rounded-2xl"
                           />
                         </div>
                         <div>

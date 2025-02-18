@@ -91,7 +91,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               name="fullName"
               value={formData.fullName}
               onChange={handleInputChange}
-              className={`border ${
+              className={`border outline-none ${
                 errors.fullName ? "border-red-500" : "border-primary"
               } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
             />
@@ -110,7 +110,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               name="mobileNumber"
               value={formData.mobileNumber}
               onChange={handleInputChange}
-              className={`border ${
+              className={`border outline-none ${
                 errors.mobileNumber ? "border-red-500" : "border-primary"
               } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
             />
@@ -131,7 +131,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               name="secondMobileNumber"
               value={formData.secondMobileNumber}
               onChange={handleInputChange}
-              className={`border ${
+              className={`border outline-none ${
                 errors.secondMobileNumber ? "border-red-500" : "border-primary"
               } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
             />
@@ -180,7 +180,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             value={formData.notes}
             onChange={handleInputChange}
             rows={4}
-            className={`border ${
+            className={`border outline-none ${
               errors.notes ? "border-red-500" : "border-primary"
             } bg-[#f7f4e9] py-2 px-4 w-full rounded-lg`}
           ></textarea>
