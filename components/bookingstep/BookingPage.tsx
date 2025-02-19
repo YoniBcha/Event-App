@@ -115,11 +115,11 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   };
 
   return (
-    <main className="h-full">
+    <main className="">
       <form onSubmit={handleSubmit(onSubmit)} className="h-full">
-        <section className="flex flex-col md:flex-row w-full h-full gap-5 px-5">
+        <section className="flex flex-col md:flex-row w-full h-[80vh] gap-5 px-5">
           <div className="flex justify-center items-center md:justify-end h-full w-full">
-            <div className="flex flex-col justify-center items-center h-full md:h-[80%] w-full md:w-[60%] gap-5 rounded-2xl shadow-xl">
+            <div className="flex flex-col justify-center items-center h-full md:h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl shadow-xl">
               <div className="flex flex-col gap-5 relative w-[80%]">
                 <div className="">
                   <div
@@ -352,7 +352,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
             </div>
           </div>
           <div className="flex justify-center items-center md:justify-start h-full w-full">
-            <div className="flex flex-col justify-center items-center h-[80%] w-full md:w-[60%] gap-5 rounded-2xl relative">
+            <div className="flex flex-col justify-center items-center h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl relative">
               <Image
                 src={"/zip/Rectangle.png"}
                 alt="About Image"
