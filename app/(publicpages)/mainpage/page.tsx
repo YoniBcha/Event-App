@@ -135,15 +135,11 @@ const RootPage = () => {
       };
 
       console.log("Payload to be sent:", payload);
-
-      // Check if the user is authenticated
       if (!authenticateUser) {
-        // If not authenticated, redirect to the login page with the payload
         router.push(
           `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
         );
       } else {
-        // If authenticated, proceed to the booking page
         await router.push(
           `/sidebar/booking?payload=${encodeURIComponent(
             JSON.stringify(payload)

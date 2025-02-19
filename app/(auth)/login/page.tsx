@@ -68,30 +68,25 @@ const LoginContent: React.FC<any> = ({
   const searchParams = useSearchParams();
   const payload = searchParams?.get("payload");
 
-  const handleLogin = async (data: {
-    phoneNumber: string;
-    password: string;
-  }) => {
+  const handleLogin = async (data: { phoneNumber: string; password: string }) => {
     setLoading(true);
     try {
       const response = await loginUser({
         phoneNumber: data.phoneNumber,
         password: data.password,
-      }).unwrap(); // Ensure unwrap() is available
-
+      }).unwrap();
+  
       if (response) {
-        dispatch(authenticateUser(response));
+        console.log("Dispatching authenticateUser with payload:", response.data);
+        dispatch(authenticateUser(response.data));
         toast.success("Login Successful! Welcome back.", { autoClose: 2000 });
-
         setTimeout(() => {
           if (payload) {
-            router.push(
-              `/sidebar/booking?payload=${encodeURIComponent(payload)}`
-            );
+            router.push(`/sidebar/booking?payload=${encodeURIComponent(payload)}`);
           } else {
             router.push("/sidebar/my-orders");
           }
-        }, 1000); // Delay navigation to ensure toast displays
+        }, 1000);
       } else {
         throw new Error("Invalid phone number or password");
       }
