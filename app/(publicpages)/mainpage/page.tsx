@@ -180,7 +180,7 @@ const RootPage = () => {
   };
 
   return (
-    <main className="h-full w-full">
+    <main className="w-full">
       <section className="h-full w-full">
         {currentStep === 1 && (
           <BookingPage setBookingPageData={handleBookingData} />
