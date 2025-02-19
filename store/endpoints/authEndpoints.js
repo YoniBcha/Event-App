@@ -29,4 +29,11 @@ export const authEndpoints = (builder) => ({
       body: data,
     }),
   }),
+
+  logoutUser: builder.mutation({
+    query: () => ({
+      url: "user/logout",
+      method: "POST",
+    }),
+  }),
 });

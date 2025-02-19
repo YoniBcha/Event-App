@@ -1,26 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { authenticateUser } from "@/store/authReducer";
 import { useRouter } from "next/navigation";
+import { useLogoutUserMutation } from "@/store/endpoints/apiSlice"; // Adjust the import path
+import { logoutUser } from "@/store/authReducer"; // Import the logoutUser action
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  // const [selectedLang, setSelectedLang] = useState("EN");
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isAvatarDropdownOpen, setIsAvatarDropdownOpen] = useState(false);
   const accountDropdownRef = useRef<HTMLDivElement>(null);
   const avatarDropdownRef = useRef<HTMLDivElement>(null);
   const [currentLocale, setCurrentLocale] = useState("en");
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(
-    (state: any) => state.auth.isAuthenticated
-  );
+  const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
   const router = useRouter();
+  const [logoutUserMutation] = useLogoutUserMutation(); // Initialize the mutation
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
@@ -35,7 +32,6 @@ function Header() {
     if (typeof window !== "undefined") {
       localStorage.setItem("locale", newLocale);
       setCurrentLocale(newLocale);
-
       window.location.reload();
     }
   };
@@ -47,10 +43,6 @@ function Header() {
     }
   }, []);
 
-  // const switchLanguage = (lang: string) => {
-  //   setSelectedLang(lang);
-  // };
-
   const toggleAccountDropdown = () => {
     setIsAccountDropdownOpen(!isAccountDropdownOpen);
   };
@@ -60,14 +52,18 @@ function Header() {
   };
 
   const handleLogin = () => {
-    dispatch(authenticateUser(true));
-    router.push("/login"); // Add a leading slash
+    router.push("/login");
     setIsAvatarDropdownOpen(false);
   };
 
-  const handleLogout = () => {
-    dispatch(authenticateUser(false));
-    setIsAvatarDropdownOpen(false);
+  const handleLogout = async () => {
+    try {
+      await logoutUserMutation({}).unwrap(); // Call the logout mutation
+      dispatch(logoutUser()); // Dispatch the logout action to update Redux state
+      router.push("/login"); // Redirect to login page
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   useEffect(() => {
@@ -99,6 +95,7 @@ function Header() {
     ],
     copyright: "© 2025 FENZO",
   };
+
 
   return (
     <>

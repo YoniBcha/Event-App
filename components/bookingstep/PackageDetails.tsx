@@ -112,7 +112,8 @@ function PackageDetails({
                   {packageData.eventPackage.packagePrice} SR
                 </h3>
                 <div
-                  className="mt-2 p-2 text-sm md:text-base"
+                  className="mt-2 p-2 text-sm md:text-base overflow-hidden"
+                  style={{ wordWrap: "break-word" }}
                   dangerouslySetInnerHTML={{
                     __html: packageData.eventPackage.description.replace(
                       /\n/g,
