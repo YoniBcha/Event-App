@@ -128,7 +128,7 @@ function Header() {
 
         <div className="border p-2 border-primary rounded-sm">FENZO</div>
 
-        <div className="md:flex gap-3 items-center hidden">
+        <div className="sm:flex gap-3 items-center hidden">
           <div className="flex">
             <div
               className={`flex justify-center items-center h-6 w-6 rounded-sm cursor-pointer ${
