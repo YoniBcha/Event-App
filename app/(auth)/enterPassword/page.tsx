@@ -75,8 +75,8 @@ const EnterPasswordForm = () => {
 
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
-      <div className="shadow-lg px-6 py-5 rounded-lg text-center">
-        <h2 className="text-2xl font-bold text-primary">
+      <div className="rounded-lg text-center">
+      <h2 className="text-2xl font-bold text-primary">
           Create Your Password
         </h2>
         <p className="text-tertiary text-center mt-2 mb-6">
@@ -88,7 +88,7 @@ const EnterPasswordForm = () => {
           className="flex flex-col space-y-4"
         >
           <div className="text-left">
-            <label className="block text-gray-700 font-semibold">
+            <label className="block text-tertiary mb-2 font-semibold">
               Password
             </label>
             <input
@@ -103,7 +103,7 @@ const EnterPasswordForm = () => {
           </div>
 
           <div className="text-left">
-            <label className="block text-gray-700 font-semibold">
+            <label className="block text-tertiary mb-2 font-semibold">
               Confirm Password
             </label>
             <input

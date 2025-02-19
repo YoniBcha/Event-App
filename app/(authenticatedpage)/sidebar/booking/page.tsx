@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useBookEventMutation } from "@/store/endpoints/apiSlice";
 import Modal from "./modal";
 import Image from "next/image";
+import React, { Suspense } from "react";
+import router from "next/router";
 
+// Define the Payload interface
 interface Payload {
   place: string;
   date: string;
@@ -15,8 +17,15 @@ interface Payload {
   eventType: string | null;
   eventDesign: string | null;
   eventPackage: string | null;
-  eventPackageAdditions: any[];
-  extraServices: any[];
+  eventPackageAdditions: {
+    additionId: string;
+    additionTypeName: string;
+    quantity: number;
+  }[];
+  extraServices: {
+    servicesProvider_id: string;
+    packageName: string;
+  }[];
   personalData: {
     fullName: string;
     mobileNumber: string;
@@ -27,16 +36,36 @@ interface Payload {
 }
 
 const MyOrders = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <MyOrdersContent />
+    </Suspense>
+  );
+};
+
+const MyOrdersContent = () => {
   const searchParams = useSearchParams();
   const [payload, setPayload] = useState<Payload | null>(null);
   const [bookEvent, { isLoading, isError }] = useBookEventMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const payloadParam = searchParams.get("payload");
+    let payloadParam = searchParams.get("payload");
+
+    if (!payloadParam) {
+      payloadParam = localStorage.getItem("bookingPayload"); // Retrieve from localStorage
+    }
+
     if (payloadParam) {
-      const decodedPayload = JSON.parse(decodeURIComponent(payloadParam));
-      setPayload(decodedPayload);
+      try {
+        const decodedPayload = JSON.parse(decodeURIComponent(payloadParam));
+        console.log("Decoded Payload:", decodedPayload);
+        setPayload(decodedPayload);
+      } catch (error) {
+        console.error("Failed to parse payload:", error);
+      }
+    } else {
+      console.error("No payload found in URL or localStorage");
     }
   }, [searchParams]);
 
@@ -45,11 +74,13 @@ const MyOrders = () => {
       try {
         const result = await bookEvent(payload).unwrap();
         console.log("API Response:", result);
-        setIsModalOpen(true); // Open the modal on success
+        setIsModalOpen(true);
+        router.push("/sidebar/my-order");
       } catch (error) {
         console.error("Error booking event:", error);
       }
     } else {
+      console.error("No payload available to submit.");
     }
   };
 
@@ -60,7 +91,7 @@ const MyOrders = () => {
   return (
     <div className="p-6">
       <h1 className="text-primary text-2xl font-bold mb-6">My Orders</h1>
-      {payload && (
+      {payload ? (
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row gap-5">
             <div>
@@ -103,7 +134,7 @@ const MyOrders = () => {
                       <span className="font-semibold">
                         Addition {index + 1}:
                       </span>{" "}
-                      {addition.name || "Unnamed addition"}
+                      {addition.additionTypeName || "Unnamed addition"}
                     </p>
                   ))
                 ) : (
@@ -122,7 +153,7 @@ const MyOrders = () => {
                         <span className="font-semibold">
                           Service {index + 1}:
                         </span>{" "}
-                        {service.name || "Unnamed service"}
+                        {service.packageName || "Unnamed service"}
                       </p>
                     ))
                   ) : (
@@ -182,6 +213,8 @@ const MyOrders = () => {
             )}
           </div>
         </div>
+      ) : (
+        <p>Loading payload...</p>
       )}
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>

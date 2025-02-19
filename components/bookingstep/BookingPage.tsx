@@ -402,6 +402,13 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   onChange={handleDateChange}
                   inline
                   className="w-full"
+                  dayClassName={(date) => {
+                    return field.value &&
+                      field.value instanceof Date &&
+                      date.toDateString() === field.value.toDateString()
+                      ? "react-datepicker__day--selected"
+                      : "";
+                  }}
                 />
               )}
             />

@@ -60,12 +60,12 @@ const BookedEvents = () => {
   const response = data as ApiResponse;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto">
       <h1 className="text-2xl font-bold mb-5 text-primary">My Reservation</h1>
       {response?.bookedEvents.map((event: Event) => (
         <div
           key={event._id}
-          className="flex flex-col md:flex-row w-full md:w-[80%] gap-10 mb-6 p-4 border rounded-lg shadow-lg bg-white"
+          className="flex flex-col md:flex-row w-full lg:w-[80%] gap-10 mb-6 p-4 border rounded-lg shadow-lg bg-white"
         >
           <div className="mb-4">
             <Image

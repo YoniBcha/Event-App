@@ -162,3 +162,20 @@ body::after {
   font-weight: 700;
   font-style: normal;
 }
+
+/* Custom styles for react-datepicker */
+.react-datepicker__day--selected {
+  background-color: #c2937b !important;
+  color: white !important;
+  border-radius: 50% !important;
+}
+
+.react-datepicker__day--selected:hover {
+  background-color: #c2937b !important;
+  color: white !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #dedede !important;
+  border-radius: 50% !important;
+}

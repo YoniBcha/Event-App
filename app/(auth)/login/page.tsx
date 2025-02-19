@@ -1,31 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useLoginUserMutation } from "@/store/endpoints/apiSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { authenticateUser } from "@/store/authReducer";
 import Link from "next/link";
-interface LoginFormInputs {
-  phoneNumber: string;
-  password: string;
-}
-
-interface LoginResponse {
-  data: {
-    id: string;
-    phoneNumber: string;
-    email_verified_at: string | null;
-    type: "User" | "Admin" | "Other";
-  };
-  message?: string;
-  status?: boolean;
-}
 
 const schema = yup.object({
   phoneNumber: yup
@@ -41,39 +27,78 @@ const schema = yup.object({
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [loginUser] = useLoginUserMutation<LoginResponse>();
+  const [loginUser] = useLoginUserMutation();
   const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormInputs>({
+  } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
 
-  const handleLogin = async (data: LoginFormInputs) => {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <LoginContent
+        register={register}
+        handleSubmit={handleSubmit}
+        errors={errors}
+        dispatch={dispatch}
+        router={router}
+        loginUser={loginUser}
+        loading={loading}
+        setLoading={setLoading}
+      />
+    </Suspense>
+  );
+};
+
+const LoginContent: React.FC<any> = ({
+  register,
+  handleSubmit,
+  errors,
+  dispatch,
+  router,
+  loginUser,
+  loading,
+  setLoading,
+}) => {
+  const searchParams = useSearchParams();
+  const payload = searchParams?.get("payload");
+
+  const handleLogin = async (data: {
+    phoneNumber: string;
+    password: string;
+  }) => {
     setLoading(true);
     try {
-      const response = (await loginUser({
+      const response = await loginUser({
         phoneNumber: data.phoneNumber,
         password: data.password,
-      }).unwrap()) as unknown as LoginResponse;
+      }).unwrap(); // Ensure unwrap() is available
 
-      if (response?.data) {
-        const userData = response.data;
-        dispatch(authenticateUser(userData));
+      if (response) {
+        dispatch(authenticateUser(response));
         toast.success("Login Successful! Welcome back.", { autoClose: 2000 });
-        router.push("/sidebar/booking");
+
+        setTimeout(() => {
+          if (payload) {
+            router.push(
+              `/sidebar/booking?payload=${encodeURIComponent(payload)}`
+            );
+          } else {
+            router.push("/sidebar/my-orders");
+          }
+        }, 1000); // Delay navigation to ensure toast displays
       } else {
         throw new Error("Invalid phone number or password");
       }
-    } catch (error) {
-      const errorMessage =
-        (error as { data?: { message?: string } })?.data?.message ||
-        "Login Failed. Please try again.";
-      toast.error(errorMessage, { autoClose: 2000 });
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Login Failed. Please try again.", {
+        autoClose: 2000,
+      });
     } finally {
       setLoading(false);
     }
@@ -81,7 +106,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
-      <div className="w-96 text-center">
+      <div className="rounded-lg text-center">
         <h2 className="text-primary text-3xl font-extrabold">Login</h2>
         <p className="text-sm text-primary mb-9">Welcome Back!</p>
 
@@ -118,6 +143,7 @@ const Login: React.FC = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
         <Link href={"/SendVerificationCode"}>
           <p className="font-bold text-tertiary py-5">
             Do You Have An Account?

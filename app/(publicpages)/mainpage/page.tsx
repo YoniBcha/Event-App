@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux"; // Import useSelector to access the store
 import BookingPage from "@/components/bookingstep/BookingPage";
 import EventType from "@/components/bookingstep/EventType";
 import ChooseDesigns from "@/components/bookingstep/ChooseDesigns";
@@ -10,7 +11,6 @@ import ChoosePackage from "@/components/bookingstep/ChoosePackage";
 import PackageDetails from "@/components/bookingstep/PackageDetails";
 import ChooseAdditional from "@/components/bookingstep/ChooseAdditional";
 import ExtraService from "@/components/bookingstep/ExtraService";
-// import LastReservation from "@/components/bookingstep/LastReservation";
 import PersonalDataComonents from "@/components/bookingstep/PersonalData";
 
 interface FormData {
@@ -59,6 +59,9 @@ const RootPage = () => {
   const [eventPackageAdditions, setEventPackageAdditions] = useState<
     EventPackageAddition[]
   >([]);
+
+  // Retrieve the authenticated user from the store
+  const authenticateUser = useSelector((state: any) => state.auth.user);
 
   const handleBookingData = (data: FormData) => {
     setBookingData(data);
@@ -112,12 +115,6 @@ const RootPage = () => {
     });
   };
 
-  // const handleLastReservationNext = (value: boolean) => {
-  //   if (value) {
-  //     setCurrentStep(9);
-  //   }
-  // };
-
   const handlePersonalDataSubmit = async (data: PersonalData) => {
     try {
       console.log("Received Personal Data:", data);
@@ -133,16 +130,26 @@ const RootPage = () => {
         eventPackageAdditions: eventPackageAdditions,
         extraServices: extraServices.flatMap(
           (service) => service.extraServices
-        ), // Fix: Flatten the nested array
+        ),
         personalData: data,
       };
 
       console.log("Payload to be sent:", payload);
-      await router.push(
-        `/sidebar/booking?payload=${encodeURIComponent(
-          JSON.stringify(payload)
-        )}`
-      );
+
+      // Check if the user is authenticated
+      if (!authenticateUser) {
+        // If not authenticated, redirect to the login page with the payload
+        router.push(
+          `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
+        );
+      } else {
+        // If authenticated, proceed to the booking page
+        await router.push(
+          `/sidebar/booking?payload=${encodeURIComponent(
+            JSON.stringify(payload)
+          )}`
+        );
+      }
     } catch (error) {
       console.error("Navigation error:", error);
     }
@@ -225,9 +232,6 @@ const RootPage = () => {
             onExtraServiceSelect={handleExtraServiceSelect}
           />
         )}
-        {/* {currentStep === 8 && (
-          <LastReservation onNext={handleLastReservationNext} />
-        )} */}
         {currentStep === 8 && (
           <PersonalDataComonents onSubmit={handlePersonalDataSubmit} />
         )}

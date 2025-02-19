@@ -116,6 +116,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     } else {
       setSelectedCategories([...selectedCategories, category]);
     }
+    console.log("Selected Categories:", selectedCategories);
   };
 
   const handleServiceProviderSelect = (
@@ -199,9 +200,17 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
 
   const handleNext = async () => {
     if (currentStep === 0) {
-      setCurrentCategory(selectedCategories[currentStep]);
+      if (selectedCategories.length === 0) {
+        setErrors({ extraServices: "At least one service must be selected" });
+        return;
+      }
+      setCurrentCategory(selectedCategories[0]);
       setCurrentStep(1);
     } else if (currentStep === 1) {
+      if (!selectedServiceProviders[currentCategory || ""]) {
+        setErrors({ extraServices: "Service provider is required" });
+        return;
+      }
       if (packages.length > 0) {
         setCurrentStep(2);
       } else {
@@ -213,6 +222,10 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
         }
       }
     } else if (currentStep === 2) {
+      if (!selectedPackages[currentCategory || ""]) {
+        setErrors({ extraServices: "Package is required" });
+        return;
+      }
       if (currentCategoryIndex < selectedCategories.length - 1) {
         setCurrentCategory(selectedCategories[currentCategoryIndex + 1]);
         setCurrentStep(1);
@@ -248,6 +261,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
           .then((data) => {
             if (data.status) {
               setServiceProviders(data.servicesProviders);
+              console.log("Service Providers:", data.servicesProviders);
             }
           })
           .catch((error) =>

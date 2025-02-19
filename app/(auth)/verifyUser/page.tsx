@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, {
+  useState,
+  useEffect,
+  Suspense,
+  useRef,
+  useCallback,
+} from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -60,9 +66,10 @@ const VerificationPageContent: React.FC = () => {
   const [resending, setResending] = useState<boolean>(false);
   const [phoneNumberFromURL, setPhoneNumberFromURL] = useState<string>("");
   const [fullNameFromURL, setFullNameFromURL] = useState<string>("");
+  const [digits, setDigits] = useState<string[]>(Array(4).fill(""));
+  const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(4).fill(null));
 
   const {
-    register,
     handleSubmit,
     setValue,
     formState: { errors },
@@ -73,16 +80,33 @@ const VerificationPageContent: React.FC = () => {
 
   useEffect(() => {
     if (searchParams) {
-      setPhoneNumberFromURL(searchParams.get("phoneNumber") || "");
-      setFullNameFromURL(searchParams.get("fullName") || "");
+      const phoneNumber = searchParams.get("phoneNumber") || "";
+      const fullName = searchParams.get("fullName") || "";
+      setPhoneNumberFromURL(phoneNumber);
+      setFullNameFromURL(fullName);
+      setValue("phoneNumber", phoneNumber); // Set the phone number in the form
     }
-  }, [searchParams]);
+  }, [searchParams, setValue]);
 
-  useEffect(() => {
-    if (phoneNumberFromURL) {
-      setValue("phoneNumber", phoneNumberFromURL);
+  const handleDigitChange = (index: number, value: string) => {
+    const newDigits = [...digits];
+    newDigits[index] = value;
+    setDigits(newDigits);
+
+    if (value && index < 3) {
+      inputRefs.current[index + 1]?.focus();
     }
-  }, [phoneNumberFromURL, setValue]);
+
+    setValue("code", newDigits.join(""));
+  };
+
+  // Use `useCallback` to create a stable ref callback
+  const setInputRef = useCallback(
+    (index: number) => (el: HTMLInputElement | null) => {
+      inputRefs.current[index] = el;
+    },
+    []
+  );
 
   const handleVerify: SubmitHandler<VerificationFormInputs> = async (data) => {
     setLoading(true);
@@ -122,8 +146,8 @@ const VerificationPageContent: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="p-6 rounded-lg shadow-md w-96 text-center">
+    <div className="flex items-center justify-center h-[75vh] w-full">
+      <div className="rounded-lg text-center">
         <h2 className="text-2xl font-bold text-primary">Verify Your Account</h2>
         <p className="text-gray-600 mt-2 mb-6">
           Enter the 4-digit verification code sent to your phone.
@@ -131,33 +155,28 @@ const VerificationPageContent: React.FC = () => {
 
         <form
           onSubmit={handleSubmit(handleVerify)}
-          className="flex flex-col space-y-4"
+          className="flex flex-col items-center space-y-4"
         >
-          <input
-            type="text"
-            {...register("phoneNumber")}
-            className="border border-primary rounded-sm p-3 text-center text-lg outline-none focus:ring-2 focus:ring-primary"
-            placeholder="Phone Number"
-            disabled
-          />
-          {errors.phoneNumber && (
-            <p className="text-red-500 text-sm">{errors.phoneNumber.message}</p>
-          )}
-
-          <input
-            type="text"
-            {...register("code")}
-            maxLength={4}
-            className="border border-primary rounded-sm p-3 text-center text-xl tracking-widest outline-none focus:ring-2 focus:ring-primary"
-            placeholder="----"
-          />
+          <div className="flex space-x-2 justify-center">
+            {digits.map((digit, index) => (
+              <input
+                key={index}
+                type="text"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleDigitChange(index, e.target.value)}
+                ref={setInputRef(index)} // Use the stable ref callback
+                className="border border-primary rounded-lg p-3 text-center text-xl tracking-widest outline-none focus:ring-2 focus:ring-primary w-12"
+              />
+            ))}
+          </div>
           {errors.code && (
             <p className="text-red-500 text-sm">{errors.code.message}</p>
           )}
 
           <button
             type="submit"
-            className="w-full bg-primary text-white py-2 rounded-md font-semibold cursor-pointer"
+            className="bg-primary text-white py-2 rounded-md font-semibold cursor-pointer w-1/2"
             disabled={loading}
           >
             {loading ? "Verifying..." : "Verify"}

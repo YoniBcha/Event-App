@@ -49,10 +49,14 @@ function SendVerificationCode() {
       toast.success("Verification code sent to your phone!");
 
       router.push(
-        `/verifyUser?phoneNumber=${encodeURIComponent(data.phoneNumber)}&fullName=${encodeURIComponent(data.fullName)}`
+        `/verifyUser?phoneNumber=${encodeURIComponent(
+          data.phoneNumber
+        )}&fullName=${encodeURIComponent(data.fullName)}`
       );
     } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to send OTP. Please try again.");
+      toast.error(
+        error?.data?.message || "Failed to send OTP. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -60,7 +64,7 @@ function SendVerificationCode() {
 
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
-      <div className="shadow-lg px-6 py-5 rounded-lg text-center">
+      <div className="rounded-lg text-center">
         <div className="text-primary text-3xl font-extrabold">
           Verify Your Phone!
         </div>
