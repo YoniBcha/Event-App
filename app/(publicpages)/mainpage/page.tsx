@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux"; // Import useSelector to access the store
+import { useSelector } from "react-redux"; 
 import BookingPage from "@/components/bookingstep/BookingPage";
 import EventType from "@/components/bookingstep/EventType";
 import ChooseDesigns from "@/components/bookingstep/ChooseDesigns";

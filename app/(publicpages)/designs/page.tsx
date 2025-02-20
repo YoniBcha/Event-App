@@ -18,13 +18,13 @@ interface Design {
   __v: number;
 }
 
-interface ChooseDesignsProps {
-  id: string;
-  onNext: (selectedDesignId: string | null) => void; // Callback to send the selected design ID to the parent
-  onBackClick: () => void; // Callback for "Back" button click
-}
+// interface ChooseDesignsProps {
+//   id?: string; // Make id optional
+//   onNext?: (selectedDesignId: string | null) => void; // Make onNext optional
+//   onBackClick?: () => void; // Make onBackClick optional
+// }
 
-function ChooseDesigns({  onBackClick }: ChooseDesignsProps) {
+function ChooseDesigns() {
   const [designs, setDesigns] = useState<Design[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
@@ -68,9 +68,9 @@ function ChooseDesigns({  onBackClick }: ChooseDesignsProps) {
     setIsGridView(!isGridView);
   };
 
-  const handleBackClick = () => {
-    onBackClick();
-  };
+  // const handleBackClick = () => {
+  //   onBackClick?.(); // Use optional chaining to avoid errors if onBackClick is undefined
+  // };
 
   if (error) return <p>Failed to load designs</p>;
 
@@ -82,7 +82,7 @@ function ChooseDesigns({  onBackClick }: ChooseDesignsProps) {
           No Designs Available
         </div>
         <button
-          onClick={handleBackClick}
+          // onClick={handleBackClick}
           className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
         >
           <span className="mr-2">
