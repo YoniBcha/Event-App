@@ -62,7 +62,7 @@ const EnterPasswordForm = () => {
       if (response) {
         dispatch(authenticateUser(response));
         toast.success("Registration successful!");
-        router.push("/dashboard");
+        router.push("/login");
       } else {
         throw new Error("Registration failed");
       }
@@ -88,9 +88,6 @@ const EnterPasswordForm = () => {
           className="flex flex-col space-y-4"
         >
           <div className="text-left">
-            <label className="block text-tertiary mb-2 font-semibold">
-              Password
-            </label>
             <input
               type="password"
               {...register("password")}
@@ -103,9 +100,6 @@ const EnterPasswordForm = () => {
           </div>
 
           <div className="text-left">
-            <label className="block text-tertiary mb-2 font-semibold">
-              Confirm Password
-            </label>
             <input
               type="password"
               {...register("confirmPassword")}
@@ -121,7 +115,7 @@ const EnterPasswordForm = () => {
 
           <button
             type="submit"
-            className="w-full bg-primary text-white py-2 rounded-md font-semibold cursor-pointer"
+            className="w-full bg-primary text-white hover:bg-[#faebdc] hover:text-primary py-2 rounded-md font-semibold cursor-pointer"
             disabled={loading}
           >
             {loading ? "Creating Account..." : "Register"}

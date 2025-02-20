@@ -132,7 +132,7 @@ const LoginContent: React.FC<any> = ({
 
           <button
             type="submit"
-            className="w-full bg-primary text-center rounded-xl py-2 text-gray-100 cursor-pointer disabled:opacity-50"
+            className="w-full bg-primary text-center hover:bg-[#faebdc] hover:text-primary rounded-xl py-2 text-gray-100 cursor-pointer disabled:opacity-50"
             disabled={loading}
           >
             {loading ? "Logging in..." : "Login"}
@@ -142,7 +142,7 @@ const LoginContent: React.FC<any> = ({
         <Link href={"/SendVerificationCode"}>
           <p className="font-bold text-tertiary py-5">
             Do You Have An Account?
-            <span className="text-primary font-bold cursor-pointer">
+            <span className="text-primary hover:text-gray-500 font-bold cursor-pointer">
               {" "}
               Signup
             </span>

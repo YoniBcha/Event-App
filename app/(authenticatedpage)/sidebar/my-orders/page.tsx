@@ -65,54 +65,57 @@ const BookedEvents = () => {
       {response?.bookedEvents.map((event: Event) => (
         <div
           key={event._id}
-          className="flex flex-col md:flex-row w-full lg:w-[80%] gap-10 mb-6 p-4 border rounded-lg shadow-lg bg-white"
+          className="flex flex-col md:flex-row  w-full lg:w-[80%] gap-10 max-md:gap-2 mb-6 p-3 border rounded-2xl shadow-lg bg-white"
         >
-          <div className="mb-4">
-            <Image
-              src={event.eventType.image}
-              alt="Event"
-              width={600}
-              height={400}
-              className="w-full h-40 object-cover rounded-xl"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="text-2xl text-primary">
-              {event.eventType.nameOfEvent} Event
+          <div className="flex flex-row gap-2 ">
+            <div >
+              <Image
+                src={event.eventType.image}
+                alt="Event"
+                width={600}
+                height={400}
+                className="w-[14rem] h-[12rem] object-cover rounded-xl"
+              />
             </div>
-            <p className="text-sm text-tertiary">
-              Package: {event.eventPackage.packageName}
-            </p>
-            <p className="font-medium text-primary text-sm">
-              Event Design: {event.eventDesign.eventDesign}
-            </p>
-            <p className="text-tertiary text-sm">
-              {event.personalData.mobileNumber}
-            </p>
-            {event.personalData.secondMobileNumber && (
-              <p className="text-tertiary text-sm">
-                {event.personalData.secondMobileNumber}
+            <div className="flex flex-col gap-1">
+              <div className="text-2xl max-md:text-xl text-primary">
+                {event.eventType.nameOfEvent} Event
+              </div>
+              <p className="text-sm text-tertiary">
+                Package: {event.eventPackage.packageName}
               </p>
-            )}
-            <div className="flex">
-              <p className="text-black">City:</p>
-              <p className="text-primary pl-2">{event.city}</p>
+              <p className="font-medium text-primary text-sm">
+                Event Design: {event.eventDesign.eventDesign}
+              </p>
+              <p className="text-tertiary text-sm">
+                {event.personalData.mobileNumber}
+              </p>
+              {event.personalData.secondMobileNumber && (
+                <p className="text-tertiary text-sm">
+                  {event.personalData.secondMobileNumber}
+                </p>
+              )}
+              <div className="flex">
+                <p className="text-gray-400">City:</p>
+                <p className="text-primary pl-2">{event.city}</p>
+              </div>
             </div>
           </div>
-          <div className="flex flex-col gap-3 border-l-4 border-primary pl-5">
-            <div className="bg-primary w-40 text-white text-center py-1 rounded-xl text-lg">
+          <div className="flex flex-wrap md:flex-col gap-3 border-l-4 max-md:border-none border-primary md:pl-5 pl-1 ">
+            <div className="bg-primary w-40 p-1 max-md:h-fit text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-2xl font-semibold">
               {event.orderStatus}
             </div>
-            <div className="bg-[#dedede] text-white text-center py-1 rounded-xl text-lg">
+            <div className="bg-[#dedede] p-1 max-md:h-fit text-lg text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-2xl font-semibold">
               Quotation
             </div>
 
-            <div className="mt-5">
-              <p className="text-primary text-sm font-semibold text-end">
-                {new Date(event.date).toLocaleDateString()}
+            <div className="mt-5 max-md:mt-1 flex justify-start">
+              <p className="text-primary text-lg font-semibold text-end">
+                Date:{new Date(event.date).toLocaleDateString()}
               </p>
             </div>
           </div>
+          
         </div>
       ))}
     </div>

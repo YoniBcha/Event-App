@@ -5,7 +5,7 @@ function Profile() {
   return (
     <div className="flex w-full gap-6 flex-col">
       <div className="flex flex-1 flex-col md:flex-row  gap-8 w-full items-center">
-        <div className="max-md:flex max-md:justify-center ">
+        <div className="max-md:hidden max-md:justify-center ">
           <div className="rounded-full h-20 w-20 bg-slate-500 mb-2 sm:mb-0 sm:mr-4 flex items-center justify-center"></div>
         </div>
         <div className="flex flex-col flex-1 w-full  ">
@@ -13,7 +13,7 @@ function Profile() {
           <div>
             <input
               type="text"
-              className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#F6F0EA]"
+              className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
               placeholder="username"
             />
           </div>
@@ -52,7 +52,7 @@ function Profile() {
 
           <input
             type="text"
-            className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#F6F0EA]"
+            className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
             placeholder="email@example.com"
           />
         </div>
@@ -61,7 +61,7 @@ function Profile() {
 
           <input
             type="password"
-            className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#F6F0EA]"
+            className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
             placeholder="*******"
           />
         </div>
@@ -72,7 +72,7 @@ function Profile() {
 
         <input
           type="text"
-          className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#F6F0EA]"
+          className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
           placeholder="+1234567890"
         />
       </div>
@@ -82,18 +82,18 @@ function Profile() {
 
         <input
           type="text"
-          className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#F6F0EA]"
+          className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
           placeholder="Select Your Language"
         />
       </div>
 
       <hr className="bg-tertiary hidden md:block md:h-0" />
       <div className="flex flex-row gap-5">
-        <div className="py-1 px-3 rounded-xl bg-[#f7dbbf] text-primary border border-gray-300">
+        <div className="py-1 px-3 rounded-xl bg-[#f7dbbf] hover:bg-primary hover:text-white cursor-pointer text-primary border border-gray-300">
           Save Changes
         </div>
 
-        <div className="py-1 px-3 rounded-xl bg-[#f7dbbf] text-primary border border-gray-300">
+        <div className="py-1 px-3 rounded-xl bg-[#f7dbbf] hover:bg-primary hover:text-white cursor-pointer text-primary border border-gray-300">
           Cancel
         </div>
       </div>

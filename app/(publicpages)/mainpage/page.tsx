@@ -226,6 +226,7 @@ const RootPage = () => {
           <ExtraService
             extraServices={extraServices}
             onExtraServiceSelect={handleExtraServiceSelect}
+            onBack={handleBack}
           />
         )}
         {currentStep === 8 && (

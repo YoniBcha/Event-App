@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import * as Yup from "yup";
+import { useSelector } from "react-redux";
 import { ChromePicker, ColorResult } from "react-color";
 
 interface PersonalData {
@@ -40,7 +41,23 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showColorPicker, setShowColorPicker] = useState(false); // State to toggle color picker
+  interface RootState {
+    language: {
+      translations: {
+        booking: {
+          personalData: string;
+          fullName: string;
+          mobileNumber: string;
+          secondMobileNumber: string;
+          pickColor: string;
+          notes: string;
+          nextBtn: string;
+        };
+      };
+    };
+  }
 
+  const translations = useSelector((state: RootState) => state.language.translations);
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -76,15 +93,15 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   };
 
   return (
-    <div className="flex items-center justify-center h-full p-4">
-      <div className="w-full max-w-4xl p-6 rounded-lg shadow-md">
+    <div className="flex items-center justify-center h-full max-[500px]:p-1 p-4">
+      <div className="w-full max-w-4xl p-6 max-[500px]:p-3 rounded-lg shadow-md">
         <div className="text-center text-primary font-bold text-2xl mb-6">
-          Personal Data
+          {translations.booking.personalData}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col">
             <label className="font-medium text-tertiary text-md mb-2">
-              Full Name
+              {translations.booking.fullName}
             </label>
             <input
               type="text"
@@ -93,7 +110,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               onChange={handleInputChange}
               className={`border outline-none ${
                 errors.fullName ? "border-red-500" : "border-primary"
-              } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
+              } input-field`}
             />
             {errors.fullName && (
               <div className="text-red-500 text-sm mt-1">{errors.fullName}</div>
@@ -103,7 +120,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           {/* Mobile Number */}
           <div className="flex flex-col">
             <label className="font-medium text-tertiary text-md mb-2">
-              Mobile Number
+              {translations.booking.mobileNumber}
             </label>
             <input
               type="text"
@@ -112,7 +129,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               onChange={handleInputChange}
               className={`border outline-none ${
                 errors.mobileNumber ? "border-red-500" : "border-primary"
-              } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
+              } input-field`}
             />
             {errors.mobileNumber && (
               <div className="text-red-500 text-sm mt-1">
@@ -124,7 +141,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           {/* Second Mobile Number */}
           <div className="flex flex-col">
             <label className="font-medium text-tertiary text-md mb-2">
-              Second Mobile Number
+              {translations.booking.secondMobileNumber}
             </label>
             <input
               type="text"
@@ -133,7 +150,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               onChange={handleInputChange}
               className={`border outline-none ${
                 errors.secondMobileNumber ? "border-red-500" : "border-primary"
-              } bg-[#f7f4e9] py-2 px-4 rounded-lg`}
+              } input-field`}
             />
             {errors.secondMobileNumber && (
               <div className="text-red-500 text-sm mt-1">
@@ -145,7 +162,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           {/* Favorite Colors */}
           <div className="flex flex-col">
             <label className="font-medium text-tertiary text-md mb-2">
-              Click this to pick a color
+              {translations.booking.pickColor}
             </label>
             <div className="relative">
               <div
@@ -173,7 +190,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
         {/* Notes */}
         <div className="mt-6">
           <label className="font-medium text-tertiary text-md mb-2">
-            Notes
+            {translations.booking.notes}
           </label>
           <textarea
             name="notes"
@@ -191,9 +208,9 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
         <div className="flex justify-center mt-8">
           <button
             onClick={handleSubmit}
-            className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors duration-200"
+            className="px-6 py-2 rounded-lg bg-primary hover:bg-[#faebdc] hover:text-primary text-white hover:bg-primary-dark transition-colors duration-200"
           >
-            Next &gt;
+            { translations.booking.nextBtn} &gt;
           </button>
         </div>
       </div>

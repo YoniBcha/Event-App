@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSendVerificationCodeMutation } from "@/store/endpoints/apiSlice";
+import Link from "next/link";
 
 interface FormData {
   fullName: string;
@@ -42,7 +43,6 @@ function SendVerificationCode() {
     try {
       // Send only the phoneNumber in the payload
       const payload = { phoneNumber: data.phoneNumber };
-      console.log("Payload being sent:", payload); // Debugging log
 
       await sendVerificationCode(payload).unwrap();
 
@@ -101,17 +101,19 @@ function SendVerificationCode() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-primary text-center rounded-xl py-2 text-gray-100 cursor-pointer"
+            className="w-full bg-primary text-center hover:bg-[#faebdc] hover:text-primary rounded-xl py-2 text-gray-100 cursor-pointer"
             disabled={loading}
           >
             {loading ? "Sending OTP..." : "Send OTP"}
           </button>
         </form>
 
-        <div className="font-bold text-tertiary py-5">
-          Already have an account?{" "}
-          <span className="text-primary font-bold cursor-pointer">Sign in</span>
-        </div>
+        <Link href={"/login"}>
+          <div className="font-bold text-tertiary py-5">
+            Already have an account?{" "}
+            <span className="text-primary font-bold hover:text-gray-500 cursor-pointer">Sign in</span>
+          </div>
+        </Link>
       </div>
     </div>
   );
