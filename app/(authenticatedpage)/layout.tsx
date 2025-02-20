@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect} from "react";
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import Image from "next/image";
+import { FiSettings, FiUser, FiEdit } from "react-icons/fi";
+
 interface AuthState {
   isAuthenticated: boolean;
   user: any;
@@ -29,6 +30,7 @@ function Layout({ children }: RootLayoutProps) {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+  const translations = useSelector((state: any) => state.language.translations);
 
   useEffect(() => {
     if (!isAuthenticated && pathname !== "/login") {
@@ -42,7 +44,26 @@ function Layout({ children }: RootLayoutProps) {
 
   return (
     <div className="flex flex-col md:flex-row w-full mb-10 gap-2 md:gap-6">
-      <div className="w-full md:w-[20%] flex-col items-center">
+      {/* Mobile Header with Avatar and Edit Icon */}
+      <div className="md:hidden flex justify-center items-center p-4 bg-[#fbf4e8]">
+        <div className="flex items-center gap-2">
+          <div className="relative rounded-full border-4 border-primary w-16 h-16">
+           <FiUser size={54} />
+           <Link  href="/sidebar/profile">
+            <button
+              className="absolute -bottom-1 -right-1 bg-primary p-1 rounded-full text-white"
+            >
+                <FiEdit size={20} className="cursor-pointer"/>
+            </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Sidebar (Hidden on Mobile) */}
+      <div
+        className=" md:block w-full md:w-[30%] flex-col items-center hidden"
+      >
         <div className="flex flex-col gap-5 bg-[#fbf4e8] rounded-sm m-4 p-2">
           <Link
             href="/sidebar/profile"
@@ -51,14 +72,9 @@ function Layout({ children }: RootLayoutProps) {
             }`}
           >
             <div>
-              <Image
-                src={"/zip/setting-01.svg"}
-                width={18}
-                height={18}
-                alt="contact"
-              />
+              <FiUser size={18} />
             </div>
-            <div>Profile</div>
+            <div>{translations.profile}</div>
           </Link>
 
           <Link
@@ -68,18 +84,14 @@ function Layout({ children }: RootLayoutProps) {
             }`}
           >
             <div>
-              <Image
-                src={"/zip/file-02.svg"}
-                width={18}
-                height={18}
-                alt="contact"
-              />
+              <FiSettings size={18} />
             </div>
-            <div>My Orders</div>
+            <div>{translations.myOrders}</div>
           </Link>
         </div>
       </div>
 
+      {/* Main Content */}
       <div className="md:w-[80%]">{children}</div>
     </div>
   );

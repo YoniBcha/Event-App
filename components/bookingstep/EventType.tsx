@@ -6,6 +6,7 @@ import { Navigation, Pagination } from "swiper/modules";
 
 import { useGetEventTypesQuery } from "@/store/endpoints/apiSlice";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -45,16 +46,62 @@ const EventTypeComponent = ({
   );
 
   const eventTypes: EventTypeData[] = data?.eventTypes ?? [];
+  interface RootState {
+    language: {
+      translations: {
+        booking: {
+          eventType: string;
+          backBtn: string;
+          nextBtn: string;
+        };
+      };
+    };
+  }
+
+  const translations = useSelector((state: RootState) => state.language.translations);
 
   const handleEventTypeSelect = (eventTypeId: string) => {
     setSelectedEventTypeId(eventTypeId);
     onEventTypeSelect(eventTypeId);
   };
+  const handleBackClick = () => {
+    onBack();
+  }
+
+  if (!isLoading && eventTypes.length === 0) {
+    return (
+      <div className="flex flex-col gap-10 h-full justify-center items-center">
+        <div className="text-primary font-bold text-xl md:text-3xl text-center">
+          No Types Available
+        </div>
+        <button
+          onClick={handleBackClick}
+          className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+        >
+          <span className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 12 24"
+            >
+              <path
+                fill="#c2937b"
+                fillRule="evenodd"
+                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+              />
+            </svg>
+          </span>
+          <span>Back</span>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col justify-center gap-4 items-center h-full">
-      <div className="text-primary font-bold text-2xl md:text-3xl py-5">
-        Event Type
+      <div className="text-primary font-bold text-xl md:text-3xl py-5">
+        {translations.booking.eventType}
       </div>
 
       {isLoading ? (
@@ -106,10 +153,10 @@ const EventTypeComponent = ({
         </div>
       )}
 
-      <div className="flex flex-row gap-5 mt-4">
+      <div className="flex flex-row gap-5 my-4">
         <button
           onClick={onBack}
-          className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer hover:bg-gray-200 transition"
+          className="back-btn"
         >
           <span className="mr-2">
             <svg
@@ -125,19 +172,19 @@ const EventTypeComponent = ({
               />
             </svg>
           </span>
-          <span>Back</span>
+          <span>{translations.booking.backBtn}</span>
         </button>
         <button
           onClick={() => onNext(selectedEventTypeId)}
-          className={`flex items-center p-2 rounded-lg text-gray-100 cursor-pointer transition ${
+          className={`next-btn ${
             selectedEventTypeId
-              ? "bg-primary hover:bg-primary-dark"
+              ? "bg-primary hover:bg-[#faebdc] hover:text-primary"
               : "bg-gray-400 cursor-not-allowed"
           }`}
           disabled={!selectedEventTypeId}
         >
-          <span>Next</span>
-          <span className="ml-3">
+          <span>{ translations.booking.nextBtn}</span>
+          <span className="ml-3 ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"

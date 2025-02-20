@@ -5,12 +5,14 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 import * as Yup from "yup";
 
 interface ExtraServiceProps {
   extraServices: any;
   onExtraServiceSelect: (selectedService: any) => void;
+  onBack: () => void; // Add onBack prop for the back button
 }
 
 interface CategoryCardProps {
@@ -66,6 +68,7 @@ interface SelectedData {
 interface ParentComponentProps {
   extraServices: any[];
   onExtraServiceSelect: (selectedData: SelectedData) => void;
+  onBack: () => void; // Add onBack prop for the back button
 }
 
 const validationSchema = Yup.object().shape({
@@ -84,6 +87,7 @@ const validationSchema = Yup.object().shape({
 const ParentComponent: React.FC<ParentComponentProps> = ({
   extraServices,
   onExtraServiceSelect,
+  onBack,
 }) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedServiceProviders, setSelectedServiceProviders] = useState<{
@@ -101,6 +105,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     useState<ServiceProvider | null>(null);
   const [packages, setPackages] = useState<Package[]>([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const translations = useSelector((state: any) => state.language.translations);
 
   const handleCategorySelect = (category: string) => {
     if (selectedCategories.includes(category)) {
@@ -271,16 +276,46 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     }
   }, [currentCategory, extraServices]);
 
+  if (extraServices.length === 0) {
+    return (
+      <div className="flex flex-col gap-10 h-full justify-center items-center">
+        <div className="text-primary font-bold text-xl md:text-3xl text-center">
+          No Extra Services Available
+        </div>
+        <button
+          onClick={onBack}
+          className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+        >
+          <span className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 12 24"
+            >
+              <path
+                fill="#c2937b"
+                fillRule="evenodd"
+                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+              />
+            </svg>
+          </span>
+          <span>{translations.booking.backBtn}</span>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full">
       <div className="flex flex-col gap-4 items-center h-full">
-        <div className="text-primary font-bold text-2xl md:text-3xl py-5">
-          Choose Extra Services
+        <div className="text-primary font-bold text-xl md:text-3xl py-5">
+          {translations.booking.chooseExtraServices}
         </div>
 
         {currentStep === 0 && (
           <>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-10 mt-10">
+            <div className="grid grid-cols-2 md:grid-cols-3 max-[370px]:grid-cols-1 gap-10 mt-10">
               {extraServices.map((service, index) => (
                 <div key={index} className="">
                   <CategoryCard
@@ -296,13 +331,46 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               ))}
             </div>
 
-            <div className="flex justify-center items-center mt-5 md:mt-10">
+            <div className="flex justify-center items-center gap-5 mt-5 md:mt-10">
+            <button
+          onClick={onBack}
+          className="back-btn"
+        >
+          <span className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 12 24"
+            >
+              <path
+                fill="#c2937b"
+                fillRule="evenodd"
+                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+              />
+            </svg>
+          </span>
+          <span>{translations.booking.backBtn}</span>
+        </button>
               <button
                 onClick={handleNext}
                 disabled={selectedCategories.length === 0}
-                className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+                className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
               >
-                Next
+               <span>{ translations.booking.nextBtn}</span>
+          <span className="ml-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 48 48"
+            >
+              <path
+                fill="#fff"
+                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
+              />
+            </svg>
+          </span>{" "}
               </button>
             </div>
           </>
@@ -313,7 +381,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
             <h2 className="text-center mt-2 text-primary font-bold text-lg">
               Select {currentCategory}
             </h2>
-            <ul className="grid grid-cols-2 md:grid-cols-3 gap-8">
+            <ul className="grid grid-cols-2 max-[500px]:gap-3 max-[500px]:grid-cols-1  md:grid-cols-3 gap-8">
               {serviceProviders.map((provider, index) => (
                 <div
                   key={index}
@@ -341,19 +409,46 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 </div>
               ))}
             </ul>
-            <div className="flex gap-5 mt-5">
+            <div className="flex gap-5 my-5">
               <button
                 onClick={handleBack}
-                className="text-center mt-2 text-primary font-medium text-lg border border-primary rounded-lg px-6 py-1"
+                className="back-btn"
               >
-                Back
+               <span className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 12 24"
+            >
+              <path
+                fill="#c2937b"
+                fillRule="evenodd"
+                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+              />
+            </svg>
+          </span>
+          <span>{translations.booking.backBtn}</span>{" "}
               </button>
               <button
-                className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+                className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
                 onClick={handleNext}
                 disabled={!selectedServiceProviders[currentCategory]}
               >
-                Next
+                 <span>{ translations.booking.nextBtn}</span>
+          <span className="ml-3 ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 48 48"
+            >
+              <path
+                fill="#fff"
+                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
+              />
+            </svg>
+          </span>
               </button>
             </div>
           </div>
@@ -368,7 +463,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               </h2>
               {selectedProvider && (
                 <div className="flex flex-col md:flex-row gap-5 mx-2">
-                  <div className="bg-white px-6 py-3 rounded-2xl">
+                  <div className="bg-white h-fit shadow-lg max-md:mx-auto shadow-gray-300 px-6 py-3 rounded-2xl">
                     <div className="h-28 w-28 relative">
                       <Image
                         src={selectedProvider.profile}
@@ -395,7 +490,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                           handlePackageSelect(currentCategory, pkg.packageName)
                         }
                       >
-                        <div className="relative h-32 w-32">
+                        <div className="relative h-32 w-36">
                           <Image
                             src={pkg.packageLogo}
                             alt={pkg.packageName}
@@ -417,20 +512,34 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                   </div>
                 </div>
               )}
-              <div className="flex gap-5 mt-5">
+              <div className="flex gap-5 my-5">
                 <button
                   onClick={handleBack}
-                  className="text-center mt-2 text-primary font-medium text-lg border border-primary rounded-lg px-6 py-1"
+                  className="back-btn"
                 >
-                  Back
+                  <span className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 12 24"
+            >
+              <path
+                fill="#c2937b"
+                fillRule="evenodd"
+                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+              />
+            </svg>
+          </span>
+          <span>{translations.booking.backBtn}</span>{" "}
                 </button>
                 <button
                   onClick={handleNext}
-                  className="text-center mt-2 bg-primary font-medium text-white text-lg border border-primary rounded-lg px-6 py-1"
+                  className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
                 >
                   {currentCategoryIndex < selectedCategories.length - 1
-                    ? "Next Category"
-                    : "Done"}
+                    ? translations.booking.nextCategory
+                  : translations.booking.done}
                 </button>
               </div>
             </div>
@@ -443,8 +552,11 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
 const ExtraServicesPage: React.FC<ExtraServiceProps> = ({
   extraServices,
   onExtraServiceSelect,
+  onBack,
 }) => {
-  const { data, error, isLoading } = useGetExtraServiceQuery<any>({});
+  const { data, error, isLoading } = useGetExtraServiceQuery<any>({
+    
+  });
 
   const handleExtraServiceSelect = (selectedData: SelectedData) => {
     console.log("Selected Data from Child:", selectedData);
@@ -463,6 +575,7 @@ const ExtraServicesPage: React.FC<ExtraServiceProps> = ({
     <ParentComponent
       extraServices={data?.extraServices || []}
       onExtraServiceSelect={handleExtraServiceSelect}
+      onBack={onBack} // Pass the onBack prop
     />
   );
 };

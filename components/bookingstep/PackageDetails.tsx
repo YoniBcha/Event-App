@@ -4,6 +4,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 import { useGetPackageDetailQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
 
 function PackageDetails({
@@ -17,6 +18,7 @@ function PackageDetails({
 }) {
   const { data: packageData, isLoading } =
     useGetPackageDetailQuery<any>(packageId);
+    const translations = useSelector((state: any) => state.language.translations);
 
   const [selectedImage, setSelectedImage] = useState("");
 
@@ -38,9 +40,9 @@ function PackageDetails({
 
   return (
     <div className="flex flex-col justify-center gap-4 items-center h-full pb-20">
-      <div className="flex-grow flex flex-col justify-center items-center w-full h-full mt-10 md:mt-0">
-        <div className="text-primary font-bold text-2xl md:text-3xl py-5">
-          Package Details
+      <div className="flex-grow flex flex-col justify-center items-center w-full h-full mt-6 md:mt-0">
+        <div className="text-primary font-bold text-xl md:text-3xl py-5">
+          {translations.booking.packageDetails}
         </div>
 
         {isLoading ? (
@@ -48,8 +50,8 @@ function PackageDetails({
             <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div className="flex flex-col md:flex-row bg-[#FDFDF9] w-full md:w-2/3 h-full p-3 rounded-xl">
-            <div className="flex flex-col w-full md:w-1/4 h-full">
+          <div className="flex flex-col gap-3 md:flex-row bg-[#FDFDF9] w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl">
+            <div className="flex flex-col w-full lg:w-1/4 md:w-2/4 h-full">
               <div className="flex flex-col w-full">
                 <div className="min-h-[200px] w-full rounded bg-slate-500 flex items-center justify-center relative overflow-hidden">
                   {selectedImage ? (
@@ -86,7 +88,7 @@ function PackageDetails({
                 )}
               </div>
 
-              <div className="h-14 grid grid-cols-2 gap-2 pt-1">
+              <div className="h-14 grid grid-cols-2 gap-3 max-md:grid-cols-3 max-[400px]:grid-cols-2 pt-1">
                 {packageData.eventPackage.additions.map(
                   (addition: any, index: any) => (
                     <div key={index} className="flex items-center gap-5">
@@ -130,7 +132,7 @@ function PackageDetails({
       <div className="flex gap-5">
         <button
           onClick={onBack}
-          className="flex items-center p-2 rounded-lg border border-primary text-primary hover:bg-primary hover:text-gray-100 transition-colors duration-200"
+          className="back-btn"
         >
           <span className="mr-2">
             <svg
@@ -146,13 +148,13 @@ function PackageDetails({
               />
             </svg>
           </span>
-          <span>Back</span>
+          <span>{translations.booking.backBtn}</span>
         </button>
         <button
           onClick={handleNextClick}
-          className="flex items-center p-2 rounded-lg bg-primary text-gray-100 hover:bg-primary-dark transition-colors duration-200"
+          className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
         >
-          <span>Next</span>
+          <span>{ translations.booking.nextBtn}</span>
           <span className="ml-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"

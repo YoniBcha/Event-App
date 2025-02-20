@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Pagination } from "swiper/modules";
 import Image from "next/image";
-import { useGetChooseDesignsQuery } from "@/store/endpoints/apiSlice";
+import { motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/grid";
 import "swiper/css/pagination";
-import { useSelector } from "react-redux";
 
 interface Design {
   _id: string;
@@ -25,38 +24,39 @@ interface ChooseDesignsProps {
   onBackClick: () => void; // Callback for "Back" button click
 }
 
-function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
-  const { data, error, isLoading } = useGetChooseDesignsQuery(id) as {
-    data?: { eventType?: { eventDesigns?: Design[] } };
-    error?: unknown;
-    isLoading: boolean;
-  };
+function ChooseDesigns({  onBackClick }: ChooseDesignsProps) {
+  const [designs, setDesigns] = useState<Design[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<unknown>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
-  interface RootState {
-    language: {
-      translations: {
-        booking: {
-          chooseDesign: string;
-          backBtn: string;
-          nextBtn: string;
-        };
-      };
-    };
-  }
 
-  const translations = useSelector((state: RootState) => state.language.translations);
-  const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchDesigns = async () => {
+      try {
+        const response = await fetch(
+          "https://eventapp-back-cr86.onrender.com/api/v1/event/getEventDesigns"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch designs");
+        }
+        const data = await response.json();
+        setDesigns(data.eventDesigns);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDesigns();
+  }, []);
 
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
     setIsModalOpen(true);
-  };
-
-  const handleCardClick = (designId: string) => {
-    setSelectedDesignId(designId); // Set the selected design ID
   };
 
   const closeModal = () => {
@@ -68,22 +68,13 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     setIsGridView(!isGridView);
   };
 
-  const handleNextClick = () => {
-    if (selectedDesignId) {
-      onNext(selectedDesignId); // Send the selected design ID to the parent
-    } else {
-      alert("Please select a design before proceeding.");
-    }
-  };
-
   const handleBackClick = () => {
     onBackClick();
   };
 
   if (error) return <p>Failed to load designs</p>;
 
-  const designs: Design[] = data?.eventType?.eventDesigns ?? [];
-   // Check if there are no designs
+  // Check if there are no designs
   if (!isLoading && designs.length === 0) {
     return (
       <div className="flex flex-col gap-10 h-full justify-center items-center">
@@ -115,15 +106,15 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4  h-full">
+    <div className="flex flex-col gap-4 h-full">
       <div className="text-primary font-bold text-xl md:text-3xl pt-5 text-center">
-        {translations.booking.chooseDesign}
+        All Event Designs
       </div>
 
       <div className="flex justify-end items-center w-full">
         <button
           onClick={toggleView}
-          className=" md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
+          className="md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
         >
           {isGridView ? (
             <Image
@@ -178,33 +169,27 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             className="mySwiper"
           >
             {designs.map((design: Design, index: number) => (
-              <SwiperSlide
-                key={design._id || index}
-                onClick={() => handleCardClick(design._id)} // Pass the design ID
-                className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
-                  selectedDesignId === design._id
-                    ? "border-2 border-primary scale-105"
-                    : "border border-gray-300"
-                }`}
-              >
-                <div
-                  className="relative w-full h-64"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleImageClick(design.image);
-                  }}
+              <SwiperSlide key={design._id || index}>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="flex flex-col items-center cursor-pointer p-2 rounded-lg border border-gray-300 transition-all duration-300"
                 >
-                  <Image
-                    src={design.image}
-                    alt={design.eventDesign}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-lg"
-                  />
-                </div>
-                <p className="mt-2 text-sm font-bold text-tertiary text-center">
-                  {design.eventDesign}
-                </p>
+                  <div
+                    className="relative w-full h-64"
+                    onClick={() => handleImageClick(design.image)}
+                  >
+                    <Image
+                      src={design.image}
+                      alt={design.eventDesign}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-t-lg"
+                    />
+                  </div>
+                  <p className="mt-2 text-sm font-bold text-tertiary text-center">
+                    {design.eventDesign}
+                  </p>
+                </motion.div>
               </SwiperSlide>
             ))}
           </Swiper>
@@ -213,21 +198,14 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         // List View
         <div className="flex flex-col gap-4 w-full px-4">
           {designs.map((design: Design, index: number) => (
-            <div
+            <motion.div
               key={design._id || index}
-              className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
-                selectedDesignId === design._id
-                  ? "border-4 border-primary scale-105"
-                  : "border border-gray-300"
-              }`}
-              onClick={() => handleCardClick(design._id)} // Pass the design ID
+              whileHover={{ scale: 1.02 }}
+              className="flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 border border-gray-300 transition-all duration-300"
             >
               <div
                 className="relative w-full h-48"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleImageClick(design.image);
-                }}
+                onClick={() => handleImageClick(design.image)}
               >
                 <Image
                   src={design.image}
@@ -240,7 +218,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
               <p className="mt-2 text-sm text-tertiary font-medium text-center">
                 {design.eventDesign}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
@@ -264,53 +242,6 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
           </div>
         </div>
       )}
-
-      <div className="flex justify-center gap-5 my-5">
-        <button
-          onClick={handleBackClick}
-          className="back-btn"
-        >
-          <span className="mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 12 24"
-            >
-              <path
-                fill="#c2937b"
-                fillRule="evenodd"
-                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-              />
-            </svg>
-          </span>
-          <span>{translations.booking.backBtn}</span>
-        </button>
-        <button
-          onClick={handleNextClick}
-          disabled={!selectedDesignId} // Disable if no design is selected
-          className={`next-btn ${
-            selectedDesignId
-              ? "bg-primary hover:bg-[#faebdc] hover:text-primary"
-              : "bg-gray-400 text-gray-100 cursor-not-allowed"
-          }`}
-        >
-          <span>{ translations.booking.nextBtn}</span>
-          <span className="ml-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 48 48"
-            >
-              <path
-                fill="#fff"
-                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
-              />
-            </svg>
-          </span>
-        </button>
-      </div>
     </div>
   );
 }

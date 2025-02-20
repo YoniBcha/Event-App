@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import { useForm, Controller, Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
 
@@ -87,6 +88,21 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const filteredCities = sortedCities.filter((city) =>
     city.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  interface RootState {
+    language: {
+      translations: {
+        booking: {
+          selectPlace: string;
+          selectDate: string;
+          selectCity: string;
+          searchCity: string;
+          bookBtn: string;
+        };
+      };
+    };
+  }
+
+  const translations = useSelector((state: RootState) => state.language.translations);
   const {
     handleSubmit,
     formState: { errors },
@@ -119,6 +135,17 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
       <form onSubmit={handleSubmit(onSubmit)} className="h-full">
         <section className="flex flex-col md:flex-row w-full h-[80vh] gap-5 px-5">
           <div className="flex justify-center items-center md:justify-end h-full w-full">
+            <div className="flex flex-col justify-center items-center h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl relative">
+              <Image
+                src={"/zip/Rectangle.png"}
+                alt="About Image"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-2xl"
+              />
+            </div>
+          </div>
+          <div className="flex justify-center items-center md:justify-start h-full w-full">
             <div className="flex flex-col justify-center items-center h-full md:h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl shadow-xl">
               <div className="flex flex-col gap-5 relative w-[80%]">
                 <div className="">
@@ -149,7 +176,8 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       </svg>
                     </div>
                     <div className="">
-                      <div className="text-[#a1948d]">Select Place: </div>
+                      <div className="text-[#a1948d]">{
+                        translations.booking.selectPlace} </div>
                       <div className="text-[#a1948d] font-semibold">
                         {selectedPlace ? selectedPlace : ""}
                       </div>
@@ -224,7 +252,8 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       </svg>
                     </div>
                     <div className="flex flex-col">
-                      <div className="text-[#a1948d]">Select Date</div>
+                      <div className="text-[#a1948d]">{
+                        translations.booking.selectDate}</div>
                       <div className="text-[#a1948d] font-semibold">
                         {selectedDate ? selectedDate.toLocaleDateString() : ""}
                       </div>
@@ -281,7 +310,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       </svg>
                     </div>
                     <div>
-                      <div className="text-[#a1948d]">Select City: </div>
+                      <div className="text-[#a1948d]">{ translations.booking.selectCity} </div>
                       <div className="text-[#a1948d] font-semibold">
                         {selectedCity || ""}
                       </div>
@@ -314,7 +343,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       <div className="p-2 sticky top-0 bg-[#eee7de]">
                         <input
                           type="text"
-                          placeholder="Search cities..."
+                          placeholder={translations.booking.searchCity}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           onClick={(e) => e.stopPropagation()}
@@ -344,22 +373,11 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className="flex items-center justify-center bg-primary rounded-full px-10 py-3"
+                  className="flex items-center justify-center bg-primary text-white hover:bg-[#faebdc] hover:text-primary rounded-full px-10 py-3"
                 >
-                  <div className="text-white">Book Now</div>
+                  {translations.booking.bookBtn}
                 </button>
               </div>
-            </div>
-          </div>
-          <div className="flex justify-center items-center md:justify-start h-full w-full">
-            <div className="flex flex-col justify-center items-center h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl relative">
-              <Image
-                src={"/zip/Rectangle.png"}
-                alt="About Image"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-2xl"
-              />
             </div>
           </div>
         </section>
@@ -370,7 +388,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
           <div className="bg-white px-3 py-2 rounded-lg shadow-lg">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-primary">
-                Select a Date
+                {translations.booking.selectDate}
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
