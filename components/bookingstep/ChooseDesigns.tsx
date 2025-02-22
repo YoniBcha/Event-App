@@ -5,10 +5,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Pagination } from "swiper/modules";
 import Image from "next/image";
 import { useGetChooseDesignsQuery } from "@/store/endpoints/apiSlice";
+import { useSelector } from "react-redux";
+import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+
 import "swiper/css";
 import "swiper/css/grid";
 import "swiper/css/pagination";
-import { useSelector } from "react-redux";
 
 interface Design {
   _id: string;
@@ -47,7 +49,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     };
   }
 
-  const translations = useSelector((state: RootState) => state.language.translations);
+  const translations = useSelector(
+    (state: RootState) => state.language.translations
+  );
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
 
   const handleImageClick = (image: string) => {
@@ -80,19 +84,39 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     onBackClick();
   };
 
+  // Framer Motion Variants
+  const slideVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const buttonVariants = {
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 },
+  };
+
   if (error) return <p>Failed to load designs</p>;
 
   const designs: Design[] = data?.eventType?.eventDesigns ?? [];
-   // Check if there are no designs
+
+  // Check if there are no designs
   if (!isLoading && designs.length === 0) {
     return (
-      <div className="flex flex-col gap-10 h-full justify-center items-center">
+      <motion.div
+        className="flex flex-col gap-10 h-full justify-center items-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
         <div className="text-primary font-bold text-xl md:text-3xl text-center">
           No Designs Available
         </div>
-        <button
+        <motion.button
           onClick={handleBackClick}
           className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
         >
           <span className="mr-2">
             <svg
@@ -109,21 +133,29 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             </svg>
           </span>
           <span>Back</span>
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4  h-full">
+    <motion.div
+      className="flex flex-col gap-4 h-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <div className="text-primary font-bold text-xl md:text-3xl pt-5 text-center">
         {translations.booking.chooseDesign}
       </div>
 
       <div className="flex justify-end items-center w-full">
-        <button
+        <motion.button
           onClick={toggleView}
-          className=" md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
+          className="md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
         >
           {isGridView ? (
             <Image
@@ -140,7 +172,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
               alt="Grid View"
             />
           )}
-        </button>
+        </motion.button>
       </div>
 
       {isLoading ? (
@@ -181,30 +213,38 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
               <SwiperSlide
                 key={design._id || index}
                 onClick={() => handleCardClick(design._id)} // Pass the design ID
-                className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
-                  selectedDesignId === design._id
-                    ? "border-2 border-primary scale-105"
-                    : "border border-gray-300"
-                }`}
               >
-                <div
-                  className="relative w-full h-64"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleImageClick(design.image);
-                  }}
+                <motion.div
+                  className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
+                    selectedDesignId === design._id
+                      ? "border-2 border-primary scale-105"
+                      : "border border-gray-300"
+                  }`}
+                  variants={slideVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <Image
-                    src={design.image}
-                    alt={design.eventDesign}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-lg"
-                  />
-                </div>
-                <p className="mt-2 text-sm font-bold text-tertiary text-center">
-                  {design.eventDesign}
-                </p>
+                  <div
+                    className="relative w-full h-64"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleImageClick(design.image);
+                    }}
+                  >
+                    <Image
+                      src={design.image}
+                      alt={design.eventDesign}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-t-lg"
+                    />
+                  </div>
+                  <p className="mt-2 text-sm font-bold text-tertiary text-center">
+                    {design.eventDesign}
+                  </p>
+                </motion.div>
               </SwiperSlide>
             ))}
           </Swiper>
@@ -213,7 +253,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         // List View
         <div className="flex flex-col gap-4 w-full px-4">
           {designs.map((design: Design, index: number) => (
-            <div
+            <motion.div
               key={design._id || index}
               className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
                 selectedDesignId === design._id
@@ -221,6 +261,11 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                   : "border border-gray-300"
               }`}
               onClick={() => handleCardClick(design._id)} // Pass the design ID
+              variants={slideVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <div
                 className="relative w-full h-48"
@@ -240,35 +285,49 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
               <p className="mt-2 text-sm text-tertiary font-medium text-center">
                 {design.eventDesign}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
 
       {/* Modal for Enlarged Image */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50"
-          onClick={closeModal}
-        >
-          <div className="relative w-11/12 md:w-3/4 lg:w-1/2 h-1/2 md:h-3/4 rounded-lg p-4">
-            <div className="relative w-full h-full">
-              <Image
-                src={selectedImage}
-                alt="Selected Image"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50"
+            onClick={closeModal}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="relative w-11/12 md:w-3/4 lg:w-1/2 h-1/2 md:h-3/4 rounded-lg p-4"
+              variants={slideVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <div className="relative w-full h-full">
+                <Image
+                  src={selectedImage}
+                  alt="Selected Image"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="flex justify-center gap-5 my-5">
-        <button
+        <motion.button
           onClick={handleBackClick}
           className="back-btn"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
         >
           <span className="mr-2">
             <svg
@@ -285,8 +344,8 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             </svg>
           </span>
           <span>{translations.booking.backBtn}</span>
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           onClick={handleNextClick}
           disabled={!selectedDesignId} // Disable if no design is selected
           className={`next-btn ${
@@ -294,8 +353,11 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
               ? "bg-primary hover:bg-[#faebdc] hover:text-primary"
               : "bg-gray-400 text-gray-100 cursor-not-allowed"
           }`}
+          variants={buttonVariants}
+          whileHover={selectedDesignId ? "hover" : {}}
+          whileTap={selectedDesignId ? "tap" : {}}
         >
-          <span>{ translations.booking.nextBtn}</span>
+          <span>{translations.booking.nextBtn}</span>
           <span className="ml-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -309,9 +371,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
               />
             </svg>
           </span>
-        </button>
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

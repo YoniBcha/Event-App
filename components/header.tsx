@@ -134,19 +134,19 @@ function Header() {
         </div>
 
         <div className="hidden sm:flex flex-row gap-5 items-center text-primary ">
-          <Link className="hover:text-gray-500 text-xl" href={"/"}>
+          <Link className="hover:text-gray-500 text-lg" href={"/"}>
             {translations.sidebar.home}
           </Link>
-          <Link className="hover:text-gray-500 text-xl" href={"/designs"}>
+          <Link className="hover:text-gray-500 text-lg" href={"/designs"}>
             {translations.sidebar.designs}
           </Link>
-          <Link className="hover:text-gray-500 text-xl" href={"/about"}>
+          <Link className="hover:text-gray-500 text-lg" href={"/about"}>
             {translations.sidebar.about}
           </Link>
-          <Link className="hover:text-gray-500 text-xl" href={"/contact"}>
+          <Link className="hover:text-gray-500 text-lg" href={"/contact"}>
             {translations.sidebar.contact}
           </Link>
-          <Link className="hover:text-gray-500 text-xl" href={"/mainpage"}>
+          <Link className="hover:text-gray-500 text-lg" href={"/mainpage"}>
             {translations.sidebar.booking}
           </Link>
         </div>

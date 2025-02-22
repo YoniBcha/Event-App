@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 
 const validationSchema = yup.object({
   city: yup.string().required("City is required"),
@@ -75,6 +76,7 @@ interface FormData {
 interface BookingPageProps {
   setBookingPageData: (data: FormData) => void;
 }
+
 const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
   const [showPlaceDropdown, setShowPlaceDropdown] = useState<boolean>(false);
@@ -88,6 +90,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const filteredCities = sortedCities.filter((city) =>
     city.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
   interface RootState {
     language: {
       translations: {
@@ -102,32 +105,59 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
     };
   }
 
-  const translations = useSelector((state: RootState) => state.language.translations);
+  const translations = useSelector(
+    (state: RootState) => state.language.translations
+  );
   const {
     handleSubmit,
     formState: { errors },
     setValue,
     control,
   } = useForm<FormData>({
-    resolver: yupResolver(validationSchema) as Resolver<FormData>, // Explicitly cast the resolver
+    resolver: yupResolver(validationSchema) as Resolver<FormData>,
   });
 
   const handleDateChange = (date: Date | null) => {
+    if (date && date <= new Date()) {
+      return; // Prevent selecting past dates
+    }
     setSelectedDate(date);
     setValue("date", date);
     setIsModalOpen(false);
   };
 
   const handleCityChange = (city: string) => {
-    setSelectedCity(city); // Set the selected city
-    setValue("city", city); // Update the form value
-    setShowCityDropdown(false); // Close the dropdown
+    setSelectedCity(city);
+    setValue("city", city);
+    setShowCityDropdown(false);
+  };
+
+  const handlePlaceChange = (place: string) => {
+    if (selectedPlace === place) {
+      setSelectedPlace(null); // Unselect if clicked twice
+      setValue("place", "");
+    } else {
+      setSelectedPlace(place);
+      setValue("place", place);
+    }
+    setShowPlaceDropdown(false);
   };
 
   const onSubmit = (data: FormData) => {
     const payload = { ...data };
     console.log("Form data is:", payload);
     setBookingPageData(payload);
+  };
+
+  // Framer Motion Variants
+  const dropdownVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 },
   };
 
   return (
@@ -148,6 +178,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
           <div className="flex justify-center items-center md:justify-start h-full w-full">
             <div className="flex flex-col justify-center items-center h-full md:h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl shadow-xl">
               <div className="flex flex-col gap-5 relative w-[80%]">
+                {/* Place Dropdown */}
                 <div className="">
                   <div
                     onClick={() => setShowPlaceDropdown(!showPlaceDropdown)}
@@ -176,10 +207,11 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       </svg>
                     </div>
                     <div className="">
-                      <div className="text-[#a1948d]">{
-                        translations.booking.selectPlace} </div>
+                      <div className="text-[#a1948d]">
+                        {translations.booking.selectPlace}
+                      </div>
                       <div className="text-[#a1948d] font-semibold">
-                        {selectedPlace ? selectedPlace : ""}
+                        {selectedPlace || ""}
                       </div>
                     </div>
                     <div>
@@ -201,35 +233,40 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       </svg>
                     </div>
                   </div>
-                  {showPlaceDropdown && (
-                    <div className="absolute top-10 mt-2 w-full bg-[#eee7de] border border-[#d4c9c0] rounded-lg shadow-lg z-10">
-                      {["outdoor", "indoor", "both"].map((place) => (
-                        <label
-                          key={place}
-                          className="flex items-center p-2 hover:bg-[#c2937b] cursor-pointer"
-                        >
-                          <input
-                            type="radio"
-                            name="place"
-                            value={place}
-                            checked={selectedPlace === place}
-                            onChange={() => {
-                              setSelectedPlace(place);
-                              setShowPlaceDropdown(false);
-                              setValue("place", place);
-                            }}
-                            className="mr-2 w-4 h-4 hover:border-white border border-[#c2937b] rounded-sm appearance-none checked:bg-[#685651] checked:border-[#685651]"
-                          />
-                          <span className="text-[#685651]">{place}</span>
-                        </label>
-                      ))}
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {showPlaceDropdown && (
+                      <motion.div
+                        className="absolute top-10 mt-2 w-full bg-[#eee7de] border border-[#d4c9c0] rounded-lg shadow-lg z-10"
+                        variants={dropdownVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                      >
+                        {["outdoor", "indoor", "both"].map((place) => (
+                          <label
+                            key={place}
+                            className="flex items-center p-2 hover:bg-[#c2937b] cursor-pointer"
+                          >
+                            <input
+                              type="radio"
+                              name="place"
+                              value={place}
+                              checked={selectedPlace === place}
+                              onChange={() => handlePlaceChange(place)}
+                              className="mr-2 w-4 h-4 hover:border-white border border-[#c2937b] rounded-sm appearance-none checked:bg-[#685651] checked:border-[#685651]"
+                            />
+                            <span className="text-[#685651]">{place}</span>
+                          </label>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   {errors.place && (
                     <p className="text-red-500">{errors.place.message}</p>
                   )}
                 </div>
 
+                {/* Date Picker */}
                 <div className="">
                   <div
                     onClick={() => setIsModalOpen(true)}
@@ -252,8 +289,9 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       </svg>
                     </div>
                     <div className="flex flex-col">
-                      <div className="text-[#a1948d]">{
-                        translations.booking.selectDate}</div>
+                      <div className="text-[#a1948d]">
+                        {translations.booking.selectDate}
+                      </div>
                       <div className="text-[#a1948d] font-semibold">
                         {selectedDate ? selectedDate.toLocaleDateString() : ""}
                       </div>
@@ -282,6 +320,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   )}
                 </div>
 
+                {/* City Dropdown */}
                 <div className="">
                   <div
                     onClick={() => setShowCityDropdown(!showCityDropdown)}
@@ -310,7 +349,9 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       </svg>
                     </div>
                     <div>
-                      <div className="text-[#a1948d]">{ translations.booking.selectCity} </div>
+                      <div className="text-[#a1948d]">
+                        {translations.booking.selectCity}
+                      </div>
                       <div className="text-[#a1948d] font-semibold">
                         {selectedCity || ""}
                       </div>
@@ -338,36 +379,44 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                     <p className="text-red-500">{errors.city.message}</p>
                   )}
 
-                  {showCityDropdown && (
-                    <div className="absolute top-full mt-2 w-full bg-[#eee7de] border border-[#d4c9c0] rounded-lg shadow-lg z-10 h-40 overflow-y-auto">
-                      <div className="p-2 sticky top-0 bg-[#eee7de]">
-                        <input
-                          type="text"
-                          placeholder={translations.booking.searchCity}
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          onClick={(e) => e.stopPropagation()}
-                          className="w-full px-2 py-1 border border-[#d4c9c0] hover:border-white rounded-md focus:outline-none"
-                        />
-                      </div>
-                      {filteredCities.map((city) => (
-                        <label
-                          key={city}
-                          className="flex items-center p-2 hover:bg-[#c2937b] cursor-pointer"
-                        >
+                  <AnimatePresence>
+                    {showCityDropdown && (
+                      <motion.div
+                        className="absolute top-full mt-2 w-full bg-[#eee7de] border border-[#d4c9c0] rounded-lg shadow-lg z-10 h-40 overflow-y-auto"
+                        variants={dropdownVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                      >
+                        <div className="p-2 sticky top-0 bg-[#eee7de]">
                           <input
-                            type="radio"
-                            name="city"
-                            value={city}
-                            checked={selectedCity === city}
-                            onChange={() => handleCityChange(city)}
-                            className="mr-2 w-4 h-4 border border-[#c2937b] rounded-full appearance-none checked:bg-[#685651] checked:border-[#685651] hover:border-white"
+                            type="text"
+                            placeholder={translations.booking.searchCity}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full px-2 py-1 border border-[#d4c9c0] hover:border-white rounded-md focus:outline-none"
                           />
-                          <span className="text-[#281d1b]">{city}</span>
-                        </label>
-                      ))}
-                    </div>
-                  )}
+                        </div>
+                        {filteredCities.map((city) => (
+                          <label
+                            key={city}
+                            className="flex items-center p-2 hover:bg-[#c2937b] cursor-pointer"
+                          >
+                            <input
+                              type="radio"
+                              name="city"
+                              value={city}
+                              checked={selectedCity === city}
+                              onChange={() => handleCityChange(city)}
+                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-full appearance-none checked:bg-[#685651] checked:border-[#685651] hover:border-white"
+                            />
+                            <span className="text-[#281d1b]">{city}</span>
+                          </label>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
               <div className="flex justify-center items-center">
@@ -383,56 +432,71 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
         </section>
       </form>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white px-3 py-2 rounded-lg shadow-lg">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-primary">
-                {translations.booking.selectDate}
-              </h2>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-primary hover:text-gray-700"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
+      {/* Date Picker Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white px-3 py-2 rounded-lg shadow-lg"
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold text-primary">
+                  {translations.booking.selectDate}
+                </h2>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-primary hover:text-gray-700"
                 >
-                  <rect width="24" height="24" fill="none" />
-                  <path
-                    fill="#685651"
-                    d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"
-                    strokeWidth="0.5"
-                    stroke="#685651"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                  >
+                    <rect width="24" height="24" fill="none" />
+                    <path
+                      fill="#685651"
+                      d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"
+                      strokeWidth="0.5"
+                      stroke="#685651"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <Controller
+                name="date"
+                control={control}
+                defaultValue={null}
+                render={({ field }) => (
+                  <DatePicker
+                    selected={field.value}
+                    onChange={handleDateChange}
+                    inline
+                    minDate={new Date()} // Prevent selecting past dates
+                    className="w-full"
+                    dayClassName={(date) => {
+                      return field.value &&
+                        field.value instanceof Date &&
+                        date.toDateString() === field.value.toDateString()
+                        ? "react-datepicker__day--selected"
+                        : "";
+                    }}
                   />
-                </svg>
-              </button>
-            </div>
-            <Controller
-              name="date"
-              control={control}
-              defaultValue={null}
-              render={({ field }) => (
-                <DatePicker
-                  selected={field.value}
-                  onChange={handleDateChange}
-                  inline
-                  className="w-full"
-                  dayClassName={(date) => {
-                    return field.value &&
-                      field.value instanceof Date &&
-                      date.toDateString() === field.value.toDateString()
-                      ? "react-datepicker__day--selected"
-                      : "";
-                  }}
-                />
-              )}
-            />
-          </div>
-        </div>
-      )}
+                )}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 };

@@ -3,10 +3,10 @@
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-
 import { useGetEventTypesQuery } from "@/store/endpoints/apiSlice";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -46,6 +46,7 @@ const EventTypeComponent = ({
   );
 
   const eventTypes: EventTypeData[] = data?.eventTypes ?? [];
+
   interface RootState {
     language: {
       translations: {
@@ -58,25 +59,47 @@ const EventTypeComponent = ({
     };
   }
 
-  const translations = useSelector((state: RootState) => state.language.translations);
+  const translations = useSelector(
+    (state: RootState) => state.language.translations
+  );
 
   const handleEventTypeSelect = (eventTypeId: string) => {
     setSelectedEventTypeId(eventTypeId);
     onEventTypeSelect(eventTypeId);
   };
+
   const handleBackClick = () => {
     onBack();
-  }
+  };
+
+  // Framer Motion Variants
+  const slideVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const buttonVariants = {
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 },
+  };
 
   if (!isLoading && eventTypes.length === 0) {
     return (
-      <div className="flex flex-col gap-10 h-full justify-center items-center">
+      <motion.div
+        className="flex flex-col gap-10 h-full justify-center items-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
         <div className="text-primary font-bold text-xl md:text-3xl text-center">
           No Types Available
         </div>
-        <button
+        <motion.button
           onClick={handleBackClick}
           className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
         >
           <span className="mr-2">
             <svg
@@ -93,13 +116,18 @@ const EventTypeComponent = ({
             </svg>
           </span>
           <span>Back</span>
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
     );
   }
 
   return (
-    <div className="flex flex-col justify-center gap-4 items-center h-full">
+    <motion.div
+      className="flex flex-col justify-center gap-4 items-center h-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <div className="text-primary font-bold text-xl md:text-3xl py-5">
         {translations.booking.eventType}
       </div>
@@ -129,23 +157,31 @@ const EventTypeComponent = ({
               <SwiperSlide
                 key={eventType._id}
                 onClick={() => handleEventTypeSelect(eventType._id)}
-                className={`flex flex-col items-center cursor-pointer px-1 py-2 rounded-lg transition-all duration-300 ${
-                  selectedEventTypeId === eventType._id
-                    ? "border-2 border-primary scale-105"
-                    : "border border-gray-300"
-                }`}
               >
-                <div className="relative w-full h-64">
-                  <Image
-                    src={eventType.image}
-                    alt={eventType.nameOfEvent}
-                    layout="fill"
-                    className="rounded-lg object-cover"
-                  />
-                </div>
-                <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                  {eventType.nameOfEvent}
-                </p>
+                <motion.div
+                  className={`flex flex-col items-center cursor-pointer px-1 py-2 rounded-lg transition-all duration-300 ${
+                    selectedEventTypeId === eventType._id
+                      ? "border-2 border-primary scale-105"
+                      : "border border-gray-300"
+                  }`}
+                  variants={slideVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <div className="relative w-full h-64">
+                    <Image
+                      src={eventType.image}
+                      alt={eventType.nameOfEvent}
+                      layout="fill"
+                      className="rounded-lg object-cover"
+                    />
+                  </div>
+                  <p className="mt-2 text-sm text-tertiary font-medium text-center">
+                    {eventType.nameOfEvent}
+                  </p>
+                </motion.div>
               </SwiperSlide>
             ))}
             <div className="swiper-pagination mt-2"></div>
@@ -154,9 +190,12 @@ const EventTypeComponent = ({
       )}
 
       <div className="flex flex-row gap-5 my-4">
-        <button
+        <motion.button
           onClick={onBack}
           className="back-btn"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
         >
           <span className="mr-2">
             <svg
@@ -173,8 +212,8 @@ const EventTypeComponent = ({
             </svg>
           </span>
           <span>{translations.booking.backBtn}</span>
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           onClick={() => onNext(selectedEventTypeId)}
           className={`next-btn ${
             selectedEventTypeId
@@ -182,9 +221,12 @@ const EventTypeComponent = ({
               : "bg-gray-400 cursor-not-allowed"
           }`}
           disabled={!selectedEventTypeId}
+          variants={buttonVariants}
+          whileHover={selectedEventTypeId ? "hover" : {}}
+          whileTap={selectedEventTypeId ? "tap" : {}}
         >
-          <span>{ translations.booking.nextBtn}</span>
-          <span className="ml-3 ">
+          <span>{translations.booking.nextBtn}</span>
+          <span className="ml-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -197,9 +239,9 @@ const EventTypeComponent = ({
               />
             </svg>
           </span>
-        </button>
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

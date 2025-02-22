@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetPackageDetailQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
+import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 
 function PackageDetails({
   packageId,
@@ -18,7 +19,7 @@ function PackageDetails({
 }) {
   const { data: packageData, isLoading } =
     useGetPackageDetailQuery<any>(packageId);
-    const translations = useSelector((state: any) => state.language.translations);
+  const translations = useSelector((state: any) => state.language.translations);
 
   const [selectedImage, setSelectedImage] = useState("");
 
@@ -38,8 +39,24 @@ function PackageDetails({
     }
   };
 
+  // Framer Motion Variants
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
+  const buttonVariants = {
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 },
+  };
+
   return (
-    <div className="flex flex-col justify-center gap-4 items-center h-full pb-20">
+    <motion.div
+      className="flex flex-col justify-center gap-4 items-center h-full pb-20"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <div className="flex-grow flex flex-col justify-center items-center w-full h-full mt-6 md:mt-0">
         <div className="text-primary font-bold text-xl md:text-3xl py-5">
           {translations.booking.packageDetails}
@@ -50,32 +67,51 @@ function PackageDetails({
             <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div className="flex flex-col gap-3 md:flex-row bg-[#FDFDF9] w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl">
+          <motion.div
+            className="flex flex-col gap-3 md:flex-row bg-[#FDFDF9] w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="flex flex-col w-full lg:w-1/4 md:w-2/4 h-full">
               <div className="flex flex-col w-full">
                 <div className="min-h-[200px] w-full rounded bg-slate-500 flex items-center justify-center relative overflow-hidden">
-                  {selectedImage ? (
-                    <Image
-                      src={selectedImage}
-                      alt="Selected"
-                      fill
-                      className="object-cover rounded"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      priority
-                    />
-                  ) : (
-                    <span>Select an image</span>
-                  )}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={selectedImage}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                      variants={imageVariants}
+                      transition={{ duration: 0.3 }}
+                      className="w-full h-full"
+                    >
+                      {selectedImage ? (
+                        <Image
+                          src={selectedImage}
+                          alt="Selected"
+                          fill
+                          className="object-cover rounded"
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          priority
+                        />
+                      ) : (
+                        <span>Select an image</span>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
               </div>
 
               <div className="py-2 grid grid-cols-4 gap-2">
                 {packageData.eventPackage.image.map(
                   (imageUrl: any, index: any) => (
-                    <div
+                    <motion.div
                       key={index}
                       className="rounded cursor-pointer overflow-hidden relative w-full h-12 md:h-6"
                       onClick={() => handleImageClick(imageUrl)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       <Image
                         src={imageUrl}
@@ -83,7 +119,7 @@ function PackageDetails({
                         fill
                         className="object-cover rounded"
                       />
-                    </div>
+                    </motion.div>
                   )
                 )}
               </div>
@@ -91,7 +127,13 @@ function PackageDetails({
               <div className="h-14 grid grid-cols-2 gap-3 max-md:grid-cols-3 max-[400px]:grid-cols-2 pt-1">
                 {packageData.eventPackage.additions.map(
                   (addition: any, index: any) => (
-                    <div key={index} className="flex items-center gap-5">
+                    <motion.div
+                      key={index}
+                      className="flex items-center gap-5"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
                       <Image
                         src={addition.additionId.logo}
                         width={20}
@@ -101,13 +143,18 @@ function PackageDetails({
                       <div className="text-primary text-sm">
                         {addition.additionId.additionName}
                       </div>
-                    </div>
+                    </motion.div>
                   )
                 )}
               </div>
             </div>
 
-            <div className="w-full h-full md:w-3/4 ml-0 md:ml-5 mt-5">
+            <motion.div
+              className="w-full h-full md:w-3/4 ml-0 md:ml-5 mt-5"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <div className="mb-6">
                 <h3 className="text-xl font-semibold">
                   {packageData.eventPackage.packageName}{" "}
@@ -124,15 +171,18 @@ function PackageDetails({
                   }}
                 />
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
       </div>
 
       <div className="flex gap-5">
-        <button
+        <motion.button
           onClick={onBack}
           className="back-btn"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
         >
           <span className="mr-2">
             <svg
@@ -149,12 +199,15 @@ function PackageDetails({
             </svg>
           </span>
           <span>{translations.booking.backBtn}</span>
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           onClick={handleNextClick}
           className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
         >
-          <span>{ translations.booking.nextBtn}</span>
+          <span>{translations.booking.nextBtn}</span>
           <span className="ml-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -168,9 +221,9 @@ function PackageDetails({
               />
             </svg>
           </span>
-        </button>
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
