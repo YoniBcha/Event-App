@@ -68,7 +68,7 @@ const BookedEvents = () => {
           className="flex flex-col md:flex-row  w-full lg:w-[80%] gap-10 max-md:gap-2 mb-6 p-3 border rounded-2xl shadow-lg bg-white"
         >
           <div className="flex flex-row gap-2 ">
-            <div >
+            <div>
               <Image
                 src={event.eventType.image}
                 alt="Event"
@@ -102,10 +102,10 @@ const BookedEvents = () => {
             </div>
           </div>
           <div className="flex flex-wrap md:flex-col gap-3 border-l-4 max-md:border-none border-primary md:pl-5 pl-1 ">
-            <div className="bg-primary w-40 p-1 max-md:h-fit text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-2xl font-semibold">
+            <div className="bg-primary w-40 p-1 max-md:h-fit text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-lg font-semibold">
               {event.orderStatus}
             </div>
-            <div className="bg-[#dedede] p-1 max-md:h-fit text-lg text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-2xl font-semibold">
+            <div className="bg-[#dedede] p-1 max-md:h-fit text-lg text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg font-semibold">
               Quotation
             </div>
 
@@ -115,7 +115,6 @@ const BookedEvents = () => {
               </p>
             </div>
           </div>
-          
         </div>
       ))}
     </div>
