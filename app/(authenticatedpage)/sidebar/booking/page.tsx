@@ -3,11 +3,12 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
 import { useBookEventMutation } from "@/store/endpoints/apiSlice";
 import Modal from "./modal";
 import Image from "next/image";
 import React, { Suspense } from "react";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 // Define the Payload interface
 interface Payload {
@@ -45,9 +46,11 @@ const MyOrders = () => {
 
 const MyOrdersContent = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [payload, setPayload] = useState<Payload | null>(null);
   const [bookEvent, { isLoading, isError }] = useBookEventMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const translations = useSelector((state: any) => state.language.translations);
 
   useEffect(() => {
     let payloadParam = searchParams.get("payload");
@@ -75,7 +78,6 @@ const MyOrdersContent = () => {
         const result = await bookEvent(payload).unwrap();
         console.log("API Response:", result);
         setIsModalOpen(true);
-        router.push("/sidebar/my-order");
       } catch (error) {
         console.error("Error booking event:", error);
       }
@@ -90,13 +92,14 @@ const MyOrdersContent = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-primary text-2xl font-bold mb-6">My Orders</h1>
+      <h1 className="text-primary text-2xl font-bold mb-6">{
+        translations.myOrders}</h1>
       {payload ? (
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row gap-5">
             <div>
               <h2 className="text-primary text-lg font-medium mb-2">
-                Event Details
+               {translations.booking.eventDetails}
               </h2>
               <div className="text-tertiary text-base space-y-2">
                 <p>
@@ -162,30 +165,30 @@ const MyOrdersContent = () => {
                 </div>
                 <div>
                   <h2 className="text-primary text-lg font-medium mb-2">
-                    Personal Data
+                   {translations.booking.personalData}
                   </h2>
                   <div className="text-tertiary text-base space-y-2">
                     <p>
-                      <span className="font-semibold">Full Name:</span>{" "}
+                      <span className="font-semibold">{translations.booking.fullName}:</span>{" "}
                       {payload.personalData.fullName}
                     </p>
                     <p>
-                      <span className="font-semibold">Mobile Number:</span>{" "}
+                      <span className="font-semibold">{translations.booking.mobileNumber}:</span>{" "}
                       {payload.personalData.mobileNumber}
                     </p>
                     <p>
                       <span className="font-semibold">
-                        Second Mobile Number:
+                        {translations.booking.secondMobileNumber}:
                       </span>{" "}
                       {payload.personalData.secondMobileNumber ||
                         "Not provided"}
                     </p>
                     <p>
-                      <span className="font-semibold">Favorite Colors:</span>{" "}
+                      <span className="font-semibold">{ translations.booking.favoriteColor}:</span>{" "}
                       {payload.personalData.favoriteColors}
                     </p>
                     <p>
-                      <span className="font-semibold">Notes:</span>{" "}
+                      <span className="font-semibold">{ translations.booking.notes}:</span>{" "}
                       {payload.personalData.notes || "No notes"}
                     </p>
                   </div>
@@ -204,7 +207,7 @@ const MyOrdersContent = () => {
                   : "bg-primary hover:bg-primary-dark"
               } text-white transition-colors duration-200`}
             >
-              {isLoading ? "Submitting..." : "Submit Payload"}
+              {isLoading ? "Submitting..." : translations.booking.submitOrder}
             </button>
             {isError && (
               <p className="text-red-500 mt-2">
@@ -217,7 +220,7 @@ const MyOrdersContent = () => {
         <p>Loading payload...</p>
       )}
 
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+<Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="flex flex-col items-center justify-center gap-3">
           <Image
             src="/zip/Checkmark.png"
@@ -226,12 +229,20 @@ const MyOrdersContent = () => {
             height={40}
           />
           <h2 className="text-center text-2xl md:text-3xl text-primary font-bold mb-4">
-            Thank you
+            {translations.booking.thankYou}
           </h2>
           <p className="text-base text-primary text-center">
-            The reservation process has been completed successfully. Please
-            complete your personal information to view the costs.
+            {translations.booking.thankYouSubtitle} 
           </p>
+          <button
+            onClick={() => {
+              closeModal();
+              router.push("/sidebar/my-orders");
+            }}
+            className="next-btn text-primary hover:bg-[#faebdc] bg-primary hover:text-white mt-6"
+          >
+          { translations.booking.nextBtn}
+          </button>
         </div>
       </Modal>
     </div>

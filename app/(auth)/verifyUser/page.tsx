@@ -176,7 +176,7 @@ const VerificationPageContent: React.FC = () => {
 
           <button
             type="submit"
-            className="bg-primary text-white py-2 rounded-md font-semibold cursor-pointer w-1/2"
+            className="bg-primary text-white hover:bg-[#faebdc] hover:text-primary py-2 rounded-md font-semibold cursor-pointer w-1/2"
             disabled={loading}
           >
             {loading ? "Verifying..." : "Verify"}
@@ -184,7 +184,7 @@ const VerificationPageContent: React.FC = () => {
 
           <button
             type="button"
-            className="text-primary text-sm font-semibold cursor-pointer"
+            className="text-primary text-sm hover:text-gray-500 font-semibold cursor-pointer"
             onClick={handleResendCode}
             disabled={resending}
           >

@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Pagination } from "swiper/modules";
 import Image from "next/image";
 import { useGetPackageQuery } from "@/store/endpoints/apiSlice";
+import { useSelector } from "react-redux";
 import "swiper/css";
 import "swiper/css/grid";
 import "swiper/css/pagination";
@@ -54,6 +55,19 @@ function ChoosePackage({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
+  interface RootState {
+    language: {
+      translations: {
+        booking: {
+          choosePackage: string;
+          backBtn: string;
+          nextBtn: string;
+        };
+      };
+    };
+  }
+
+  const translations = useSelector((state: RootState) => state.language.translations);
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
   );
@@ -75,15 +89,49 @@ function ChoosePackage({
   const toggleView = () => {
     setIsGridView(!isGridView);
   };
+  const handleBackClick = () => {
+    onBackClick();
+  };
 
   if (error) return <p>Failed to load packages</p>;
 
   const packages = (data as { eventPackages: Package[] })?.eventPackages || [];
-
+   // Check if there are no designs
+   if (!isLoading && packages.length === 0) {
+    return (
+      <div className="flex flex-col gap-10 h-full justify-between items-center">
+        <div className="text-primary font-bold text-xl md:text-3xl text-center">
+          No Packages Available
+        </div>
+        <div>
+          <button
+            onClick={handleBackClick}
+            className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          >
+            <span className="mr-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 12 24"
+              >
+                <path
+                  fill="#c2937b"
+                  fillRule="evenodd"
+                  d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+                />
+              </svg>
+            </span>
+            <span>Back</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-4  h-full">
       <div className="text-primary font-bold text-2xl md:text-3xl pt-5 text-center">
-        Choose Package
+        {translations.booking.choosePackage}
       </div>
 
       <div className="flex justify-end items-center w-full">
@@ -228,10 +276,10 @@ function ChoosePackage({
         </div>
       )}
 
-      <div className="flex justify-center gap-5 mt-5">
+      <div className="flex justify-center gap-5 my-5">
         <button
           onClick={onBackClick}
-          className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          className="back-btn"
         >
           <span className="mr-2">
             <svg
@@ -247,18 +295,18 @@ function ChoosePackage({
               />
             </svg>
           </span>
-          <span>Back</span>{" "}
+          <span>{translations.booking.backBtn}</span>{" "}
         </button>
         <button
           onClick={() => onNext(selectedPackageId)}
-          className={`flex items-center p-2 rounded-lg ${
+          className={`next-btn ${
             selectedPackageId
-              ? "bg-primary text-gray-100 cursor-pointer"
+              ? "bg-primary hover:bg-[#faebdc] hover:text-primary"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
           disabled={!selectedPackageId}
         >
-          <span>Next</span>
+          <span>{ translations.booking.nextBtn}</span>
           <span className="ml-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"

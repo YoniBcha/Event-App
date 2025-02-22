@@ -73,7 +73,7 @@ const Home: React.FC = () => {
           {translations.welcome}
         </motion.div>
         <motion.div
-          className="text-5xl text-primary font-bold"
+          className="text-5xl text-primary max-sm:text-3xl font-bold"
           variants={itemVariants}
         >
           FENZO
@@ -84,14 +84,14 @@ const Home: React.FC = () => {
           vitae aliquid molestiae ea laudantium qui, atque necessitatibus
           voluptate possimus nam neque!
         </motion.div>
-        <motion.div
-          className="p-2 text-gray-100 bg-primary rounded"
+        <motion.button
+          className="p-2 text-gray-100 bg-primary hover:bg-[#faebdc] hover:text-primary rounded"
           variants={itemVariants}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          Start My Journey
-        </motion.div>
+          {translations.startJourney}
+        </motion.button>
       </motion.div>
 
       <div className="w-1/2 sm:hidden md:flex flex-row gap-2 mx-3 justify-evenly">

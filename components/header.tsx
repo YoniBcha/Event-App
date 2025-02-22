@@ -10,7 +10,6 @@ import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isAvatarDropdownOpen, setIsAvatarDropdownOpen] = useState(false);
   const accountDropdownRef = useRef<HTMLDivElement>(null);
   const avatarDropdownRef = useRef<HTMLDivElement>(null);
@@ -19,6 +18,7 @@ function Header() {
   const isAuthenticated = useSelector(
     (state: any) => state.auth.isAuthenticated
   );
+  const translations = useSelector((state: any) => state.language.translations);
   const router = useRouter();
   const [logoutUserMutation] = useLogoutUserMutation(); // Initialize the mutation
 
@@ -46,9 +46,9 @@ function Header() {
     }
   }, []);
 
-  const toggleAccountDropdown = () => {
-    setIsAccountDropdownOpen(!isAccountDropdownOpen);
-  };
+  // const toggleAccountDropdown = () => {
+  //   setIsAccountDropdownOpen(!isAccountDropdownOpen);
+  // };
 
   const toggleAvatarDropdown = () => {
     setIsAvatarDropdownOpen(!isAvatarDropdownOpen);
@@ -74,12 +74,6 @@ function Header() {
       if (
         accountDropdownRef.current &&
         !accountDropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsAccountDropdownOpen(false);
-      }
-      if (
-        avatarDropdownRef.current &&
-        !avatarDropdownRef.current.contains(event.target as Node)
       ) {
         setIsAvatarDropdownOpen(false);
       }
@@ -139,18 +133,30 @@ function Header() {
           </svg>
         </div>
 
-        <div className="hidden sm:flex flex-row gap-4 items-center text-primary">
-          <Link href={"/"}>HOME</Link>
-          <Link href={"/"}>DESIGNS</Link>
-          <Link href={"/about"}>ABOUT</Link>
-          <Link href={"/contact"}>CONTACT</Link>
-          <Link href={"/mainpage"}>BOOKING</Link>
+        <div className="hidden sm:flex flex-row gap-5 items-center text-primary ">
+          <Link className="hover:text-gray-500 text-xl" href={"/"}>
+            {translations.sidebar.home}
+          </Link>
+          <Link className="hover:text-gray-500 text-xl" href={"/designs"}>
+            {translations.sidebar.designs}
+          </Link>
+          <Link className="hover:text-gray-500 text-xl" href={"/about"}>
+            {translations.sidebar.about}
+          </Link>
+          <Link className="hover:text-gray-500 text-xl" href={"/contact"}>
+            {translations.sidebar.contact}
+          </Link>
+          <Link className="hover:text-gray-500 text-xl" href={"/mainpage"}>
+            {translations.sidebar.booking}
+          </Link>
         </div>
 
-        <div className="border p-2 border-primary rounded-sm">FENZO</div>
+        <div className="border p-2 border-primary mx-auto rounded-sm">
+          FENZO
+        </div>
 
-        <div className="sm:flex gap-3 items-center hidden">
-          <div className="flex">
+        <div className="sm:flex gap-3 items-center ">
+          <div className="sm:flex hidden">
             <div
               className={`flex justify-center items-center h-6 w-6 rounded-sm cursor-pointer ${
                 currentLocale === "en"
@@ -181,7 +187,9 @@ function Header() {
               {isAvatarDropdownOpen && (
                 <motion.div
                   className={`absolute ${
-                    currentLocale === "ar" ? "left-20" : "right-20"
+                    currentLocale === "ar"
+                      ? "md:left-20 left-[2rem]"
+                      : "md:right-20 right-[2rem]"
                   } top-16 mt-2 w-48 bg-white border border-primary shadow-lg rounded-md overflow-hidden z-50`}
                   variants={dropdownVariants}
                   initial="hidden"
@@ -205,7 +213,7 @@ function Header() {
                         href={"/sidebar/profile"}
                         className="block w-full py-2 cursor-pointer"
                       >
-                        Profile
+                        {translations.sidebar.profile}
                       </Link>
                     </li>
                     <li className="flex w-full px-3 gap-2 hover:bg-gray-100">
@@ -219,7 +227,7 @@ function Header() {
                         href={"/sidebar/my-orders"}
                         className="block w-full py-2 cursor-pointer"
                       >
-                        My Orders
+                        {translations.sidebar.myOrders}
                       </Link>
                     </li>
                     {isAuthenticated ? (
@@ -233,7 +241,7 @@ function Header() {
                           height={18}
                           alt="contact"
                         />
-                        <p>Logout</p>
+                        <p>{translations.sidebar.logout}</p>
                       </li>
                     ) : (
                       <li
@@ -246,7 +254,7 @@ function Header() {
                           height={18}
                           alt="contact"
                         />
-                        <p>Login</p>
+                        <p>{translations.sidebar.login}</p>
                       </li>
                     )}
                   </ul>
@@ -289,7 +297,7 @@ function Header() {
                 <button
                   className={`absolute ${
                     currentLocale == "ar" ? "left-4" : "right-4"
-                  } text-xl text-primary`}
+                  } text-xl text-primary hover:text-gray-500`}
                   onClick={toggleDrawer}
                 >
                   ✖
@@ -305,10 +313,12 @@ function Header() {
                       height={20}
                       alt="contact"
                     />
-                    <div className="">Home</div>
+                    <div className="hover:text-gray-500">
+                      {translations.sidebar.home}
+                    </div>
                   </div>
                 </Link>
-                <Link href="/" onClick={toggleDrawer}>
+                <Link href="/designs" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
                     <Image
                       src={"/zip/file-02.svg"}
@@ -316,7 +326,9 @@ function Header() {
                       height={20}
                       alt="contact"
                     />
-                    <div className="">Designs</div>
+                    <div className="hover:text-gray-500">
+                      {translations.sidebar.designs}
+                    </div>
                   </div>
                 </Link>
                 <Link href="/about" onClick={toggleDrawer}>
@@ -327,7 +339,9 @@ function Header() {
                       height={20}
                       alt="contact"
                     />
-                    <div className="">About Us</div>
+                    <div className="hover:text-gray-500">
+                      {translations.sidebar.about}
+                    </div>
                   </div>
                 </Link>
                 <Link href="/contact" onClick={toggleDrawer}>
@@ -338,7 +352,9 @@ function Header() {
                       height={20}
                       alt="contact"
                     />
-                    <div className="">Contact Us</div>
+                    <div className="hover:text-gray-500">
+                      {translations.sidebar.contact}
+                    </div>
                   </div>
                 </Link>
                 <Link href="/mainpage" onClick={toggleDrawer}>
@@ -349,7 +365,9 @@ function Header() {
                       height={20}
                       alt="contact"
                     />
-                    <div className="">Booking</div>
+                    <div className="hover:text-gray-500">
+                      {translations.sidebar.booking}
+                    </div>
                   </div>
                 </Link>
                 {/* Language Selector */}
@@ -366,7 +384,7 @@ function Header() {
                         d="M16 2a14 14 0 1 0 14 14A14.016 14.016 0 0 0 16 2M4.02 16.394l1.338.446L7 19.303v1.283a1 1 0 0 0 .293.707L10 24v2.377a12 12 0 0 1-5.98-9.983M16 28a12 12 0 0 1-2.572-.285L14 26l1.805-4.512a1 1 0 0 0-.097-.926l-1.411-2.117a1 1 0 0 0-.832-.445h-4.93l-1.248-1.873L9.414 14H11v2h2v-2.734l3.868-6.77l-1.736-.992L14.277 7h-2.742L10.45 5.371A11.86 11.86 0 0 1 20 4.7V8a1 1 0 0 0 1 1h1.465a1 1 0 0 0 .832-.445l.877-1.316A12 12 0 0 1 26.894 11H22.82a1 1 0 0 0-.98.804l-.723 4.47a1 1 0 0 0 .54 1.055L25 19l.685 4.056A11.98 11.98 0 0 1 16 28"
                       />
                     </svg>
-                    <div className="">Languages</div>
+                    <div className="">{translations.languages}</div>
                   </div>
                   <div className="flex items-center">
                     <div
@@ -392,7 +410,7 @@ function Header() {
                   </div>
                 </div>
                 {/* Account Dropdown */}
-                <div className="relative" ref={accountDropdownRef}>
+                {/* <div className="relative" ref={accountDropdownRef}>
                   <div
                     className="flex gap-5 items-center cursor-pointer"
                     onClick={toggleAccountDropdown}
@@ -409,7 +427,7 @@ function Header() {
                           d="M16 2a7 7 0 1 0 0 14a7 7 0 0 0 0-14m-6 7a6 6 0 1 1 12 0a6 6 0 0 1-12 0m-2.5 9A3.5 3.5 0 0 0 4 21.5v.667C4 24.317 6.766 30 16 30s12-5.684 12-7.833V21.5a3.5 3.5 0 0 0-3.5-3.5zM5 21.5A2.5 2.5 0 0 1 7.5 19h17a2.5 2.5 0 0 1 2.5 2.5v.667C27 23.684 24.765 29 16 29S5 23.684 5 22.167z"
                         />
                       </svg>
-                      <div>Account</div>
+                      <div>{translations.acount}</div>
                     </div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -445,25 +463,37 @@ function Header() {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
+                </div> */}
                 {/* Log Out Link */}
-                <Link href="/logout" onClick={toggleDrawer}>
+                {/* {isAuthenticated ? (
+              <div onClick={handleLogout} className="flex items-center gap-2 cursor-pointer">
+              <Image
+                src={"/zip/elements2.svg"}
+                width={18}
+                height={18}
+                alt="logout"
+              />
+              <div className="hover:text-gray-500">Log out</div>
+              </div>
+            ) : (
+              <Link href="/login" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
                     <Image
-                      src={"/zip/elements2.svg"}
-                      width={18}
-                      height={18}
-                      alt="contact"
+                    src={"/zip/elements2.svg"}
+                    width={18}
+                    height={18}
+                    alt="login"
                     />
-                    <div className="">Log out</div>
+                    <div className="hover:text-gray-500">Log in</div>
                   </div>
-                </Link>
+                  </Link>
+                )} */}
               </nav>
             </div>
             {/* Footer */}
             <div className="p-2">
               <div className="flex items-center justify-between">
-                <div className="flex gap-4">
+                <div className="flex gap-4 ">
                   {footerData.socialIcons.map((icon, index) => (
                     <Image
                       key={index}
