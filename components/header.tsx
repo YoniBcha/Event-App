@@ -110,7 +110,6 @@ function Header() {
         initial={{ x: "100%" }} // Start from right corner
         animate={{ x: "0%" }} // Move to left
         transition={{
-          type: "spring", // Adds bounce effect
           stiffness: 100, // Adjusts the bounciness
           damping: 10, // Controls how quickly it settles
         }}
@@ -134,19 +133,34 @@ function Header() {
         </div>
 
         <div className="hidden sm:flex flex-row gap-5 items-center text-primary ">
-          <Link className="hover:text-gray-500 text-lg" href={"/"}>
+          <Link
+            className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
+            href={"/"}
+          >
             {translations.sidebar.home}
           </Link>
-          <Link className="hover:text-gray-500 text-lg" href={"/designs"}>
+          <Link
+            className="hover:text-gray-500  hover:-translate-y-1 duration-200 text-lg"
+            href={"/designs"}
+          >
             {translations.sidebar.designs}
           </Link>
-          <Link className="hover:text-gray-500 text-lg" href={"/about"}>
+          <Link
+            className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
+            href={"/about"}
+          >
             {translations.sidebar.about}
           </Link>
-          <Link className="hover:text-gray-500 text-lg" href={"/contact"}>
+          <Link
+            className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
+            href={"/contact"}
+          >
             {translations.sidebar.contact}
           </Link>
-          <Link className="hover:text-gray-500 text-lg" href={"/mainpage"}>
+          <Link
+            className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
+            href={"/mainpage"}
+          >
             {translations.sidebar.booking}
           </Link>
         </div>
@@ -190,14 +204,14 @@ function Header() {
                     currentLocale === "ar"
                       ? "md:left-20 left-[2rem]"
                       : "md:right-20 right-[2rem]"
-                  } top-16 mt-2 w-48 bg-white border border-primary shadow-lg rounded-md overflow-hidden z-50`}
+                  } top-16 mt-2 w-48 backdrop-blur-xl bg-white/50 border border-primary shadow-lg rounded-md overflow-hidden z-50`}
                   variants={dropdownVariants}
                   initial="hidden"
                   animate="visible"
                   exit="hidden"
                 >
                   <ul className="text-sm text-primary w-full">
-                    <li className="flex items-center px-3 gap-2 w-full hover:bg-gray-100">
+                    <li className="flex items-center px-3 gap-2 w-full hover:bg-secondary">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -216,7 +230,7 @@ function Header() {
                         {translations.sidebar.profile}
                       </Link>
                     </li>
-                    <li className="flex w-full px-3 gap-2 hover:bg-gray-100">
+                    <li className="flex w-full px-3 gap-2 hover:bg-secondary">
                       <Image
                         src={"/zip/file-02.svg"}
                         width={18}
@@ -232,7 +246,7 @@ function Header() {
                     </li>
                     {isAuthenticated ? (
                       <li
-                        className="flex gap-3 w-full px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        className="flex gap-3 w-full px-4 py-2 hover:bg-secondary cursor-pointer"
                         onClick={handleLogout}
                       >
                         <Image
@@ -284,9 +298,9 @@ function Header() {
               currentLocale === "ar" ? "right-0" : "left-0"
             }`}
             variants={drawerVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
+            initial={{ x: currentLocale === "ar" ? "100%" : "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: currentLocale === "ar" ? "100%" : "-100%" }}
             transition={{ type: "tween", duration: 0.3 }}
           >
             <div className="">
@@ -296,7 +310,7 @@ function Header() {
                 </div>
                 <button
                   className={`absolute ${
-                    currentLocale == "ar" ? "left-4" : "right-4"
+                    currentLocale === "ar" ? "left-4" : "right-4"
                   } text-xl text-primary hover:text-gray-500`}
                   onClick={toggleDrawer}
                 >
@@ -409,85 +423,6 @@ function Header() {
                     </div>
                   </div>
                 </div>
-                {/* Account Dropdown */}
-                {/* <div className="relative" ref={accountDropdownRef}>
-                  <div
-                    className="flex gap-5 items-center cursor-pointer"
-                    onClick={toggleAccountDropdown}
-                  >
-                    <div className="flex gap-2 items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 32 32"
-                      >
-                        <path
-                          fill="#c2937b"
-                          d="M16 2a7 7 0 1 0 0 14a7 7 0 0 0 0-14m-6 7a6 6 0 1 1 12 0a6 6 0 0 1-12 0m-2.5 9A3.5 3.5 0 0 0 4 21.5v.667C4 24.317 6.766 30 16 30s12-5.684 12-7.833V21.5a3.5 3.5 0 0 0-3.5-3.5zM5 21.5A2.5 2.5 0 0 1 7.5 19h17a2.5 2.5 0 0 1 2.5 2.5v.667C27 23.684 24.765 29 16 29S5 23.684 5 22.167z"
-                        />
-                      </svg>
-                      <div>{translations.acount}</div>
-                    </div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="#c2937b"
-                        d="m12 13.171l4.95-4.95l1.414 1.415L12 16L5.636 9.636L7.05 8.222z"
-                      />
-                    </svg>
-                  </div>
-                  <AnimatePresence>
-                    {isAccountDropdownOpen && (
-                      <motion.div
-                        className={`w-48 bg-white rounded-md overflow-hidden mt-2 ${
-                          currentLocale === "ar" ? "mr-5" : "ml-5"
-                        }`}
-                        variants={dropdownVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="hidden"
-                      >
-                        <ul className="text-sm text-primary">
-                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                            Profile
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                            My Orders
-                          </li>
-                        </ul>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div> */}
-                {/* Log Out Link */}
-                {/* {isAuthenticated ? (
-              <div onClick={handleLogout} className="flex items-center gap-2 cursor-pointer">
-              <Image
-                src={"/zip/elements2.svg"}
-                width={18}
-                height={18}
-                alt="logout"
-              />
-              <div className="hover:text-gray-500">Log out</div>
-              </div>
-            ) : (
-              <Link href="/login" onClick={toggleDrawer}>
-                  <div className="flex items-center gap-2">
-                    <Image
-                    src={"/zip/elements2.svg"}
-                    width={18}
-                    height={18}
-                    alt="login"
-                    />
-                    <div className="hover:text-gray-500">Log in</div>
-                  </div>
-                  </Link>
-                )} */}
               </nav>
             </div>
             {/* Footer */}

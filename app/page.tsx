@@ -30,7 +30,7 @@ const Home: React.FC = () => {
 
   return (
     <motion.div
-      className="h-full w-full flex flex-col md:flex-row"
+      className="md:h-full w-full flex flex-col md:flex-row"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

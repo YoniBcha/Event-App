@@ -8,6 +8,7 @@
   --primary: #c3927b;
   --secondary: #fbf9f1;
   --tertiary: #bcbab9;
+  --font-primary: "Times New Roman", Times, serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,7 +24,7 @@
   .next-btn {
     @apply flex items-center text-center mt-2 font-medium  cursor-pointer text-white text-lg border border-primary rounded-lg px-6 py-1 transition;
   }
-  .input-field{
+  .input-field {
     @apply bg-[#f7f4e9] py-2 max-sm:py-1 px-4 rounded-lg;
   }
 }
@@ -31,7 +32,7 @@
 body {
   color: var(--tertiary);
   background: var(--secondary);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-primary);
 }
 /* Top-left image */
 body::before {
@@ -57,7 +58,7 @@ body::after {
   right: 0;
   width: 250px;
   height: 250px;
-  background-image: url("/images/f1 1.png"); /* Replace with your image path */
+  background-image: url("/images/f1 1.svg"); /* Replace with your image path */
   background-size: cover;
   background-position: center;
 }
@@ -176,13 +177,13 @@ body::after {
 
 /* Custom styles for react-datepicker */
 .react-datepicker__day--selected {
-  background-color: #c2937b !important;
+  background-color: var(--primary) !important;
   color: white !important;
   border-radius: 50% !important;
 }
 
 .react-datepicker__day--selected:hover {
-  background-color: #c2937b !important;
+  background-color: var(--secondary) !important;
   color: white !important;
 }
 

@@ -182,7 +182,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setShowPlaceDropdown(!showPlaceDropdown)}
-                    className="flex justify-between items-center border border-[#ebddd5] rounded-xl bg-[#fdfdfb] px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center rounded-xl  border-white border-2 backdrop-blur-lg bg-white/50 px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <svg
@@ -236,7 +236,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   <AnimatePresence>
                     {showPlaceDropdown && (
                       <motion.div
-                        className="absolute top-10 mt-2 w-full bg-[#eee7de] border border-[#d4c9c0] rounded-lg shadow-lg z-10"
+                        className="absolute top-10 mt-2 w-full backdrop-blur-lg  border border-[#d4c9c0] rounded-lg shadow-lg z-10"
                         variants={dropdownVariants}
                         initial="hidden"
                         animate="visible"
@@ -245,7 +245,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                         {["outdoor", "indoor", "both"].map((place) => (
                           <label
                             key={place}
-                            className="flex items-center p-2 hover:bg-[#c2937b] cursor-pointer"
+                            className="flex items-center p-2 hover:bg-primary cursor-pointer"
                           >
                             <input
                               type="radio"
@@ -253,7 +253,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                               value={place}
                               checked={selectedPlace === place}
                               onChange={() => handlePlaceChange(place)}
-                              className="mr-2 w-4 h-4 hover:border-white border border-[#c2937b] rounded-sm appearance-none checked:bg-[#685651] checked:border-[#685651]"
+                              className="mr-2 w-4 h-4 hover:border-white border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
                             />
                             <span className="text-[#685651]">{place}</span>
                           </label>
@@ -270,7 +270,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setIsModalOpen(true)}
-                    className="flex justify-between items-center border border-[#ebddd5] rounded-xl bg-[#fdfdfb] px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center  rounded-xl border-white border-2 backdrop-blur-lg bg-white/50 px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <svg
@@ -324,7 +324,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setShowCityDropdown(!showCityDropdown)}
-                    className="flex justify-between items-center border border-[#ebddd5] rounded-xl bg-[#fdfdfb] px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center rounded-xl border-white border-2 backdrop-blur-lg bg-white/50 px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <svg
@@ -382,26 +382,26 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   <AnimatePresence>
                     {showCityDropdown && (
                       <motion.div
-                        className="absolute top-full mt-2 w-full bg-[#eee7de] border border-[#d4c9c0] rounded-lg shadow-lg z-10 h-40 overflow-y-auto"
+                        className="absolute top-full mt-2 w-full backdrop-blur-lg border border-[#d4c9c0] rounded-lg shadow-lg z-10 h-40 overflow-y-auto"
                         variants={dropdownVariants}
                         initial="hidden"
                         animate="visible"
                         exit="hidden"
                       >
-                        <div className="p-2 sticky top-0 bg-[#eee7de]">
+                        <div className="p-2 sticky top-0 backdrop-blur-md bg-secondary">
                           <input
                             type="text"
                             placeholder={translations.booking.searchCity}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full px-2 py-1 border border-[#d4c9c0] hover:border-white rounded-md focus:outline-none"
+                            className="w-full px-2 py-1 border border-[#d4c9c0]  hover:border-white rounded-md focus:outline-none"
                           />
                         </div>
                         {filteredCities.map((city) => (
                           <label
                             key={city}
-                            className="flex items-center p-2 hover:bg-[#c2937b] cursor-pointer"
+                            className="flex items-center p-2 hover:bg-primary cursor-pointer"
                           >
                             <input
                               type="radio"
@@ -409,7 +409,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                               value={city}
                               checked={selectedCity === city}
                               onChange={() => handleCityChange(city)}
-                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-full appearance-none checked:bg-[#685651] checked:border-[#685651] hover:border-white"
+                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-full appearance-none checked:bg-primary checked:border-[#685651] hover:border-white"
                             />
                             <span className="text-[#281d1b]">{city}</span>
                           </label>
@@ -422,7 +422,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className="flex items-center justify-center bg-primary text-white hover:bg-[#faebdc] hover:text-primary rounded-full px-10 py-3"
+                  className="flex items-center justify-center bg-primary text-white hover:bg-secondary hover:border hover:border-white hover:text-primary rounded-full px-10 py-3"
                 >
                   {translations.booking.bookBtn}
                 </button>
@@ -442,7 +442,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white px-3 py-2 rounded-lg shadow-lg"
+              className="backdrop-blur-lg bg-white/40 px-3 py-2 rounded-lg shadow-lg"
               variants={modalVariants}
               initial="hidden"
               animate="visible"
@@ -487,7 +487,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       return field.value &&
                         field.value instanceof Date &&
                         date.toDateString() === field.value.toDateString()
-                        ? "react-datepicker__day--selected"
+                        ? "react-datepicker__day--selected bg-primary"
                         : "";
                     }}
                   />

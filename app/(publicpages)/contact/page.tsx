@@ -205,7 +205,7 @@ const ContactUs = () => {
               </label>
               <input
                 {...register("name")}
-                className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-[#f7f4e9]"
+                className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-secondary"
               />
               {errors.name && (
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -221,7 +221,7 @@ const ContactUs = () => {
               <input
                 {...register("email")}
                 type="email"
-                className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-[#f7f4e9]"
+                className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-secondary"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -237,7 +237,7 @@ const ContactUs = () => {
               <input
                 {...register("phone")}
                 type="tel"
-                className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-[#f7f4e9]"
+                className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-secondary"
               />
               {errors.phone && (
                 <p className="text-red-500 text-sm">{errors.phone.message}</p>
@@ -253,7 +253,7 @@ const ContactUs = () => {
               <textarea
                 {...register("message")}
                 rows={2}
-                className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-[#f7f4e9]"
+                className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-secondary"
               ></textarea>
               {errors.message && (
                 <p className="text-red-500 text-sm">{errors.message.message}</p>

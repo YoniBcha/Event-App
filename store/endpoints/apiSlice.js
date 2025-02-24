@@ -63,5 +63,5 @@ export const {
   useGetDjQuery,
   useBookEventMutation,
   useGetSelfBookedEventsQuery,
-  useLogoutUserMutation
+  useLogoutUserMutation,
 } = apiSlice;
