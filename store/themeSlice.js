@@ -6,22 +6,15 @@ const THEME_STORAGE_KEY = "appTheme";
 const loadThemeFromLocalStorage = () => {
   if (typeof window === "undefined") return null;
   const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-  const { primaryColor, secondaryColor, font, tertiaryColor, logo } =
-    JSON.parse(storedTheme);
-
-  if (primaryColor) {
-    document.documentElement.style.setProperty("--primary", primaryColor);
+  if (storedTheme) {
+    try {
+      return JSON.parse(storedTheme);
+    } catch (error) {
+      console.error("Failed to parse theme from localStorage", error);
+      return null;
+    }
   }
-  if (secondaryColor) {
-    document.documentElement.style.setProperty("--secondary", secondaryColor);
-  }
-  if (tertiaryColor) {
-    document.documentElement.style.setProperty("--tertiary", tertiaryColor);
-  }
-  if (font) {
-    document.documentElement.style.setProperty("--font-primary", font);
-  }
-  return storedTheme ? JSON.parse(storedTheme) : null;
+  return null;
 };
 
 const saveThemeToLocalStorage = (theme) => {
