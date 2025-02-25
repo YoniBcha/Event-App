@@ -178,8 +178,8 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                 className="flex flex-col cursor-pointer"
                 onClick={() => handleCategoryClick(addition.additionName)}
               >
-                <div className="flex flex-row bg-[#ffffff] rounded-lg">
-                  <div className="flex items-center justify-center w-1/4 bg-[#eee7de] font-bold rounded-lg">
+                <div className="flex flex-row bg-secondary rounded-lg">
+                  <div className="flex items-center justify-center w-1/4 bg-secondary font-bold rounded-lg">
                     <Image
                       src={addition.logo}
                       width={26}

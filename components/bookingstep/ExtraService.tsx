@@ -33,7 +33,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
 }) => {
   return (
     <div
-      className={`bg-[#FDFDF9] rounded-3xl px-6 py-3 cursor-pointer ${
+      className={`bg-[#FDFDF9] hover:bg-secondary rounded-3xl px-6 py-3 cursor-pointer ${
         isSelected ? "shadow-lg border-b-2 border-primary" : ""
       }`}
       onClick={onClick}
@@ -320,13 +320,12 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               {extraServices.map((service, index) => (
                 <motion.div
                   key={index}
-                  className="rounded-3xl"
+                  className="rounded-3xl b"
                   variants={{
                     hover: {
                       scale: 1.05,
                       boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                      borderColor: "#a57a6a",
-                      color: "#a57a6a",
+
                       transition: { duration: 0.2, ease: "easeInOut" },
                     },
                     tap: {
@@ -434,7 +433,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               {serviceProviders.map((provider, index) => (
                 <motion.div
                   key={index}
-                  className={`px-6 py-5 hover:bg-secondary rounded-3xl bg-secondary shadow-lg cursor-pointer ${
+                  className={`px-6 py-5 hover:bg-secondary rounded-3xl  shadow-lg cursor-pointer ${
                     selectedServiceProviders[currentCategory] === provider._id
                       ? "border-b-2 border-primary !border-b-primary" // Ensure border is applied
                       : ""
@@ -555,7 +554,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               </h2>
               {selectedProvider && (
                 <div className="flex flex-col md:flex-row gap-5 mx-2">
-                  <div className="bg-white h-fit shadow-lg max-md:mx-auto shadow-gray-300 px-6 py-3 rounded-2xl">
+                  <div className="bg-white hover:bg-secondary h-fit shadow-lg max-md:mx-auto shadow-gray-300 px-6 py-3 rounded-2xl">
                     <div className="h-28 w-28 relative">
                       <Image
                         src={selectedProvider.profile}
