@@ -14,6 +14,20 @@ function Header() {
   const accountDropdownRef = useRef<HTMLDivElement>(null);
   const avatarDropdownRef = useRef<HTMLDivElement>(null);
   const [currentLocale, setCurrentLocale] = useState("en");
+  const [logo, setLogo] = useState("/path/to/default/logo.png");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return; // Ensure we're on the client side
+    const storedTheme = localStorage.getItem("appTheme");
+    if (storedTheme) {
+      try {
+        const { logo } = JSON.parse(storedTheme);
+        setLogo(logo);
+      } catch (error) {
+        console.error("Failed to parse stored theme:", error);
+      }
+    }
+  }, []);
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state: any) => state.auth.isAuthenticated
@@ -113,8 +127,9 @@ function Header() {
           stiffness: 100, // Adjusts the bounciness
           damping: 10, // Controls how quickly it settles
         }}
-        className="flex w-full py-6 bg-transparent flex-row justify-between items-center text-sm text-primary"
+        className="flex w-full py-6 bg-transparent flex-row justify-between  items-center text-sm text-primary"
       >
+        {/* Left Side Navigation (Hamburger Menu) */}
         <div className="sm:hidden cursor-pointer" onClick={toggleDrawer}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -124,15 +139,16 @@ function Header() {
           >
             <rect width="16" height="16" fill="none" />
             <path
-              fill="#C2937B"
+              fill="var(--primary)"
               d="M15 4H1V2h14zm0 5H1V7h14zM1 14h14v-2H1z"
               strokeWidth="0.5"
-              stroke="#C2937B"
+              stroke="var(--secondary)"
             />
           </svg>
         </div>
 
-        <div className="hidden sm:flex flex-row gap-5 items-center text-primary ">
+        {/* Center Navigation Links (Hidden on Small Screens) */}
+        <div className="hidden sm:flex flex-row gap-5 items-center text-primary">
           <Link
             className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
             href={"/"}
@@ -165,11 +181,13 @@ function Header() {
           </Link>
         </div>
 
-        <div className="border p-2 border-primary mx-auto rounded-sm">
-          FENZO
+        {/* Centered FENZO Logo */}
+        <div className="flex-grow flex justify-center">
+          <img src={logo} alt="Logo" width={100} height={50} />
         </div>
 
-        <div className="sm:flex gap-3 items-center ">
+        {/* Right Side Icons (Language Toggle and Avatar) */}
+        <div className="sm:flex gap-3 items-center">
           <div className="sm:flex hidden">
             <div
               className={`flex justify-center items-center h-6 w-6 rounded-sm cursor-pointer ${
@@ -314,9 +332,7 @@ function Header() {
           >
             <div className="">
               <div className="flex justify-between items-center px-6">
-                <div className="border p-2 text-primary border-primary rounded-sm">
-                  FENZO
-                </div>
+                <img src={logo} alt="Logo" width={100} height={50} />
                 <button
                   className={`absolute ${
                     currentLocale === "ar" ? "left-4" : "right-4"

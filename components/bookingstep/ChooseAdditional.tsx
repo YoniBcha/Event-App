@@ -178,7 +178,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                 className="flex flex-col cursor-pointer"
                 onClick={() => handleCategoryClick(addition.additionName)}
               >
-                <div className="flex flex-row bg-[#faebdc] rounded-lg">
+                <div className="flex flex-row bg-[#ffffff] rounded-lg">
                   <div className="flex items-center justify-center w-1/4 bg-[#eee7de] font-bold rounded-lg">
                     <Image
                       src={addition.logo}
@@ -246,7 +246,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                             </div>
                             <div className="flex items-center gap-2">
                               <button
-                                className="px-2 rounded-lg bg-[#faebdc] hover:bg-primary hover:text-white text-gray-400"
+                                className="px-2 rounded-lg bg-[#ffffff] hover:bg-primary hover:text-white text-gray-400"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleQuantityChange(
@@ -278,7 +278,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                                 onClick={(e) => e.stopPropagation()}
                               />
                               <button
-                                className="px-2 rounded-lg bg-[#faebdc] hover:bg-primary hover:text-white text-gray-400"
+                                className="px-2 rounded-lg bg-[#ffffff] hover:bg-primary hover:text-white text-gray-400"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleQuantityChange(
@@ -305,13 +305,14 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           {/* Back Button */}
           <motion.button
             onClick={onBack}
-            className="back-btn flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+            className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
             variants={{
               hover: {
                 scale: 1.05,
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                borderColor: "#a57a6a",
-                color: "#a57a6a",
+                borderColor: getComputedStyle(document.documentElement)
+                  .getPropertyValue("--secondary")
+                  .trim(),
                 transition: { duration: 0.2, ease: "easeInOut" },
               },
               tap: {
@@ -346,15 +347,17 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
             disabled={!hasSelection}
             className={`next-btn flex items-center p-2 rounded-lg text-white cursor-pointer ${
               hasSelection
-                ? "bg-primary hover:bg-[#faebdc] hover:text-primary"
+                ? "bg-primary hover:bg-secondary hover:text-primary"
                 : "bg-gray-400 text-gray-100 cursor-not-allowed"
             }`}
             variants={{
               hover: {
                 scale: 1.05,
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                backgroundColor: "#faebdc",
-                color: "#c2937b",
+                backgroundColor: getComputedStyle(document.documentElement)
+                  .getPropertyValue("--secondary")
+                  .trim(),
+
                 transition: { duration: 0.2, ease: "easeInOut" },
               },
               tap: {

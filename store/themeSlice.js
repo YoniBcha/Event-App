@@ -8,7 +8,7 @@ const loadThemeFromLocalStorage = () => {
   const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
   const { primaryColor, secondaryColor, font, tertiaryColor, logo } =
     JSON.parse(storedTheme);
-  console.log(JSON.stringify(primaryColor, null, 2));
+
   if (primaryColor) {
     document.documentElement.style.setProperty("--primary", primaryColor);
   }

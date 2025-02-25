@@ -13,7 +13,7 @@ function Profile() {
           <div>
             <input
               type="text"
-              className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
+              className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-secondary"
               placeholder="username"
             />
           </div>
@@ -52,7 +52,7 @@ function Profile() {
 
           <input
             type="text"
-            className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
+            className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-secondary"
             placeholder="email@example.com"
           />
         </div>
@@ -61,7 +61,7 @@ function Profile() {
 
           <input
             type="password"
-            className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
+            className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-secondary"
             placeholder="*******"
           />
         </div>
@@ -72,7 +72,7 @@ function Profile() {
 
         <input
           type="text"
-          className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
+          className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-secondary"
           placeholder="+1234567890"
         />
       </div>
@@ -82,18 +82,18 @@ function Profile() {
 
         <input
           type="text"
-          className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-[#f7dbbf]"
+          className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-secondary"
           placeholder="Select Your Language"
         />
       </div>
 
       <hr className="bg-tertiary hidden md:block md:h-0" />
       <div className="flex flex-row gap-5">
-        <div className="py-1 px-3 rounded-xl bg-[#f7dbbf] hover:bg-primary hover:text-white cursor-pointer text-primary border border-gray-300">
+        <div className="py-1 px-3 rounded-xl bg-secondary hover:bg-primary hover:text-white cursor-pointer text-primary border border-gray-300">
           Save Changes
         </div>
 
-        <div className="py-1 px-3 rounded-xl bg-[#f7dbbf] hover:bg-primary hover:text-white cursor-pointer text-primary border border-gray-300">
+        <div className="py-1 px-3 rounded-xl bg-secondary hover:bg-primary hover:text-white cursor-pointer text-primary border border-gray-300">
           Cancel
         </div>
       </div>

@@ -265,13 +265,11 @@ const MyOrdersContent = () => {
               closeModal();
               router.push("/sidebar/my-orders");
             }}
-            className="next-btn text-primary hover:bg-[#faebdc] bg-primary hover:text-white mt-6"
+            className="next-btn text-primary hover:bg-secondary bg-primary hover:text-white mt-6"
             variants={{
               hover: {
                 scale: 1.05,
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                borderColor: "#a57a6a",
-                color: "#a57a6a",
                 transition: { duration: 0.2, ease: "easeInOut" },
               },
               tap: {

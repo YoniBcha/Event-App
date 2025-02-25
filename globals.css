@@ -6,7 +6,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --primary: #c3927b;
-  --secondary: #f7f7f7;
+  --secondary: #ffffff;
   --tertiary: #bcbab9;
   --font-primary: "Times New Roman", Times, serif;
 }
@@ -40,7 +40,7 @@ body {
 /* Top-left image */
 body::before {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 120px;
   left: 0;
   z-index: -1;
@@ -55,7 +55,7 @@ body::before {
 /* Top-right image */
 body::after {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 120px;
   z-index: -1;
   right: 0;

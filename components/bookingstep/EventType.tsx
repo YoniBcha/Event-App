@@ -166,8 +166,11 @@ const EventTypeComponent = ({
                     hover: {
                       scale: 1.05,
                       boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                      backgroundColor: "#faebdc",
-                      color: "#c2937b",
+                      backgroundColor: getComputedStyle(
+                        document.documentElement
+                      )
+                        .getPropertyValue("--secondary")
+                        .trim(),
                       transition: { duration: 0.2, ease: "easeInOut" },
                     },
                     tap: {
@@ -202,13 +205,14 @@ const EventTypeComponent = ({
         {/* Back Button */}
         <motion.button
           onClick={onBack}
-          className="back-btn flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          className="back-btn flex hover:bg-secondary items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
           variants={{
             hover: {
               scale: 1.05,
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-              borderColor: "#a57a6a",
-              color: "#a57a6a",
+              borderColor: getComputedStyle(document.documentElement)
+                .getPropertyValue("--secondary")
+                .trim(),
               transition: { duration: 0.2, ease: "easeInOut" },
             },
             tap: {
@@ -250,8 +254,9 @@ const EventTypeComponent = ({
             hover: {
               scale: 1.05,
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-              backgroundColor: "#faebdc",
-              color: "#c2937b",
+              backgroundColor: getComputedStyle(document.documentElement)
+                .getPropertyValue("--secondary")
+                .trim(),
               transition: { duration: 0.2, ease: "easeInOut" },
             },
             tap: {

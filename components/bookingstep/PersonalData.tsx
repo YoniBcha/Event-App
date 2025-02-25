@@ -210,13 +210,11 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
         <motion.div className="flex justify-center mt-8">
           <motion.button
             onClick={handleSubmit}
-            className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-[#faebdc] hover:text-primary transition-colors duration-200"
+            className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-secondary hover:text-primary transition-colors duration-200"
             variants={{
               hover: {
                 scale: 1.05,
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                borderColor: "#a57a6a",
-                color: "#a57a6a",
                 transition: { duration: 0.2, ease: "easeInOut" },
               },
               tap: {

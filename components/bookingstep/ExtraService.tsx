@@ -351,16 +351,14 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               ))}
             </div>
 
-            <div className="flex justify-center items-center gap-5 mt-5 md:mt-10">
+            <div className="flex justify-center  items-center gap-5 mt-5 md:mt-10">
               <motion.button
                 onClick={onBack}
-                className="back-btn"
+                className="back-btn hover:bg-secondary"
                 variants={{
                   hover: {
                     scale: 1.05,
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                    borderColor: "#a57a6a",
-                    color: "#a57a6a",
                     transition: { duration: 0.2, ease: "easeInOut" },
                   },
                   tap: {
@@ -380,7 +378,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     viewBox="0 0 12 24"
                   >
                     <path
-                      fill="#c2937b"
+                      fill="var(--primary)"
                       fillRule="evenodd"
                       d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
                     />
@@ -391,13 +389,12 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               <motion.button
                 onClick={handleNext}
                 disabled={selectedCategories.length === 0}
-                className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
+                className="next-btn bg-primary  hover:bg-secondary hover:text-primary"
                 variants={{
                   hover: {
                     scale: 1.05,
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                    borderColor: "#a57a6a",
-                    color: "#a57a6a",
+
                     transition: { duration: 0.2, ease: "easeInOut" },
                   },
                   tap: {
@@ -437,7 +434,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               {serviceProviders.map((provider, index) => (
                 <motion.div
                   key={index}
-                  className={`px-6 py-5 rounded-3xl bg-secondary shadow-lg cursor-pointer ${
+                  className={`px-6 py-5 hover:bg-secondary rounded-3xl bg-secondary shadow-lg cursor-pointer ${
                     selectedServiceProviders[currentCategory] === provider._id
                       ? "border-b-2 border-primary !border-b-primary" // Ensure border is applied
                       : ""
@@ -478,13 +475,12 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
             <div className="flex gap-5 my-5">
               <motion.button
                 onClick={handleBack}
-                className="back-btn"
+                className="back-btn hover:bg-secondary"
                 variants={{
                   hover: {
                     scale: 1.05,
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                    borderColor: "#a57a6a",
-                    color: "#a57a6a",
+
                     transition: { duration: 0.2, ease: "easeInOut" },
                   },
                   tap: {
@@ -504,7 +500,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     viewBox="0 0 12 24"
                   >
                     <path
-                      fill="#c2937b"
+                      fill="var(--primary)"
                       fillRule="evenodd"
                       d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
                     />
@@ -513,15 +509,13 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 <span>{translations.booking.backBtn}</span>{" "}
               </motion.button>
               <motion.button
-                className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
+                className="next-btn bg-primary hover:bg-secondary "
                 onClick={handleNext}
                 disabled={!selectedServiceProviders[currentCategory]}
                 variants={{
                   hover: {
                     scale: 1.05,
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                    borderColor: "#a57a6a",
-                    color: "#a57a6a",
                     transition: { duration: 0.2, ease: "easeInOut" },
                   },
                   tap: {
@@ -579,7 +573,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     {packages.map((pkg, index) => (
                       <motion.div
                         key={index}
-                        className={`flex max-sm:flex-col items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
+                        className={`flex max-sm:flex-col hover:bg-secondary items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
                           selectedPackages[currentCategory] === pkg.packageName
                             ? "border-b-2 border-primary !border-b-primary"
                             : ""
@@ -591,8 +585,6 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                           hover: {
                             scale: 1.05,
                             boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                            borderColor: "#a57a6a",
-                            color: "#a57a6a",
                             transition: { duration: 0.2, ease: "easeInOut" },
                           },
                           tap: {
@@ -634,13 +626,11 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 {/* Back Button */}
                 <motion.button
                   onClick={handleBack}
-                  className="back-btn flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+                  className="back-btn flex items-center hover:bg-secondary p-2 bg-secondary rounded-lg border border-primary text-primary cursor-pointer"
                   variants={{
                     hover: {
                       scale: 1.05,
                       boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                      borderColor: "#a57a6a",
-                      color: "#a57a6a",
                       transition: { duration: 0.2, ease: "easeInOut" },
                     },
                     tap: {
@@ -672,13 +662,12 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 {/* Next Button */}
                 <motion.button
                   onClick={handleNext}
-                  className="next-btn flex items-center p-2 rounded-lg text-white bg-primary hover:bg-[#faebdc] hover:text-primary cursor-pointer"
+                  className="next-btn flex items-center p-2 rounded-lg text-white bg-primary hover:bg-secondary hover:text-primary cursor-pointer"
                   variants={{
                     hover: {
                       scale: 1.05,
                       boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                      backgroundColor: "#faebdc",
-                      color: "#c2937b",
+
                       transition: { duration: 0.2, ease: "easeInOut" },
                     },
                     tap: {

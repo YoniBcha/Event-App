@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -48,23 +48,19 @@ function Layout({ children }: RootLayoutProps) {
       <div className="md:hidden flex justify-center items-center p-4 bg-[#fbf4e8]">
         <div className="flex items-center gap-2">
           <div className="relative rounded-full border-4 border-primary w-16 h-16">
-           <FiUser size={54} />
-           <Link  href="/sidebar/profile">
-            <button
-              className="absolute -bottom-1 -right-1 bg-primary p-1 rounded-full text-white"
-            >
-                <FiEdit size={20} className="cursor-pointer"/>
-            </button>
+            <FiUser size={54} />
+            <Link href="/sidebar/profile">
+              <button className="absolute -bottom-1 -right-1 bg-primary p-1 rounded-full text-white">
+                <FiEdit size={20} className="cursor-pointer" />
+              </button>
             </Link>
           </div>
         </div>
       </div>
 
       {/* Sidebar (Hidden on Mobile) */}
-      <div
-        className=" md:block w-full md:w-[30%] flex-col items-center hidden"
-      >
-        <div className="flex flex-col gap-5 bg-[#fbf4e8] rounded-sm m-4 p-2">
+      <div className=" md:block w-full md:w-[30%] flex-col items-center hidden">
+        <div className="flex flex-col gap-5 bg-secondary rounded-sm m-4 p-2">
           <Link
             href="/sidebar/profile"
             className={`flex gap-3 py-1 px-2 rounded text-primary hover:bg-primary hover:text-white font-bold ${

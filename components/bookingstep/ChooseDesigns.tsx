@@ -219,7 +219,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                 onClick={() => handleCardClick(design._id)}
               >
                 <motion.div
-                  className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
+                  className={`flex flex-col items-center hover:bg-secondary cursor-pointer p-2 rounded-lg transition-all duration-300 ${
                     selectedDesignId === design._id
                       ? "border-2 border-primary scale-105"
                       : "border border-gray-300"
@@ -259,7 +259,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
           {designs.map((design: Design, index: number) => (
             <motion.div
               key={design._id || index}
-              className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
+              className={`flex flex-col justify-center hover:bg-secondary items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
                 selectedDesignId === design._id
                   ? "border-4 border-primary scale-105"
                   : "border border-gray-300"
@@ -329,13 +329,14 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         {/* Back Button */}
         <motion.button
           onClick={handleBackClick}
-          className="back-btn flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          className="back-btn flex items-center p-2 hover:bg-secondary rounded-lg border border-primary text-primary cursor-pointer"
           variants={{
             hover: {
               scale: 1.05,
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-              borderColor: "#a57a6a",
-              color: "#a57a6a",
+              borderColor: getComputedStyle(document.documentElement)
+                .getPropertyValue("--secondary")
+                .trim(),
               transition: { duration: 0.2, ease: "easeInOut" },
             },
             tap: {
@@ -377,8 +378,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             hover: {
               scale: 1.05,
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-              backgroundColor: "#faebdc",
-              color: "#c2937b",
+              backgroundColor: getComputedStyle(document.documentElement)
+                .getPropertyValue("--secondary")
+                .trim(),
               transition: { duration: 0.2, ease: "easeInOut" },
             },
             tap: {

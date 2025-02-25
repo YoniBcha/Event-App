@@ -186,7 +186,7 @@ function ChooseDesigns() {
               <SwiperSlide key={design._id || index}>
                 <motion.div
                   whileHover={{ scale: 1.05 }}
-                  className="flex flex-col items-center cursor-pointer p-2 rounded-lg border border-gray-300 transition-all duration-300"
+                  className="flex flex-col hover:bg-secondary items-center cursor-pointer p-2 rounded-lg border border-gray-300 transition-all duration-300"
                 >
                   <div
                     className="relative w-full h-64"

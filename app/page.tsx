@@ -85,7 +85,7 @@ const Home: React.FC = () => {
           voluptate possimus nam neque!
         </motion.div>
         <motion.button
-          className="p-2 text-gray-100 bg-primary hover:bg-[#faebdc] hover:text-primary rounded"
+          className="p-2 text-gray-100 bg-primary hover:bg-secondary hover:text-primary rounded"
           variants={itemVariants}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

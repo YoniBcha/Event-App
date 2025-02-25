@@ -45,6 +45,10 @@ function PackageDetails({
     visible: { opacity: 1, scale: 1 },
   };
 
+  // const buttonVariants = {
+  //   hover: { scale: 1.05 },
+  //   tap: { scale: 0.95 },
+  // };
 
   return (
     <motion.div
@@ -176,13 +180,12 @@ function PackageDetails({
         {/* Back Button */}
         <motion.button
           onClick={onBack}
-          className="back-btn flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          className="back-btn flex items-center p-2 hover:bg-secondary rounded-lg border border-primary text-primary cursor-pointer"
           variants={{
             hover: {
               scale: 1.05,
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
               borderColor: "#a57a6a",
-              color: "#a57a6a",
               transition: { duration: 0.2, ease: "easeInOut" },
             },
             tap: {
@@ -214,13 +217,12 @@ function PackageDetails({
         {/* Next Button */}
         <motion.button
           onClick={handleNextClick}
-          className="next-btn flex items-center p-2 rounded-lg text-white bg-primary hover:bg-[#faebdc] hover:text-primary cursor-pointer"
+          className="next-btn flex items-center p-2 rounded-lg text-white bg-primary hover:bg-secondary hover:text-primary cursor-pointer"
           variants={{
             hover: {
               scale: 1.05,
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-              backgroundColor: "#faebdc",
-              color: "#c2937b",
+
               transition: { duration: 0.2, ease: "easeInOut" },
             },
             tap: {
