@@ -420,12 +420,27 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 </div>
               </div>
               <div className="flex justify-center items-center">
-                <button
+                <motion.button
                   type="submit"
                   className="flex items-center justify-center bg-primary text-white hover:bg-secondary hover:border hover:border-white hover:text-primary rounded-full px-10 py-3"
+                  variants={{
+                    hover: {
+                      scale: 1.05,
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                      borderColor: "#a57a6a",
+                      transition: { duration: 0.2, ease: "easeInOut" },
+                    },
+                    tap: {
+                      scale: 0.95,
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                      transition: { duration: 0.1, ease: "easeInOut" },
+                    },
+                  }}
+                  whileHover="hover"
+                  whileTap="tap"
                 >
                   {translations.booking.bookBtn}
-                </button>
+                </motion.button>
               </div>
             </div>
           </div>

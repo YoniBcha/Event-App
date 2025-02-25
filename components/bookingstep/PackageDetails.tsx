@@ -177,10 +177,24 @@ function PackageDetails({
       </div>
 
       <div className="flex gap-5">
+        {/* Back Button */}
         <motion.button
           onClick={onBack}
-          className="back-btn"
-          variants={buttonVariants}
+          className="back-btn flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          variants={{
+            hover: {
+              scale: 1.05,
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+              borderColor: "#a57a6a",
+              color: "#a57a6a",
+              transition: { duration: 0.2, ease: "easeInOut" },
+            },
+            tap: {
+              scale: 0.95,
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.1, ease: "easeInOut" },
+            },
+          }}
           whileHover="hover"
           whileTap="tap"
         >
@@ -192,7 +206,7 @@ function PackageDetails({
               viewBox="0 0 12 24"
             >
               <path
-                fill="#c2937b"
+                fill="currentColor"
                 fillRule="evenodd"
                 d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
               />
@@ -200,10 +214,25 @@ function PackageDetails({
           </span>
           <span>{translations.booking.backBtn}</span>
         </motion.button>
+
+        {/* Next Button */}
         <motion.button
           onClick={handleNextClick}
-          className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
-          variants={buttonVariants}
+          className="next-btn flex items-center p-2 rounded-lg text-white bg-primary hover:bg-[#faebdc] hover:text-primary cursor-pointer"
+          variants={{
+            hover: {
+              scale: 1.05,
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+              backgroundColor: "#faebdc",
+              color: "#c2937b",
+              transition: { duration: 0.2, ease: "easeInOut" },
+            },
+            tap: {
+              scale: 0.95,
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.1, ease: "easeInOut" },
+            },
+          }}
           whileHover="hover"
           whileTap="tap"
         >
@@ -216,7 +245,7 @@ function PackageDetails({
               viewBox="0 0 48 48"
             >
               <path
-                fill="#fff"
+                fill="currentColor"
                 d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
               />
             </svg>

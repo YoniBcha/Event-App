@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
+import { motion } from "framer-motion";
 import * as Yup from "yup";
 
 interface ExtraServiceProps {
@@ -317,7 +318,26 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
           <>
             <div className="grid grid-cols-2 md:grid-cols-3 max-[370px]:grid-cols-1 gap-10 mt-10">
               {extraServices.map((service, index) => (
-                <div key={index} className="">
+                <motion.div
+                  key={index}
+                  className="rounded-3xl"
+                  variants={{
+                    hover: {
+                      scale: 1.05,
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                      borderColor: "#a57a6a",
+                      color: "#a57a6a",
+                      transition: { duration: 0.2, ease: "easeInOut" },
+                    },
+                    tap: {
+                      scale: 0.95,
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                      transition: { duration: 0.1, ease: "easeInOut" },
+                    },
+                  }}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
                   <CategoryCard
                     imageSrc={service.image}
                     altText={service.serviceName}
@@ -327,12 +347,31 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     )}
                     onClick={() => handleCategorySelect(service.serviceName)}
                   />
-                </div>
+                </motion.div>
               ))}
             </div>
 
             <div className="flex justify-center items-center gap-5 mt-5 md:mt-10">
-              <button onClick={onBack} className="back-btn">
+              <motion.button
+                onClick={onBack}
+                className="back-btn"
+                variants={{
+                  hover: {
+                    scale: 1.05,
+                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                    borderColor: "#a57a6a",
+                    color: "#a57a6a",
+                    transition: { duration: 0.2, ease: "easeInOut" },
+                  },
+                  tap: {
+                    scale: 0.95,
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                    transition: { duration: 0.1, ease: "easeInOut" },
+                  },
+                }}
+                whileHover="hover"
+                whileTap="tap"
+              >
                 <span className="mr-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -348,11 +387,27 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                   </svg>
                 </span>
                 <span>{translations.booking.backBtn}</span>
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 onClick={handleNext}
                 disabled={selectedCategories.length === 0}
                 className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
+                variants={{
+                  hover: {
+                    scale: 1.05,
+                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                    borderColor: "#a57a6a",
+                    color: "#a57a6a",
+                    transition: { duration: 0.2, ease: "easeInOut" },
+                  },
+                  tap: {
+                    scale: 0.95,
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                    transition: { duration: 0.1, ease: "easeInOut" },
+                  },
+                }}
+                whileHover="hover"
+                whileTap="tap"
               >
                 <span>{translations.booking.nextBtn}</span>
                 <span className="ml-3">
@@ -368,7 +423,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     />
                   </svg>
                 </span>{" "}
-              </button>
+              </motion.button>
             </div>
           </>
         )}
@@ -380,16 +435,30 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
             </h2>
             <ul className="grid grid-cols-2 max-[500px]:gap-3 max-[500px]:grid-cols-1  md:grid-cols-3 gap-8">
               {serviceProviders.map((provider, index) => (
-                <div
+                <motion.div
                   key={index}
                   className={`px-6 py-5 rounded-3xl bg-secondary shadow-lg cursor-pointer ${
                     selectedServiceProviders[currentCategory] === provider._id
-                      ? "border-b-2 border-primary"
+                      ? "border-b-2 border-primary !border-b-primary" // Ensure border is applied
                       : ""
                   }`}
                   onClick={() =>
                     handleServiceProviderSelect(currentCategory, provider)
                   }
+                  variants={{
+                    hover: {
+                      scale: 1.05,
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                      transition: { duration: 0.2, ease: "easeInOut" },
+                    },
+                    tap: {
+                      scale: 0.95,
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                      transition: { duration: 0.1, ease: "easeInOut" },
+                    },
+                  }}
+                  whileHover="hover"
+                  whileTap="tap"
                 >
                   <div className="relative h-36 w-36">
                     <Image
@@ -403,11 +472,30 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                   <div className="text-center mt-2 text-primary font-bold text-lg">
                     {provider.providerName}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </ul>
             <div className="flex gap-5 my-5">
-              <button onClick={handleBack} className="back-btn">
+              <motion.button
+                onClick={handleBack}
+                className="back-btn"
+                variants={{
+                  hover: {
+                    scale: 1.05,
+                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                    borderColor: "#a57a6a",
+                    color: "#a57a6a",
+                    transition: { duration: 0.2, ease: "easeInOut" },
+                  },
+                  tap: {
+                    scale: 0.95,
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                    transition: { duration: 0.1, ease: "easeInOut" },
+                  },
+                }}
+                whileHover="hover"
+                whileTap="tap"
+              >
                 <span className="mr-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -423,11 +511,27 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                   </svg>
                 </span>
                 <span>{translations.booking.backBtn}</span>{" "}
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
                 onClick={handleNext}
                 disabled={!selectedServiceProviders[currentCategory]}
+                variants={{
+                  hover: {
+                    scale: 1.05,
+                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                    borderColor: "#a57a6a",
+                    color: "#a57a6a",
+                    transition: { duration: 0.2, ease: "easeInOut" },
+                  },
+                  tap: {
+                    scale: 0.95,
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                    transition: { duration: 0.1, ease: "easeInOut" },
+                  },
+                }}
+                whileHover="hover"
+                whileTap="tap"
               >
                 <span>{translations.booking.nextBtn}</span>
                 <span className="ml-3 ">
@@ -443,7 +547,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     />
                   </svg>
                 </span>
-              </button>
+              </motion.button>
             </div>
           </div>
         )}
@@ -473,16 +577,32 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
                     {packages.map((pkg, index) => (
-                      <div
+                      <motion.div
                         key={index}
                         className={`flex items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
                           selectedPackages[currentCategory] === pkg.packageName
-                            ? "border-b-2 border-primary"
+                            ? "border-b-2 border-primary !border-b-primary"
                             : ""
                         }`}
                         onClick={() =>
                           handlePackageSelect(currentCategory, pkg.packageName)
                         }
+                        variants={{
+                          hover: {
+                            scale: 1.05,
+                            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                            borderColor: "#a57a6a",
+                            color: "#a57a6a",
+                            transition: { duration: 0.2, ease: "easeInOut" },
+                          },
+                          tap: {
+                            scale: 0.95,
+                            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                            transition: { duration: 0.1, ease: "easeInOut" },
+                          },
+                        }}
+                        whileHover="hover"
+                        whileTap="tap"
                       >
                         {/* Image Container */}
                         <div className="relative h-20 w-24 sm:h-24 sm:w-28 lg:h-32 lg:w-36 flex-shrink-0">
@@ -505,13 +625,33 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                             {pkg.packageDescription}
                           </p>
                         </div>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
               )}
               <div className="flex gap-5 my-5">
-                <button onClick={handleBack} className="back-btn">
+                {/* Back Button */}
+                <motion.button
+                  onClick={handleBack}
+                  className="back-btn flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+                  variants={{
+                    hover: {
+                      scale: 1.05,
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                      borderColor: "#a57a6a",
+                      color: "#a57a6a",
+                      transition: { duration: 0.2, ease: "easeInOut" },
+                    },
+                    tap: {
+                      scale: 0.95,
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                      transition: { duration: 0.1, ease: "easeInOut" },
+                    },
+                  }}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
                   <span className="mr-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -520,22 +660,40 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                       viewBox="0 0 12 24"
                     >
                       <path
-                        fill="#c2937b"
+                        fill="currentColor"
                         fillRule="evenodd"
                         d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
                       />
                     </svg>
                   </span>
-                  <span>{translations.booking.backBtn}</span>{" "}
-                </button>
-                <button
+                  <span>{translations.booking.backBtn}</span>
+                </motion.button>
+
+                {/* Next Button */}
+                <motion.button
                   onClick={handleNext}
-                  className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
+                  className="next-btn flex items-center p-2 rounded-lg text-white bg-primary hover:bg-[#faebdc] hover:text-primary cursor-pointer"
+                  variants={{
+                    hover: {
+                      scale: 1.05,
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                      backgroundColor: "#faebdc",
+                      color: "#c2937b",
+                      transition: { duration: 0.2, ease: "easeInOut" },
+                    },
+                    tap: {
+                      scale: 0.95,
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                      transition: { duration: 0.1, ease: "easeInOut" },
+                    },
+                  }}
+                  whileHover="hover"
+                  whileTap="tap"
                 >
                   {currentCategoryIndex < selectedCategories.length - 1
                     ? translations.booking.nextCategory
                     : translations.booking.done}
-                </button>
+                </motion.button>
               </div>
             </div>
           )}
