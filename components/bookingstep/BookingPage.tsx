@@ -248,7 +248,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                             className="flex items-center p-2 hover:bg-primary cursor-pointer"
                           >
                             <input
-                              type="radio"
+                              type="checkbox"
                               name="place"
                               value={place}
                               checked={selectedPlace === place}
@@ -404,7 +404,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                             className="flex items-center p-2 hover:bg-primary cursor-pointer"
                           >
                             <input
-                              type="radio"
+                              type="checkbox"
                               name="city"
                               value={city}
                               checked={selectedCity === city}
@@ -499,11 +499,26 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                     minDate={new Date()} // Prevent selecting past dates
                     className="w-full"
                     dayClassName={(date) => {
-                      return field.value &&
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0); // Reset time part to ensure accurate comparison
+                      date.setHours(0, 0, 0, 0); // Do the same for the date being checked
+
+                      let className = "";
+
+                      if (
+                        field.value &&
                         field.value instanceof Date &&
                         date.toDateString() === field.value.toDateString()
-                        ? "react-datepicker__day--selected bg-primary"
-                        : "";
+                      ) {
+                        className +=
+                          "react-datepicker__day--selected bg-primary ";
+                      }
+
+                      if (date.toDateString() === today.toDateString()) {
+                        className += "bg-today "; // Add this class for today's date
+                      }
+
+                      return className;
                     }}
                   />
                 )}

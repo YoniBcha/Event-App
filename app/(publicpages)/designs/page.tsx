@@ -34,6 +34,20 @@ function ChooseDesigns() {
   const [isGridView, setIsGridView] = useState(true);
 
   useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 414 && !isGridView) {
+        setIsGridView(true); // Switch to grid view on larger screens
+      }
+
+      if (window.innerWidth < 323 && isGridView) {
+        setIsGridView(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isGridView]);
+  useEffect(() => {
     const fetchDesigns = async () => {
       try {
         const response = await fetch(
@@ -77,7 +91,7 @@ function ChooseDesigns() {
   // Check if there are no designs
   if (!isLoading && designs.length === 0) {
     return (
-      <div className="flex flex-col gap-10 h-full justify-center items-center">
+      <div className="flex flex-col gap-10  justify-center items-center">
         <div className="text-primary font-bold text-xl md:text-3xl text-center">
           No Designs Available
         </div>
@@ -106,7 +120,7 @@ function ChooseDesigns() {
   }
 
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 ">
       <div className="text-primary font-bold text-xl md:text-3xl pt-5 text-center">
         All Event Designs
       </div>

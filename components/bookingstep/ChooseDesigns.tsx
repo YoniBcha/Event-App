@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Add useEffect
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Pagination } from "swiper/modules";
 import Image from "next/image";
 import { useGetChooseDesignsQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import { motion, AnimatePresence } from "framer-motion";
 
 import "swiper/css";
 import "swiper/css/grid";
@@ -23,8 +24,8 @@ interface Design {
 
 interface ChooseDesignsProps {
   id: string;
-  onNext: (selectedDesignId: string | null) => void; // Callback to send the selected design ID to the parent
-  onBackClick: () => void; // Callback for "Back" button click
+  onNext: (selectedDesignId: string | null) => void;
+  onBackClick: () => void;
 }
 
 function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
@@ -37,22 +38,25 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
-  interface RootState {
-    language: {
-      translations: {
-        booking: {
-          chooseDesign: string;
-          backBtn: string;
-          nextBtn: string;
-        };
-      };
-    };
-  }
-
-  const translations = useSelector(
-    (state: RootState) => state.language.translations
-  );
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
+
+  const translations = useSelector((state: any) => state.language.translations);
+
+  // Handle window resize to dynamically switch to grid view on larger screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 414 && !isGridView) {
+        setIsGridView(true); // Switch to grid view on larger screens
+      }
+
+      if (window.innerWidth < 223 && isGridView) {
+        setIsGridView(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isGridView]);
 
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
@@ -60,7 +64,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   };
 
   const handleCardClick = (designId: string) => {
-    setSelectedDesignId(designId); // Set the selected design ID
+    setSelectedDesignId(designId);
   };
 
   const closeModal = () => {
@@ -74,7 +78,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
 
   const handleNextClick = () => {
     if (selectedDesignId) {
-      onNext(selectedDesignId); // Send the selected design ID to the parent
+      onNext(selectedDesignId);
     } else {
       alert("Please select a design before proceeding.");
     }
@@ -183,7 +187,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         // Grid View
         <div className="w-full px-4">
           <Swiper
-            slidesPerView={4}
+            slidesPerView={2} // Default for small screens
             grid={{
               rows: 2,
               fill: "row",
@@ -195,13 +199,13 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             modules={[Grid, Pagination]}
             breakpoints={{
               320: {
-                slidesPerView: 2,
+                slidesPerView: 2, // 2 columns for small screens
                 grid: {
                   rows: 2,
                 },
               },
               768: {
-                slidesPerView: 4,
+                slidesPerView: 4, // 4 columns for medium and larger screens
                 grid: {
                   rows: 2,
                 },
@@ -212,7 +216,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             {designs.map((design: Design, index: number) => (
               <SwiperSlide
                 key={design._id || index}
-                onClick={() => handleCardClick(design._id)} // Pass the design ID
+                onClick={() => handleCardClick(design._id)}
               >
                 <motion.div
                   className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
@@ -260,7 +264,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                   ? "border-4 border-primary scale-105"
                   : "border border-gray-300"
               }`}
-              onClick={() => handleCardClick(design._id)} // Pass the design ID
+              onClick={() => handleCardClick(design._id)}
               variants={slideVariants}
               initial="hidden"
               animate="visible"
@@ -363,7 +367,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         {/* Next Button */}
         <motion.button
           onClick={handleNextClick}
-          disabled={!selectedDesignId} // Disable if no design is selected
+          disabled={!selectedDesignId}
           className={`next-btn flex items-center p-2 rounded-lg text-white cursor-pointer ${
             selectedDesignId
               ? "bg-primary hover:bg-[#faebdc] hover:text-primary"

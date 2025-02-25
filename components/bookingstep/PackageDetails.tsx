@@ -45,10 +45,6 @@ function PackageDetails({
     visible: { opacity: 1, scale: 1 },
   };
 
-  const buttonVariants = {
-    hover: { scale: 1.05 },
-    tap: { scale: 0.95 },
-  };
 
   return (
     <motion.div

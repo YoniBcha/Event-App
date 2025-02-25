@@ -9,6 +9,7 @@ import Modal from "./modal";
 import Image from "next/image";
 import React, { Suspense } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 // Define the Payload interface
 interface Payload {
@@ -92,14 +93,15 @@ const MyOrdersContent = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-primary text-2xl font-bold mb-6">{
-        translations.myOrders}</h1>
+      <h1 className="text-primary text-2xl font-bold mb-6">
+        {translations.myOrders}
+      </h1>
       {payload ? (
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row gap-5">
             <div>
               <h2 className="text-primary text-lg font-medium mb-2">
-               {translations.booking.eventDetails}
+                {translations.booking.eventDetails}
               </h2>
               <div className="text-tertiary text-base space-y-2">
                 <p>
@@ -165,15 +167,19 @@ const MyOrdersContent = () => {
                 </div>
                 <div>
                   <h2 className="text-primary text-lg font-medium mb-2">
-                   {translations.booking.personalData}
+                    {translations.booking.personalData}
                   </h2>
                   <div className="text-tertiary text-base space-y-2">
                     <p>
-                      <span className="font-semibold">{translations.booking.fullName}:</span>{" "}
+                      <span className="font-semibold">
+                        {translations.booking.fullName}:
+                      </span>{" "}
                       {payload.personalData.fullName}
                     </p>
                     <p>
-                      <span className="font-semibold">{translations.booking.mobileNumber}:</span>{" "}
+                      <span className="font-semibold">
+                        {translations.booking.mobileNumber}:
+                      </span>{" "}
                       {payload.personalData.mobileNumber}
                     </p>
                     <p>
@@ -184,11 +190,15 @@ const MyOrdersContent = () => {
                         "Not provided"}
                     </p>
                     <p>
-                      <span className="font-semibold">{ translations.booking.favoriteColor}:</span>{" "}
+                      <span className="font-semibold">
+                        {translations.booking.favoriteColor}:
+                      </span>{" "}
                       {payload.personalData.favoriteColors}
                     </p>
                     <p>
-                      <span className="font-semibold">{ translations.booking.notes}:</span>{" "}
+                      <span className="font-semibold">
+                        {translations.booking.notes}:
+                      </span>{" "}
                       {payload.personalData.notes || "No notes"}
                     </p>
                   </div>
@@ -198,17 +208,33 @@ const MyOrdersContent = () => {
           </div>
 
           <div>
-            <button
+            <motion.button
               onClick={handleSubmit}
               disabled={isLoading}
               className={`px-6 py-2 rounded-lg ${
                 isLoading
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-primary hover:bg-primary-dark"
+                  : "bg-primary  hover:bg-secondary hover:text-primary"
               } text-white transition-colors duration-200`}
+              variants={{
+                hover: {
+                  scale: 1.05,
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                  borderColor: "#a57a6a",
+
+                  transition: { duration: 0.2, ease: "easeInOut" },
+                },
+                tap: {
+                  scale: 0.95,
+                  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                  transition: { duration: 0.1, ease: "easeInOut" },
+                },
+              }}
+              whileHover="hover"
+              whileTap="tap"
             >
               {isLoading ? "Submitting..." : translations.booking.submitOrder}
-            </button>
+            </motion.button>
             {isError && (
               <p className="text-red-500 mt-2">
                 Error booking event. Please try again.
@@ -220,7 +246,7 @@ const MyOrdersContent = () => {
         <p>Loading payload...</p>
       )}
 
-<Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="flex flex-col items-center justify-center gap-3">
           <Image
             src="/zip/Checkmark.png"
@@ -232,17 +258,33 @@ const MyOrdersContent = () => {
             {translations.booking.thankYou}
           </h2>
           <p className="text-base text-primary text-center">
-            {translations.booking.thankYouSubtitle} 
+            {translations.booking.thankYouSubtitle}
           </p>
-          <button
+          <motion.button
             onClick={() => {
               closeModal();
               router.push("/sidebar/my-orders");
             }}
             className="next-btn text-primary hover:bg-[#faebdc] bg-primary hover:text-white mt-6"
+            variants={{
+              hover: {
+                scale: 1.05,
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                borderColor: "#a57a6a",
+                color: "#a57a6a",
+                transition: { duration: 0.2, ease: "easeInOut" },
+              },
+              tap: {
+                scale: 0.95,
+                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                transition: { duration: 0.1, ease: "easeInOut" },
+              },
+            }}
+            whileHover="hover"
+            whileTap="tap"
           >
-          { translations.booking.nextBtn}
-          </button>
+            {translations.booking.nextBtn}
+          </motion.button>
         </div>
       </Modal>
     </div>

@@ -579,7 +579,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     {packages.map((pkg, index) => (
                       <motion.div
                         key={index}
-                        className={`flex items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
+                        className={`flex max-sm:flex-col items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
                           selectedPackages[currentCategory] === pkg.packageName
                             ? "border-b-2 border-primary !border-b-primary"
                             : ""

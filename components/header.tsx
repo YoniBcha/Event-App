@@ -200,6 +200,7 @@ function Header() {
             <AnimatePresence>
               {isAvatarDropdownOpen && (
                 <motion.div
+                  ref={avatarDropdownRef}
                   className={`absolute ${
                     currentLocale === "ar"
                       ? "md:left-20 left-[2rem]"
@@ -211,62 +212,70 @@ function Header() {
                   exit="hidden"
                 >
                   <ul className="text-sm text-primary w-full">
-                    <li className="flex items-center px-3 gap-2 w-full hover:bg-secondary">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 32 32"
-                      >
-                        <path
-                          fill="#c2937b"
-                          d="M16 2a7 7 0 1 0 0 14a7 7 0 0 0 0-14m-6 7a6 6 0 1 1 12 0a6 6 0 0 1-12 0m-2.5 9A3.5 3.5 0 0 0 4 21.5v.667C4 24.317 6.766 30 16 30s12-5.684 12-7.833V21.5a3.5 3.5 0 0 0-3.5-3.5zM5 21.5A2.5 2.5 0 0 1 7.5 19h17a2.5 2.5 0 0 1 2.5 2.5v.667C27 23.684 24.765 29 16 29S5 23.684 5 22.167z"
-                        />
-                      </svg>
-                      <Link
-                        href={"/sidebar/profile"}
-                        className="block w-full py-2 cursor-pointer"
-                      >
-                        {translations.sidebar.profile}
-                      </Link>
-                    </li>
-                    <li className="flex w-full px-3 gap-2 hover:bg-secondary">
-                      <Image
-                        src={"/zip/file-02.svg"}
-                        width={18}
-                        height={18}
-                        alt="contact"
-                      />
-                      <Link
-                        href={"/sidebar/my-orders"}
-                        className="block w-full py-2 cursor-pointer"
-                      >
-                        {translations.sidebar.myOrders}
-                      </Link>
-                    </li>
                     {isAuthenticated ? (
-                      <li
-                        className="flex gap-3 w-full px-4 py-2 hover:bg-secondary cursor-pointer"
-                        onClick={handleLogout}
-                      >
-                        <Image
-                          src={"/zip/elements2.svg"}
-                          width={18}
-                          height={18}
-                          alt="contact"
-                        />
-                        <p>{translations.sidebar.logout}</p>
-                      </li>
+                      <>
+                        {/* Profile */}
+                        <li className="flex items-center px-3 gap-2 w-full hover:bg-secondary">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 32 32"
+                          >
+                            <path
+                              fill="#c2937b"
+                              d="M16 2a7 7 0 1 0 0 14a7 7 0 0 0 0-14m-6 7a6 6 0 1 1 12 0a6 6 0 0 1-12 0m-2.5 9A3.5 3.5 0 0 0 4 21.5v.667C4 24.317 6.766 30 16 30s12-5.684 12-7.833V21.5a3.5 3.5 0 0 0-3.5-3.5zM5 21.5A2.5 2.5 0 0 1 7.5 19h17a2.5 2.5 0 0 1 2.5 2.5v.667C27 23.684 24.765 29 16 29S5 23.684 5 22.167z"
+                            />
+                          </svg>
+                          <Link
+                            href="/sidebar/profile"
+                            className="block w-full py-2 cursor-pointer"
+                          >
+                            {translations.sidebar.profile}
+                          </Link>
+                        </li>
+
+                        {/* My Orders */}
+                        <li className="flex w-full px-3 gap-2 hover:bg-secondary">
+                          <Image
+                            src="/zip/file-02.svg"
+                            width={18}
+                            height={18}
+                            alt="my-orders"
+                          />
+                          <Link
+                            href="/sidebar/my-orders"
+                            className="block w-full py-2 cursor-pointer"
+                          >
+                            {translations.sidebar.myOrders}
+                          </Link>
+                        </li>
+
+                        {/* Logout */}
+                        <li
+                          className="flex gap-3 w-full px-4 py-2 hover:bg-secondary cursor-pointer"
+                          onClick={handleLogout}
+                        >
+                          <Image
+                            src="/zip/elements2.svg"
+                            width={18}
+                            height={18}
+                            alt="logout"
+                          />
+                          <p>{translations.sidebar.logout}</p>
+                        </li>
+                      </>
                     ) : (
+                      /* Login */
                       <li
                         className="flex gap-3 w-full px-4 py-2 hover:bg-gray-100 cursor-pointer"
                         onClick={handleLogin}
                       >
                         <Image
-                          src={"/zip/elements2.svg"}
+                          src="/zip/elements2.svg"
                           width={18}
                           height={18}
-                          alt="contact"
+                          alt="login"
                         />
                         <p>{translations.sidebar.login}</p>
                       </li>

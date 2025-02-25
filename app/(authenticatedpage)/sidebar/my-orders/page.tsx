@@ -102,15 +102,15 @@ const BookedEvents = () => {
             </div>
           </div>
           <div className="flex flex-wrap md:flex-col gap-3 border-l-4 max-md:border-none border-primary md:pl-5 pl-1 ">
-            <div className="bg-primary w-40 p-1 max-md:h-fit text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-lg font-semibold">
+            <div className="bg-primary w-40 p-1 max-md:h-fit text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-lg ">
               {event.orderStatus}
             </div>
-            <div className="bg-[#dedede] p-1 max-md:h-fit text-lg text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg font-semibold">
+            <div className="bg-[#dedede] p-1 max-md:h-fit text-lg text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg ">
               Quotation
             </div>
 
             <div className="mt-5 max-md:mt-1 flex justify-start">
-              <p className="text-primary text-lg font-semibold text-end">
+              <p className="text-primary  font-semibold text-center">
                 Date:{new Date(event.date).toLocaleDateString()}
               </p>
             </div>

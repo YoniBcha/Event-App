@@ -28,7 +28,10 @@
     @apply bg-[#f7f4e9] py-2 max-sm:py-1 px-4 rounded-lg;
   }
 }
-
+.bg-today {
+  border-radius: 50%;
+  background-color: var(--secondary); /* Replace with your preferred color */
+}
 body {
   color: var(--tertiary);
   background: #f0f0f0;
@@ -57,8 +60,8 @@ body::after {
   z-index: -1;
   right: 0;
   width: 250px;
-  height: 250px;
-  background-image: url("/images/f1 1.svg"); /* Replace with your image path */
+  height: 350px;
+  background-image: url("/images/f1 1.png"); /* Replace with your image path */
   background-size: cover;
   background-position: center;
 }

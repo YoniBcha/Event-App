@@ -73,10 +73,6 @@ const EventTypeComponent = ({
   };
 
   // Framer Motion Variants
-  const slideVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
 
   const buttonVariants = {
     hover: { scale: 1.05 },
@@ -164,11 +160,24 @@ const EventTypeComponent = ({
                       ? "border-2 border-primary scale-105"
                       : "border border-gray-300"
                   }`}
-                  variants={slideVariants}
                   initial="hidden"
                   animate="visible"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  variants={{
+                    hover: {
+                      scale: 1.05,
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                      backgroundColor: "#faebdc",
+                      color: "#c2937b",
+                      transition: { duration: 0.2, ease: "easeInOut" },
+                    },
+                    tap: {
+                      scale: 0.95,
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                      transition: { duration: 0.1, ease: "easeInOut" },
+                    },
+                  }}
+                  whileHover={selectedEventTypeId ? "hover" : {}}
+                  whileTap={selectedEventTypeId ? "tap" : {}}
                 >
                   <div className="relative w-full h-64">
                     <Image

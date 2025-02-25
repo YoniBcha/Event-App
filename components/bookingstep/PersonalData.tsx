@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
 import { ChromePicker, ColorResult } from "react-color";
+import { motion } from "framer-motion";
 
 interface PersonalData {
   fullName: string;
@@ -40,7 +41,8 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [showColorPicker, setShowColorPicker] = useState(false); // State to toggle color picker
+  const [showColorPicker, setShowColorPicker] = useState(false);
+
   interface RootState {
     language: {
       translations: {
@@ -57,31 +59,31 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     };
   }
 
-  const translations = useSelector((state: RootState) => state.language.translations);
+  const translations = useSelector(
+    (state: RootState) => state.language.translations
+  );
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    // Clear the error for the field when the user starts typing
+
     if (errors[name]) {
       setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
     }
   };
 
   const handleColorChange = (color: ColorResult) => {
-    setFormData({ ...formData, favoriteColors: color.hex }); // Update the color in form data
+    setFormData({ ...formData, favoriteColors: color.hex });
   };
 
   const handleSubmit = async () => {
     try {
-      // Validate the form data using Yup
       await validationSchema.validate(formData, { abortEarly: false });
-      // If validation passes, submit the form
       onSubmit(formData);
-      setErrors({}); // Clear any previous errors
+      setErrors({});
     } catch (validationErrors) {
-      // Handle validation errors
       const newErrors: Record<string, string> = {};
       if (validationErrors instanceof Yup.ValidationError) {
         validationErrors.inner.forEach((error) => {
@@ -93,74 +95,67 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   };
 
   return (
-    <div className="flex items-center justify-center h-full max-[500px]:p-1 p-4">
+    <motion.div
+      className="flex items-center justify-center h-full max-[500px]:p-1 p-4"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div className="w-full max-w-4xl p-6 max-[500px]:p-3 rounded-lg shadow-md">
-        <div className="text-center text-primary font-bold text-2xl mb-6">
+        <motion.div
+          className="text-center text-primary font-bold text-2xl mb-6"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+        >
           {translations.booking.personalData}
-        </div>
+        </motion.div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="font-medium text-tertiary text-md mb-2">
-              {translations.booking.fullName}
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleInputChange}
-              className={`border outline-none ${
-                errors.fullName ? "border-red-500" : "border-primary"
-              } input-field`}
-            />
-            {errors.fullName && (
-              <div className="text-red-500 text-sm mt-1">{errors.fullName}</div>
-            )}
-          </div>
-
-          {/* Mobile Number */}
-          <div className="flex flex-col">
-            <label className="font-medium text-tertiary text-md mb-2">
-              {translations.booking.mobileNumber}
-            </label>
-            <input
-              type="text"
-              name="mobileNumber"
-              value={formData.mobileNumber}
-              onChange={handleInputChange}
-              className={`border outline-none ${
-                errors.mobileNumber ? "border-red-500" : "border-primary"
-              } input-field`}
-            />
-            {errors.mobileNumber && (
-              <div className="text-red-500 text-sm mt-1">
-                {errors.mobileNumber}
-              </div>
-            )}
-          </div>
-
-          {/* Second Mobile Number */}
-          <div className="flex flex-col">
-            <label className="font-medium text-tertiary text-md mb-2">
-              {translations.booking.secondMobileNumber}
-            </label>
-            <input
-              type="text"
-              name="secondMobileNumber"
-              value={formData.secondMobileNumber}
-              onChange={handleInputChange}
-              className={`border outline-none ${
-                errors.secondMobileNumber ? "border-red-500" : "border-primary"
-              } input-field`}
-            />
-            {errors.secondMobileNumber && (
-              <div className="text-red-500 text-sm mt-1">
-                {errors.secondMobileNumber}
-              </div>
-            )}
-          </div>
+          {[
+            { label: translations.booking.fullName, name: "fullName" },
+            { label: translations.booking.mobileNumber, name: "mobileNumber" },
+            {
+              label: translations.booking.secondMobileNumber,
+              name: "secondMobileNumber",
+            },
+          ].map((field, index) => (
+            <motion.div
+              key={field.name}
+              className="flex flex-col"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.3 }}
+            >
+              <label className="font-medium text-tertiary text-md mb-2">
+                {field.label}
+              </label>
+              <input
+                type="text"
+                name={field.name}
+                value={formData[field.name as keyof typeof formData] || ""}
+                onChange={handleInputChange}
+                className={`border outline-none ${
+                  errors[field.name as keyof typeof errors]
+                    ? "border-red-500"
+                    : "border-primary"
+                } input-field`}
+              />
+              {errors[field.name] && (
+                <div className="text-red-500 text-sm mt-1">
+                  {errors[field.name]}
+                </div>
+              )}
+            </motion.div>
+          ))}
 
           {/* Favorite Colors */}
-          <div className="flex flex-col">
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.3 }}
+          >
             <label className="font-medium text-tertiary text-md mb-2">
               {translations.booking.pickColor}
             </label>
@@ -184,11 +179,16 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                 {errors.favoriteColors}
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
 
         {/* Notes */}
-        <div className="mt-6">
+        <motion.div
+          className="mt-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.3 }}
+        >
           <label className="font-medium text-tertiary text-md mb-2">
             {translations.booking.notes}
           </label>
@@ -204,17 +204,35 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           {errors.notes && (
             <div className="text-red-500 text-sm mt-1">{errors.notes}</div>
           )}
-        </div>
-        <div className="flex justify-center mt-8">
-          <button
+        </motion.div>
+
+        {/* Submit Button */}
+        <motion.div className="flex justify-center mt-8">
+          <motion.button
             onClick={handleSubmit}
-            className="px-6 py-2 rounded-lg bg-primary hover:bg-[#faebdc] hover:text-primary text-white hover:bg-primary-dark transition-colors duration-200"
+            className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-[#faebdc] hover:text-primary transition-colors duration-200"
+            variants={{
+              hover: {
+                scale: 1.05,
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                borderColor: "#a57a6a",
+                color: "#a57a6a",
+                transition: { duration: 0.2, ease: "easeInOut" },
+              },
+              tap: {
+                scale: 0.95,
+                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                transition: { duration: 0.1, ease: "easeInOut" },
+              },
+            }}
+            whileHover="hover"
+            whileTap="tap"
           >
-            { translations.booking.nextBtn} &gt;
-          </button>
-        </div>
+            {translations.booking.nextBtn} &gt;
+          </motion.button>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

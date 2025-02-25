@@ -1,23 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie"; // Import js-cookie
 
 const initializeUser = () => {
   if (typeof window !== "undefined") {
-    const item = window?.localStorage.getItem("user-info");
+    const item = Cookies.get("user-info");
     return item ? JSON.parse(item) : null;
   }
 };
 
 const initializeAuthenticated = () => {
   if (typeof window !== "undefined") {
-    const item = window?.localStorage.getItem("user-info");
-    return item ? true : false;
+    return !!Cookies.get("user-info");
   }
 };
 
 const initializeToken = () => {
   if (typeof window !== "undefined") {
-    const item = window?.localStorage.getItem("token");
-    return item ? item : null;
+    return Cookies.get("token") || null;
   }
 };
 
@@ -35,23 +34,24 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload;
       state.token = action.payload.token;
-      window?.localStorage.setItem("user-info", JSON.stringify(state.user));
-      window?.localStorage.setItem("token", state.token);
+      Cookies.set("user-info", JSON.stringify(state.user), { expires: 1 });
+      Cookies.set("token", state.token, { expires: 1 });
     },
     logoutUser: (state) => {
       state.isAuthenticated = false;
       state.token = null;
       state.user = null;
-      window?.localStorage.removeItem("user-info");
-      window?.localStorage.removeItem("token");
+      Cookies.remove("user-info");
+      Cookies.remove("token");
     },
     setUser: (state, action) => {
       state.user = action.payload;
-      window?.localStorage.setItem("user-info", JSON.stringify(state.user));
+      Cookies.set("user-info", JSON.stringify(state.user), { expires: 1 });
     },
     socialAuthenticate: (state, action) => {
       state.isAuthenticated = true;
       state.token = action.payload;
+      Cookies.set("token", state.token, { expires: 1 });
     },
     setCSRFToken: (state, action) => {
       state.csrf_token = action.payload;

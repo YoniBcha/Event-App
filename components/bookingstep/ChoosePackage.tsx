@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Pagination } from "swiper/modules";
 import Image from "next/image";
@@ -36,8 +37,8 @@ interface ChoosePackageProps {
   place: string;
   eventType: string;
   eventDesign: string;
-  onNext: (selectedPackageId: string | null) => void; // Callback to send the selected package ID to the parent
-  onBackClick: () => void; // Callback for "Back" button click
+  onNext: (selectedPackageId: string | null) => void;
+  onBackClick: () => void;
 }
 
 function ChoosePackage({
@@ -56,24 +57,40 @@ function ChoosePackage({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
-  interface RootState {
-    language: {
-      translations: {
-        booking: {
-          choosePackage: string;
-          backBtn: string;
-          nextBtn: string;
-        };
-      };
-    };
-  }
-
-  const translations = useSelector(
-    (state: RootState) => state.language.translations
-  );
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
   );
+
+  const translations = useSelector((state: any) => state.language.translations);
+
+  // Framer Motion Variants
+  const slideVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const cardVariants = {
+    hover: {
+      scale: 1.05,
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+      transition: { duration: 0.2, ease: "easeInOut" },
+    },
+    tap: {
+      scale: 0.95,
+      transition: { duration: 0.1, ease: "easeInOut" },
+    },
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && !isGridView) {
+        setIsGridView(true); // Switch to grid view on larger screens
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isGridView]);
 
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
@@ -92,6 +109,7 @@ function ChoosePackage({
   const toggleView = () => {
     setIsGridView(!isGridView);
   };
+
   const handleBackClick = () => {
     onBackClick();
   };
@@ -99,7 +117,8 @@ function ChoosePackage({
   if (error) return <p>Failed to load packages</p>;
 
   const packages = (data as { eventPackages: Package[] })?.eventPackages || [];
-  // Check if there are no designs
+
+  // Check if there are no packages
   if (!isLoading && packages.length === 0) {
     return (
       <div className="flex flex-col gap-10 h-full justify-between items-center">
@@ -131,8 +150,9 @@ function ChoosePackage({
       </div>
     );
   }
+
   return (
-    <div className="flex flex-col gap-4  h-full">
+    <div className="flex flex-col gap-4 h-full">
       <div className="text-primary font-bold text-2xl md:text-3xl pt-5 text-center">
         {translations.booking.choosePackage}
       </div>
@@ -140,7 +160,7 @@ function ChoosePackage({
       <div className="flex justify-end items-center w-full">
         <button
           onClick={toggleView}
-          className=" md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
+          className="md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
         >
           {isGridView ? (
             <Image
@@ -165,6 +185,7 @@ function ChoosePackage({
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
         </div>
       ) : isGridView ? (
+        // Grid View
         <div className="w-full px-4">
           <Swiper
             slidesPerView={4}
@@ -196,46 +217,56 @@ function ChoosePackage({
             {packages.map((eventPackage: Package, index: number) => (
               <SwiperSlide
                 key={eventPackage._id || index}
-                onClick={() => handleCardClick(eventPackage._id)} // Pass the package ID
-                className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
-                  selectedPackageId === eventPackage._id
-                    ? "border-2 border-primary scale-105"
-                    : "border border-gray-300"
-                }`}
+                onClick={() => handleCardClick(eventPackage._id)}
               >
-                <div
-                  className="relative w-full h-64"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleImageClick(eventPackage.image[0]);
-                  }}
+                <motion.div
+                  className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
+                    selectedPackageId === eventPackage._id
+                      ? "border-2 border-primary scale-105"
+                      : "border border-gray-300"
+                  }`}
+                  variants={cardVariants}
+                  whileHover="hover"
+                  whileTap="tap"
                 >
-                  <Image
-                    src={eventPackage.image[0]}
-                    alt={eventPackage.packageName}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-lg"
-                  />
-                </div>
-                <p className="mt-2 text-sm font-bold text-tertiary text-center">
-                  {eventPackage.packageName} - ${eventPackage.packagePrice}
-                </p>
+                  <div
+                    className="relative w-full h-64"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleImageClick(eventPackage.image[0]);
+                    }}
+                  >
+                    <Image
+                      src={eventPackage.image[0]}
+                      alt={eventPackage.packageName}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-t-lg"
+                    />
+                  </div>
+                  <p className="mt-2 text-sm font-bold text-tertiary text-center">
+                    {eventPackage.packageName} - ${eventPackage.packagePrice}
+                  </p>
+                </motion.div>
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
       ) : (
+        // List View
         <div className="flex flex-col gap-4">
           {packages.map((eventPackage: Package, index: number) => (
-            <div
+            <motion.div
               key={eventPackage._id || index}
               className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
                 selectedPackageId === eventPackage._id
                   ? "border-4 border-primary scale-105"
                   : "border border-gray-300"
               }`}
-              onClick={() => handleCardClick(eventPackage._id)} // Pass the package ID
+              onClick={() => handleCardClick(eventPackage._id)}
+              variants={cardVariants}
+              whileHover="hover"
+              whileTap="tap"
             >
               <div
                 className="relative w-full h-48"
@@ -255,29 +286,41 @@ function ChoosePackage({
               <p className="mt-2 text-sm text-tertiary font-medium text-center">
                 {eventPackage.packageName} - ${eventPackage.packagePrice}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
 
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50"
-          onClick={closeModal}
-        >
-          <div className="relative w-11/12 md:w-3/4 lg:w-1/2 h-1/2 md:h-3/4 rounded-lg p-4">
-            <div className="relative w-full h-full">
-              <Image
-                src={selectedImage}
-                alt="Selected Image"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Modal for Enlarged Image */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50"
+            onClick={closeModal}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="relative w-11/12 md:w-3/4 lg:w-1/2 h-1/2 md:h-3/4 rounded-lg p-4"
+              variants={slideVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <div className="relative w-full h-full">
+                <Image
+                  src={selectedImage}
+                  alt="Selected Image"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="flex justify-center gap-5 my-5">
         {/* Back Button */}
