@@ -6,7 +6,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --primary: #c3927b;
-  --secondary: #fbf9f1;
+  --secondary: #f7f7f7;
   --tertiary: #bcbab9;
   --font-primary: "Times New Roman", Times, serif;
 }
@@ -31,7 +31,7 @@
 
 body {
   color: var(--tertiary);
-  background: var(--secondary);
+  background: #f0f0f0;
   font-family: var(--font-primary);
 }
 /* Top-left image */
@@ -75,7 +75,7 @@ body::after {
   opacity: 0.5; /* Reduced color intensity */
   background: radial-gradient(
       circle at 30% 70%,
-      var(--primary) 15%,
+      var(--primary) 10%,
       rgba(0, 0, 0, 0) 60%
     ),
     radial-gradient(circle at 60% 40%, var(--primary) 10%, rgba(0, 0, 0, 0) 70%);

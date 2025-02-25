@@ -6,12 +6,27 @@ const THEME_STORAGE_KEY = "appTheme";
 const loadThemeFromLocalStorage = () => {
   if (typeof window === "undefined") return null;
   const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+  const { primaryColor, secondaryColor, font, tertiaryColor, logo } =
+    JSON.parse(storedTheme);
+  console.log(JSON.stringify(primaryColor, null, 2));
+  if (primaryColor) {
+    document.documentElement.style.setProperty("--primary", primaryColor);
+  }
+  if (secondaryColor) {
+    document.documentElement.style.setProperty("--secondary", secondaryColor);
+  }
+  if (tertiaryColor) {
+    document.documentElement.style.setProperty("--tertiary", tertiaryColor);
+  }
+  if (font) {
+    document.documentElement.style.setProperty("--font-primary", font);
+  }
   return storedTheme ? JSON.parse(storedTheme) : null;
 };
 
 const saveThemeToLocalStorage = (theme) => {
   if (typeof window === "undefined") return;
-  localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(theme));
+  localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(theme.data));
 };
 
 export const fetchThemeFromAPI = createAsyncThunk(

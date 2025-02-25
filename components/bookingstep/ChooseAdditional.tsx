@@ -45,7 +45,10 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
     isLoading: boolean;
     isError: boolean;
   };
-  const translations = useSelector((state: { language: { translations: Translations } }) => state.language.translations);
+  const translations = useSelector(
+    (state: { language: { translations: Translations } }) =>
+      state.language.translations
+  );
 
   if (isError) return <div>Error fetching data</div>;
 
@@ -221,7 +224,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="w-full p-3 mt-2 border-t border-gray-300 shadow-lg rounded-lg"
+                      className="w-full p-3 mt-2 border-t border-gray-300 shadow-lg bg-secondary rounded-lg"
                     >
                       <div className="flex flex-col gap-2">
                         {addition.typeDetail.map((type) => (
@@ -299,10 +302,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           </div>
         )}
         <div className="flex flex-row gap-5 my-2 md:mt-10">
-          <button
-            onClick={onBack}
-            className="back-btn"
-          >
+          <button onClick={onBack} className="back-btn">
             <span className="mr-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -320,15 +320,15 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
             <span>{translations.booking.backBtn}</span>
           </button>
           <button
-          className={`next-btn ${
-            hasSelection
-              ? "bg-primary hover:bg-[#faebdc] hover:text-primary"
+            className={`next-btn ${
+              hasSelection
+                ? "bg-primary hover:bg-[#faebdc] hover:text-primary"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
             disabled={!hasSelection}
             onClick={handleNextClick}
           >
-            <span>{ translations.booking.nextBtn}</span>
+            <span>{translations.booking.nextBtn}</span>
             <span className="ml-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

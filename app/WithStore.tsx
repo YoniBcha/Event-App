@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { ReactNode, useEffect } from "react";
@@ -22,8 +23,8 @@ const WithStore = ({ children }: WithStoreProps) => {
 };
 
 const ThemeFetcherAndApplier = () => {
-  const { data, error, isLoading } = useGetThemeColorQuery<any>({});
-  const { primaryColor, secondaryColor, font, tertiaryColor, logo } =
+  const { data } = useGetThemeColorQuery<any>({});
+  const { primaryColor, secondaryColor, font, tertiaryColor } =
     data?.data || {};
   const dispatch = useDispatch<any>();
   useEffect(() => {
@@ -40,11 +41,7 @@ const ThemeFetcherAndApplier = () => {
     if (font) {
       document.documentElement.style.setProperty("--font-primary", font);
     }
-  }, [primaryColor, secondaryColor, tertiaryColor]);
-
-  if (error) {
-    return <div className="text-red-500">Error: {error.message}</div>;
-  }
+  }, [primaryColor, secondaryColor, tertiaryColor, dispatch, font]);
 
   return null;
 };

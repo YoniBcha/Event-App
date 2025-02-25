@@ -6,7 +6,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import { useGetEventTypesQuery } from "@/store/endpoints/apiSlice";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import { motion } from "framer-motion"; // Import Framer Motion
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -141,7 +141,7 @@ const EventTypeComponent = ({
           Error: {error instanceof Error ? error.message : "An error occurred"}
         </div>
       ) : (
-        <div className="w-[90%] px-4">
+        <div className="w-[90%] px-4   ">
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={20}
@@ -159,7 +159,7 @@ const EventTypeComponent = ({
                 onClick={() => handleEventTypeSelect(eventType._id)}
               >
                 <motion.div
-                  className={`flex flex-col items-center cursor-pointer px-1 py-2 rounded-lg transition-all duration-300 ${
+                  className={`flex flex-col items-center  cursor-pointer px-1 py-2 rounded-lg transition-all duration-300 ${
                     selectedEventTypeId === eventType._id
                       ? "border-2 border-primary scale-105"
                       : "border border-gray-300"

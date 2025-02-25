@@ -1,18 +1,35 @@
+/* swiper-custom.css */
+
+/* Custom styles for Swiper navigation buttons */
 .swiper-button-next,
 .swiper-button-prev {
-  color: #c2937b;
+  background-color: var(--primary); /* Background color */
+  color: white; /* Arrow color */
+  width: 40px; /* Button width */
+  height: 40px; /* Button height */
+  border-radius: 50%; /* Rounded corners */
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
-.swiper-pagination-fraction {
-  color: #c2937b;
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 20px; /* Arrow size */
 }
 
-.swiper-pagination-bullet {
-  background-color: #c2937b;
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: var(--secondary); /* Hover background color */
 }
 
-.swiper-pagination-bullet-active {
-  background-color: #c2937b;
+.swiper-button-next {
+  right: 10px; /* Position from the right */
+}
+
+.swiper-button-prev {
+  left: 10px; /* Position from the left */
 }
 
 .swiper-pagination {

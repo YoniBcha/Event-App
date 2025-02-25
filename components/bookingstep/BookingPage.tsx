@@ -182,7 +182,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setShowPlaceDropdown(!showPlaceDropdown)}
-                    className="flex justify-between items-center rounded-xl  border-white border-2 backdrop-blur-lg bg-white/50 px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center rounded-xl  border-white border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <svg
@@ -236,7 +236,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   <AnimatePresence>
                     {showPlaceDropdown && (
                       <motion.div
-                        className="absolute top-10 mt-2 w-full backdrop-blur-lg  border border-[#d4c9c0] rounded-lg shadow-lg z-10"
+                        className="absolute top-10 mt-2 w-full bg-secondary  border border-[#d4c9c0] rounded-lg shadow-lg z-10"
                         variants={dropdownVariants}
                         initial="hidden"
                         animate="visible"
@@ -270,7 +270,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setIsModalOpen(true)}
-                    className="flex justify-between items-center  rounded-xl border-white border-2 backdrop-blur-lg bg-white/50 px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center  rounded-xl border-white border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <svg
@@ -324,7 +324,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setShowCityDropdown(!showCityDropdown)}
-                    className="flex justify-between items-center rounded-xl border-white border-2 backdrop-blur-lg bg-white/50 px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center rounded-xl border-white border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <svg
@@ -382,7 +382,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   <AnimatePresence>
                     {showCityDropdown && (
                       <motion.div
-                        className="absolute top-full mt-2 w-full backdrop-blur-lg border border-[#d4c9c0] rounded-lg shadow-lg z-10 h-40 overflow-y-auto"
+                        className="absolute top-full mt-2 w-full bg-secondary border border-[#d4c9c0] rounded-lg shadow-lg z-10 h-40 overflow-y-auto"
                         variants={dropdownVariants}
                         initial="hidden"
                         animate="visible"

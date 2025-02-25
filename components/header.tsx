@@ -204,7 +204,7 @@ function Header() {
                     currentLocale === "ar"
                       ? "md:left-20 left-[2rem]"
                       : "md:right-20 right-[2rem]"
-                  } top-16 mt-2 w-48 backdrop-blur-xl bg-white/50 border border-primary shadow-lg rounded-md overflow-hidden z-50`}
+                  } top-16 mt-2 w-48 backdrop-blur-xl bg-white/20 border border-primary shadow-lg rounded-md overflow-hidden z-50`}
                   variants={dropdownVariants}
                   initial="hidden"
                   animate="visible"

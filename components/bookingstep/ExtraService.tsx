@@ -284,7 +284,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
         </div>
         <button
           onClick={onBack}
-          className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          className="flex items-center p-2 rounded-lg  border border-primary text-primary cursor-pointer"
         >
           <span className="mr-2">
             <svg
@@ -332,45 +332,42 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
             </div>
 
             <div className="flex justify-center items-center gap-5 mt-5 md:mt-10">
-            <button
-          onClick={onBack}
-          className="back-btn"
-        >
-          <span className="mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 12 24"
-            >
-              <path
-                fill="#c2937b"
-                fillRule="evenodd"
-                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-              />
-            </svg>
-          </span>
-          <span>{translations.booking.backBtn}</span>
-        </button>
+              <button onClick={onBack} className="back-btn">
+                <span className="mr-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 12 24"
+                  >
+                    <path
+                      fill="#c2937b"
+                      fillRule="evenodd"
+                      d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+                    />
+                  </svg>
+                </span>
+                <span>{translations.booking.backBtn}</span>
+              </button>
               <button
                 onClick={handleNext}
                 disabled={selectedCategories.length === 0}
                 className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
               >
-               <span>{ translations.booking.nextBtn}</span>
-          <span className="ml-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 48 48"
-            >
-              <path
-                fill="#fff"
-                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
-              />
-            </svg>
-          </span>{" "}
+                <span>{translations.booking.nextBtn}</span>
+                <span className="ml-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 48 48"
+                  >
+                    <path
+                      fill="#fff"
+                      d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
+                    />
+                  </svg>
+                </span>{" "}
               </button>
             </div>
           </>
@@ -385,7 +382,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               {serviceProviders.map((provider, index) => (
                 <div
                   key={index}
-                  className={`px-6 py-5 rounded-3xl shadow-lg cursor-pointer ${
+                  className={`px-6 py-5 rounded-3xl bg-secondary shadow-lg cursor-pointer ${
                     selectedServiceProviders[currentCategory] === provider._id
                       ? "border-b-2 border-primary"
                       : ""
@@ -410,45 +407,42 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               ))}
             </ul>
             <div className="flex gap-5 my-5">
-              <button
-                onClick={handleBack}
-                className="back-btn"
-              >
-               <span className="mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 12 24"
-            >
-              <path
-                fill="#c2937b"
-                fillRule="evenodd"
-                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-              />
-            </svg>
-          </span>
-          <span>{translations.booking.backBtn}</span>{" "}
+              <button onClick={handleBack} className="back-btn">
+                <span className="mr-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 12 24"
+                  >
+                    <path
+                      fill="#c2937b"
+                      fillRule="evenodd"
+                      d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+                    />
+                  </svg>
+                </span>
+                <span>{translations.booking.backBtn}</span>{" "}
               </button>
               <button
                 className="next-btn bg-primary hover:bg-[#faebdc] hover:text-primary"
                 onClick={handleNext}
                 disabled={!selectedServiceProviders[currentCategory]}
               >
-                 <span>{ translations.booking.nextBtn}</span>
-          <span className="ml-3 ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 48 48"
-            >
-              <path
-                fill="#fff"
-                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
-              />
-            </svg>
-          </span>
+                <span>{translations.booking.nextBtn}</span>
+                <span className="ml-3 ">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 48 48"
+                  >
+                    <path
+                      fill="#fff"
+                      d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
+                    />
+                  </svg>
+                </span>
               </button>
             </div>
           </div>
@@ -490,15 +484,19 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                           handlePackageSelect(currentCategory, pkg.packageName)
                         }
                       >
-                        <div className="relative h-32 w-36">
+                        {/* Image Container */}
+                        <div className="relative h-20 w-24 sm:h-24 sm:w-28 lg:h-32 lg:w-36 flex-shrink-0">
+                          {" "}
+                          {/* Responsive width and height */}
                           <Image
                             src={pkg.packageLogo}
                             alt={pkg.packageName}
-                            fill
-                            objectFit="cover"
-                            className="rounded-2xl"
+                            width={1000} // Default width for larger screens
+                            height={1000} // Default height for larger screens
+                            className="rounded-2xl object-scale-down" // Ensure the image covers the area
                           />
                         </div>
+                        {/* Text Content */}
                         <div>
                           <p className="text-primary font-bold text-lg">
                             {pkg.packageName}
@@ -513,25 +511,22 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 </div>
               )}
               <div className="flex gap-5 my-5">
-                <button
-                  onClick={handleBack}
-                  className="back-btn"
-                >
+                <button onClick={handleBack} className="back-btn">
                   <span className="mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 12 24"
-            >
-              <path
-                fill="#c2937b"
-                fillRule="evenodd"
-                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-              />
-            </svg>
-          </span>
-          <span>{translations.booking.backBtn}</span>{" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 12 24"
+                    >
+                      <path
+                        fill="#c2937b"
+                        fillRule="evenodd"
+                        d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+                      />
+                    </svg>
+                  </span>
+                  <span>{translations.booking.backBtn}</span>{" "}
                 </button>
                 <button
                   onClick={handleNext}
@@ -539,7 +534,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 >
                   {currentCategoryIndex < selectedCategories.length - 1
                     ? translations.booking.nextCategory
-                  : translations.booking.done}
+                    : translations.booking.done}
                 </button>
               </div>
             </div>
@@ -554,9 +549,7 @@ const ExtraServicesPage: React.FC<ExtraServiceProps> = ({
   onExtraServiceSelect,
   onBack,
 }) => {
-  const { data, error, isLoading } = useGetExtraServiceQuery<any>({
-    
-  });
+  const { data, error, isLoading } = useGetExtraServiceQuery<any>({});
 
   const handleExtraServiceSelect = (selectedData: SelectedData) => {
     console.log("Selected Data from Child:", selectedData);

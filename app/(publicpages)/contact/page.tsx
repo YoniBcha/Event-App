@@ -262,7 +262,7 @@ const ContactUs = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#c2937b] text-white px-4 py-2 hover:bg-[#faebdc] hover:text-primary transition rounded-full cursor-pointer"
+              className="w-full bg-primary text-white px-4 py-2 hover:bg-secondary hover:text-primary transition rounded-full cursor-pointer"
             >
               {isSubmitting ? "Sending..." : "SEND MESSAGE"}
             </button>
