@@ -3,19 +3,19 @@
 
 import React, { useState, useEffect } from "react"; // Add useEffect
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Grid, Navigation, Pagination } from "swiper/modules";
+
 import Image from "next/image";
 import { useGetChooseDesignsQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 
 import "swiper/css";
-import "swiper/css/grid";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import "./swiper-custom.css"; // Create this file for custom styles
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { Navigation, Pagination } from "swiper/modules";
 interface Design {
   _id: string;
   eventDesign: string;
@@ -59,10 +59,10 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, [isGridView]);
 
-  // const handleImageClick = (image: string) => {
-  //   setSelectedImage(image);
-  //   setIsModalOpen(true);
-  // };
+  const handleImageClick = (image: string) => {
+    setSelectedImage(image);
+    setIsModalOpen(true);
+  };
 
   const handleCardClick = (designId: string) => {
     setSelectedDesignId(designId);
@@ -145,7 +145,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
 
   return (
     <motion.div
-      className="flex flex-col gap-4 h-full"
+      className="flex flex-col gap-4 justify-center items-center h-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -160,78 +160,117 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         </div>
       ) : (
         // Grid View
-        <div className="w-full px-4">
-          <Swiper
-            spaceBetween={20}
-            slidesPerView={1}
-            pagination={{ type: "fraction", el: ".swiper-pagination" }}
-            navigation={{
-              nextEl: ".swiper-button-next", // Custom next button selector
-              prevEl: ".swiper-button-prev", // Custom previous button selector
-            }}
-            modules={[Grid, Pagination, Navigation]} // Add Navigation module
-            breakpoints={{
-              320: { slidesPerView: 1 }, // For small screens (mobile)
-              480: { slidesPerView: 2 }, // For slightly larger mobile screens
-              640: { slidesPerView: 3 }, // For tablets
-              1024: { slidesPerView: 4 }, // For desktops
-            }}
-            className="mySwiper"
-          >
+        <>
+          <div className="flex sm:hidden flex-col gap-4 w-full px-4">
             {designs.map((design: Design, index: number) => (
-              <SwiperSlide
+              <motion.div
                 key={design._id || index}
+                className={`flex flex-col justify-center hover:bg-secondary items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
+                  selectedDesignId === design._id
+                    ? "border-2 border-primary scale-105"
+                    : "border border-gray-300"
+                }`}
                 onClick={() => handleCardClick(design._id)}
+                variants={slideVariants}
+                initial="hidden"
+                animate="visible"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <motion.div
-                  className={`flex flex-col items-center cursor-pointer px-1 py-2 rounded-lg transition-all duration-300 ${
-                    selectedDesignId === design._id
-                      ? "border-2 border-primary scale-105"
-                      : "border border-gray-300"
-                  }`}
-                  initial="hidden"
-                  animate="visible"
-                  variants={{
-                    hover: {
-                      scale: 1.05,
-                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                      backgroundColor: getComputedStyle(
-                        document.documentElement
-                      )
-                        .getPropertyValue("--secondary")
-                        .trim(),
-                      transition: { duration: 0.2, ease: "easeInOut" },
-                    },
-                    tap: {
-                      scale: 0.95,
-                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-                      transition: { duration: 0.1, ease: "easeInOut" },
-                    },
+                <div
+                  className="relative w-full h-48"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleImageClick(design.image);
                   }}
-                  whileHover={"hover"}
-                  whileTap={"tap"}
                 >
-                  <div className="relative w-full h-64">
-                    <Image
-                      src={design.image}
-                      alt={design.eventDesign}
-                      layout="fill"
-                      className="rounded-lg object-cover"
-                    />
-                  </div>
-                  <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                    {design.eventDesign}
-                  </p>
-                </motion.div>
-              </SwiperSlide>
+                  <Image
+                    src={design.image}
+                    alt={design.eventDesign}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-t-lg"
+                  />
+                </div>
+                <p className="mt-2 text-sm text-tertiary font-medium text-center">
+                  {design.eventDesign}
+                </p>
+              </motion.div>
             ))}
-            {/* Custom Pagination */}
-            <div className="swiper-pagination mt-2"></div>
-            {/* Custom Navigation Buttons */}
-            <div className="swiper-button-prev"></div>
+          </div>
+
+          <div className="w-[90%] px-4 sm:block hidden relative">
+            <Swiper
+              modules={[Navigation, Pagination]}
+              spaceBetween={20}
+              slidesPerView={1}
+              pagination={{ type: "fraction", el: ".swiper-pagination" }}
+              navigation={{
+                nextEl: ".swiper-button-next", // Custom next button selector
+                prevEl: ".swiper-button-prev", // Custom previous button selector
+              }}
+              breakpoints={{
+                320: { slidesPerView: 1 }, // For small screens (mobile)
+                480: { slidesPerView: 2 }, // For slightly larger mobile screens
+                640: { slidesPerView: 3 }, // For tablets
+                1024: { slidesPerView: 4 }, // For desktops
+              }}
+            >
+              {designs.map((design: Design, index: number) => (
+                <SwiperSlide
+                  key={design._id || index}
+                  onClick={() => handleCardClick(design._id)}
+                >
+                  <motion.div
+                    className={`flex flex-col items-center cursor-pointer px-1 py-2 rounded-lg transition-all duration-300 ${
+                      selectedDesignId === design._id
+                        ? "border-2 border-primary scale-105"
+                        : "border border-gray-300"
+                    }`}
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                      hover: {
+                        scale: 1.05,
+                        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                        backgroundColor: getComputedStyle(
+                          document.documentElement
+                        )
+                          .getPropertyValue("--secondary")
+                          .trim(),
+                        transition: { duration: 0.2, ease: "easeInOut" },
+                      },
+                      tap: {
+                        scale: 0.95,
+                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                        transition: { duration: 0.1, ease: "easeInOut" },
+                      },
+                    }}
+                    whileHover={"hover"}
+                    whileTap={"tap"}
+                  >
+                    <div className="relative w-full h-64">
+                      <Image
+                        src={design.image}
+                        alt={design.eventDesign}
+                        layout="fill"
+                        className="rounded-lg object-cover"
+                      />
+                    </div>
+                    <p className="mt-2 text-sm text-tertiary font-medium text-center">
+                      {design.eventDesign}
+                    </p>
+                  </motion.div>
+                </SwiperSlide>
+              ))}
+              {/* Custom Pagination */}
+              <div className="swiper-pagination mt-2"></div>
+              {/* Custom Navigation Buttons */}
+            </Swiper>
+            <div className="swiper-button-prev "></div>
             <div className="swiper-button-next"></div>
-          </Swiper>
-        </div>
+          </div>
+        </>
       )}
 
       {/* Modal for Enlarged Image */}

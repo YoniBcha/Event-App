@@ -143,7 +143,10 @@ function Header() {
         className="flex w-full py-6 bg-transparent flex-row justify-between  items-center text-sm text-primary"
       >
         {/* Left Side Navigation (Hamburger Menu) */}
-        <div className="sm:hidden cursor-pointer" onClick={toggleDrawer}>
+        <div
+          className="[@media(min-width:1000px)]:hidden cursor-pointer"
+          onClick={toggleDrawer}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -161,7 +164,7 @@ function Header() {
         </div>
 
         {/* Center Navigation Links (Hidden on Small Screens) */}
-        <div className="hidden sm:flex flex-row gap-5 items-center text-primary">
+        <div className="hidden [@media(min-width:1000px)]:flex flex-row gap-5 items-center text-primary">
           <Link
             className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
             href={"/"}

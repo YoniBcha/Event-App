@@ -383,7 +383,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               </motion.button>
               <motion.button
                 onClick={handleNext}
-                disabled={selectedCategories.length === 0}
+                // disabled={selectedCategories.length === 0}
                 className="next-btn bg-primary  hover:bg-secondary hover:text-primary"
                 variants={{
                   hover: {
@@ -493,7 +493,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               <motion.button
                 className="next-btn bg-primary hover:bg-secondary "
                 onClick={handleNext}
-                disabled={!selectedServiceProviders[currentCategory]}
+                // disabled={!selectedServiceProviders[currentCategory]}
                 variants={{
                   hover: {
                     scale: 1.05,

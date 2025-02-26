@@ -127,12 +127,12 @@ function PackageDetails({
                 )}
               </div>
 
-              <div className="h-14 grid grid-cols-2 gap-3 max-md:grid-cols-3 max-[400px]:grid-cols-2 pt-1">
+              <div className="justify-center relative items-center grid grid-cols-2 gap-3 border backdrop-blur-xl bg-white/70 border-white rounded-lg max-md:grid-cols-3 max-[400px]:grid-cols-2 pt-1 w-full">
                 {packageData.eventPackage.additions.map(
                   (addition: any, index: any) => (
                     <motion.div
                       key={index}
-                      className="flex items-center gap-5"
+                      className="flex  w-full items-center gap-1 p-2 "
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -162,7 +162,13 @@ function PackageDetails({
                 <h3 className="text-xl flex items-center font-semibold">
                   {packageData.eventPackage.packageName}{" "}
                   {packageData.eventPackage.packagePrice}{" "}
-                  <Image src="/images/SR.png" alt="SR" width={20} height={20} />
+                  <Image
+                    src="/images/SR.png"
+                    alt="SR"
+                    width={20}
+                    height={20}
+                    className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
+                  />
                 </h3>
                 <div
                   className="mt-2 p-2 text-sm md:text-base overflow-hidden"
