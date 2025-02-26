@@ -18,6 +18,7 @@ import {
   useVerifyUserMutation,
   useSendVerificationCodeMutation,
 } from "@/store/endpoints/apiSlice";
+import { useSelector } from "react-redux";
 
 interface VerifyUserResponse {
   data: {
@@ -34,16 +35,7 @@ interface VerificationFormInputs {
   code: string;
 }
 
-const schema = yup.object({
-  phoneNumber: yup
-    .string()
-    .matches(/^\d{10}$/, "Enter a valid 10-digit phone number")
-    .required("Phone number is required"),
-  code: yup
-    .string()
-    .matches(/^\d{4}$/, "Code must be a 4-digit number")
-    .required("Verification code is required"),
-});
+
 
 const VerificationPage: React.FC = () => {
   return (
@@ -68,7 +60,17 @@ const VerificationPageContent: React.FC = () => {
   const [fullNameFromURL, setFullNameFromURL] = useState<string>("");
   const [digits, setDigits] = useState<string[]>(Array(4).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(4).fill(null));
-
+  const translations = useSelector((state: any) => state.language.translations);
+  const schema = yup.object({
+    phoneNumber: yup
+      .string()
+      .matches(/^\d{10}$/, `${translations.login.phoneMust}`)
+      .required(`${translations.login.phoneRequire}`),
+    code: yup
+      .string()
+      .matches(/^\d{4}$/, `${translations.login.codeMust}`)
+      .required(`${translations.login.codeRequire}`),
+  });
   const {
     handleSubmit,
     setValue,
@@ -148,16 +150,16 @@ const VerificationPageContent: React.FC = () => {
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
       <div className="rounded-lg text-center">
-        <h2 className="text-2xl font-bold text-primary">Verify Your Account</h2>
+        <h2 className="text-2xl font-bold text-primary">{translations.login.verifyAccount}</h2>
         <p className="text-gray-600 mt-2 mb-6">
-          Enter the 4-digit verification code sent to your phone.
+        {translations.login.verifyAccountSubtitel}
         </p>
 
         <form
           onSubmit={handleSubmit(handleVerify)}
           className="flex flex-col items-center space-y-4"
         >
-          <div className="flex space-x-2 justify-center">
+          <div className="flex gap-3 space-x-2 justify-center">
             {digits.map((digit, index) => (
              <input
              key={index}
@@ -179,7 +181,7 @@ const VerificationPageContent: React.FC = () => {
             className="bg-primary text-white hover:bg-[#faebdc] hover:text-primary py-2 rounded-md font-semibold cursor-pointer w-1/2"
             disabled={loading}
           >
-            {loading ? "Verifying..." : "Verify"}
+            {loading ? translations.login.verifying : translations.login.verify}
           </button>
 
           <button
@@ -188,7 +190,7 @@ const VerificationPageContent: React.FC = () => {
             onClick={handleResendCode}
             disabled={resending}
           >
-            {resending ? "Resending..." : "Resend Code"}
+            {resending ? translations.login.resending : translations.login.resendCode}
           </button>
         </form>
       </div>

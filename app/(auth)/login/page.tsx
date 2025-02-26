@@ -9,7 +9,7 @@ import { useLoginUserMutation } from "@/store/endpoints/apiSlice";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authenticateUser } from "@/store/authReducer";
 import Link from "next/link";
 
@@ -67,6 +67,7 @@ const LoginContent: React.FC<any> = ({
 }) => {
   const searchParams = useSearchParams();
   const payload = searchParams?.get("payload");
+  const translations = useSelector((state: any) => state.language.translations);
 
   const handleLogin = async (data: { phoneNumber: string; password: string }) => {
     setLoading(true);
@@ -102,14 +103,14 @@ const LoginContent: React.FC<any> = ({
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
       <div className="rounded-lg text-center">
-        <h2 className="text-primary text-3xl font-extrabold">Login</h2>
-        <p className="text-sm text-primary mb-9">Welcome Back!</p>
+        <h2 className="text-primary text-3xl font-extrabold">{translations.login.loginButton}</h2>
+        <p className="text-sm text-primary mb-9">{translations.login.title}</p>
 
         <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
           <div className="py-2 px-1 w-full bg-[#EEE7DF] rounded-xl mb-3">
             <input
               type="text"
-              placeholder="Enter your mobile number"
+              placeholder={translations.login.mobilePlaceholder}
               {...register("phoneNumber")}
               className="bg-transparent outline-none px-3 text-tertiary w-full"
             />
@@ -121,7 +122,7 @@ const LoginContent: React.FC<any> = ({
           <div className="py-2 px-1 w-full bg-[#EEE7DF] rounded-xl mb-3">
             <input
               type="password"
-              placeholder="Password"
+              placeholder={translations.login.password}
               {...register("password")}
               className="bg-transparent outline-none px-3 text-tertiary w-full"
             />
@@ -135,23 +136,23 @@ const LoginContent: React.FC<any> = ({
             className="w-full bg-primary text-center hover:bg-[#faebdc] hover:text-primary rounded-xl py-2 text-gray-100 cursor-pointer disabled:opacity-50"
             disabled={loading}
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ?translations.login.loadingButton :translations.login.loginButton}
           </button>
         </form>
 
         <Link href={"/SendVerificationCode"}>
           <p className="font-bold text-tertiary py-5">
-            Do You Have An Account?
+          {translations.login.noAccount}
             <span className="text-primary hover:text-gray-500 font-bold cursor-pointer">
               {" "}
-              Signup
+              {translations.login.signup}
             </span>
           </p>
         </Link>
 
         <div className="flex items-center justify-center text-sm text-[#7c6d68]">
           <input type="checkbox" className="mr-2" />
-          <span>I agree to the Terms of Service</span>
+          <span>{translations.login.agreeCondition}</span>
         </div>
       </div>
       <ToastContainer />
