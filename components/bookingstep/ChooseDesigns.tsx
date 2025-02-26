@@ -15,7 +15,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import "./swiper-custom.css"; // Create this file for custom styles
-import { FaBars, FaChevronLeft, FaChevronRight, FaTh } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 interface Design {
   _id: string;
   eventDesign: string;
