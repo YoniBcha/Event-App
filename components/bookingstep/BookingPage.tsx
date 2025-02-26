@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import { FaCalendarAlt, FaCity, FaMapMarkerAlt } from "react-icons/fa";
 
 const validationSchema = yup.object({
   city: yup.string().required("City is required"),
@@ -167,7 +168,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
           <div className="flex justify-center items-center md:justify-end h-full w-full">
             <div className="flex flex-col justify-center items-center h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl relative">
               <Image
-                src={"/zip/Rectangle.png"}
+                src={"/images/booking-image.jpg"}
                 alt="About Image"
                 layout="fill"
                 objectFit="cover"
@@ -185,26 +186,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                     className="flex justify-between items-center rounded-xl  border-white border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 1024 1024"
-                      >
-                        <rect width="1024" height="1024" fill="none" />
-                        <path
-                          fill="#685651"
-                          d="M800 416a288 288 0 1 0-576 0c0 118.144 94.528 272.128 288 456.576C705.472 688.128 800 534.144 800 416M512 960C277.312 746.688 160 565.312 160 416a352 352 0 0 1 704 0c0 149.312-117.312 330.688-352 544"
-                          strokeWidth="25.5"
-                          stroke="#685651"
-                        />
-                        <path
-                          fill="#685651"
-                          d="M512 512a96 96 0 1 0 0-192a96 96 0 0 0 0 192m0 64a160 160 0 1 1 0-320a160 160 0 0 1 0 320"
-                          strokeWidth="25.5"
-                          stroke="#685651"
-                        />
-                      </svg>
+                      <FaMapMarkerAlt className="text-2xl text-primary" />
                     </div>
                     <div className="">
                       <div className="text-[#a1948d]">
@@ -273,20 +255,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                     className="flex justify-between items-center  rounded-xl border-white border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                      >
-                        <rect width="24" height="24" fill="none" />
-                        <path
-                          fill="#685651"
-                          d="M19.5 4h-3V2.5a.5.5 0 0 0-1 0V4h-7V2.5a.5.5 0 0 0-1 0V4h-3A2.503 2.503 0 0 0 2 6.5v13A2.503 2.503 0 0 0 4.5 22h15a2.5 2.5 0 0 0 2.5-2.5v-13A2.5 2.5 0 0 0 19.5 4M21 19.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5V11h18zm0-9.5H3V6.5C3 5.672 3.67 5 4.5 5h3v1.5a.5.5 0 0 0 1 0V5h7v1.5a.5.5 0 0 0 1 0V5h3A1.5 1.5 0 0 1 21 6.5z"
-                          strokeWidth="0.5"
-                          stroke="#685651"
-                        />
-                      </svg>
+                      <FaCalendarAlt className="text-2xl text-primary" />
                     </div>
                     <div className="flex flex-col">
                       <div className="text-[#a1948d]">
@@ -327,26 +296,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                     className="flex justify-between items-center rounded-xl border-white border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 1024 1024"
-                      >
-                        <rect width="1024" height="1024" fill="none" />
-                        <path
-                          fill="#685651"
-                          d="M800 416a288 288 0 1 0-576 0c0 118.144 94.528 272.128 288 456.576C705.472 688.128 800 534.144 800 416M512 960C277.312 746.688 160 565.312 160 416a352 352 0 0 1 704 0c0 149.312-117.312 330.688-352 544"
-                          strokeWidth="25.5"
-                          stroke="#685651"
-                        />
-                        <path
-                          fill="#685651"
-                          d="M512 512a96 96 0 1 0 0-192a96 96 0 0 0 0 192m0 64a160 160 0 1 1 0-320a160 160 0 0 1 0 320"
-                          strokeWidth="25.5"
-                          stroke="#685651"
-                        />
-                      </svg>
+                      <FaCity className="text-2xl text-primary" />
                     </div>
                     <div>
                       <div className="text-[#a1948d]">

@@ -75,3 +75,18 @@
     transform: translateY(-50%) scale(0.75);
   }
 }
+
+/* Ensure the Swiper container allows overflow for hover effects */
+.swiper-container {
+  overflow: visible !important;
+}
+
+/* Add padding to the Swiper slides to prevent overlap */
+.swiper-slide {
+  padding: 10px; /* Adjust padding as needed */
+}
+
+/* Ensure the card hover effect does not overflow */
+.motion-div {
+  transform-origin: center; /* Scale from the center */
+}

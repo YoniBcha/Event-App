@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux"; 
+import { useSelector } from "react-redux";
 import BookingPage from "@/components/bookingstep/BookingPage";
 import EventType from "@/components/bookingstep/EventType";
 import ChooseDesigns from "@/components/bookingstep/ChooseDesigns";
@@ -12,7 +12,7 @@ import PackageDetails from "@/components/bookingstep/PackageDetails";
 import ChooseAdditional from "@/components/bookingstep/ChooseAdditional";
 import ExtraService from "@/components/bookingstep/ExtraService";
 import PersonalDataComonents from "@/components/bookingstep/PersonalData";
-
+import { motion, AnimatePresence } from "framer-motion"; // Import framer-motion
 interface FormData {
   city: string;
   place: string;
@@ -44,6 +44,9 @@ const RootPage = () => {
   const [extraServices, setExtraServices] = useState<ExtraServiceData[]>([]);
   const [personalData, setPersonalData] = useState<PersonalData | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const [bookingData, setBookingData] = useState<FormData>({
     city: "",
     place: "",
@@ -178,66 +181,154 @@ const RootPage = () => {
       setCurrentStep(currentStep - 1);
     }
   };
+  const stepVariants = {
+    hidden: { opacity: 0, x: currentLocale === "en" ? 100 : -100 }, // Slide in from the right for English, left for Arabic
+    visible: { opacity: 1, x: 0 }, // Center of the screen
+    exit: { opacity: 0, x: currentLocale === "en" ? -100 : 100 }, // Slide out to the left for English, right for Arabic
+  };
 
   return (
     <main className="w-full">
       <section className="h-full w-full">
-        {currentStep === 1 && (
-          <BookingPage setBookingPageData={handleBookingData} />
-        )}
-        {currentStep === 2 && (
-          <EventType
-            onEventTypeSelect={handleEventTypeSelect}
-            onNext={handleNext}
-            onBack={handleBack}
-          />
-        )}
-        {currentStep === 3 && selectedEventTypeId && (
-          <ChooseDesigns
-            id={selectedEventTypeId}
-            onNext={handleDesignSelect}
-            onBackClick={handleBack}
-          />
-        )}
-        {currentStep === 4 && selectedDesignId && bookingData && (
-          <ChoosePackage
-            place={bookingData?.place ?? ""}
-            eventDesign={selectedDesignId ?? ""}
-            eventType={selectedEventTypeId ?? ""}
-            onNext={handlePackageSelect}
-            onBackClick={handleBack}
-          />
-        )}
-        {currentStep === 5 && selectedPackageId && (
-          <PackageDetails
-            packageId={selectedPackageId}
-            onNextClick={handlePackageDetailsNext}
-            onBack={handleBack}
-          />
-        )}
-        {currentStep === 6 && selectedPackageId && (
-          <ChooseAdditional
-            packageId={selectedPackageId ?? ""}
-            onBack={handleBack}
-            onSubmit={handleAdditionalDataSubmit}
-          />
-        )}
-        {currentStep === 7 && (
-          <ExtraService
-            extraServices={extraServices}
-            onExtraServiceSelect={handleExtraServiceSelect}
-            onBack={handleBack}
-          />
-        )}
-        {currentStep === 8 && (
-          <PersonalDataComonents onSubmit={handlePersonalDataSubmit} />
-        )}
-        {currentStep === 9 && personalData && (
-          <div>
-            <h2>Personal Data Submitted:</h2>
-            <pre>{JSON.stringify(personalData, null, 2)}</pre>
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {currentStep === 1 && (
+            <motion.div
+              key="step-1"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <BookingPage setBookingPageData={handleBookingData} />
+            </motion.div>
+          )}
+          {currentStep === 2 && (
+            <motion.div
+              key="step-2"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <EventType
+                onEventTypeSelect={handleEventTypeSelect}
+                onNext={handleNext}
+                onBack={handleBack}
+              />
+            </motion.div>
+          )}
+          {currentStep === 3 && selectedEventTypeId && (
+            <motion.div
+              key="step-3"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <ChooseDesigns
+                id={selectedEventTypeId}
+                onNext={handleDesignSelect}
+                onBackClick={handleBack}
+              />
+            </motion.div>
+          )}
+          {currentStep === 4 && selectedDesignId && bookingData && (
+            <motion.div
+              key="step-4"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <ChoosePackage
+                place={bookingData?.place ?? ""}
+                eventDesign={selectedDesignId ?? ""}
+                eventType={selectedEventTypeId ?? ""}
+                onNext={handlePackageSelect}
+                onBackClick={handleBack}
+              />
+            </motion.div>
+          )}
+          {currentStep === 5 && selectedPackageId && (
+            <motion.div
+              key="step-5"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <PackageDetails
+                packageId={selectedPackageId}
+                onNextClick={handlePackageDetailsNext}
+                onBack={handleBack}
+              />
+            </motion.div>
+          )}
+          {currentStep === 6 && selectedPackageId && (
+            <motion.div
+              key="step-6"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <ChooseAdditional
+                packageId={selectedPackageId ?? ""}
+                onBack={handleBack}
+                onSubmit={handleAdditionalDataSubmit}
+              />
+            </motion.div>
+          )}
+          {currentStep === 7 && (
+            <motion.div
+              key="step-7"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <ExtraService
+                extraServices={extraServices}
+                onExtraServiceSelect={handleExtraServiceSelect}
+                onBack={handleBack}
+              />
+            </motion.div>
+          )}
+          {currentStep === 8 && (
+            <motion.div
+              key="step-8"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <PersonalDataComonents onSubmit={handlePersonalDataSubmit} />
+            </motion.div>
+          )}
+          {currentStep === 9 && personalData && (
+            <motion.div
+              key="step-9"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <div>
+                <h2>Personal Data Submitted:</h2>
+                <pre>{JSON.stringify(personalData, null, 2)}</pre>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
     </main>
   );

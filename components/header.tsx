@@ -7,6 +7,10 @@ import { useRouter } from "next/navigation";
 import { useLogoutUserMutation } from "@/store/endpoints/apiSlice"; // Adjust the import path
 import { logoutUser } from "@/store/authReducer"; // Import the logoutUser action
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import { FaUser, FaBoxOpen, FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
+import { FaHome, FaFileAlt, FaUsers, FaComments, FaBook } from "react-icons/fa";
+import { MdLanguage } from "react-icons/md";
+import { FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -100,9 +104,18 @@ function Header() {
 
   const footerData = {
     socialIcons: [
-      "/zip/Social Icons.svg",
-      "/zip/Social Icons2.svg",
-      "/zip/Social Icons3.svg",
+      {
+        icon: <FaInstagram className="text-2xl text-primary" />,
+        link: "https://www.instagram.com",
+      },
+      {
+        icon: <FaTiktok className="text-2xl text-primary" />,
+        link: "https://www.tiktok.com",
+      },
+      {
+        icon: <FaYoutube className="text-2xl text-primary" />,
+        link: "https://www.youtube.com",
+      },
     ],
     copyright: "© 2025 FENZO",
   };
@@ -234,17 +247,8 @@ function Header() {
                       <>
                         {/* Profile */}
                         <li className="flex items-center px-3 gap-2 w-full hover:bg-secondary">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 32 32"
-                          >
-                            <path
-                              fill="#c2937b"
-                              d="M16 2a7 7 0 1 0 0 14a7 7 0 0 0 0-14m-6 7a6 6 0 1 1 12 0a6 6 0 0 1-12 0m-2.5 9A3.5 3.5 0 0 0 4 21.5v.667C4 24.317 6.766 30 16 30s12-5.684 12-7.833V21.5a3.5 3.5 0 0 0-3.5-3.5zM5 21.5A2.5 2.5 0 0 1 7.5 19h17a2.5 2.5 0 0 1 2.5 2.5v.667C27 23.684 24.765 29 16 29S5 23.684 5 22.167z"
-                            />
-                          </svg>
+                          <FaUser className="text-primary" size={18} />{" "}
+                          {/* Profile Icon */}
                           <Link
                             href="/sidebar/profile"
                             className="block w-full py-2 cursor-pointer"
@@ -254,13 +258,9 @@ function Header() {
                         </li>
 
                         {/* My Orders */}
-                        <li className="flex w-full px-3 gap-2 hover:bg-secondary">
-                          <Image
-                            src="/zip/file-02.svg"
-                            width={18}
-                            height={18}
-                            alt="my-orders"
-                          />
+                        <li className="flex items-center w-full px-3 gap-2 hover:bg-secondary">
+                          <FaBoxOpen className="text-primary" size={18} />{" "}
+                          {/* My Orders Icon */}
                           <Link
                             href="/sidebar/my-orders"
                             className="block w-full py-2 cursor-pointer"
@@ -274,12 +274,8 @@ function Header() {
                           className="flex gap-3 w-full px-4 py-2 hover:bg-secondary cursor-pointer"
                           onClick={handleLogout}
                         >
-                          <Image
-                            src="/zip/elements2.svg"
-                            width={18}
-                            height={18}
-                            alt="logout"
-                          />
+                          <FaSignOutAlt className="text-primary" size={18} />{" "}
+                          {/* Logout Icon */}
                           <p>{translations.sidebar.logout}</p>
                         </li>
                       </>
@@ -289,12 +285,8 @@ function Header() {
                         className="flex gap-3 w-full px-4 py-2 hover:bg-gray-100 cursor-pointer"
                         onClick={handleLogin}
                       >
-                        <Image
-                          src="/zip/elements2.svg"
-                          width={18}
-                          height={18}
-                          alt="login"
-                        />
+                        <FaSignInAlt className="text-primary" size={18} />{" "}
+                        {/* Login Icon */}
                         <p>{translations.sidebar.login}</p>
                       </li>
                     )}
@@ -346,12 +338,7 @@ function Header() {
                 {/* Navigation Links */}
                 <Link href="/" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
-                    <Image
-                      src={"/zip/dashboard-square-01.svg"}
-                      width={20}
-                      height={20}
-                      alt="contact"
-                    />
+                    <FaHome className="text-xl" />
                     <div className="hover:text-gray-500">
                       {translations.sidebar.home}
                     </div>
@@ -359,12 +346,7 @@ function Header() {
                 </Link>
                 <Link href="/designs" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
-                    <Image
-                      src={"/zip/file-02.svg"}
-                      width={20}
-                      height={20}
-                      alt="contact"
-                    />
+                    <FaFileAlt className="text-xl" />
                     <div className="hover:text-gray-500">
                       {translations.sidebar.designs}
                     </div>
@@ -372,12 +354,7 @@ function Header() {
                 </Link>
                 <Link href="/about" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
-                    <Image
-                      src={"/zip/user-multiple.svg"}
-                      width={20}
-                      height={20}
-                      alt="contact"
-                    />
+                    <FaUsers className="text-xl" />
                     <div className="hover:text-gray-500">
                       {translations.sidebar.about}
                     </div>
@@ -385,12 +362,7 @@ function Header() {
                 </Link>
                 <Link href="/contact" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
-                    <Image
-                      src={"/zip/bubble-chat.svg"}
-                      width={20}
-                      height={20}
-                      alt="contact"
-                    />
+                    <FaComments className="text-xl" />
                     <div className="hover:text-gray-500">
                       {translations.sidebar.contact}
                     </div>
@@ -398,31 +370,17 @@ function Header() {
                 </Link>
                 <Link href="/mainpage" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
-                    <Image
-                      src={"/zip/user-multiple.svg"}
-                      width={20}
-                      height={20}
-                      alt="contact"
-                    />
+                    <FaBook className="text-xl" />
                     <div className="hover:text-gray-500">
                       {translations.sidebar.booking}
                     </div>
                   </div>
                 </Link>
+
                 {/* Language Selector */}
                 <div className="flex justify-between">
                   <div className="flex gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 32 32"
-                    >
-                      <path
-                        fill="#c2937b"
-                        d="M16 2a14 14 0 1 0 14 14A14.016 14.016 0 0 0 16 2M4.02 16.394l1.338.446L7 19.303v1.283a1 1 0 0 0 .293.707L10 24v2.377a12 12 0 0 1-5.98-9.983M16 28a12 12 0 0 1-2.572-.285L14 26l1.805-4.512a1 1 0 0 0-.097-.926l-1.411-2.117a1 1 0 0 0-.832-.445h-4.93l-1.248-1.873L9.414 14H11v2h2v-2.734l3.868-6.77l-1.736-.992L14.277 7h-2.742L10.45 5.371A11.86 11.86 0 0 1 20 4.7V8a1 1 0 0 0 1 1h1.465a1 1 0 0 0 .832-.445l.877-1.316A12 12 0 0 1 26.894 11H22.82a1 1 0 0 0-.98.804l-.723 4.47a1 1 0 0 0 .54 1.055L25 19l.685 4.056A11.98 11.98 0 0 1 16 28"
-                      />
-                    </svg>
+                    <MdLanguage className="text-xl text-[#c2937b]" />
                     <div className="">{translations.languages}</div>
                   </div>
                   <div className="flex items-center">
@@ -454,14 +412,15 @@ function Header() {
             <div className="p-2">
               <div className="flex items-center justify-between">
                 <div className="flex gap-4 ">
-                  {footerData.socialIcons.map((icon, index) => (
-                    <Image
+                  {footerData.socialIcons.map((social, index) => (
+                    <a
                       key={index}
-                      src={icon}
-                      width={20}
-                      height={20}
-                      alt="social icon"
-                    />
+                      href={social.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {social.icon}
+                    </a>
                   ))}
                 </div>
                 <div className="flex justify-end items-center">

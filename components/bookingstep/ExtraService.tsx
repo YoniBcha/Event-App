@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 import { motion } from "framer-motion";
 import * as Yup from "yup";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface ExtraServiceProps {
   extraServices: any;
@@ -240,7 +241,9 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
       }
     }
   };
-
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const handleBack = () => {
     if (currentStep === 1) {
       setCurrentStep(0);
@@ -370,18 +373,11 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 whileTap="tap"
               >
                 <span className="mr-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 12 24"
-                  >
-                    <path
-                      fill="var(--primary)"
-                      fillRule="evenodd"
-                      d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-                    />
-                  </svg>
+                  {currentLocale === "ar" ? (
+                    <FaChevronRight /> // Right arrow for Arabic
+                  ) : (
+                    <FaChevronLeft /> // Left arrow for English
+                  )}
                 </span>
                 <span>{translations.booking.backBtn}</span>
               </motion.button>
@@ -407,18 +403,12 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               >
                 <span>{translations.booking.nextBtn}</span>
                 <span className="ml-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 48 48"
-                  >
-                    <path
-                      fill="#fff"
-                      d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
-                    />
-                  </svg>
-                </span>{" "}
+                  {currentLocale === "ar" ? (
+                    <FaChevronLeft /> // Left arrow for Arabic
+                  ) : (
+                    <FaChevronRight /> // Right arrow for English
+                  )}
+                </span>
               </motion.button>
             </div>
           </>
@@ -492,18 +482,11 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 whileTap="tap"
               >
                 <span className="mr-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 12 24"
-                  >
-                    <path
-                      fill="var(--primary)"
-                      fillRule="evenodd"
-                      d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-                    />
-                  </svg>
+                  {currentLocale === "ar" ? (
+                    <FaChevronRight /> // Right arrow for Arabic
+                  ) : (
+                    <FaChevronLeft /> // Left arrow for English
+                  )}
                 </span>
                 <span>{translations.booking.backBtn}</span>{" "}
               </motion.button>
@@ -527,18 +510,12 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 whileTap="tap"
               >
                 <span>{translations.booking.nextBtn}</span>
-                <span className="ml-3 ">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 48 48"
-                  >
-                    <path
-                      fill="#fff"
-                      d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
-                    />
-                  </svg>
+                <span className="ml-3">
+                  {currentLocale === "ar" ? (
+                    <FaChevronLeft /> // Left arrow for Arabic
+                  ) : (
+                    <FaChevronRight /> // Right arrow for English
+                  )}
                 </span>
               </motion.button>
             </div>
@@ -642,18 +619,11 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                   whileTap="tap"
                 >
                   <span className="mr-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 12 24"
-                    >
-                      <path
-                        fill="currentColor"
-                        fillRule="evenodd"
-                        d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-                      />
-                    </svg>
+                    {currentLocale === "ar" ? (
+                      <FaChevronRight /> // Right arrow for Arabic
+                    ) : (
+                      <FaChevronLeft /> // Left arrow for English
+                    )}
                   </span>
                   <span>{translations.booking.backBtn}</span>
                 </motion.button>

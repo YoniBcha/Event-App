@@ -15,6 +15,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import "./swiper-custom.css"; // Create this file for custom styles
+import { FaBars, FaChevronLeft, FaChevronRight, FaTh } from "react-icons/fa";
 interface Design {
   _id: string;
   eventDesign: string;
@@ -41,7 +42,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   const [selectedImage, setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
-
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const translations = useSelector((state: any) => state.language.translations);
 
   // Handle window resize to dynamically switch to grid view on larger screens
@@ -49,10 +52,6 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     const handleResize = () => {
       if (window.innerWidth >= 414 && !isGridView) {
         setIsGridView(true); // Switch to grid view on larger screens
-      }
-
-      if (window.innerWidth < 223 && isGridView) {
-        setIsGridView(false);
       }
     };
 
@@ -164,19 +163,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
           whileTap="tap"
         >
           {isGridView ? (
-            <Image
-              src={"/zip/menu.svg"}
-              width={32}
-              height={32}
-              alt="List View"
-            />
+            <FaBars size={32} className="bg-primary" />
           ) : (
-            <Image
-              src={"/zip/dashboard-square-01.svg"}
-              width={32}
-              height={32}
-              alt="Grid View"
-            />
+            <FaTh size={32} className="bg-primary" />
           )}
         </motion.button>
       </div>
@@ -353,18 +342,11 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
           whileTap="tap"
         >
           <span className="mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 12 24"
-            >
-              <path
-                fill="currentColor"
-                fillRule="evenodd"
-                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-              />
-            </svg>
+            {currentLocale === "ar" ? (
+              <FaChevronRight /> // Right arrow for Arabic
+            ) : (
+              <FaChevronLeft /> // Left arrow for English
+            )}
           </span>
           <span>{translations.booking.backBtn}</span>
         </motion.button>
@@ -398,17 +380,11 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         >
           <span>{translations.booking.nextBtn}</span>
           <span className="ml-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 48 48"
-            >
-              <path
-                fill="currentColor"
-                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
-              />
-            </svg>
+            {currentLocale === "ar" ? (
+              <FaChevronLeft /> // Left arrow for Arabic
+            ) : (
+              <FaChevronRight /> // Right arrow for English
+            )}
           </span>
         </motion.button>
       </div>

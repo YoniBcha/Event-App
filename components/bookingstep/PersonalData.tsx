@@ -42,7 +42,9 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showColorPicker, setShowColorPicker] = useState(false);
-
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   interface RootState {
     language: {
       translations: {

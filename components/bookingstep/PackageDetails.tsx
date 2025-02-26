@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetPackageDetailQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 function PackageDetails({
   packageId,
@@ -20,7 +21,9 @@ function PackageDetails({
   const { data: packageData, isLoading } =
     useGetPackageDetailQuery<any>(packageId);
   const translations = useSelector((state: any) => state.language.translations);
-
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const [selectedImage, setSelectedImage] = useState("");
 
   React.useEffect(() => {
@@ -198,18 +201,11 @@ function PackageDetails({
           whileTap="tap"
         >
           <span className="mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 12 24"
-            >
-              <path
-                fill="currentColor"
-                fillRule="evenodd"
-                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-              />
-            </svg>
+            {currentLocale === "ar" ? (
+              <FaChevronRight /> // Right arrow for Arabic
+            ) : (
+              <FaChevronLeft /> // Left arrow for English
+            )}
           </span>
           <span>{translations.booking.backBtn}</span>
         </motion.button>
@@ -236,17 +232,11 @@ function PackageDetails({
         >
           <span>{translations.booking.nextBtn}</span>
           <span className="ml-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 48 48"
-            >
-              <path
-                fill="currentColor"
-                d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
-              />
-            </svg>
+            {currentLocale === "ar" ? (
+              <FaChevronLeft /> // Left arrow for Arabic
+            ) : (
+              <FaChevronRight /> // Right arrow for English
+            )}
           </span>
         </motion.button>
       </div>

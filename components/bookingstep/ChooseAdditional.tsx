@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useGetAdditionalEndpointsQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion"; // Import motion and AnimatePresence
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 interface Addition {
   _id: string;
@@ -37,7 +38,9 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [hasSelection, setHasSelection] = useState<boolean>(false);
-
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const queryResult = useGetAdditionalEndpointsQuery({});
 
   const { data, isLoading, isError } = queryResult as {
@@ -310,9 +313,6 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
               hover: {
                 scale: 1.05,
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                borderColor: getComputedStyle(document.documentElement)
-                  .getPropertyValue("--secondary")
-                  .trim(),
                 transition: { duration: 0.2, ease: "easeInOut" },
               },
               tap: {
@@ -325,18 +325,11 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
             whileTap="tap"
           >
             <span className="mr-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 12 24"
-              >
-                <path
-                  fill="currentColor"
-                  fillRule="evenodd"
-                  d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-                />
-              </svg>
+              {currentLocale === "ar" ? (
+                <AiOutlineRight size={20} />
+              ) : (
+                <AiOutlineLeft size={20} />
+              )}
             </span>
             <span>{translations.booking.backBtn}</span>
           </motion.button>
@@ -354,10 +347,6 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
               hover: {
                 scale: 1.05,
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                backgroundColor: getComputedStyle(document.documentElement)
-                  .getPropertyValue("--secondary")
-                  .trim(),
-
                 transition: { duration: 0.2, ease: "easeInOut" },
               },
               tap: {
@@ -371,17 +360,11 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           >
             <span>{translations.booking.nextBtn}</span>
             <span className="ml-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 48 48"
-              >
-                <path
-                  fill="currentColor"
-                  d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"
-                />
-              </svg>
+              {currentLocale === "ar" ? (
+                <AiOutlineLeft size={20} />
+              ) : (
+                <AiOutlineRight size={20} />
+              )}
             </span>
           </motion.button>
         </div>
