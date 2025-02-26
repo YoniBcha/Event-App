@@ -148,8 +148,10 @@ const EventTypeComponent = ({
               prevEl: ".swiper-button-prev",
             }}
             breakpoints={{
-              640: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
+              320: { slidesPerView: 1 }, // For small screens (mobile)
+              480: { slidesPerView: 2 }, // For slightly larger mobile screens
+              640: { slidesPerView: 3 }, // For tablets
+              1024: { slidesPerView: 4 }, // For desktops
             }}
           >
             {eventTypes.map((eventType) => (

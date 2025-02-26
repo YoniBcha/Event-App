@@ -3,19 +3,19 @@
 
 import React, { useState, useEffect } from "react"; // Add useEffect
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Grid, Navigation, Pagination } from "swiper/modules";
+
 import Image from "next/image";
 import { useGetChooseDesignsQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 
 import "swiper/css";
-import "swiper/css/grid";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import "./swiper-custom.css"; // Create this file for custom styles
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { Navigation, Pagination } from "swiper/modules";
 interface Design {
   _id: string;
   eventDesign: string;
@@ -145,7 +145,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
 
   return (
     <motion.div
-      className="flex flex-col gap-4 h-full"
+      className="flex flex-col gap-4 justify-center items-center h-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -160,8 +160,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         </div>
       ) : (
         // Grid View
-        <div className="w-full px-4">
+        <div className="w-[90%] px-4 relative">
           <Swiper
+            modules={[Navigation, Pagination]}
             spaceBetween={20}
             slidesPerView={1}
             pagination={{ type: "fraction", el: ".swiper-pagination" }}
@@ -169,14 +170,12 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
               nextEl: ".swiper-button-next", // Custom next button selector
               prevEl: ".swiper-button-prev", // Custom previous button selector
             }}
-            modules={[Grid, Pagination, Navigation]} // Add Navigation module
             breakpoints={{
               320: { slidesPerView: 1 }, // For small screens (mobile)
               480: { slidesPerView: 2 }, // For slightly larger mobile screens
               640: { slidesPerView: 3 }, // For tablets
               1024: { slidesPerView: 4 }, // For desktops
             }}
-            className="mySwiper"
           >
             {designs.map((design: Design, index: number) => (
               <SwiperSlide
@@ -228,9 +227,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             {/* Custom Pagination */}
             <div className="swiper-pagination mt-2"></div>
             {/* Custom Navigation Buttons */}
-            <div className="swiper-button-prev"></div>
-            <div className="swiper-button-next"></div>
           </Swiper>
+          <div className="swiper-button-prev "></div>
+          <div className="swiper-button-next"></div>
         </div>
       )}
 

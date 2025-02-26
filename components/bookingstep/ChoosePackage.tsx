@@ -3,12 +3,12 @@
 
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Grid, Pagination } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
 import { useGetPackageQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
 import "swiper/css";
-import "swiper/css/grid";
+
 import "swiper/css/pagination";
 import "./swiper-custom.css";
 import { motion, AnimatePresence } from "framer-motion";
@@ -152,7 +152,7 @@ function ChoosePackage({
   }
 
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div className="flex flex-col justify-center items-center gap-4 h-full">
       <div className="text-primary font-bold text-2xl md:text-3xl pt-5 text-center">
         {translations.booking.choosePackage}
       </div>
@@ -163,25 +163,22 @@ function ChoosePackage({
         </div>
       ) : (
         // Grid View
-        <div className="w-full px-4">
+        <div className="w-[90%] px-4 relative">
           <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={20}
             slidesPerView={1}
-            grid={{
-              rows: 2,
-              fill: "row",
+            pagination={{ type: "fraction", el: ".swiper-pagination" }}
+            navigation={{
+              nextEl: ".swiper-button-next", // Custom next button selector
+              prevEl: ".swiper-button-prev", // Custom previous button selector
             }}
-            spaceBetween={10}
-            pagination={{
-              clickable: true,
-            }}
-            modules={[Grid, Pagination]}
             breakpoints={{
               320: { slidesPerView: 1 }, // For small screens (mobile)
               480: { slidesPerView: 2 }, // For slightly larger mobile screens
               640: { slidesPerView: 3 }, // For tablets
               1024: { slidesPerView: 4 }, // For desktops
             }}
-            className="mySwiper"
           >
             {packages.map((eventPackage: Package, index: number) => (
               <SwiperSlide
@@ -228,7 +225,11 @@ function ChoosePackage({
                 </motion.div>
               </SwiperSlide>
             ))}
+            <div className="swiper-pagination mt-2"></div>
+            {/* Custom Navigation Buttons */}
           </Swiper>
+          <div className="swiper-button-prev "></div>
+          <div className="swiper-button-next"></div>
         </div>
       )}
 
