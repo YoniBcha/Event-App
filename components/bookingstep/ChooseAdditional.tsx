@@ -38,7 +38,7 @@ interface PackageAdditionsResponse {
 function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
-  const [hasSelection, setHasSelection] = useState<boolean>(false);
+  const [, setHasSelection] = useState<boolean>(false);
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
@@ -264,7 +264,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                               </button>
                               <input
                                 type="number"
-                                className="w-12 text-center border rounded-lg"
+                                className="w-12 text-center border rounded-lg "
                                 value={
                                   quantities[
                                     `${addition.additionName}-${type.typeName}`
