@@ -50,7 +50,7 @@ interface RootState {
       "fullName": string;
       "email": string;
       "phoneNumber": string;
-      "message": string;
+      "Message": string;
       "sendMessage": string;
       "sending": string;
       };
@@ -279,7 +279,7 @@ const ContactUs = () => {
                 htmlFor="message"
                 className="block text-sm font-medium text-gray-700"
               >
-                {translations.contact.message}
+                {translations.contact.Message}
               </label>
               <textarea
                 {...register("message")}

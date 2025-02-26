@@ -101,7 +101,22 @@
     "submitOrder": "إرسال الطلب",
     "favoriteColor": "اللون المفضل",
     "thankYou": "شكرا لك",
-    "thankYouSubtitle": "تم إكمال عملية الحجز بنجاح."
+    "thankYouSubtitle": "تم إكمال عملية الحجز بنجاح.",
+    "place": "المكان",
+    "date": "التاريخ",
+    "city": "المدينة",
+    "eventDesign": "تصميم الحدث",
+    "eventPackage": "باقة الحدث",
+    "packageAddition": "إضافة الباقة",
+    "addition": "إضافة",
+    "noAddition": "لم يتم اختيار أي إضافة",
+    "extraServices": "الخدمات الإضافية",
+    "service": "الخدمة",
+    "noService": "لم يتم اختيار أي خدمة إضافية",
+    "myReservation": "حجزي",
+    "event": "الحدث",
+    "package": "الباقة",
+    "quotation": "عرض السعر"
   },
   "contact": {
     "contactUs": "اتصل بنا",

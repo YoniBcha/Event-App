@@ -3,6 +3,7 @@
 import React from "react";
 import { useGetSelfBookedEventsQuery } from "@/store/endpoints/apiSlice";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 
 interface Event {
   _id: string;
@@ -45,10 +46,25 @@ interface ApiResponse {
   status: boolean;
   message: string;
 }
+interface RootState {
+  language: {
+    translations: {
+      booking: {
+        myReservation: string;
+        event: string;
+        package: string;
+        eventDesign: string;
+        city: string;
+        quotation: string;
+        date: string;
+      };
+    };
+  };
+}
 
 const BookedEvents = () => {
   const { data, isLoading } = useGetSelfBookedEventsQuery({});
-
+  const translations = useSelector((state: RootState) => state.language.translations);
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -59,9 +75,10 @@ const BookedEvents = () => {
 
   const response = data as ApiResponse;
 
+
   return (
     <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-5 text-primary">My Reservation</h1>
+      <h1 className="text-2xl font-bold mb-5 text-primary">{translations.booking.myReservation}</h1>
       {response?.bookedEvents.map((event: Event) => (
         <div
           key={event._id}
@@ -79,13 +96,13 @@ const BookedEvents = () => {
             </div>
             <div className="flex flex-col gap-1">
               <div className="text-2xl max-md:text-xl text-primary">
-                {event.eventType.nameOfEvent} Event
+                {event.eventType.nameOfEvent} {translations.booking.event}
               </div>
               <p className="text-sm text-tertiary">
-                Package: {event.eventPackage.packageName}
+                {translations.booking.package}: {event.eventPackage.packageName}
               </p>
               <p className="font-medium text-primary text-sm">
-                Event Design: {event.eventDesign.eventDesign}
+                {translations.booking.eventDesign}: {event.eventDesign.eventDesign}
               </p>
               <p className="text-tertiary text-sm">
                 {event.personalData.mobileNumber}
@@ -96,7 +113,7 @@ const BookedEvents = () => {
                 </p>
               )}
               <div className="flex">
-                <p className="text-gray-400">City:</p>
+                <p className="text-gray-400">{translations.booking.city}:</p>
                 <p className="text-primary pl-2">{event.city}</p>
               </div>
             </div>
@@ -106,12 +123,12 @@ const BookedEvents = () => {
               {event.orderStatus}
             </div>
             <div className="bg-[#dedede] p-1 max-md:h-fit text-lg text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg ">
-              Quotation
+              {translations.booking.quotation}
             </div>
 
             <div className="mt-5 max-md:mt-1 flex justify-start">
               <p className="text-primary  font-semibold text-center">
-                Date:{new Date(event.date).toLocaleDateString()}
+                {translations.booking.date}:{new Date(event.date).toLocaleDateString()}
               </p>
             </div>
           </div>

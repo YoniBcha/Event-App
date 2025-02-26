@@ -105,24 +105,24 @@ const MyOrdersContent = () => {
               </h2>
               <div className="text-tertiary text-base space-y-2">
                 <p>
-                  <span className="font-semibold">Place:</span> {payload.place}
+                  <span className="font-semibold">{translations.booking.place}:</span> {payload.place}
                 </p>
                 <p>
-                  <span className="font-semibold">Date:</span> {payload.date}
+                  <span className="font-semibold">{translations.booking.date}:</span> {payload.date}
                 </p>
                 <p>
-                  <span className="font-semibold">City:</span> {payload.city}
+                  <span className="font-semibold">{translations.booking.city}:</span> {payload.city}
                 </p>
                 <p>
-                  <span className="font-semibold">Event Type:</span>{" "}
+                  <span className="font-semibold">{translations.booking.eventType}:</span>{" "}
                   {payload.eventType || "Not specified"}
                 </p>
                 <p>
-                  <span className="font-semibold">Event Design:</span>{" "}
+                  <span className="font-semibold">{translations.booking.eventDesign}:</span>{" "}
                   {payload.eventDesign || "Not specified"}
                 </p>
                 <p>
-                  <span className="font-semibold">Event Package:</span>{" "}
+                  <span className="font-semibold">{translations.booking.eventPackage}:</span>{" "}
                   {payload.eventPackage || "Not specified"}
                 </p>
               </div>
@@ -130,39 +130,39 @@ const MyOrdersContent = () => {
 
             <div>
               <h2 className="text-primary text-lg font-medium mb-2">
-                Event Package Additions
+                {translations.booking.packageAddition}
               </h2>
               <div className="text-tertiary text-base space-y-2">
                 {payload.eventPackageAdditions.length > 0 ? (
                   payload.eventPackageAdditions.map((addition, index) => (
                     <p key={index}>
                       <span className="font-semibold">
-                        Addition {index + 1}:
+                        {translations.booking.addition} {index + 1}:
                       </span>{" "}
                       {addition.additionTypeName || "Unnamed addition"}
                     </p>
                   ))
                 ) : (
-                  <p>No additions selected.</p>
+                  <p>{translations.booking.noAddition}</p>
                 )}
               </div>
 
               <div>
                 <h2 className="text-primary text-lg font-medium mb-2">
-                  Extra Services
+                  {translations.booking.extraServices}
                 </h2>
                 <div className="text-tertiary text-base space-y-2">
                   {payload.extraServices.length > 0 ? (
                     payload.extraServices.map((service, index) => (
                       <p key={index}>
                         <span className="font-semibold">
-                          Service {index + 1}:
+                          {translations.booking.service} {index + 1}:
                         </span>{" "}
                         {service.packageName || "Unnamed service"}
                       </p>
                     ))
                   ) : (
-                    <p>No extra services selected.</p>
+                    <p>{translations.booking.noService}</p>
                   )}
                 </div>
                 <div>

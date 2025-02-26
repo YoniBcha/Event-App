@@ -102,7 +102,22 @@
     "submitOrder": "Submit Order",
     "favoriteColor": "Favorite Color",
     "thankYou": "Thank You",
-    "thankYouSubtitle": "The reservation process has been completed successfully."
+    "thankYouSubtitle": "The reservation process has been completed successfully.",
+    "place": "Place",
+    "date": "Date",
+    "city": "City",
+    "eventDesign": "Event Design",
+    "eventPackage": "Event Package",
+    "packageAddition": "Package Addition",
+    "addition": "Addition",
+    "noAddition": "No Addition Selected",
+    "extraServices": "Extra Services",
+    "service": "Service",
+    "noService": "No Extra Service Selected",
+    "myReservation": "My Reservation",
+    "event": "Event",
+    "package": "Package",
+    "quotation": "Quotation"
   },
   "contact":{
     "contactUs": "Contact Us",
