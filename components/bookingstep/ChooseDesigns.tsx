@@ -73,9 +73,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     setSelectedImage("");
   };
 
-  const toggleView = () => {
-    setIsGridView(!isGridView);
-  };
+  // const toggleView = () => {
+  //   setIsGridView(!isGridView);
+  // };
 
   const handleNextClick = () => {
     if (selectedDesignId) {

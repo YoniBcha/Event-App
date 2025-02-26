@@ -112,9 +112,9 @@ function ChoosePackage({
     setSelectedImage("");
   };
 
-  const toggleView = () => {
-    setIsGridView(!isGridView);
-  };
+  // const toggleView = () => {
+  //   setIsGridView(!isGridView);
+  // };
 
   const handleBackClick = () => {
     onBackClick();
