@@ -3,10 +3,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const Home: React.FC = () => {
   const translations = useSelector((state: any) => state.language.translations);
-
+  const router = useRouter();
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -76,19 +77,17 @@ const Home: React.FC = () => {
           className="text-5xl text-primary max-sm:text-3xl font-bold"
           variants={itemVariants}
         >
-          FENZO
+          {translations.fenzo}
         </motion.div>
         <motion.div variants={itemVariants}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro odio
-          quam accusantium rerum provident pariatur odit officia voluptatibus
-          vitae aliquid molestiae ea laudantium qui, atque necessitatibus
-          voluptate possimus nam neque!
+          {translations.subTitle}
         </motion.div>
         <motion.button
           className="p-2 text-gray-100 bg-primary hover:bg-secondary hover:text-primary rounded"
           variants={itemVariants}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+     onClick={() => router.push("/mainpage")}
         >
           {translations.startJourney}
         </motion.button>

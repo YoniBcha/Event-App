@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { useContactUsMutation } from "@/store/endpoints/apiSlice";
 import { toast } from "react-toastify";
 import React from "react";
+import { useSelector } from "react-redux";
 import Image from "next/image";
 
 const contactSchema = yup.object().shape({
@@ -31,6 +32,31 @@ interface ContactFormInputs {
   phone: string;
   message: string;
 }
+interface RootState {
+  language: {
+    translations: {
+      contact: {
+      "contactUs": string;
+      "callUs": string;
+      "callSub": string;
+      "chatWithUs": string;
+      "chatSub": string;
+      "startChat": string;
+      "startEmail": string;
+      "startInsta": string;
+      "visitUs": string;
+      "visitSub": string;
+      "saudiArabia": string;
+      "fullName": string;
+      "email": string;
+      "phoneNumber": string;
+      "message": string;
+      "sendMessage": string;
+      "sending": string;
+      };
+    };
+  };
+}
 
 const ContactUs = () => {
   const [submitContact] = useContactUsMutation();
@@ -42,6 +68,9 @@ const ContactUs = () => {
   } = useForm<ContactFormInputs>({
     resolver: yupResolver(contactSchema),
   });
+  const translations = useSelector(
+    (state: RootState) => state.language.translations
+  );
 
   const onSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
     try {
@@ -56,14 +85,15 @@ const ContactUs = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold text-center text-primary mb-8">
-        CONTACT US
+       {translations.contact.contactUs}
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div>
           <div className="mb-8">
-            <h2 className="text-xl text-[#7f7f7f] font-semibold">Call Us</h2>
+            <h2 className="text-xl text-[#7f7f7f] font-semibold">{
+              translations.contact.callUs}</h2>
             <p className="text-[#7f7f7f] font-regular mt-1">
-              Call our team Mon-Fri from 8am to 5pm.
+              {translations.contact.callSub}
             </p>
             <div className="flex gap-2 mt-2">
               <svg
@@ -85,10 +115,10 @@ const ContactUs = () => {
           </div>
           <div className="mb-8">
             <h2 className="text-xl text-[#7f7f7f] font-semibold">
-              Chat With Us
+              {translations.contact.chatWithUs}
             </h2>
             <p className="text-[#7f7f7f] font-regular mt-1">
-              Speak to our friendly team via live chat.
+              {translations.contact.chatSub}
             </p>
             <div className="mt-3">
               <div className="flex items-center gap-2">
@@ -101,7 +131,7 @@ const ContactUs = () => {
                   />
                 </div>
                 <p className="text-primary underline text-lg">
-                  Start a live chat
+                  {translations.contact.startChat}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -136,7 +166,7 @@ const ContactUs = () => {
                   />
                 </svg>
                 <p className="text-primary underline text-lg">
-                  Shoot us an email{" "}
+                  {translations.contact.startEmail}{" "}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -156,15 +186,15 @@ const ContactUs = () => {
                   />
                 </svg>
                 <p className="text-primary underline text-lg">
-                  Message us on Instagram{" "}
+                  {translations.contact.startInsta}{" "}
                 </p>
               </div>
             </div>
           </div>
           <div>
-            <h2 className="text-xl text-[#7f7f7f] font-semibold">Visit Us </h2>
+            <h2 className="text-xl text-[#7f7f7f] font-semibold">{translations.contact.visitUs} </h2>
             <p className="text-[#7f7f7f] font-regular mt-1">
-              Chat to us in person at our Saudi Arabia HQ.{" "}
+              {translations.contact.visitSub}{" "}
             </p>
             <div className="mt-3">
               <div className="flex items-center gap-2">
@@ -189,7 +219,8 @@ const ContactUs = () => {
                     <circle cx="6.5" cy="6.5" r="2.5" />
                   </g>
                 </svg>
-                <p className="text-primary underline text-lg">Saudi Arabia </p>
+                <p className="text-primary underline text-lg">{
+                  translations.contact.saudiArabia}</p>
               </div>
             </div>
           </div>
@@ -201,7 +232,7 @@ const ContactUs = () => {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Full Name
+                {translations.contact.fullName}
               </label>
               <input
                 {...register("name")}
@@ -216,7 +247,7 @@ const ContactUs = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email
+                {translations.contact.email}
               </label>
               <input
                 {...register("email")}
@@ -232,7 +263,7 @@ const ContactUs = () => {
                 htmlFor="phone"
                 className="block text-sm font-medium text-gray-700"
               >
-                Phone Number
+                {translations.contact.phoneNumber}
               </label>
               <input
                 {...register("phone")}
@@ -248,7 +279,7 @@ const ContactUs = () => {
                 htmlFor="message"
                 className="block text-sm font-medium text-gray-700"
               >
-                Message
+                {translations.contact.message}
               </label>
               <textarea
                 {...register("message")}
@@ -264,7 +295,7 @@ const ContactUs = () => {
               disabled={isSubmitting}
               className="w-full bg-primary text-white px-4 py-2 hover:bg-secondary hover:text-primary transition rounded-full cursor-pointer"
             >
-              {isSubmitting ? "Sending..." : "SEND MESSAGE"}
+              {isSubmitting ? translations.contact.sending : translations.contact.sendMessage}
             </button>
           </form>
         </div>

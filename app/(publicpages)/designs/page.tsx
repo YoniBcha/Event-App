@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Pagination } from "swiper/modules";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/grid";
@@ -17,6 +18,15 @@ interface Design {
   updatedAt: string;
   __v: number;
 }
+interface RootState {
+  language: {
+    translations: {
+      sidebar: {
+        "designs": string;
+      };
+    };
+  };
+}
 
 // interface ChooseDesignsProps {
 //   id?: string; // Make id optional
@@ -25,6 +35,9 @@ interface Design {
 // }
 
 function ChooseDesigns() {
+  const translations = useSelector(
+    (state: RootState) => state.language.translations
+  );
   const [designs, setDesigns] = useState<Design[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
@@ -122,7 +135,7 @@ function ChooseDesigns() {
   return (
     <div className="flex flex-col gap-4 ">
       <div className="text-primary font-bold text-xl md:text-3xl pt-5 text-center">
-        All Event Designs
+       {translations.sidebar.designs}
       </div>
 
       <div className="flex justify-end items-center w-full">
