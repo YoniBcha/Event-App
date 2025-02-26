@@ -159,9 +159,10 @@ function PackageDetails({
               transition={{ duration: 0.5 }}
             >
               <div className="mb-6">
-                <h3 className="text-xl font-semibold">
+                <h3 className="text-xl flex items-center font-semibold">
                   {packageData.eventPackage.packageName}{" "}
-                  {packageData.eventPackage.packagePrice} SR
+                  {packageData.eventPackage.packagePrice}{" "}
+                  <Image src="/images/SR.png" alt="SR" width={20} height={20} />
                 </h3>
                 <div
                   className="mt-2 p-2 text-sm md:text-base overflow-hidden"
