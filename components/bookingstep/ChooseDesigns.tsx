@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react"; // Add useEffect
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Grid, Pagination } from "swiper/modules";
+import { Grid, Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
 import { useGetChooseDesignsQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
@@ -12,7 +12,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import "swiper/css";
 import "swiper/css/grid";
 import "swiper/css/pagination";
+import "swiper/css/navigation";
 
+import "./swiper-custom.css"; // Create this file for custom styles
 interface Design {
   _id: string;
   eventDesign: string;
@@ -187,29 +189,17 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         // Grid View
         <div className="w-full px-4">
           <Swiper
-            slidesPerView={2} // Default for small screens
-            grid={{
-              rows: 2,
-              fill: "row",
+            spaceBetween={20}
+            slidesPerView={1}
+            pagination={{ type: "fraction", el: ".swiper-pagination" }}
+            navigation={{
+              nextEl: ".swiper-button-next", // Custom next button selector
+              prevEl: ".swiper-button-prev", // Custom previous button selector
             }}
-            spaceBetween={10}
-            pagination={{
-              clickable: true,
-            }}
-            modules={[Grid, Pagination]}
+            modules={[Grid, Pagination, Navigation]} // Add Navigation module
             breakpoints={{
-              320: {
-                slidesPerView: 2, // 2 columns for small screens
-                grid: {
-                  rows: 2,
-                },
-              },
-              768: {
-                slidesPerView: 4, // 4 columns for medium and larger screens
-                grid: {
-                  rows: 2,
-                },
-              },
+              640: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
             }}
             className="mySwiper"
           >
@@ -219,38 +209,52 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                 onClick={() => handleCardClick(design._id)}
               >
                 <motion.div
-                  className={`flex flex-col items-center hover:bg-secondary cursor-pointer p-2 rounded-lg transition-all duration-300 ${
+                  className={`flex flex-col items-center cursor-pointer px-1 py-2 rounded-lg transition-all duration-300 ${
                     selectedDesignId === design._id
                       ? "border-2 border-primary scale-105"
                       : "border border-gray-300"
                   }`}
-                  variants={slideVariants}
                   initial="hidden"
                   animate="visible"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  variants={{
+                    hover: {
+                      scale: 1.05,
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                      backgroundColor: getComputedStyle(
+                        document.documentElement
+                      )
+                        .getPropertyValue("--secondary")
+                        .trim(),
+                      transition: { duration: 0.2, ease: "easeInOut" },
+                    },
+                    tap: {
+                      scale: 0.95,
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                      transition: { duration: 0.1, ease: "easeInOut" },
+                    },
+                  }}
+                  whileHover={selectedDesignId ? "hover" : {}}
+                  whileTap={selectedDesignId ? "tap" : {}}
                 >
-                  <div
-                    className="relative w-full h-64"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleImageClick(design.image);
-                    }}
-                  >
+                  <div className="relative w-full h-64">
                     <Image
                       src={design.image}
                       alt={design.eventDesign}
                       layout="fill"
-                      objectFit="cover"
-                      className="rounded-t-lg"
+                      className="rounded-lg object-cover"
                     />
                   </div>
-                  <p className="mt-2 text-sm font-bold text-tertiary text-center">
+                  <p className="mt-2 text-sm text-tertiary font-medium text-center">
                     {design.eventDesign}
                   </p>
                 </motion.div>
               </SwiperSlide>
             ))}
+            {/* Custom Pagination */}
+            <div className="swiper-pagination mt-2"></div>
+            {/* Custom Navigation Buttons */}
+            <div className="swiper-button-prev"></div>
+            <div className="swiper-button-next"></div>
           </Swiper>
         </div>
       ) : (

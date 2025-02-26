@@ -1,5 +1,36 @@
 /* swiper-custom.css */
 
+/* Custom styles for Swiper pagination */
+.swiper-pagination {
+  position: relative;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-pagination-fraction {
+  font-size: 16px;
+  color: var(--primary); /* Text color */
+}
+
+.swiper-pagination-bullets {
+  bottom: 10px;
+}
+
+.swiper-pagination-bullet {
+  background-color: var(--primary); /* Bullet color */
+  opacity: 0.5;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  transition: opacity 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+}
+
 /* Custom styles for Swiper navigation buttons */
 .swiper-button-next,
 .swiper-button-prev {
@@ -8,10 +39,15 @@
   width: 40px; /* Button width */
   height: 40px; /* Button height */
   border-radius: 50%; /* Rounded corners */
-  position: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  cursor: pointer;
 }
 
 .swiper-button-next::after,
@@ -32,14 +68,10 @@
   left: 10px; /* Position from the left */
 }
 
-.swiper-pagination {
-  position: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary);
-}
-
-.swiper-pagination-fraction {
-  font-size: 16px;
-  color: var(--primary);
+/* Hide navigation buttons on mobile */
+@media (max-width: 639px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
 }
