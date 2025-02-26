@@ -156,29 +156,13 @@ function ChooseDesigns() {
         // Grid View
         <div className="w-full px-4">
           <Swiper
-            slidesPerView={4}
-            grid={{
-              rows: 2,
-              fill: "row",
-            }}
+            slidesPerView={1}
             spaceBetween={10}
-            pagination={{
-              clickable: true,
-            }}
+            pagination={{ type: "fraction", el: ".swiper-pagination" }}
             modules={[Grid, Pagination]}
             breakpoints={{
-              320: {
-                slidesPerView: 2,
-                grid: {
-                  rows: 2,
-                },
-              },
-              768: {
-                slidesPerView: 4,
-                grid: {
-                  rows: 2,
-                },
-              },
+              640: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
             }}
             className="mySwiper"
           >

@@ -233,8 +233,8 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                       transition: { duration: 0.1, ease: "easeInOut" },
                     },
                   }}
-                  whileHover={selectedDesignId ? "hover" : {}}
-                  whileTap={selectedDesignId ? "tap" : {}}
+                  whileHover={"hover"}
+                  whileTap={"tap"}
                 >
                   <div className="relative w-full h-64">
                     <Image

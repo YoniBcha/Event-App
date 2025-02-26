@@ -72,6 +72,6 @@
 @media (max-width: 639px) {
   .swiper-button-next,
   .swiper-button-prev {
-    display: none;
+    transform: translateY(-50%) scale(0.75);
   }
 }

@@ -179,8 +179,8 @@ const EventTypeComponent = ({
                       transition: { duration: 0.1, ease: "easeInOut" },
                     },
                   }}
-                  whileHover={selectedEventTypeId ? "hover" : {}}
-                  whileTap={selectedEventTypeId ? "tap" : {}}
+                  whileHover={"hover"}
+                  whileTap={"tap"}
                 >
                   <div className="relative w-full h-64">
                     <Image
