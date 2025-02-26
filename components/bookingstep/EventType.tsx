@@ -212,6 +212,8 @@ const EventTypeComponent = ({
             <div className="swiper-button-prev"></div>
             <div className="swiper-button-next"></div>
           </Swiper>
+          <div className="swiper-button-next"></div>
+          <div className="swiper-button-prev"></div>
         </div>
       )}
 

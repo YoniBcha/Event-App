@@ -61,11 +61,11 @@
 }
 
 .swiper-button-next {
-  right: 10px; /* Position from the right */
+  right: -50px; /* Position from the right */
 }
 
 .swiper-button-prev {
-  left: 10px; /* Position from the left */
+  left: -50px; /* Position from the left */
 }
 
 /* Hide navigation buttons on mobile */
