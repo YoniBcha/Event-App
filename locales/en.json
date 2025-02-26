@@ -89,5 +89,27 @@
     "favoriteColor": "Favorite Color",
     "thankYou": "Thank You",
     "thankYouSubtitle": "The reservation process has been completed successfully."
+  },
+  "contact":{
+    "contactUs": "Contact Us",
+    "callUs": "Call Us",
+    "callSub":"Call our team Mon-Fri from 8am to 5pm.",
+    "chatWithUs": "Chat With Us",
+    "chatSub": "Speak to our friendly team via live chat.",
+    "startChat": "Start a live chat",
+    "startEmail": "Shoot Us An Email",
+    "startInsta": "Message us on Instagram",
+    "visitUs": "Visit Us",
+    "visitSub": "Chat to us in person at our Saudi Arabia HQ.",
+    "saudiArabia": "Saudi Arabia",
+    "fullName": "Full Name",
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "Message": "Message",
+    "sendMessage": "Send Message",
+    "sending": "Sending...",
+    "aboutUs": "About Us",
+    "aboutSub":"Welcome to FENZO, where dreams come to life and love takes center stage. Our journey began with a passion for creating unforgettable moments, turning ordinary events into extraordinary celebrations. At FENZO, we believe in the power of love and the magic it brings to every union. With a team of dedicated professionals, we are committed to making your wedding day an enchanting experience that reflects your unique love story. Imagine the wedding day you’ve always dreamed of – an exquisite symphony of luxury and elegance.",
+    "sampleText":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro odio quam accusantium rerum provident pariatur odit officia voluptatibus vitae aliquid molestiae ea laudantium qui, atque necessitatibus voluptate possimus nam neque!"
   }
 }
