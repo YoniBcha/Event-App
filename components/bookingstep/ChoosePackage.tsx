@@ -169,7 +169,7 @@ function ChoosePackage({
                 key={eventPackage._id || index}
                 className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
                   selectedPackageId === eventPackage._id
-                    ? "border-4 border-primary scale-105"
+                    ? "border-2 border-primary scale-105"
                     : "border border-gray-300"
                 }`}
                 onClick={() => handleCardClick(eventPackage._id)}
@@ -253,6 +253,9 @@ function ChoosePackage({
                           alt="SR"
                           width={12}
                           height={10}
+                          className={
+                            currentLocale === "ar" ? "scale-x-[-1]" : ""
+                          }
                         />
                       </span>
                       {eventPackage.packagePrice}

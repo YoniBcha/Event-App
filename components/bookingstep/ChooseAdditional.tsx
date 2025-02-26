@@ -338,12 +338,8 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           {/* Next Button */}
           <motion.button
             onClick={handleNextClick}
-            disabled={!hasSelection}
-            className={`next-btn flex items-center p-2 rounded-lg text-white cursor-pointer ${
-              hasSelection
-                ? "bg-primary hover:bg-secondary hover:text-primary"
-                : "bg-gray-400 text-gray-100 cursor-not-allowed"
-            }`}
+            className={`next-btn flex items-center p-2 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary
+               `}
             variants={{
               hover: {
                 scale: 1.05,
@@ -356,8 +352,8 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                 transition: { duration: 0.1, ease: "easeInOut" },
               },
             }}
-            whileHover={hasSelection ? "hover" : {}}
-            whileTap={hasSelection ? "tap" : {}}
+            whileHover={"hover"}
+            whileTap={"tap"}
           >
             <span>{translations.booking.nextBtn}</span>
             <span className="ml-3">

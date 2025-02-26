@@ -167,7 +167,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                 key={design._id || index}
                 className={`flex flex-col justify-center hover:bg-secondary items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
                   selectedDesignId === design._id
-                    ? "border-4 border-primary scale-105"
+                    ? "border-2 border-primary scale-105"
                     : "border border-gray-300"
                 }`}
                 onClick={() => handleCardClick(design._id)}
