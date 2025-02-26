@@ -112,9 +112,9 @@ function ChoosePackage({
     setSelectedImage("");
   };
 
-  const toggleView = () => {
-    setIsGridView(!isGridView);
-  };
+  // const toggleView = () => {
+  //   setIsGridView(!isGridView);
+  // };
 
   const handleBackClick = () => {
     onBackClick();
@@ -157,38 +157,15 @@ function ChoosePackage({
         {translations.booking.choosePackage}
       </div>
 
-      <div className="flex justify-end items-center w-full">
-        <button
-          onClick={toggleView}
-          className="md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
-        >
-          {isGridView ? (
-            <Image
-              src={"/zip/menu.svg"}
-              width={32}
-              height={32}
-              alt="List View"
-            />
-          ) : (
-            <Image
-              src={"/zip/dashboard-square-01.svg"}
-              width={32}
-              height={32}
-              alt="Grid View"
-            />
-          )}
-        </button>
-      </div>
-
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
         </div>
-      ) : isGridView ? (
+      ) : (
         // Grid View
         <div className="w-full px-4">
           <Swiper
-            slidesPerView={4}
+            slidesPerView={1}
             grid={{
               rows: 2,
               fill: "row",
@@ -199,18 +176,10 @@ function ChoosePackage({
             }}
             modules={[Grid, Pagination]}
             breakpoints={{
-              320: {
-                slidesPerView: 2,
-                grid: {
-                  rows: 2,
-                },
-              },
-              768: {
-                slidesPerView: 4,
-                grid: {
-                  rows: 2,
-                },
-              },
+              320: { slidesPerView: 1 }, // For small screens (mobile)
+              480: { slidesPerView: 2 }, // For slightly larger mobile screens
+              640: { slidesPerView: 3 }, // For tablets
+              1024: { slidesPerView: 4 }, // For desktops
             }}
             className="mySwiper"
           >
@@ -245,53 +214,21 @@ function ChoosePackage({
                     />
                   </div>
                   <div className="mt-2 text-sm flex flex-row font-bold text-tertiary text-center">
-                    {eventPackage.packageName} - <span className="mx-1 pt-[0.2rem]">
-                      <Image src="/images/SR.png" alt="SR" width={12} height={10} />
-                    </span>{eventPackage.packagePrice}
+                    {eventPackage.packageName} -{" "}
+                    <span className="mx-1 pt-[0.2rem]">
+                      <Image
+                        src="/images/SR.png"
+                        alt="SR"
+                        width={12}
+                        height={10}
+                      />
+                    </span>
+                    {eventPackage.packagePrice}
                   </div>
                 </motion.div>
               </SwiperSlide>
             ))}
           </Swiper>
-        </div>
-      ) : (
-        // List View
-        <div className="flex flex-col gap-4">
-          {packages.map((eventPackage: Package, index: number) => (
-            <motion.div
-              key={eventPackage._id || index}
-              className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
-                selectedPackageId === eventPackage._id
-                  ? "border-4 border-primary scale-105"
-                  : "border border-gray-300"
-              }`}
-              onClick={() => handleCardClick(eventPackage._id)}
-              variants={cardVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              <div
-                className="relative w-full h-48"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleImageClick(eventPackage.image[0]);
-                }}
-              >
-                <Image
-                  src={eventPackage.image[0]}
-                  alt={eventPackage.packageName}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-lg"
-                />
-              </div>
-              <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                {eventPackage.packageName} - <span>
-                  <Image src="/images/SR.png" alt="SR" width={20} height={20} />
-                </span>{eventPackage.packagePrice}
-              </p>
-            </motion.div>
-          ))}
         </div>
       )}
 

@@ -15,7 +15,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import "./swiper-custom.css"; // Create this file for custom styles
-import { FaBars, FaChevronLeft, FaChevronRight, FaTh } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 interface Design {
   _id: string;
   eventDesign: string;
@@ -59,10 +59,10 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, [isGridView]);
 
-  const handleImageClick = (image: string) => {
-    setSelectedImage(image);
-    setIsModalOpen(true);
-  };
+  // const handleImageClick = (image: string) => {
+  //   setSelectedImage(image);
+  //   setIsModalOpen(true);
+  // };
 
   const handleCardClick = (designId: string) => {
     setSelectedDesignId(designId);
@@ -73,9 +73,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     setSelectedImage("");
   };
 
-  const toggleView = () => {
-    setIsGridView(!isGridView);
-  };
+  // const toggleView = () => {
+  //   setIsGridView(!isGridView);
+  // };
 
   const handleNextClick = () => {
     if (selectedDesignId) {
@@ -154,27 +154,11 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         {translations.booking.chooseDesign}
       </div>
 
-      <div className="flex justify-end items-center w-full">
-        <motion.button
-          onClick={toggleView}
-          className="md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
-        >
-          {isGridView ? (
-            <FaBars size={32} className="bg-primary" />
-          ) : (
-            <FaTh size={32} className="bg-primary" />
-          )}
-        </motion.button>
-      </div>
-
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
         </div>
-      ) : isGridView ? (
+      ) : (
         // Grid View
         <div className="w-full px-4">
           <Swiper
@@ -187,8 +171,10 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             }}
             modules={[Grid, Pagination, Navigation]} // Add Navigation module
             breakpoints={{
-              640: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
+              320: { slidesPerView: 1 }, // For small screens (mobile)
+              480: { slidesPerView: 2 }, // For slightly larger mobile screens
+              640: { slidesPerView: 3 }, // For tablets
+              1024: { slidesPerView: 4 }, // For desktops
             }}
             className="mySwiper"
           >
@@ -245,45 +231,6 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             <div className="swiper-button-prev"></div>
             <div className="swiper-button-next"></div>
           </Swiper>
-        </div>
-      ) : (
-        // List View
-        <div className="flex flex-col gap-4 w-full px-4">
-          {designs.map((design: Design, index: number) => (
-            <motion.div
-              key={design._id || index}
-              className={`flex flex-col justify-center hover:bg-secondary items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
-                selectedDesignId === design._id
-                  ? "border-4 border-primary scale-105"
-                  : "border border-gray-300"
-              }`}
-              onClick={() => handleCardClick(design._id)}
-              variants={slideVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <div
-                className="relative w-full h-48"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleImageClick(design.image);
-                }}
-              >
-                <Image
-                  src={design.image}
-                  alt={design.eventDesign}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-lg"
-                />
-              </div>
-              <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                {design.eventDesign}
-              </p>
-            </motion.div>
-          ))}
         </div>
       )}
 
