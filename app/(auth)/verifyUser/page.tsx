@@ -159,15 +159,15 @@ const VerificationPageContent: React.FC = () => {
         >
           <div className="flex space-x-2 justify-center">
             {digits.map((digit, index) => (
-              <input
-                key={index}
-                type="text"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleDigitChange(index, e.target.value)}
-                ref={setInputRef(index)} // Use the stable ref callback
-                className="border border-primary rounded-lg p-3 text-center text-xl tracking-widest outline-none focus:ring-2 focus:ring-primary w-12"
-              />
+             <input
+             key={index}
+             type="number"
+             maxLength={1}
+             value={digit}
+             onChange={(e) => handleDigitChange(index, e.target.value)}
+             ref={setInputRef(index)}
+             className="border border-primary rounded-lg p-3 text-center text-xl tracking-widest outline-none focus:ring-2 focus:ring-primary w-12 appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+           />
             ))}
           </div>
           {errors.code && (

@@ -23,6 +23,8 @@ const validationSchema = yup.object({
 
 const saudiCities = [
   "Jeddah",
+  "Makkah",
+  "Riyadh"
 ];
 
 interface FormData {
@@ -140,7 +142,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setShowPlaceDropdown(!showPlaceDropdown)}
-                    className="flex justify-between items-center rounded-xl  border-white border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <FaMapMarkerAlt className="text-2xl text-primary" />
@@ -192,7 +194,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                               value={place}
                               checked={selectedPlace === place}
                               onChange={() => handlePlaceChange(place)}
-                              className="mr-2 w-4 h-4 hover:border-white border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
+                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
                             />
                             <span className="text-[#685651]">{place}</span>
                           </label>
@@ -209,7 +211,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setIsModalOpen(true)}
-                    className="flex justify-between items-center  rounded-xl border-white border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center  rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <FaCalendarAlt className="text-2xl text-primary" />
@@ -250,7 +252,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setShowCityDropdown(!showCityDropdown)}
-                    className="flex justify-between items-center rounded-xl border-white border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <FaCity className="text-2xl text-primary" />
@@ -302,7 +304,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full px-2 py-1 border border-[#d4c9c0]  hover:border-white rounded-md focus:outline-none"
+                            className="w-full px-2 py-1 border border-[#d4c9c0]  rounded-md focus:outline-none"
                           />
                         </div>
                         {filteredCities.map((city) => (
@@ -316,7 +318,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                               value={city}
                               checked={selectedCity === city}
                               onChange={() => handleCityChange(city)}
-                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-full appearance-none checked:bg-primary checked:border-[#685651] hover:border-white"
+                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-full appearance-none checked:bg-primary checked:border-[#685651]"
                             />
                             <span className="text-[#281d1b]">{city}</span>
                           </label>
@@ -329,7 +331,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
               <div className="flex justify-center items-center">
                 <motion.button
                   type="submit"
-                  className="flex items-center justify-center bg-primary text-white hover:bg-secondary hover:border hover:border-white hover:text-primary rounded-full px-10 py-3"
+                  className="flex items-center justify-center bg-primary text-white hover:bg-secondary hover:border hover:text-primary rounded-full px-10 py-3"
                   variants={{
                     hover: {
                       scale: 1.05,

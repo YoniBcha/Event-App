@@ -244,9 +244,11 @@ function ChoosePackage({
                       className="rounded-t-lg"
                     />
                   </div>
-                  <p className="mt-2 text-sm font-bold text-tertiary text-center">
-                    {eventPackage.packageName} - ${eventPackage.packagePrice}
-                  </p>
+                  <div className="mt-2 text-sm flex flex-row font-bold text-tertiary text-center">
+                    {eventPackage.packageName} - <span className="mx-1 pt-[0.2rem]">
+                      <Image src="/images/SR.png" alt="SR" width={12} height={10} />
+                    </span>{eventPackage.packagePrice}
+                  </div>
                 </motion.div>
               </SwiperSlide>
             ))}
@@ -284,7 +286,9 @@ function ChoosePackage({
                 />
               </div>
               <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                {eventPackage.packageName} - ${eventPackage.packagePrice}
+                {eventPackage.packageName} - <span>
+                  <Image src="/images/SR.png" alt="SR" width={20} height={20} />
+                </span>{eventPackage.packagePrice}
               </p>
             </motion.div>
           ))}
