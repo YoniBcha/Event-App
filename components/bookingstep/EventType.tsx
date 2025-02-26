@@ -137,13 +137,16 @@ const EventTypeComponent = ({
           Error: {error instanceof Error ? error.message : "An error occurred"}
         </div>
       ) : (
-        <div className="w-[90%] px-4   ">
+        <div className="w-[90%] px-4 relative">
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={20}
             slidesPerView={1}
             pagination={{ type: "fraction", el: ".swiper-pagination" }}
-            navigation={true}
+            navigation={{
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            }}
             breakpoints={{
               640: { slidesPerView: 3 },
               1024: { slidesPerView: 4 },
@@ -198,6 +201,8 @@ const EventTypeComponent = ({
             ))}
             <div className="swiper-pagination mt-2"></div>
           </Swiper>
+          <div className="swiper-button-next"></div>
+          <div className="swiper-button-prev"></div>
         </div>
       )}
 
