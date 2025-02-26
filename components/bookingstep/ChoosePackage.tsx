@@ -162,75 +162,111 @@ function ChoosePackage({
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
         </div>
       ) : (
-        // Grid View
-        <div className="w-[90%] px-4 relative">
-          <Swiper
-            modules={[Navigation, Pagination]}
-            spaceBetween={20}
-            slidesPerView={1}
-            pagination={{ type: "fraction", el: ".swiper-pagination" }}
-            navigation={{
-              nextEl: ".swiper-button-next", // Custom next button selector
-              prevEl: ".swiper-button-prev", // Custom previous button selector
-            }}
-            breakpoints={{
-              320: { slidesPerView: 1 }, // For small screens (mobile)
-              480: { slidesPerView: 2 }, // For slightly larger mobile screens
-              640: { slidesPerView: 3 }, // For tablets
-              1024: { slidesPerView: 4 }, // For desktops
-            }}
-          >
+        <>
+          <div className="flex sm:hidden flex-col gap-4">
             {packages.map((eventPackage: Package, index: number) => (
-              <SwiperSlide
+              <motion.div
                 key={eventPackage._id || index}
+                className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
+                  selectedPackageId === eventPackage._id
+                    ? "border-4 border-primary scale-105"
+                    : "border border-gray-300"
+                }`}
                 onClick={() => handleCardClick(eventPackage._id)}
+                variants={cardVariants}
+                whileHover="hover"
+                whileTap="tap"
               >
-                <motion.div
-                  className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
-                    selectedPackageId === eventPackage._id
-                      ? "border-2 border-primary scale-105"
-                      : "border border-gray-300"
-                  }`}
-                  variants={cardVariants}
-                  whileHover="hover"
-                  whileTap="tap"
+                <div
+                  className="relative w-full h-48"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleImageClick(eventPackage.image[0]);
+                  }}
                 >
-                  <div
-                    className="relative w-full h-64"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleImageClick(eventPackage.image[0]);
-                    }}
-                  >
-                    <Image
-                      src={eventPackage.image[0]}
-                      alt={eventPackage.packageName}
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-t-lg"
-                    />
-                  </div>
-                  <div className="mt-2 text-sm flex flex-row font-bold text-tertiary text-center">
-                    {eventPackage.packageName} -{" "}
-                    <span className="mx-1 pt-[0.2rem]">
-                      <Image
-                        src="/images/SR.png"
-                        alt="SR"
-                        width={12}
-                        height={10}
-                      />
-                    </span>
-                    {eventPackage.packagePrice}
-                  </div>
-                </motion.div>
-              </SwiperSlide>
+                  <Image
+                    src={eventPackage.image[0]}
+                    alt={eventPackage.packageName}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-t-lg"
+                  />
+                </div>
+                <p className="mt-2 text-sm text-tertiary font-medium text-center">
+                  {eventPackage.packageName} - ${eventPackage.packagePrice}
+                </p>
+              </motion.div>
             ))}
-            <div className="swiper-pagination mt-2"></div>
-            {/* Custom Navigation Buttons */}
-          </Swiper>
-          <div className="swiper-button-prev "></div>
-          <div className="swiper-button-next"></div>
-        </div>
+          </div>
+          <div className="w-[90%] px-4 hidden sm:block relative">
+            <Swiper
+              modules={[Navigation, Pagination]}
+              spaceBetween={20}
+              slidesPerView={1}
+              pagination={{ type: "fraction", el: ".swiper-pagination" }}
+              navigation={{
+                nextEl: ".swiper-button-next", // Custom next button selector
+                prevEl: ".swiper-button-prev", // Custom previous button selector
+              }}
+              breakpoints={{
+                320: { slidesPerView: 1 }, // For small screens (mobile)
+                480: { slidesPerView: 2 }, // For slightly larger mobile screens
+                640: { slidesPerView: 3 }, // For tablets
+                1024: { slidesPerView: 4 }, // For desktops
+              }}
+            >
+              {packages.map((eventPackage: Package, index: number) => (
+                <SwiperSlide
+                  key={eventPackage._id || index}
+                  onClick={() => handleCardClick(eventPackage._id)}
+                >
+                  <motion.div
+                    className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
+                      selectedPackageId === eventPackage._id
+                        ? "border-2 border-primary scale-105"
+                        : "border border-gray-300"
+                    }`}
+                    variants={cardVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    <div
+                      className="relative w-full h-64"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleImageClick(eventPackage.image[0]);
+                      }}
+                    >
+                      <Image
+                        src={eventPackage.image[0]}
+                        alt={eventPackage.packageName}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-t-lg"
+                      />
+                    </div>
+                    <div className="mt-2 text-sm flex flex-row font-bold text-tertiary text-center">
+                      {eventPackage.packageName} -{" "}
+                      <span className="mx-1 pt-[0.2rem]">
+                        <Image
+                          src="/images/SR.png"
+                          alt="SR"
+                          width={12}
+                          height={10}
+                        />
+                      </span>
+                      {eventPackage.packagePrice}
+                    </div>
+                  </motion.div>
+                </SwiperSlide>
+              ))}
+              <div className="swiper-pagination mt-2"></div>
+              {/* Custom Navigation Buttons */}
+            </Swiper>
+            <div className="swiper-button-prev "></div>
+            <div className="swiper-button-next"></div>
+          </div>
+        </>
       )}
 
       {/* Modal for Enlarged Image */}
