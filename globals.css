@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: "DistinctStyleSansLight";
+  src: url("/fonts/Distinct-Style-Sans-Light.otf") format("opentype");
+}
 
 :root {
   --background: #ffffff;
@@ -35,7 +39,8 @@
 body {
   color: var(--tertiary);
   background: #f0f0f0;
-  font-family: var(--font-primary);
+  font-family: "DistinctStyleSansLight", sans-serif;
+  font-size: 12px;
 }
 /* Top-left image */
 body::before {
