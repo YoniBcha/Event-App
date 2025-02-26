@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSendVerificationCodeMutation } from "@/store/endpoints/apiSlice";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 interface FormData {
   fullName: string;
@@ -37,7 +38,7 @@ function SendVerificationCode() {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-
+  const translations = useSelector((state: any) => state.language.translations);
   const handleSendOTP: SubmitHandler<FormData> = async (data) => {
     setLoading(true);
     try {
@@ -66,17 +67,17 @@ function SendVerificationCode() {
     <div className="flex items-center justify-center h-[75vh] w-full">
       <div className="rounded-lg text-center">
         <div className="text-primary text-3xl font-extrabold">
-          Verify Your Phone!
+        {translations.login.verfyTitle}
         </div>
         <div className="text-sm text-primary mb-9">
-          Enter your details to receive a verification code.
+        {translations.login.verfySubtitle}
         </div>
 
         <form onSubmit={handleSubmit(handleSendOTP)} className="flex flex-col">
           <div className="py-2 px-1 w-full bg-[#EEE7DF] rounded-xl mb-3">
             <input
               type="text"
-              placeholder="Full Name"
+              placeholder={translations.login.fullNamePlaceholder}
               {...register("fullName")}
               className="bg-transparent outline-none flex justify-start px-3 text-tertiary w-full"
             />
@@ -89,7 +90,7 @@ function SendVerificationCode() {
           <div className="py-2 px-1 w-full bg-[#EEE7DF] rounded-xl mb-3">
             <input
               type="text"
-              placeholder="Enter your mobile number"
+              placeholder={translations.login.mobilePlaceholder}
               {...register("phoneNumber")}
               className="bg-transparent outline-none flex justify-start px-3 text-tertiary w-full"
             />
@@ -104,14 +105,14 @@ function SendVerificationCode() {
             className="w-full bg-primary text-center hover:bg-[#faebdc] hover:text-primary rounded-xl py-2 text-gray-100 cursor-pointer"
             disabled={loading}
           >
-            {loading ? "Sending OTP..." : "Send OTP"}
+            {loading ? "Sending OTP..." : translations.login.sendOtp}
           </button>
         </form>
 
         <Link href={"/login"}>
           <div className="font-bold text-tertiary py-5">
-            Already have an account?{" "}
-            <span className="text-primary font-bold hover:text-gray-500 cursor-pointer">Sign in</span>
+          {translations.login.hasAccount}{" "}
+            <span className="text-primary font-bold hover:text-gray-500 cursor-pointer">{translations.login.signIn}</span>
           </div>
         </Link>
       </div>

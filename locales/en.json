@@ -44,7 +44,21 @@
     "confirmPassword": "Confirm Password",
     "confirmPasswordPlaceholder": "Confirm Password",
     "register": "Register",
-    "createAccoount": "Create Account"
+    "createAccoount": "Create Account",
+    "verify": "Verify",
+    "resendCode": "Resend Code",
+    "sendingOtp": "Sending OTP...",
+    "verifying": "Verifying...",
+    "resending": "Resending OTP...",
+    "codeMust":"Code must be a 4-digit number",
+    "phoneMust":"Enter a valid 10-digit phone number",
+    "phoneRequire":"Phone number is required",
+    "codeRequire":"Verification code is required",
+    "passwordMust":"Password must be at least 6 characters long",
+    "passwordRequire":"Password is required",
+    "passwordMatch":"Passwords must match",
+    "confirmRequire":"Confirm password is required"
+
   },
   "sidebar": {
    "home": "Home",

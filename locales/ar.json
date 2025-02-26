@@ -44,7 +44,20 @@
     "confirmPassword": "تأكيد كلمة المرور",
     "confirmPasswordPlaceholder": "تأكيد كلمة المرور",
     "register": "تسجيل",
-    "createAccoount": "إنشاء حساب"
+    "createAccoount": "إنشاء حساب",
+    "verify": "تحقق",
+    "resendCode": "إعادة إرسال الرمز",
+    "sendingOtp": "جارٍ إرسال رمز التحقق...",
+    "verifying": "التحقق...",
+    "resending": "إعادة إرسال رمز التحقق...",
+    "codeMust": "يجب أن يكون الرمز مكونًا من 4 أرقام",
+    "phoneMust": "أدخل رقم هاتف صالح مكون من 10 أرقام",
+    "phoneRequire": "رقم الهاتف مطلوب",
+    "codeRequire": "رمز التحقق مطلوب",
+    "passwordMust": "يجب أن تكون كلمة المرور مكونة من 6 أحرف على الأقل",
+    "passwordRequire": "كلمة المرور مطلوبة",
+    "passwordMatch": "يجب أن تتطابق كلمات المرور",
+    "confirmRequire": "تأكيد كلمة المرور مطلوب"
   },
   "sidebar": {
     "home": "الرئيسية",

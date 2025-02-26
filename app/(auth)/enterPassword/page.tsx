@@ -9,19 +9,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRegisterUserMutation } from "@/store/endpoints/apiSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authenticateUser } from "@/store/authReducer";
 
-const schema = yup.object({
-  password: yup
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Passwords must match")
-    .required("Confirm password is required"),
-});
+
 
 const EnterPasswordForm = () => {
   const dispatch = useDispatch();
@@ -33,7 +24,17 @@ const EnterPasswordForm = () => {
 
   const phoneNumber = searchParams.get("phoneNumber") || "";
   const fullName = searchParams.get("fullName") || "";
-
+  const translations = useSelector((state: any) => state.language.translations);
+  const schema = yup.object({
+    password: yup
+      .string()
+      .min(6, `${translations.login.passwordMust}`)
+      .required(`${translations.login.passwordRequire}`),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password")], `${translations.login.passwordMatch}`)
+      .required(`${translations.login.confirmRequire}`),
+  });
   const {
     register,
     handleSubmit,
@@ -77,10 +78,10 @@ const EnterPasswordForm = () => {
     <div className="flex items-center justify-center h-[75vh] w-full">
       <div className="rounded-lg text-center">
       <h2 className="text-2xl font-bold text-primary">
-          Create Your Password
+        {translations.login.createPassword}
         </h2>
         <p className="text-tertiary text-center mt-2 mb-6">
-          Enter a strong password to secure your account.
+          {translations.login.createPasswordSubtitle}
         </p>
 
         <form
@@ -92,7 +93,7 @@ const EnterPasswordForm = () => {
               type="password"
               {...register("password")}
               className="border border-primary rounded-lg px-4 py-2 w-full text-lg outline-none focus:ring-1 focus:ring-primary"
-              placeholder="Enter password"
+              placeholder={translations.login.passwordPlaceholder}
             />
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password.message}</p>
@@ -104,7 +105,7 @@ const EnterPasswordForm = () => {
               type="password"
               {...register("confirmPassword")}
               className="border border-primary rounded-lg px-4 py-2 w-full text-lg outline-none focus:ring-1 focus:ring-primary"
-              placeholder="Confirm password"
+              placeholder={translations.login.confirmPassword}
             />
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm">
@@ -118,7 +119,7 @@ const EnterPasswordForm = () => {
             className="w-full bg-primary text-white hover:bg-[#faebdc] hover:text-primary py-2 rounded-md font-semibold cursor-pointer"
             disabled={loading}
           >
-            {loading ? "Creating Account..." : "Register"}
+            {loading ? translations.login.createAccount : translations.login.register}
           </button>
         </form>
       </div>
