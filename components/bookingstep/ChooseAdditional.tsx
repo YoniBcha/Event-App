@@ -264,7 +264,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                               </button>
                               <input
                                 type="number"
-                                className="w-12 text-center border rounded-lg "
+                                className="w-12 text-center border rounded-lg tracking-widest outline-none focus:ring-2 focus:ring-primary  appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 value={
                                   quantities[
                                     `${addition.additionName}-${type.typeName}`
