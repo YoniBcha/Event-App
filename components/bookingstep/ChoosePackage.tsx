@@ -123,17 +123,17 @@ function ChoosePackage({
   // Check if there are no packages
   if (!isLoading && packages.length === 0) {
     return (
-        <motion.div
-              className="flex flex-col gap-10 h-full justify-center items-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
+      <motion.div
+        className="flex flex-col gap-10 h-full justify-center items-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
         <div className="text-primary font-bold text-xl md:text-3xl text-center">
           {translations.booking.noPackage}
         </div>
 
-             {/* Back Button */}
+        {/* Back Button */}
         <motion.button
           onClick={onBackClick}
           className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
@@ -162,7 +162,7 @@ function ChoosePackage({
           </span>
           <span>{translations.booking.backBtn}</span>
         </motion.button>
-       </motion.div>
+      </motion.div>
     );
   }
 
@@ -178,7 +178,8 @@ function ChoosePackage({
         </div>
       ) : (
         <>
-          <div className="flex sm:hidden flex-col gap-4">
+          {/* List View for Small Devices (sm and below) */}
+          <div className="flex w-full sm:hidden flex-col gap-4">
             {packages.map((eventPackage: Package, index: number) => (
               <motion.div
                 key={eventPackage._id || index}
@@ -207,19 +208,22 @@ function ChoosePackage({
                     className="rounded-t-lg"
                   />
                 </div>
-                <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                  {eventPackage.packageName} - {eventPackage.packagePrice}  <Image
-                                      src="/images/SR.png"
-                                      alt="SR"
-                                      width={20}
-                                      height={20}
-                                      className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
-                                    />
+                <p className="mt-2 text-sm text-tertiary font-medium flex items-center text-center">
+                  {eventPackage.packageName} - {eventPackage.packagePrice}{" "}
+                  <Image
+                    src="/images/SR.png"
+                    alt="SR"
+                    width={20}
+                    height={20}
+                    className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
+                  />
                 </p>
               </motion.div>
             ))}
           </div>
-          <div className="w-[90%] px-4 hidden sm:block relative">
+
+          {/* Swiper for Medium Devices (md and above) */}
+          <div className="hidden sm:block w-[90%] px-4 relative">
             <Swiper
               modules={[Navigation, Pagination]}
               spaceBetween={20}
@@ -230,10 +234,8 @@ function ChoosePackage({
                 prevEl: ".swiper-button-prev", // Custom previous button selector
               }}
               breakpoints={{
-                320: { slidesPerView: 1 }, // For small screens (mobile)
-                480: { slidesPerView: 2 }, // For slightly larger mobile screens
-                640: { slidesPerView: 3 }, // For tablets
-                1024: { slidesPerView: 4 }, // For desktops
+                640: { slidesPerView: 3 }, // For tablets)
+                1024: { slidesPerView: 4 }, // For desktops)
               }}
             >
               {packages.map((eventPackage: Package, index: number) => (
@@ -287,7 +289,7 @@ function ChoosePackage({
               <div className="swiper-pagination mt-2"></div>
               {/* Custom Navigation Buttons */}
             </Swiper>
-            <div className="swiper-button-prev "></div>
+            <div className="swiper-button-prev"></div>
             <div className="swiper-button-next"></div>
           </div>
         </>
