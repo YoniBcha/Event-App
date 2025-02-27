@@ -327,7 +327,7 @@ function Header() {
           >
             <div className="">
               <div className="flex justify-between items-center px-6">
-                <img src={logo} alt="Logo" width={100} height={50} />
+                <Image src={logo} alt="Logo" width={100} height={50} />
                 <button
                   className={`absolute ${
                     currentLocale === "ar" ? "left-4" : "right-4"

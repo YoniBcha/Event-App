@@ -295,7 +295,7 @@ const RootPage = () => {
               transition={{ duration: 0.3 }}
             >
               <ExtraService
-                extraServices={extraServices}
+                // extraServices={extraServices}
                 onExtraServiceSelect={handleExtraServiceSelect}
                 onBack={handleBack}
               />

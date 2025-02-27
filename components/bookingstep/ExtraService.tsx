@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
@@ -7,7 +8,7 @@ import * as Yup from "yup";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface ExtraServiceProps {
-  extraServices: any;
+  // extraServices: any;
   onExtraServiceSelect: (selectedService: any) => void;
   onBack: () => void;
 }
@@ -96,7 +97,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
   const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
   const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
   const [packages, setPackages] = useState<Package[]>([]);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [ ,setErrors] = useState<{ [key: string]: string }>({});
   const translations = useSelector((state: any) => state.language.translations);
   const currentLocale = useSelector((state: any) => state.language.currentLocale);
 
@@ -644,7 +645,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
 };
 
 const ExtraServicesPage: React.FC<ExtraServiceProps> = ({
-  extraServices,
+  // extraServices,
   onExtraServiceSelect,
   onBack,
 }) => {
