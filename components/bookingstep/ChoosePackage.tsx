@@ -180,46 +180,48 @@ function ChoosePackage({
         <>
           {/* List View for Small Devices (sm and below) */}
           <div className="flex w-full sm:hidden flex-col gap-4">
-            {packages.map((eventPackage: Package, index: number) => (
-              <motion.div
-                key={eventPackage._id || index}
-                className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
-                  selectedPackageId === eventPackage._id
-                    ? "border-2 border-primary scale-105"
-                    : "border border-gray-300"
-                }`}
-                onClick={() => handleCardClick(eventPackage._id)}
-                variants={cardVariants}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                <div
-                  className="relative w-full h-48"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleImageClick(eventPackage.image[0]);
-                  }}
+            <div className="grid grid-cols-1 gap-4 [@media(min-width:361px)]:grid-cols-2 [@media(min-width:639px)]:grid-cols-2">
+              {packages.map((eventPackage: Package, index: number) => (
+                <motion.div
+                  key={eventPackage._id || index}
+                  className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
+                    selectedPackageId === eventPackage._id
+                      ? "border-2 border-primary scale-105"
+                      : "border border-gray-300"
+                  }`}
+                  onClick={() => handleCardClick(eventPackage._id)}
+                  variants={cardVariants}
+                  whileHover="hover"
+                  whileTap="tap"
                 >
-                  <Image
-                    src={eventPackage.image[0]}
-                    alt={eventPackage.packageName}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-lg"
-                  />
-                </div>
-                <p className="mt-2 text-sm text-tertiary font-medium flex items-center text-center">
-                  {eventPackage.packageName} - {eventPackage.packagePrice}{" "}
-                  <Image
-                    src="/images/SR.png"
-                    alt="SR"
-                    width={20}
-                    height={20}
-                    className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
-                  />
-                </p>
-              </motion.div>
-            ))}
+                  <div
+                    className="relative w-full h-48"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleImageClick(eventPackage.image[0]);
+                    }}
+                  >
+                    <Image
+                      src={eventPackage.image[0]}
+                      alt={eventPackage.packageName}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-t-lg"
+                    />
+                  </div>
+                  <p className="mt-2 text-sm text-tertiary font-medium flex items-center text-center">
+                    {eventPackage.packageName} - {eventPackage.packagePrice}{" "}
+                    <Image
+                      src="/images/SR.png"
+                      alt="SR"
+                      width={20}
+                      height={20}
+                      className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
+                    />
+                  </p>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {/* Swiper for Medium Devices (md and above) */}
