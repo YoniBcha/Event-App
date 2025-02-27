@@ -18,18 +18,7 @@ interface PersonalDataProps {
   onSubmit: (personalData: PersonalData) => void;
 }
 
-// Yup validation schema
-const validationSchema = Yup.object().shape({
-  fullName: Yup.string().required("Full Name is required"),
-  mobileNumber: Yup.string()
-    .required("Mobile Number is required")
-    .matches(/^[0-9]{10}$/, "Mobile Number must be 10 digits"),
-  secondMobileNumber: Yup.string()
-    .required("Second Mobile Number is required")
-    .matches(/^[0-9]{10}$/, "Second Mobile Number must be 10 digits"),
-  favoriteColors: Yup.string().required("Favorite Colors is required"),
-  notes: Yup.string().required("Notes is required"),
-});
+
 
 function PersonalData({ onSubmit }: PersonalDataProps) {
   const [formData, setFormData] = useState<PersonalData>({
@@ -56,6 +45,13 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           pickColor: string;
           notes: string;
           nextBtn: string;
+          fullNameRequire: string;
+          colorRequire: string;
+          noteRequire: string;
+          mobileRequire: string;
+          secondMobileRequire: string;
+          mobileMust: string;
+          secondMobileMust: string;
         };
       };
     };
@@ -64,6 +60,18 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
+  // Yup validation schema
+const validationSchema = Yup.object().shape({
+  fullName: Yup.string().required(`${translations.booking.fullNameRequire}`),
+  mobileNumber: Yup.string()
+    .required(`${translations.booking.mobileRequire}`)
+    .matches(/^[0-9]{10}$/, `${translations.booking.mobileMust}`),
+  secondMobileNumber: Yup.string()
+    .required(`${translations.booking.secondMobileRequire}`)
+    .matches(/^[0-9]{10}$/, `${translations.booking.secondMobileMust}`),
+  favoriteColors: Yup.string().required(`${translations.booking.colorRequire}`),
+  notes: Yup.string().required(`${translations.booking.noteRequire}`),
+});
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

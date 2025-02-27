@@ -116,10 +116,6 @@ function ChoosePackage({
   //   setIsGridView(!isGridView);
   // };
 
-  const handleBackClick = () => {
-    onBackClick();
-  };
-
   if (error) return <p>Failed to load packages</p>;
 
   const packages = (data as { eventPackages: Package[] })?.eventPackages || [];
@@ -127,27 +123,46 @@ function ChoosePackage({
   // Check if there are no packages
   if (!isLoading && packages.length === 0) {
     return (
-      <div className="flex flex-col gap-10 h-full justify-between items-center">
+        <motion.div
+              className="flex flex-col gap-10 h-full justify-center items-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
         <div className="text-primary font-bold text-xl md:text-3xl text-center">
-          No Packages Available
+          {translations.booking.noPackage}
         </div>
-        <div>
-          <button
-            onClick={handleBackClick}
-            className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
-          >
-            <span className="mr-2">
-              {currentLocale === "ar" ? (
-                <FaChevronRight /> // Right arrow for Arabic
-              ) : (
-                <FaChevronLeft /> // Left arrow for English
-              )}
-            </span>
 
-            <span>Back</span>
-          </button>
-        </div>
-      </div>
+             {/* Back Button */}
+        <motion.button
+          onClick={onBackClick}
+          className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          variants={{
+            hover: {
+              scale: 1.05,
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+
+              transition: { duration: 0.2, ease: "easeInOut" },
+            },
+            tap: {
+              scale: 0.95,
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.1, ease: "easeInOut" },
+            },
+          }}
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <span className="mr-2">
+            {currentLocale === "ar" ? (
+              <FaChevronRight /> // Right arrow for Arabic
+            ) : (
+              <FaChevronLeft /> // Left arrow for English
+            )}
+          </span>
+          <span>{translations.booking.backBtn}</span>
+        </motion.button>
+       </motion.div>
     );
   }
 
@@ -193,7 +208,13 @@ function ChoosePackage({
                   />
                 </div>
                 <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                  {eventPackage.packageName} - ${eventPackage.packagePrice}
+                  {eventPackage.packageName} - {eventPackage.packagePrice}  <Image
+                                      src="/images/SR.png"
+                                      alt="SR"
+                                      width={20}
+                                      height={20}
+                                      className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
+                                    />
                 </p>
               </motion.div>
             ))}

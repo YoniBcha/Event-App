@@ -11,16 +11,6 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 import { FaCalendarAlt, FaCity, FaMapMarkerAlt } from "react-icons/fa";
 
-const validationSchema = yup.object({
-  city: yup.string().required("City is required"),
-  place: yup.string().required("Place is required"),
-  date: yup
-    .date()
-    .nullable()
-    .transform((value, originalValue) => (originalValue === "" ? null : value))
-    .required("Date is required"),
-});
-
 const saudiCities = [
   "Jeddah",
   "Makkah",
@@ -60,6 +50,9 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
           selectCity: string;
           searchCity: string;
           bookBtn: string;
+          cityRequire: string;
+          placeRequire: string;
+          dateRequire: string;
         };
       };
     };
@@ -68,6 +61,15 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
+  const validationSchema = yup.object({
+    city: yup.string().required(`${translations.booking.cityRequire}`),
+    place: yup.string().required(`${translations.booking.placeRequire}`),
+    date: yup
+      .date()
+      .nullable()
+      .transform((value, originalValue) => (originalValue === "" ? null : value))
+      .required(`${translations.booking.dateRequire}`),
+  });
   const {
     handleSubmit,
     formState: { errors },
@@ -304,7 +306,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full px-2 py-1 border border-[#d4c9c0]  rounded-md focus:outline-none"
+                            className="w-full px-2 py-1 border-none  rounded-md focus:outline-none"
                           />
                         </div>
                         {filteredCities.map((city) => (
