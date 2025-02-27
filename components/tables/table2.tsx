@@ -1,68 +1,110 @@
 import React from "react";
 
-// Define a type for the data rows
-interface RowData {
-  id: number;
-  name: string;
-  email: string;
-  age: number;
-  city: string;
-  profession: string;
+// Define types for event package additions
+interface EventPackageAddition {
+  additionId: {
+    _id: string;
+    additionName: string;
+  };
+  additionTypeName: string;
+  quantity: number;
+  _id: string;
 }
 
-const BulkTable2 = () => {
-  // Declare bulk data directly inside the component
-  const data: RowData[] = Array.from({ length: 5 }, (_, index) => ({
-    id: index + 1,
-    name: `User ${index + 1}`,
-    email: `user${index + 1}@example.com`,
-    age: Math.floor(Math.random() * 50) + 18, // Random age between 18 and 67
-    city: ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"][
-      Math.floor(Math.random() * 5)
-    ], // Random city
-    profession: ["Engineer", "Doctor", "Teacher", "Artist", "Scientist"][
-      Math.floor(Math.random() * 5)
-    ], // Random profession
-  }));
+// Define types for extra services
+interface ExtraService {
+  servicesProvider_id: {
+    _id: string;
+  };
+  packageName: string;
+  _id: string;
+}
 
-  // Define headers directly inside the component
-  const headers = ["ID", "Name", "Email", "Age", "City", "Profession"];
+// Define props for BulkTable2
+interface BulkTable2Props {
+  eventPackageAdditions: EventPackageAddition[];
+  extraServices: ExtraService[];
+}
 
+const BulkTable2: React.FC<BulkTable2Props> = ({
+  eventPackageAdditions,
+  extraServices,
+}) => {
   return (
-    <div className="overflow-x-auto">
-      {/* Table Container */}
-      <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-[#F3EFE7] text-left text-sm font-light">
-        {/* Table Head */}
-        <thead className="bg-[#C3937A]  ">
-          <tr>
-            {headers.map((header, index) => (
-              <th
-                key={index}
-                className="border-b-2 border-r text-white border-[#EFE7DF] px-4 py-5 font-medium md:px-6 md:py-"
-              >
-                {header}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* First Table: Event Package Additions */}
+      <div className="overflow-x-auto">
+        <h2 className="text-lg font-semibold mb-2">Event Package Additions</h2>
+        <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-[#F3EFE7] text-left text-sm font-light">
+          <thead className="bg-[#C3937A] text-white">
+            <tr>
+              <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
+                Addition Name
               </th>
-            ))}
-          </tr>
-        </thead>
-        {/* Table Body */}
-        <tbody>
-          {data.map((row: RowData, rowIndex: number) => (
-            <tr key={rowIndex} className="border-b-2 border-[#EFE7DF]">
-              {headers.map((header, colIndex: number) => (
-                <td
-                  key={colIndex}
-                  className={`border-r whitespace-nowrap px-4 py-2 font-medium text-primary ${
-                    header === "Email" ? "break-all" : ""
-                  } md:px-6 md:py-4`}
-                >
-                  {row[header.toLowerCase() as keyof RowData]}
-                </td>
-              ))}
+              <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
+                Type
+              </th>
+              <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
+                Quantity
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {eventPackageAdditions?.length > 0 ? (
+              eventPackageAdditions?.map((item, index) => (
+                <tr key={index} className="border-b-2 border-[#EFE7DF]">
+                  <td className="border-r px-4 py-2 font-medium">
+                    {item.additionId.additionName}
+                  </td>
+                  <td className="border-r px-4 py-2 font-medium">
+                    {item.additionTypeName}
+                  </td>
+                  <td className="border-r px-4 py-2 font-medium">
+                    {item.quantity}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={3} className="text-center py-4">
+                  No event package additions available
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Second Table: Extra Services */}
+      <div className="overflow-x-auto">
+        <h2 className="text-lg font-semibold mb-2">Extra Services</h2>
+        <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-[#F3EFE7] text-left text-sm font-light">
+          <thead className="bg-[#C3937A] text-white">
+            <tr>
+              <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
+                Package Name
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {extraServices?.length > 0 ? (
+              extraServices?.map((service, index) => (
+                <tr key={index} className="border-b-2 border-[#EFE7DF]">
+                  <td className="border-r px-4 py-2 font-medium">
+                    {service.packageName}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td className="text-center py-4">
+                  No extra services available
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

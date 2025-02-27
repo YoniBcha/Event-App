@@ -1,9 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
   font-family: "DistinctStyleSansLight";
   src: url("/fonts/Distinct-Style-Sans-Light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "CorbertExtraCondensedMediumItalic";
+  src: url("/fonts/CorbertExtraCondensed-MediumItalic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "AirLight";
+  src: url("/fonts/Air-Light.otf") format("opentype");
 }
 
 :root {
@@ -12,7 +23,7 @@
   --primary: #c3927b;
   --secondary: #ffffff;
   --tertiary: #bcbab9;
-  --font-primary: "Times New Roman", Times, serif;
+  --font-primary: "Distinct Style Sans", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -2,22 +2,22 @@
 "use client";
 import BulkTable from "@/components/tables/table1";
 import BulkTable2 from "@/components/tables/table2";
-// import { useGetSelfBookedEventsQuery } from "@/store/endpoints/apiSlice";
+import { useGetSingleSelfBookedEventsQuery } from "@/store/endpoints/apiSlice";
 import Image from "next/image";
-// import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 function Quotation() {
   const [logo, setLogo] = useState("/path/to/default/logo.png");
-  // const params = useParams();
-  // const id = params.id;
-  // const { data, error, isLoading } = useGetSelfBookedEventsQuery(id);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const { data } = useGetSingleSelfBookedEventsQuery<any>(id);
   const [showTerms, setShowTerms] = useState(false); // State to control visibility of terms
-  const currentLocale = useSelector(
-    (state: any) => state.language.currentLocale
-  );
-
+  //   const currentLocale = useSelector(
+  //     (state: any) => state.language.currentLocale
+  //   );
+  console.log(JSON.stringify(data, null, 2));
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure we're on the client side
     const storedTheme = localStorage.getItem("appTheme");
@@ -47,11 +47,28 @@ function Quotation() {
           <div className="flex-grow flex justify-center">
             <Image src={logo} alt="Logo" width={80} height={40} />
           </div>
-          <BulkTable />
+          {data && data.bookedEvents ? (
+            <BulkTable
+              personalData={data.bookedEvents.personalData}
+              eventDetails={{
+                packageName: data.bookedEvents.eventPackage.packageName,
+                place: data.bookedEvents.place,
+                city: data.bookedEvents.city,
+                date: data.bookedEvents.date,
+                eventType: data.bookedEvents.eventType,
+                eventDesign: data.bookedEvents.eventDesign,
+              }}
+            />
+          ) : (
+            <div>No booked events data available.</div>
+          )}
           <div className="text-lg text-primary">
             This offer is valid for one week from the date of creation
           </div>
-          <BulkTable2 />
+          <BulkTable2
+            eventPackageAdditions={data?.bookedEvents?.eventPackageAdditions}
+            extraServices={data?.bookedEvents?.extraServices}
+          />
 
           <div className="flex flex-row justify-between">
             {/* First Column */}
@@ -67,20 +84,22 @@ function Quotation() {
               </div>
               {/* Bottom Div */}
               <div className="flex justify-center">
-                <div
-                  className="rounded-xl bg-primary text-white px-10 py-1 w-fit cursor-pointer"
-                  onClick={handlePrint}
-                >
-                  Print
-                </div>
+                {showTerms && (
+                  <div
+                    className="rounded-xl bg-primary text-white px-10 py-1 w-fit cursor-pointer"
+                    onClick={handlePrint}
+                  >
+                    Print
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Second Column - Table */}
             <div className="rounded-lg p-4">
-              <table className="w-full border bg-secondary border-gray-300 rounded-sm">
+              {/* <table className="w-full border bg-secondary border-gray-300 rounded-sm">
                 <tbody>
-                  {/* Row 1 */}
+                 
                   <tr className="border-b border-gray-300">
                     <td className="py-2 px-3 border-r border-gray-300">
                       Total
@@ -98,7 +117,7 @@ function Quotation() {
                       />
                     </td>
                   </tr>
-                  {/* Row 2 */}
+                 
                   <tr className="border-b border-gray-300">
                     <td className="py-2 px-3 border-r border-gray-300">
                       VAT 15%
@@ -116,7 +135,7 @@ function Quotation() {
                       />
                     </td>
                   </tr>
-                  {/* Row 3 */}
+                
                   <tr>
                     <td className="py-2 px-3 border-r border-gray-300">
                       Amounts
@@ -135,7 +154,7 @@ function Quotation() {
                     </td>
                   </tr>
                 </tbody>
-              </table>
+              </table> */}
             </div>
           </div>
 
