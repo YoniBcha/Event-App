@@ -37,9 +37,9 @@ const BulkTable: React.FC = () => {
   return (
     <div className="overflow-x-auto">
       {/* Table Container */}
-      <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-[#F3EFE7] text-left text-sm font-light">
+      <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-secondary text-left text-sm font-light">
         {/* Table Head */}
-        <thead className="bg-[#F3EFE7]">
+        <thead className="">
           <tr>
             {headers.map(({ label }, index) => (
               <th

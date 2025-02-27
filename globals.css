@@ -40,7 +40,6 @@ body {
   color: var(--tertiary);
   background: #f0f0f0;
   font-family: var(--font-primary);
-  font-size: 12px;
 }
 /* Top-left image */
 body::before {
