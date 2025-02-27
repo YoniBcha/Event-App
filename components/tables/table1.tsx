@@ -1,70 +1,142 @@
 import React from "react";
+import moment from "moment";
 
-interface TableRow {
-  id: number;
-  name: string;
-  email: string;
-  age: number;
-  city: string;
-  profession: string;
+// Define the type for personal data and additional fields
+interface PersonalData {
+  fullName: string;
+  mobileNumber: string;
+  secondMobileNumber: string;
+  favoriteColors: string;
+  notes: string;
 }
 
-const BulkTable: React.FC = () => {
-  // Declare bulk data directly inside the component
-  const data: TableRow[] = Array.from({ length: 5 }, (_, index) => ({
-    id: index + 1,
-    name: `User ${index + 1}`,
-    email: `user${index + 1}@example.com`,
-    age: Math.floor(Math.random() * 50) + 18, // Random age between 18 and 67
-    city: ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"][
-      Math.floor(Math.random() * 5)
-    ], // Random city
-    profession: ["Engineer", "Doctor", "Teacher", "Artist", "Scientist"][
-      Math.floor(Math.random() * 5)
-    ], // Random profession
-  }));
+interface EventDetails {
+  packageName: string;
+  place: string;
+  city: string;
+  date: string;
+  eventType: {
+    nameOfEvent: string;
+  };
+  eventDesign: {
+    eventDesign: string;
+  };
+}
 
-  // Define headers as tuples for better type safety
-  const headers: { key: keyof TableRow; label: string }[] = [
-    { key: "id", label: "ID" },
-    { key: "name", label: "Name" },
-    { key: "email", label: "Email" },
-    { key: "age", label: "Age" },
+// Define the props for the BulkTable component
+interface BulkTableProps {
+  personalData?: PersonalData; // Make personalData optional
+  eventDetails?: EventDetails; // Add eventDetails as an optional prop
+}
+
+const BulkTable: React.FC<BulkTableProps> = ({
+  personalData,
+  eventDetails,
+}) => {
+  // Provide default values if personalData or eventDetails is undefined
+  const personalDataDefault = personalData || {
+    fullName: "N/A",
+    mobileNumber: "N/A",
+    secondMobileNumber: "N/A",
+    favoriteColors: "#FFFFFF",
+    notes: "N/A",
+  };
+
+  const eventDetailsDefault = eventDetails || {
+    packageName: "N/A",
+    place: "N/A",
+    city: "N/A",
+    date: "N/A",
+    eventType: {
+      nameOfEvent: "N/A",
+    },
+    eventDesign: {
+      eventDesign: "N/A",
+    },
+  };
+
+  // Combine personal data and event details into a single row
+  const rowData = {
+    ...personalDataDefault,
+    packageName: eventDetailsDefault.packageName,
+    place: eventDetailsDefault.place,
+    city: eventDetailsDefault.city,
+    date:
+      eventDetailsDefault.date !== "N/A"
+        ? moment(eventDetailsDefault.date).format("DD-MM-YYYY")
+        : "N/A",
+    eventType: eventDetailsDefault.eventType.nameOfEvent,
+    eventDesign: eventDetailsDefault.eventDesign.eventDesign,
+  };
+
+  // Define headers for the table
+  const headers: { key: keyof typeof rowData; label: string }[] = [
+    { key: "packageName", label: "PackageName" },
+    { key: "fullName", label: "Full Name" },
+    { key: "mobileNumber", label: "Mobile Number" },
+    { key: "secondMobileNumber", label: "Second Mobile Number" },
+    { key: "favoriteColors", label: "Favorite Colors" },
+    { key: "place", label: "Place" },
     { key: "city", label: "City" },
-    { key: "profession", label: "Profession" },
+    { key: "date", label: "Date" },
+    { key: "eventType", label: "Event Type" },
+    { key: "eventDesign", label: "Event Design" },
   ];
 
+  // Split data into two halves for two columns
+  const half = Math.ceil(headers.length / 2);
+  const firstColumn = headers.slice(0, half);
+  const secondColumn = headers.slice(half);
+
   return (
-    <div className="overflow-x-auto">
-      {/* Table Container */}
-      <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-[#F3EFE7] text-left text-sm font-light">
-        {/* Table Head */}
-        <thead className="bg-[#F3EFE7]">
-          <tr>
-            {headers.map(({ label }, index) => (
-              <th
-                key={index}
-                className="border-b-2 border-r border-[#EFE7DF] px-4 py-3 font-medium md:px-6 md:py-4"
-              >
+    <div className="grid grid-cols-1 md:grid-cols-2 ">
+      {/* First Column */}
+      <table className="w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-secondary text-left text-sm font-light">
+        <tbody>
+          {firstColumn.map(({ key, label }, index) => (
+            <tr key={index} className="border-b border-[#EFE7DF]">
+              <th className="border-r border-[#EFE7DF] px-4 py-3 font-extrabold md:px-6 md:py-4">
                 {label}
               </th>
-            ))}
-          </tr>
-        </thead>
-        {/* Table Body */}
+              <td className="px-4 py-2 font-medium text-primary md:px-6 md:py-4">
+                {key === "favoriteColors" ? (
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-6 h-6 border"
+                      style={{ backgroundColor: rowData[key] }}
+                    ></div>
+                    <span>{rowData[key]}</span>
+                  </div>
+                ) : (
+                  rowData[key]
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Second Column */}
+      <table className="w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-secondary text-left text-sm font-light">
         <tbody>
-          {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="border-b border-[#EFE7DF]">
-              {headers.map(({ key }, colIndex) => (
-                <td
-                  key={colIndex}
-                  className={`border-r border-[#EFE7DF] whitespace-nowrap px-4 py-2 font-medium text-primary ${
-                    key === "email" ? "break-all" : ""
-                  } md:px-6 md:py-4`}
-                >
-                  {row[key]}
-                </td>
-              ))}
+          {secondColumn.map(({ key, label }, index) => (
+            <tr key={index} className="border-b border-[#EFE7DF]">
+              <th className="border-r border-[#EFE7DF] px-4 py-3 font-extrabold md:px-6 md:py-4">
+                {label}
+              </th>
+              <td className="px-4 py-2 font-medium text-primary md:px-6 md:py-4">
+                {key === "favoriteColors" ? (
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-6 h-6 border"
+                      style={{ backgroundColor: rowData[key] }}
+                    ></div>
+                    <span>{rowData[key]}</span>
+                  </div>
+                ) : (
+                  rowData[key]
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

@@ -4,6 +4,7 @@ import React from "react";
 import { useGetSelfBookedEventsQuery } from "@/store/endpoints/apiSlice";
 import Image from "next/image";
 import { useSelector } from "react-redux";
+import Link from "next/link";
 
 interface Event {
   _id: string;
@@ -64,7 +65,9 @@ interface RootState {
 
 const BookedEvents = () => {
   const { data, isLoading } = useGetSelfBookedEventsQuery({});
-  const translations = useSelector((state: RootState) => state.language.translations);
+  const translations = useSelector(
+    (state: RootState) => state.language.translations
+  );
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -75,10 +78,11 @@ const BookedEvents = () => {
 
   const response = data as ApiResponse;
 
-
   return (
     <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-5 text-primary">{translations.booking.myReservation}</h1>
+      <h1 className="text-2xl font-bold mb-5 text-primary">
+        {translations.booking.myReservation}
+      </h1>
       {response?.bookedEvents.map((event: Event) => (
         <div
           key={event._id}
@@ -102,7 +106,8 @@ const BookedEvents = () => {
                 {translations.booking.package}: {event.eventPackage.packageName}
               </p>
               <p className="font-medium text-primary text-sm">
-                {translations.booking.eventDesign}: {event.eventDesign.eventDesign}
+                {translations.booking.eventDesign}:{" "}
+                {event.eventDesign.eventDesign}
               </p>
               <p className="text-tertiary text-sm">
                 {event.personalData.mobileNumber}
@@ -123,12 +128,20 @@ const BookedEvents = () => {
               {event.orderStatus}
             </div>
             <div className="bg-[#dedede] p-1 max-md:h-fit text-lg text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg ">
-              {translations.booking.quotation}
+              <Link
+                href={{
+                  pathname: "/sidebar/quotation",
+                  query: { id: event._id },
+                }}
+              >
+                {translations.booking.quotation}
+              </Link>
             </div>
 
             <div className="mt-5 max-md:mt-1 flex justify-start">
               <p className="text-primary  font-semibold text-center">
-                {translations.booking.date}:{new Date(event.date).toLocaleDateString()}
+                {translations.booking.date}:
+                {new Date(event.date).toLocaleDateString()}
               </p>
             </div>
           </div>

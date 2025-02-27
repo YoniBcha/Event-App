@@ -10,7 +10,10 @@ import { getExtraServiceEndpoint } from "./getExtraServiceEndpoint";
 import { contactUsEndpoints } from "./constactus";
 import { bookEventEndpoints } from "./bookEventEndpoints";
 import { getSelfBookedEventsEndpoints } from "./getSelfBookedEventsEndpoints"; // ✅ Import the new API
-
+import { userEndpoints } from "./userInfo";
+import { changePasswordEndpoints } from "./changePassword";
+import { updateProfileEndpoints } from "./updateProfile";
+import { getSingleSelfBookedEventsEndpoints } from "./getSingleSelfBookedEventsEndpoints";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -39,6 +42,10 @@ export const apiSlice = createApi({
     ...getExtraServiceEndpoint(builder),
     ...contactUsEndpoints(builder),
     ...bookEventEndpoints(builder),
+    ...userEndpoints(builder),
+    ...changePasswordEndpoints(builder),
+    ...updateProfileEndpoints(builder),
+    ...getSingleSelfBookedEventsEndpoints(builder),
     ...getSelfBookedEventsEndpoints(builder), // ✅ Added new API endpoint
   }),
   refetchOnMountOrArgChange: true,
@@ -57,11 +64,15 @@ export const {
   useGetPackageDetailQuery,
   useGetAdditionalEndpointsQuery,
   useGetExtraServiceQuery,
+  useChangePasswordMutation,
+  useUpdateProfileMutation,
   useContactUsMutation,
   useGetDancerQuery,
   useGetOrganizerQuery,
   useGetDjQuery,
+  useGetUserInfoQuery,
   useBookEventMutation,
+  useGetSingleSelfBookedEventsQuery,
   useGetSelfBookedEventsQuery,
   useLogoutUserMutation,
 } = apiSlice;
