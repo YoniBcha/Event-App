@@ -71,7 +71,7 @@ const BulkTable: React.FC<BulkTableProps> = ({
 
   // Define headers for the table
   const headers: { key: keyof typeof rowData; label: string }[] = [
-    { key: "packageName", label: "PackageName" },
+    { key: "packageName", label: "Package Name" },
     { key: "fullName", label: "Full Name" },
     { key: "mobileNumber", label: "Mobile Number" },
     { key: "secondMobileNumber", label: "Second Mobile Number" },
@@ -89,58 +89,62 @@ const BulkTable: React.FC<BulkTableProps> = ({
   const secondColumn = headers.slice(half);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 ">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {/* First Column */}
-      <table className="w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-secondary text-left text-sm font-light">
-        <tbody>
-          {firstColumn.map(({ key, label }, index) => (
-            <tr key={index} className="border-b border-[#EFE7DF]">
-              <th className="border-r border-[#EFE7DF] px-4 py-3 font-extrabold md:px-6 md:py-4">
-                {label}
-              </th>
-              <td className="px-4 py-2 font-medium text-primary md:px-6 md:py-4">
-                {key === "favoriteColors" ? (
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-6 h-6 border"
-                      style={{ backgroundColor: rowData[key] }}
-                    ></div>
-                    <span>{rowData[key]}</span>
-                  </div>
-                ) : (
-                  rowData[key]
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-secondary text-left text-sm font-light">
+          <tbody>
+            {firstColumn.map(({ key, label }, index) => (
+              <tr key={index} className="border-b border-[#EFE7DF]">
+                <th className="border-r border-[#EFE7DF] px-2 py-2 font-extrabold sm:px-4 sm:py-3">
+                  {label}
+                </th>
+                <td className="px-2 py-2 font-medium text-primary sm:px-4 sm:py-3">
+                  {key === "favoriteColors" ? (
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-4 h-4 border sm:w-6 sm:h-6"
+                        style={{ backgroundColor: rowData[key] }}
+                      ></div>
+                      <span className="text-xs sm:text-sm">{rowData[key]}</span>
+                    </div>
+                  ) : (
+                    <span className="text-xs sm:text-sm">{rowData[key]}</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Second Column */}
-      <table className="w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-secondary text-left text-sm font-light">
-        <tbody>
-          {secondColumn.map(({ key, label }, index) => (
-            <tr key={index} className="border-b border-[#EFE7DF]">
-              <th className="border-r border-[#EFE7DF] px-4 py-3 font-extrabold md:px-6 md:py-4">
-                {label}
-              </th>
-              <td className="px-4 py-2 font-medium text-primary md:px-6 md:py-4">
-                {key === "favoriteColors" ? (
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-6 h-6 border"
-                      style={{ backgroundColor: rowData[key] }}
-                    ></div>
-                    <span>{rowData[key]}</span>
-                  </div>
-                ) : (
-                  rowData[key]
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-secondary text-left text-sm font-light">
+          <tbody>
+            {secondColumn.map(({ key, label }, index) => (
+              <tr key={index} className="border-b border-[#EFE7DF]">
+                <th className="border-r border-[#EFE7DF] px-2 py-2 font-extrabold sm:px-4 sm:py-3">
+                  {label}
+                </th>
+                <td className="px-2 py-2 font-medium text-primary sm:px-4 sm:py-3">
+                  {key === "favoriteColors" ? (
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-4 h-4 border sm:w-6 sm:h-6"
+                        style={{ backgroundColor: rowData[key] }}
+                      ></div>
+                      <span className="text-xs sm:text-sm">{rowData[key]}</span>
+                    </div>
+                  ) : (
+                    <span className="text-xs sm:text-sm">{rowData[key]}</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
