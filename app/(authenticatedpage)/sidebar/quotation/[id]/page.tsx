@@ -2,12 +2,17 @@
 "use client";
 import BulkTable from "@/components/tables/table1";
 import BulkTable2 from "@/components/tables/table2";
+// import { useGetSelfBookedEventsQuery } from "@/store/endpoints/apiSlice";
 import Image from "next/image";
+// import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 function Quotation() {
   const [logo, setLogo] = useState("/path/to/default/logo.png");
+  // const params = useParams();
+  // const id = params.id;
+  // const { data, error, isLoading } = useGetSelfBookedEventsQuery(id);
   const [showTerms, setShowTerms] = useState(false); // State to control visibility of terms
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale

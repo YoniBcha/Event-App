@@ -128,7 +128,12 @@ const BookedEvents = () => {
               {event.orderStatus}
             </div>
             <div className="bg-[#dedede] p-1 max-md:h-fit text-lg text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg ">
-              <Link href={"/sidebar/quotation"}>
+              <Link
+                href={{
+                  pathname: "/sidebar/quotation",
+                  query: { id: event._id },
+                }}
+              >
                 {translations.booking.quotation}
               </Link>
             </div>

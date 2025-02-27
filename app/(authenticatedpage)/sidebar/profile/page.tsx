@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
 import {
@@ -46,11 +47,12 @@ function Profile() {
     e.preventDefault();
 
     try {
-      const response = await changePassword({
+      const response = (await changePassword({
         oldPassword,
         newPassword,
-      }).unwrap();
-      toast.success("Password changed successfully!");
+      }).unwrap()) as any;
+      console.log(JSON.stringify(response, null, 2));
+      toast.success(response?.message); // Fixed the toast.success call
       closeModals();
     } catch (error) {
       toast.error("Failed to change password. Please check your old password.");
@@ -62,8 +64,11 @@ function Profile() {
     e.preventDefault();
 
     try {
-      const response = await updateProfile({ fullName, email }).unwrap();
-      toast.success("Profile updated successfully!");
+      const response = (await updateProfile({
+        fullName,
+        email,
+      }).unwrap()) as any;
+      toast.success(response?.message);
       // useGetUserInfoQuery({});
       closeModals();
       window.location.reload();
