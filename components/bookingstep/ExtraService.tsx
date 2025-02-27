@@ -116,7 +116,6 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     } else {
       setSelectedCategories([...selectedCategories, category]);
     }
-    console.log("Selected Categories:", selectedCategories);
   };
 
   const handleServiceProviderSelect = (category: string, provider: ServiceProvider) => {
@@ -148,8 +147,6 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
 
     const isValid = await validateData();
     if (!isValid) return;
-
-    console.log("Selected Data:", selectedData);
     onExtraServiceSelect(selectedData);
   };
 
@@ -260,7 +257,6 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
           .then((data) => {
             if (data.status) {
               setServiceProviders(data.servicesProviders);
-              console.log("Service Providers:", data.servicesProviders);
             }
           })
           .catch((error) => console.error("Error fetching service providers:", error));
@@ -652,7 +648,6 @@ const ExtraServicesPage: React.FC<ExtraServiceProps> = ({
   const { data, error, isLoading } = useGetExtraServiceQuery<any>({});
 
   const handleExtraServiceSelect = (selectedData: SelectedData) => {
-    console.log("Selected Data from Child:", selectedData);
     onExtraServiceSelect(selectedData);
   };
 

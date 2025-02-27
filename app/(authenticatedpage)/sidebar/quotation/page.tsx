@@ -17,7 +17,6 @@ function Quotation() {
   //   const currentLocale = useSelector(
   //     (state: any) => state.language.currentLocale
   //   );
-  console.log(JSON.stringify(data, null, 2));
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure we're on the client side
     const storedTheme = localStorage.getItem("appTheme");

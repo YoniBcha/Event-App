@@ -113,7 +113,6 @@ const VerificationPageContent: React.FC = () => {
   const handleVerify: SubmitHandler<VerificationFormInputs> = async (data) => {
     setLoading(true);
     try {
-      console.log("Verifying user with:", data); // Debugging
       (await verifyUser({
         phoneNumber: data.phoneNumber,
         code: data.code,
@@ -124,8 +123,7 @@ const VerificationPageContent: React.FC = () => {
         )}&fullName=${encodeURIComponent(fullNameFromURL)}`
       );
     } catch (error: any) {
-      console.error("Verification error:", error); // Debugging
-      toast.error(error?.data?.message || "Invalid code. Please try again.");
+      toast.error(error?.data?.message || translations.login.invalidCode,{ autoClose: 2000 });
     } finally {
       setLoading(false);
     }
@@ -133,15 +131,15 @@ const VerificationPageContent: React.FC = () => {
 
   const handleResendCode = async () => {
     if (!phoneNumberFromURL) {
-      toast.error("Phone number is missing.");
+      toast.error(translations.login.phoneMissing, { autoClose: 2000 });
       return;
     }
     setResending(true);
     try {
       await sendVerificationCode({ phoneNumber: phoneNumberFromURL }).unwrap();
-      toast.success("Verification code sent successfully!");
+      toast.success( translations.login.ResendSuccess, { autoClose: 2000 });
     } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to send code. Try again.");
+      toast.error(error?.data?.message || translations.login.ResendFailed, { autoClose: 2000 });
     } finally {
       setResending(false);
     }
@@ -194,6 +192,7 @@ const VerificationPageContent: React.FC = () => {
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

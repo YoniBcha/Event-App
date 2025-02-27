@@ -68,18 +68,15 @@ const RootPage = () => {
 
   const handleBookingData = (data: FormData) => {
     setBookingData(data);
-    console.log("Booking Data:", data);
     setCurrentStep(2);
   };
 
   const handleEventTypeSelect = (eventTypeId: string) => {
     setSelectedEventTypeId(eventTypeId);
-    console.log("Selected Event Type ID:", eventTypeId);
   };
 
   const handleDesignSelect = (designId: string | null) => {
     setSelectedDesignId(designId);
-    console.log("Selected Design ID:", designId);
     if (designId) {
       handleNext();
     }
@@ -87,24 +84,18 @@ const RootPage = () => {
 
   const handlePackageSelect = (packageId: string | null) => {
     setSelectedPackageId(packageId);
-    console.log("Selected Package ID:", packageId);
     if (packageId) {
       handleNext();
     }
   };
 
-  const handlePackageDetailsNext = (packageId: string) => {
-    console.log("Package ID from PackageDetails:", packageId);
+  const handlePackageDetailsNext = () => {
     setCurrentStep(6);
   };
 
   const handleAdditionalDataSubmit = (data: {
     eventPackageAdditions: EventPackageAddition[];
   }) => {
-    console.log(
-      "Received Event Package Additions in Parent:",
-      data.eventPackageAdditions
-    );
     setEventPackageAdditions(data.eventPackageAdditions);
     setCurrentStep(7);
   };
@@ -112,7 +103,6 @@ const RootPage = () => {
   const handleExtraServiceSelect = (selectedService: ExtraServiceData) => {
     setExtraServices((prev) => {
       const updatedServices = [...prev, selectedService];
-      console.log("Updated Extra Services:", updatedServices);
       setCurrentStep(8);
       return updatedServices;
     });
@@ -120,7 +110,6 @@ const RootPage = () => {
 
   const handlePersonalDataSubmit = async (data: PersonalData) => {
     try {
-      console.log("Received Personal Data:", data);
       setPersonalData(data);
 
       const payload = {
@@ -137,7 +126,6 @@ const RootPage = () => {
         personalData: data,
       };
 
-      console.log("Payload to be sent:", payload);
       if (!authenticateUser) {
         router.push(
           `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`

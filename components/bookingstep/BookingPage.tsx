@@ -107,7 +107,6 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
 
   const onSubmit = (data: FormData) => {
     const payload = { ...data };
-    console.log("Form data is:", payload);
     setBookingPageData(payload);
   };
 

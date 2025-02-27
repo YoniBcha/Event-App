@@ -52,6 +52,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           secondMobileRequire: string;
           mobileMust: string;
           secondMobileMust: string;
+          secondMobileNotMatch:string;
         };
       };
     };
@@ -61,17 +62,24 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     (state: RootState) => state.language.translations
   );
   // Yup validation schema
-const validationSchema = Yup.object().shape({
-  fullName: Yup.string().required(`${translations.booking.fullNameRequire}`),
-  mobileNumber: Yup.string()
-    .required(`${translations.booking.mobileRequire}`)
-    .matches(/^[0-9]{10}$/, `${translations.booking.mobileMust}`),
-  secondMobileNumber: Yup.string()
-    .required(`${translations.booking.secondMobileRequire}`)
-    .matches(/^[0-9]{10}$/, `${translations.booking.secondMobileMust}`),
-  favoriteColors: Yup.string().required(`${translations.booking.colorRequire}`),
-  notes: Yup.string().required(`${translations.booking.noteRequire}`),
-});
+  const validationSchema = Yup.object().shape({
+    fullName: Yup.string().required(`${translations.booking.fullNameRequire}`),
+    mobileNumber: Yup.string()
+      .required(`${translations.booking.mobileRequire}`)
+      .matches(/^[0-9]{10}$/, `${translations.booking.mobileMust}`),
+    secondMobileNumber: Yup.string()
+      .required(`${translations.booking.secondMobileRequire}`)
+      .matches(/^[0-9]{10}$/, `${translations.booking.secondMobileMust}`)
+      .test(
+        "not-same-as-mobile",
+        `${translations.booking.secondMobileNotMatch}`,
+        function (value) {
+          return value !== this.parent.mobileNumber;
+        }
+      ),
+    favoriteColors: Yup.string().required(`${translations.booking.colorRequire}`),
+    notes: Yup.string().required(`${translations.booking.noteRequire}`),
+  });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

@@ -6,7 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast,ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSendVerificationCodeMutation } from "@/store/endpoints/apiSlice";
 import Link from "next/link";
@@ -17,19 +17,20 @@ interface FormData {
   phoneNumber: string;
 }
 
-const schema = yup.object({
-  fullName: yup.string().required("Full name is required"),
-  phoneNumber: yup
-    .string()
-    .matches(/^\d{10,15}$/, "Invalid phone number")
-    .required("Phone number is required"),
-});
 
 function SendVerificationCode() {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [sendVerificationCode] = useSendVerificationCodeMutation();
-
+  const translations = useSelector((state: any) => state.language.translations);
+  const schema = yup.object({
+    fullName: yup.string().required(`${translations.login.nameRequire}`),
+    phoneNumber: yup
+      .string()
+      .matches(/^\d{10,15}$/, `${translations.login.phoneMust}`)
+      .required(`${translations.login.phoneRequire}`),
+  });
+  
   const {
     register,
     handleSubmit,
@@ -38,7 +39,7 @@ function SendVerificationCode() {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  const translations = useSelector((state: any) => state.language.translations);
+ 
   const handleSendOTP: SubmitHandler<FormData> = async (data) => {
     setLoading(true);
     try {
@@ -47,7 +48,10 @@ function SendVerificationCode() {
 
       await sendVerificationCode(payload).unwrap();
 
-      toast.success("Verification code sent to your phone!");
+      toast.success(translations.login.verificationSuccess, {
+        autoClose: 2000,
+      }
+      );
 
       router.push(
         `/verifyUser?phoneNumber=${encodeURIComponent(
@@ -55,9 +59,9 @@ function SendVerificationCode() {
         )}&fullName=${encodeURIComponent(data.fullName)}`
       );
     } catch (error: any) {
-      toast.error(
-        error?.data?.message || "Failed to send OTP. Please try again."
-      );
+          toast.error(error?.data?.message || translations.login.verificationFailed, {
+            autoClose: 2000,
+          });
     } finally {
       setLoading(false);
     }
@@ -116,6 +120,7 @@ function SendVerificationCode() {
           </div>
         </Link>
       </div>
+      <ToastContainer />
     </div>
   );
 }
