@@ -270,8 +270,8 @@ function ChoosePackage({
                         className="rounded-t-lg"
                       />
                     </div>
-                    <div className="mt-2 text-sm flex flex-row font-bold text-tertiary text-center">
-                      {eventPackage.packageName} -{" "}
+                    <div className="mt-2 text-sm flex flex-row font-bold text-tertiary items-center text-center">
+                      {eventPackage.packageName} - {eventPackage.packagePrice}
                       <span className="mx-1 pt-[0.2rem]">
                         <Image
                           src="/images/SR.png"
@@ -283,7 +283,6 @@ function ChoosePackage({
                           }
                         />
                       </span>
-                      {eventPackage.packagePrice}
                     </div>
                   </motion.div>
                 </SwiperSlide>
