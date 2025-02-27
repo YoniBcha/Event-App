@@ -133,7 +133,9 @@
     "secondMobileRequire": "رقم الجوال الثاني مطلوب",
     "fullNameRequire": "الاسم الكامل مطلوب",
     "colorRequire": "اللون المفضل مطلوب",
-    "noteRequire": "الملاحظات مطلوبة"
+    "noteRequire": "الملاحظات مطلوبة",
+    "submitting":"جارٍ الإرسال...",
+     "tryBooking":"حدث خطأ أثناء الحجز. يرجى المحاولة مرة أخرى."
   },
   "contact": {
     "contactUs": "اتصل بنا",

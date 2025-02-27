@@ -233,11 +233,11 @@ const MyOrdersContent = () => {
               whileHover="hover"
               whileTap="tap"
             >
-              {isLoading ? "Submitting..." : translations.booking.submitOrder}
+              {isLoading ? translations.booking.submitting : translations.booking.submitOrder}
             </motion.button>
             {isError && (
               <p className="text-red-500 mt-2">
-                Error booking event. Please try again.
+                {translations.booking.tryBooking}
               </p>
             )}
           </div>

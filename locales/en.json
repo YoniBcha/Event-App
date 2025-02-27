@@ -134,7 +134,9 @@
     "secondMobileMust":"Second Mobile Number must be 10 digits",
     "fullNameRequire":"Full name is required",
     "colorRequire":"Favotite Color is required",
-    "noteRequire":"Notes is required"
+    "noteRequire":"Notes is required",
+    "submitting":"Submitting...",
+    "tryBooking":"An error occurred while booking. Please try again."
   },
   "contact":{
     "contactUs": "Contact Us",
