@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-"use client";
-
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
@@ -14,7 +9,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 interface ExtraServiceProps {
   extraServices: any;
   onExtraServiceSelect: (selectedService: any) => void;
-  onBack: () => void; // Add onBack prop for the back button
+  onBack: () => void;
 }
 
 interface CategoryCardProps {
@@ -70,16 +65,14 @@ interface SelectedData {
 interface ParentComponentProps {
   extraServices: any[];
   onExtraServiceSelect: (selectedData: SelectedData) => void;
-  onBack: () => void; // Add onBack prop for the back button
+  onBack: () => void;
 }
 
 const validationSchema = Yup.object().shape({
   extraServices: Yup.array()
     .of(
       Yup.object().shape({
-        servicesProvider_id: Yup.string().required(
-          "Service provider is required"
-        ),
+        servicesProvider_id: Yup.string().required("Service provider is required"),
         packageName: Yup.string().required("Package is required"),
       })
     )
@@ -100,20 +93,19 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
   }>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [currentCategory, setCurrentCategory] = useState<string | null>(null);
-  const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>(
-    []
-  );
-  const [selectedProvider, setSelectedProvider] =
-    useState<ServiceProvider | null>(null);
+  const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
+  const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
   const [packages, setPackages] = useState<Package[]>([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const translations = useSelector((state: any) => state.language.translations);
+  const currentLocale = useSelector((state: any) => state.language.currentLocale);
+
+  // Filter categories with providerCount > 0
+  const filteredCategories = extraServices.filter(service => service.providerCount > 0);
 
   const handleCategorySelect = (category: string) => {
     if (selectedCategories.includes(category)) {
-      setSelectedCategories(
-        selectedCategories.filter((cat) => cat !== category)
-      );
+      setSelectedCategories(selectedCategories.filter((cat) => cat !== category));
       const updatedServiceProviders = { ...selectedServiceProviders };
       const updatedPackages = { ...selectedPackages };
       delete updatedServiceProviders[category];
@@ -126,17 +118,14 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     console.log("Selected Categories:", selectedCategories);
   };
 
-  const handleServiceProviderSelect = (
-    category: string,
-    provider: ServiceProvider
-  ) => {
+  const handleServiceProviderSelect = (category: string, provider: ServiceProvider) => {
     const updatedServiceProviders = { ...selectedServiceProviders };
     if (updatedServiceProviders[category] === provider._id) {
       delete updatedServiceProviders[category];
       setSelectedProvider(null);
       setPackages([]);
     } else {
-      updatedServiceProviders[category] = provider._id; // Store provider ID instead of name
+      updatedServiceProviders[category] = provider._id;
       setSelectedProvider(provider);
       fetchPackages(provider._id);
     }
@@ -144,23 +133,27 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
   };
 
   const handleDone = async () => {
-    const isValid = await validateData();
-    if (!isValid) return;
-
     const selectedData: SelectedData = {
       extraServices: selectedCategories.map((category) => ({
-        servicesProvider_id: selectedServiceProviders[category] || "", // This will now contain the provider ID
+        servicesProvider_id: selectedServiceProviders[category] || "",
         packageName: selectedPackages[category] || "",
       })),
     };
+
+    if (selectedCategories.length === 0) {
+      onExtraServiceSelect({ extraServices: [] });
+      return;
+    }
+
+    const isValid = await validateData();
+    if (!isValid) return;
+
     console.log("Selected Data:", selectedData);
     onExtraServiceSelect(selectedData);
   };
 
   const fetchPackages = (providerId: string) => {
-    fetch(
-      `https://eventapp-back-cr86.onrender.com/api/v1/event/getSingleServiceProvider/${providerId}`
-    )
+    fetch(`https://eventapp-back-cr86.onrender.com/api/v1/event/getSingleServiceProvider/${providerId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status) {
@@ -208,7 +201,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
   const handleNext = async () => {
     if (currentStep === 0) {
       if (selectedCategories.length === 0) {
-        setErrors({ extraServices: "At least one service must be selected" });
+        await handleDone();
         return;
       }
       setCurrentCategory(selectedCategories[0]);
@@ -241,9 +234,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
       }
     }
   };
-  const currentLocale = useSelector(
-    (state: any) => state.language.currentLocale
-  );
+
   const handleBack = () => {
     if (currentStep === 1) {
       setCurrentStep(0);
@@ -253,9 +244,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     }
   };
 
-  const currentCategoryIndex = selectedCategories.indexOf(
-    currentCategory || ""
-  );
+  const currentCategoryIndex = selectedCategories.indexOf(currentCategory || "");
 
   useEffect(() => {
     if (currentCategory) {
@@ -273,55 +262,47 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               console.log("Service Providers:", data.servicesProviders);
             }
           })
-          .catch((error) =>
-            console.error("Error fetching service providers:", error)
-          );
+          .catch((error) => console.error("Error fetching service providers:", error));
       }
     }
   }, [currentCategory, extraServices]);
 
-  if (extraServices.length === 0) {
+  if (filteredCategories.length === 0) {
     return (
-       <motion.div
-                   className="flex flex-col gap-10 h-full justify-center items-center"
-                   initial={{ opacity: 0 }}
-                   animate={{ opacity: 1 }}
-                   exit={{ opacity: 0 }}
-                 >
-             <div className="text-primary font-bold text-xl md:text-3xl text-center">
-               {translations.booking.noServiceAvaliable}
-             </div>
-     
-                  {/* Back Button */}
-             <motion.button
-               onClick={onBack}
-               className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
-               variants={{
-                 hover: {
-                   scale: 1.05,
-                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-     
-                   transition: { duration: 0.2, ease: "easeInOut" },
-                 },
-                 tap: {
-                   scale: 0.95,
-                   boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-                   transition: { duration: 0.1, ease: "easeInOut" },
-                 },
-               }}
-               whileHover="hover"
-               whileTap="tap"
-             >
-               <span className="mr-2">
-                 {currentLocale === "ar" ? (
-                   <FaChevronRight /> // Right arrow for Arabic
-                 ) : (
-                   <FaChevronLeft /> // Left arrow for English
-                 )}
-               </span>
-               <span>{translations.booking.backBtn}</span>
-             </motion.button>
-            </motion.div>
+      <motion.div
+        className="flex flex-col gap-10 h-full justify-center items-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className="text-primary font-bold text-xl md:text-3xl text-center">
+          {translations.booking.noServiceAvaliable}
+        </div>
+
+        <motion.button
+          onClick={onBack}
+          className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          variants={{
+            hover: {
+              scale: 1.05,
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.2, ease: "easeInOut" },
+            },
+            tap: {
+              scale: 0.95,
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.1, ease: "easeInOut" },
+            },
+          }}
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <span className="mr-2">
+            {currentLocale === "ar" ? <FaChevronRight /> : <FaChevronLeft />}
+          </span>
+          <span>{translations.booking.backBtn}</span>
+        </motion.button>
+      </motion.div>
     );
   }
 
@@ -335,7 +316,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
         {currentStep === 0 && (
           <>
             <div className="grid grid-cols-2 md:grid-cols-3 max-[370px]:grid-cols-1 gap-10 mt-10">
-              {extraServices.map((service, index) => (
+              {filteredCategories.map((service, index) => (
                 <motion.div
                   key={index}
                   className="rounded-3xl b"
@@ -343,7 +324,6 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     hover: {
                       scale: 1.05,
                       boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-
                       transition: { duration: 0.2, ease: "easeInOut" },
                     },
                     tap: {
@@ -359,16 +339,14 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     imageSrc={service.image}
                     altText={service.serviceName}
                     category={service.serviceName}
-                    isSelected={selectedCategories.includes(
-                      service.serviceName
-                    )}
+                    isSelected={selectedCategories.includes(service.serviceName)}
                     onClick={() => handleCategorySelect(service.serviceName)}
                   />
                 </motion.div>
               ))}
             </div>
 
-            <div className="flex justify-center  items-center gap-5 mt-5 md:mt-10">
+            <div className="flex justify-center items-center gap-5 mt-5 md:mt-10">
               <motion.button
                 onClick={onBack}
                 className="back-btn hover:bg-secondary"
@@ -388,23 +366,17 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 whileTap="tap"
               >
                 <span className="mr-2">
-                  {currentLocale === "ar" ? (
-                    <FaChevronRight /> // Right arrow for Arabic
-                  ) : (
-                    <FaChevronLeft /> // Left arrow for English
-                  )}
+                  {currentLocale === "ar" ? <FaChevronRight /> : <FaChevronLeft />}
                 </span>
                 <span>{translations.booking.backBtn}</span>
               </motion.button>
               <motion.button
                 onClick={handleNext}
-                // disabled={selectedCategories.length === 0}
-                className="next-btn bg-primary  hover:bg-secondary hover:text-primary"
+                className="next-btn bg-primary hover:bg-secondary hover:text-primary"
                 variants={{
                   hover: {
                     scale: 1.05,
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-
                     transition: { duration: 0.2, ease: "easeInOut" },
                   },
                   tap: {
@@ -418,11 +390,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               >
                 <span>{translations.booking.nextBtn}</span>
                 <span className="ml-3">
-                  {currentLocale === "ar" ? (
-                    <FaChevronLeft /> // Left arrow for Arabic
-                  ) : (
-                    <FaChevronRight /> // Right arrow for English
-                  )}
+                  {currentLocale === "ar" ? <FaChevronLeft /> : <FaChevronRight />}
                 </span>
               </motion.button>
             </div>

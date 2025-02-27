@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useContactUsMutation } from "@/store/endpoints/apiSlice";
-import { toast } from "react-toastify";
+import { toast,ToastContainer } from "react-toastify";
 import React from "react";
 import { useSelector } from "react-redux";
 import Image from "next/image";
@@ -300,6 +300,7 @@ const ContactUs = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

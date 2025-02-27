@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useGetAdditionalEndpointsQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion"; // Import motion and AnimatePresence
+import { motion, AnimatePresence } from "framer-motion";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
@@ -40,9 +40,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [, setHasSelection] = useState<boolean>(false);
-  const currentLocale = useSelector(
-    (state: any) => state.language.currentLocale
-  );
+  const currentLocale = useSelector((state: any) => state.language.currentLocale);
   const queryResult = useGetAdditionalEndpointsQuery({});
 
   const { data, isLoading, isError } = queryResult as {
@@ -85,6 +83,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
     setQuantities(updatedQuantities);
     setHasSelection(Object.values(updatedQuantities).some((qty) => qty > 0));
   };
+
   interface Translations {
     booking: {
       backBtn: string;
@@ -126,7 +125,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           quantity: quantities[key],
         };
       })
-      .filter(Boolean) as EventPackageAddition[];
+      .filter((item) => item !== null && item.quantity > 0) as EventPackageAddition[];
 
     onSubmit({ eventPackageAdditions });
   };
@@ -134,46 +133,44 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   const eventPackageAdditional: Addition[] = data?.packageAdditions ?? [];
   if (!isLoading && eventPackageAdditional.length === 0) {
     return (
-        <motion.div
-                    className="flex flex-col gap-10 h-full justify-center items-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-              <div className="text-primary font-bold text-xl md:text-3xl text-center">
-                {translations.booking.noAdditionAvaliable}
-              </div>
-      
-                   {/* Back Button */}
-              <motion.button
-                onClick={onBack}
-                className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
-                variants={{
-                  hover: {
-                    scale: 1.05,
-                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-      
-                    transition: { duration: 0.2, ease: "easeInOut" },
-                  },
-                  tap: {
-                    scale: 0.95,
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-                    transition: { duration: 0.1, ease: "easeInOut" },
-                  },
-                }}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                <span className="mr-2">
-                  {currentLocale === "ar" ? (
-                    <FaChevronRight /> // Right arrow for Arabic
-                  ) : (
-                    <FaChevronLeft /> // Left arrow for English
-                  )}
-                </span>
-                <span>{translations.booking.backBtn}</span>
-              </motion.button>
-             </motion.div>
+      <motion.div
+        className="flex flex-col gap-10 h-full justify-center items-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className="text-primary font-bold text-xl md:text-3xl text-center">
+          {translations.booking.noAdditionAvaliable}
+        </div>
+
+        <motion.button
+          onClick={onBack}
+          className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          variants={{
+            hover: {
+              scale: 1.05,
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.2, ease: "easeInOut" },
+            },
+            tap: {
+              scale: 0.95,
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.1, ease: "easeInOut" },
+            },
+          }}
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <span className="mr-2">
+            {currentLocale === "ar" ? (
+              <FaChevronRight />
+            ) : (
+              <FaChevronLeft />
+            )}
+          </span>
+          <span>{translations.booking.backBtn}</span>
+        </motion.button>
+      </motion.div>
     );
   }
 
@@ -319,7 +316,6 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           </div>
         )}
         <div className="flex flex-row gap-5 my-2 md:mt-10">
-          {/* Back Button */}
           <motion.button
             onClick={onBack}
             className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
@@ -348,11 +344,9 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
             <span>{translations.booking.backBtn}</span>
           </motion.button>
 
-          {/* Next Button */}
           <motion.button
             onClick={handleNextClick}
-            className={`next-btn flex items-center p-2 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary
-               `}
+            className={`next-btn flex items-center p-2 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary`}
             variants={{
               hover: {
                 scale: 1.05,
