@@ -128,25 +128,27 @@ function PackageDetails({
               </div>
 
               <div className="justify-center relative items-center grid grid-cols-2 gap-3 border backdrop-blur-xl bg-white/70 border-white rounded-lg max-md:grid-cols-3 max-[400px]:grid-cols-2 pt-1 w-full">
-                {packageData.eventPackage.additions.map(
-                  (addition: any, index: any) => (
-                    <motion.div
-                      key={index}
-                      className="flex  w-full items-center gap-1 p-2 "
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <Image
-                        src={addition.additionId.logo}
-                        width={20}
-                        height={20}
-                        alt={addition.additionId.additionName}
-                      />
-                      <div className="text-primary text-sm">
-                        {addition.additionId.additionName}
-                      </div>
-                    </motion.div>
+                {packageData?.eventPackage?.additions?.map((addition: any) =>
+                  addition?.additionId?.typeDetail?.map(
+                    (type: any, idx: any) => (
+                      <motion.div
+                        key={idx}
+                        className="flex w-full items-center gap-1 p-2"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                      >
+                        <Image
+                          src={type?.typePicture}
+                          width={20}
+                          height={20}
+                          alt={type?.typeName}
+                        />
+                        <div className="text-primary text-sm">
+                          {type?.typeName}
+                        </div>
+                      </motion.div>
+                    )
                   )
                 )}
               </div>

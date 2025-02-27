@@ -69,20 +69,25 @@ const LoginContent: React.FC<any> = ({
   const payload = searchParams?.get("payload");
   const translations = useSelector((state: any) => state.language.translations);
 
-  const handleLogin = async (data: { phoneNumber: string; password: string }) => {
+  const handleLogin = async (data: {
+    phoneNumber: string;
+    password: string;
+  }) => {
     setLoading(true);
     try {
       const response = await loginUser({
         phoneNumber: data.phoneNumber,
         password: data.password,
       }).unwrap();
-  
+
       if (response) {
         dispatch(authenticateUser(response.data));
         toast.success(translations.login.loginSuccess, { autoClose: 2000 });
         setTimeout(() => {
           if (payload) {
-            router.push(`/sidebar/booking?payload=${encodeURIComponent(payload)}`);
+            router.push(
+              `/sidebar/booking?payload=${encodeURIComponent(payload)}`
+            );
           } else {
             router.push("/sidebar/my-orders");
           }
@@ -101,11 +106,16 @@ const LoginContent: React.FC<any> = ({
 
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
-      <div className="rounded-lg text-center">
-        <h2 className="text-primary text-3xl font-extrabold">{translations.login.loginButton}</h2>
+      <div className="rounded-lg text-center w-full max-w-md px-4">
+        <h2 className="text-primary text-3xl font-extrabold">
+          {translations.login.loginButton}
+        </h2>
         <p className="text-sm text-primary mb-9">{translations.login.title}</p>
 
-        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
+        <form
+          onSubmit={handleSubmit(handleLogin)}
+          className="flex flex-col w-full"
+        >
           <div className="py-2 px-1 w-full bg-[#EEE7DF] rounded-xl mb-3">
             <input
               type="text"
@@ -135,13 +145,15 @@ const LoginContent: React.FC<any> = ({
             className="w-full bg-primary text-center hover:bg-[#faebdc] hover:text-primary rounded-xl py-2 text-gray-100 cursor-pointer disabled:opacity-50"
             disabled={loading}
           >
-            {loading ?translations.login.loadingButton :translations.login.loginButton}
+            {loading
+              ? translations.login.loadingButton
+              : translations.login.loginButton}
           </button>
         </form>
 
         <Link href={"/SendVerificationCode"}>
           <p className="font-bold text-tertiary py-5">
-          {translations.login.noAccount}
+            {translations.login.noAccount}
             <span className="text-primary hover:text-gray-500 font-bold cursor-pointer">
               {" "}
               {translations.login.signup}

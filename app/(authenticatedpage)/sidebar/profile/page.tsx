@@ -63,12 +63,14 @@ function Profile() {
     e.preventDefault();
 
     try {
-      const response = (await updateProfile({
-        fullName,
-        email,
-      }).unwrap()) as any;
+      // Create payload dynamically
+      const payload: { fullName: string; email?: string } = { fullName };
+      if (email) {
+        payload.email = email;
+      }
+
+      const response = (await updateProfile(payload).unwrap()) as any;
       toast.success(response?.message);
-      // useGetUserInfoQuery({});
       closeModals();
       window.location.reload();
     } catch (error) {
@@ -109,7 +111,6 @@ function Profile() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-2 outline-none rounded-lg border border-gray-300"
                   placeholder="email@example.com"
-                  required
                 />
               </div>
               <div className="flex justify-end gap-2">
@@ -192,12 +193,12 @@ function Profile() {
           <div className="rounded-full h-20 w-20 bg-slate-500 mb-2 sm:mb-0 sm:mr-4 flex items-center justify-center"></div>
         </div>
         <div className="flex flex-col flex-1 w-full">
-          <div className="font-bold">userName</div>
+          <div className="font-bold">Full Name</div>
           <div>
             <input
               type="text"
               className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-secondary"
-              placeholder={data?.data?.fullName || "user Name"}
+              placeholder={data?.data?.fullName || "Full Name"}
             />
           </div>
         </div>
