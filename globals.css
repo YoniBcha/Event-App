@@ -23,7 +23,7 @@
   --primary: #c3927b;
   --secondary: #ffffff;
   --tertiary: #bcbab9;
-  --font-primary: "Distinct Style Sans", sans-serif;
+  --font-primary: "Times New Roman", Times, serif;
 }
 
 @media (prefers-color-scheme: dark) {
