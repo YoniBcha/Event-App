@@ -16,7 +16,7 @@ function Footer() {
         <div>&copy; 2025 FENZO</div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-1 md:gap-4">
+      <div className="flex flex-row max-[400px]:gap-2 max-[300px]:flex-col gap-4">
         <div className="hover:text-gray-500 cursor-pointer">Terms & Conditions</div>
         <div className="hover:text-gray-500 cursor-pointer">Privacy Policy</div>
       </div>
