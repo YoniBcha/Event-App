@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { ReactNode } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
 import { FiSettings, FiUser, FiEdit } from "react-icons/fi";
 
@@ -26,18 +26,14 @@ interface RootLayoutProps {
 
 function Layout({ children }: RootLayoutProps) {
   const pathname = usePathname();
-  const router = useRouter();
+
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+
   const translations = useSelector((state: any) => state.language.translations);
 
-  useEffect(() => {
-    if (!isAuthenticated && pathname !== "/login") {
-      router.push("/login");
-    }
-  }, [isAuthenticated, pathname, router]);
-
+  // If the user is not authenticated, do not render the layout
   if (!isAuthenticated) {
     return null;
   }

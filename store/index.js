@@ -10,13 +10,14 @@ const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer, // RTK Query API slice
     language: languageReducer, // Language reducer
     theme: themeReducer, // Add your theme reducer here
-    ...rootReducer, // Any other reducers
+    ...rootReducer, // Any other reducers (ensure rootReducer is an object)
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
       serializableCheck: false, // Disable serializable check if needed
-    }).concat(apiSlice.middleware); // Add RTK Query middleware
+    }).concat(apiSlice.middleware);
   },
+  devTools: process.env.NODE_ENV !== "production", // Enable DevTools only in development
 });
 
 setupListeners(store.dispatch); // Optional: Enable RTK Query listeners

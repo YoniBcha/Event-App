@@ -86,6 +86,7 @@ const LoginContent: React.FC<any> = ({
           response.data
         );
         dispatch(authenticateUser(response.data));
+        console.log("response.data", response.data);
         toast.success("Login Successful! Welcome back.", { autoClose: 2000 });
         setTimeout(() => {
           if (payload) {

@@ -3,13 +3,16 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useBookEventMutation } from "@/store/endpoints/apiSlice";
 import Modal from "./modal";
 import Image from "next/image";
 import React, { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Cookies from "js-cookie";
+import { useLogoutUserMutation } from "@/store/endpoints/apiSlice";
+import { logoutUser } from "@/store/authReducer"; // Import the logoutUser action
 
 // Define the Payload interface
 interface Payload {
@@ -48,10 +51,15 @@ const MyOrders = () => {
 const MyOrdersContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const dispatch = useDispatch();
   const [payload, setPayload] = useState<Payload | null>(null);
   const [bookEvent, { isLoading, isError }] = useBookEventMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const translations = useSelector((state: any) => state.language.translations);
+
+  // Fetch user info and check for token expiration
+
+  const [logoutUserMutation] = useLogoutUserMutation(); // Initialize the mutation
 
   useEffect(() => {
     let payloadParam = searchParams.get("payload");
@@ -77,9 +85,29 @@ const MyOrdersContent = () => {
     if (payload) {
       try {
         const result = await bookEvent(payload).unwrap();
-        console.log("API Response:", result);
+        console.log("API Response:", JSON.stringify(result, null, 2));
         setIsModalOpen(true);
-      } catch (error) {
+      } catch (error: any) {
+        try {
+          // Call the logout mutation
+          await logoutUserMutation({}).unwrap();
+
+          // Dispatch the logout action to update Redux state
+          dispatch(logoutUser());
+
+          // Clear cookies (if applicable)
+          Cookies.remove("token");
+          Cookies.remove("user-info");
+          Cookies.remove("token_creation_time");
+
+          // Redirect to login page with the payload
+          router.push(
+            `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
+          );
+        } catch (logoutError) {
+          console.error("Logout failed:", logoutError);
+        }
+
         console.error("Error booking event:", error);
       }
     } else {
@@ -105,24 +133,39 @@ const MyOrdersContent = () => {
               </h2>
               <div className="text-tertiary text-base space-y-2">
                 <p>
-                  <span className="font-semibold">{translations.booking.place}:</span> {payload.place}
+                  <span className="font-semibold">
+                    {translations.booking.place}:
+                  </span>{" "}
+                  {payload.place}
                 </p>
                 <p>
-                  <span className="font-semibold">{translations.booking.date}:</span> {payload.date}
+                  <span className="font-semibold">
+                    {translations.booking.date}:
+                  </span>{" "}
+                  {payload.date}
                 </p>
                 <p>
-                  <span className="font-semibold">{translations.booking.city}:</span> {payload.city}
+                  <span className="font-semibold">
+                    {translations.booking.city}:
+                  </span>{" "}
+                  {payload.city}
                 </p>
                 <p>
-                  <span className="font-semibold">{translations.booking.eventType}:</span>{" "}
+                  <span className="font-semibold">
+                    {translations.booking.eventType}:
+                  </span>{" "}
                   {payload.eventType || "Not specified"}
                 </p>
                 <p>
-                  <span className="font-semibold">{translations.booking.eventDesign}:</span>{" "}
+                  <span className="font-semibold">
+                    {translations.booking.eventDesign}:
+                  </span>{" "}
                   {payload.eventDesign || "Not specified"}
                 </p>
                 <p>
-                  <span className="font-semibold">{translations.booking.eventPackage}:</span>{" "}
+                  <span className="font-semibold">
+                    {translations.booking.eventPackage}:
+                  </span>{" "}
                   {payload.eventPackage || "Not specified"}
                 </p>
               </div>
@@ -233,7 +276,9 @@ const MyOrdersContent = () => {
               whileHover="hover"
               whileTap="tap"
             >
-              {isLoading ? translations.booking.submitting : translations.booking.submitOrder}
+              {isLoading
+                ? translations.booking.submitting
+                : translations.booking.submitOrder}
             </motion.button>
             {isError && (
               <p className="text-red-500 mt-2">

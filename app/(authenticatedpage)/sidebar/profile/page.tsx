@@ -1,20 +1,67 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useChangePasswordMutation,
   useGetUserInfoQuery,
+  useLogoutUserMutation,
   useUpdateProfileMutation,
 } from "@/store/endpoints/apiSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { logoutUser } from "@/store/authReducer";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+// import { RootState } from "@reduxjs/toolkit/query";
 function Profile() {
   const { data } = useGetUserInfoQuery<any>({});
   const [changePassword, { isLoading: isChangingPassword }] =
     useChangePasswordMutation();
   const [updateProfile, { isLoading: isUpdatingProfile }] =
     useUpdateProfileMutation();
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { data: datas, error } = useGetUserInfoQuery<any>({});
+  const [logoutUserMutation] = useLogoutUserMutation(); // Initialize the mutation
+  // const translations = useSelector(
+  //   (state: RootState) => state.language.translations
+  // );
+
+  useEffect(() => {
+    // Define an async function to handle the logout logic
+    const handleLogout = async () => {
+      // Check if the response contains an error or specific messages
+      if (
+        datas?.message === "Session expired" ||
+        datas?.message === "User Unauthorized" ||
+        error?.data?.message === "Session expired" ||
+        error?.data?.message === "User Unauthorized"
+      ) {
+        try {
+          // Call the logout mutation
+          await logoutUserMutation({}).unwrap();
+
+          // Dispatch the logout action to update Redux state
+          dispatch(logoutUser());
+
+          // Clear cookies
+          Cookies.remove("token");
+          Cookies.remove("user-info");
+          Cookies.remove("token_creation_time");
+
+          // Redirect to login page with payload
+
+          router.push("/login");
+        } catch (error) {
+          console.error("Logout failed:", error);
+        }
+      }
+    };
+
+    // Call the async function
+    handleLogout();
+  }, [datas?.message, error, logoutUserMutation, dispatch, router]);
 
   const [isUpdateProfileModalOpen, setIsUpdateProfileModalOpen] =
     useState(false);

@@ -1,21 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-import { useForm, Controller, Resolver } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import { motion, AnimatePresence } from "framer-motion";
 import { FaCalendarAlt, FaCity, FaMapMarkerAlt } from "react-icons/fa";
 
-const saudiCities = [
-  "Jeddah",
-  "Makkah",
-  "Riyadh"
-];
+const saudiCities = ["Jeddah", "Makkah", "Riyadh"];
 
 interface FormData {
   city: string;
@@ -61,22 +58,24 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
+
   const validationSchema = yup.object({
     city: yup.string().required(`${translations.booking.cityRequire}`),
     place: yup.string().required(`${translations.booking.placeRequire}`),
     date: yup
       .date()
-      .nullable()
-      .transform((value, originalValue) => (originalValue === "" ? null : value))
-      .required(`${translations.booking.dateRequire}`),
+      .nullable() // Allow null values
+      .required(`${translations.booking.dateRequire}`), // Still enforce required validation
   });
+
   const {
     handleSubmit,
     formState: { errors },
     setValue,
+    trigger,
     control,
   } = useForm<FormData>({
-    resolver: yupResolver(validationSchema) as Resolver<FormData>,
+    resolver: yupResolver(validationSchema) as any, // No type error now
   });
 
   const handleDateChange = (date: Date | null) => {
@@ -85,22 +84,23 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
     }
     setSelectedDate(date);
     setValue("date", date);
+    trigger("date"); // Revalidate the date field
     setIsModalOpen(false);
   };
 
   const handleCityChange = (city: string) => {
     setSelectedCity(city);
-    setValue("city", city);
+    setValue("city", city, { shouldValidate: true }); // Update form value and trigger validation
     setShowCityDropdown(false);
   };
 
   const handlePlaceChange = (place: string) => {
     if (selectedPlace === place) {
       setSelectedPlace(null); // Unselect if clicked twice
-      setValue("place", "");
+      setValue("place", "", { shouldValidate: true }); // Update form value and trigger validation
     } else {
       setSelectedPlace(place);
-      setValue("place", place);
+      setValue("place", place, { shouldValidate: true }); // Update form value and trigger validation
     }
     setShowPlaceDropdown(false);
   };

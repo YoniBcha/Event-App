@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BookingPage from "@/components/bookingstep/BookingPage";
 import EventType from "@/components/bookingstep/EventType";
 import ChooseDesigns from "@/components/bookingstep/ChooseDesigns";
@@ -13,6 +13,11 @@ import ChooseAdditional from "@/components/bookingstep/ChooseAdditional";
 import ExtraService from "@/components/bookingstep/ExtraService";
 import PersonalDataComonents from "@/components/bookingstep/PersonalData";
 import { motion, AnimatePresence } from "framer-motion"; // Import framer-motion
+import {
+  useGetUserInfoQuery,
+  useLogoutUserMutation,
+} from "@/store/endpoints/apiSlice";
+import { logoutUser } from "@/store/authReducer";
 interface FormData {
   city: string;
   place: string;
@@ -40,13 +45,16 @@ interface PersonalData {
 }
 
 const RootPage = () => {
-  const router = useRouter();
   const [extraServices, setExtraServices] = useState<ExtraServiceData[]>([]);
   const [personalData, setPersonalData] = useState<PersonalData | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [logoutUserMutation] = useLogoutUserMutation();
+  const { data: userInfo, error: userInfoError } = useGetUserInfoQuery<any>({});
   const [bookingData, setBookingData] = useState<FormData>({
     city: "",
     place: "",
@@ -80,17 +88,14 @@ const RootPage = () => {
   const handleDesignSelect = (designId: string | null) => {
     setSelectedDesignId(designId);
     console.log("Selected Design ID:", designId);
-    if (designId) {
-      handleNext();
-    }
+    handleNext();
   };
 
   const handlePackageSelect = (packageId: string | null) => {
     setSelectedPackageId(packageId);
     console.log("Selected Package ID:", packageId);
-    if (packageId) {
-      handleNext();
-    }
+
+    handleNext();
   };
 
   const handlePackageDetailsNext = (packageId: string) => {
@@ -138,16 +143,38 @@ const RootPage = () => {
       };
 
       console.log("Payload to be sent:", payload);
-      if (!authenticateUser) {
+
+      // Store the payload in session storage
+      sessionStorage.setItem("payload", JSON.stringify(payload));
+
+      // Check if the user is authenticated
+      if (
+        userInfo?.message === "Session expired" ||
+        userInfo?.message === "User Unauthorized" ||
+        userInfoError?.data?.message === "Session expired" ||
+        userInfoError?.data?.message === "User Unauthorized"
+      ) {
+        // Logout the user
+        await logoutUserMutation({}).unwrap();
+        // Dispatch the logout action to update Redux state
+        dispatch(logoutUser());
+        // Redirect to login page with the payload
         router.push(
           `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
         );
       } else {
-        await router.push(
-          `/sidebar/booking?payload=${encodeURIComponent(
-            JSON.stringify(payload)
-          )}`
-        );
+        // Proceed with the original logic if the user is authenticated
+        if (!authenticateUser) {
+          router.push(
+            `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
+          );
+        } else {
+          await router.push(
+            `/sidebar/booking?payload=${encodeURIComponent(
+              JSON.stringify(payload)
+            )}`
+          );
+        }
       }
     } catch (error) {
       console.error("Navigation error:", error);

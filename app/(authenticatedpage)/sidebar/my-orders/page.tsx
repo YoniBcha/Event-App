@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
@@ -5,7 +6,9 @@ import { useGetSelfBookedEventsQuery } from "@/store/endpoints/apiSlice";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import Link from "next/link";
-
+// import { logoutUser } from "@/store/authReducer";
+// import Cookies from "js-cookie";
+// import { usePathname, useRouter } from "next/navigation";
 interface Event {
   _id: string;
   personalData: {
@@ -41,6 +44,17 @@ interface Event {
     packageName: string;
   }[];
 }
+interface AuthState {
+  isAuthenticated: boolean;
+  user: any;
+  token: string | null;
+  notifications: any[];
+  csrf_token: string;
+}
+
+interface RootState {
+  auth: AuthState;
+}
 
 interface ApiResponse {
   bookedEvents: Event[];
@@ -65,9 +79,59 @@ interface RootState {
 
 const BookedEvents = () => {
   const { data, isLoading } = useGetSelfBookedEventsQuery({});
+  // const dispatch = useDispatch();
+  // const router = useRouter();
+  // const { data: datas, error } = useGetUserInfoQuery<any>({});
+  // const [logoutUserMutation] = useLogoutUserMutation(); // Initialize the mutation
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
+  // const pathname = usePathname();
+
+  // const isAuthenticated = useSelector(
+  //   (state: RootState) => state.auth.isAuthenticated
+  // );
+
+  // useEffect(() => {
+  //   if (!isAuthenticated && pathname !== "/login") {
+  //     router.push("/login");
+  //   }
+  // }, [isAuthenticated, pathname, router]);
+  // useEffect(() => {
+  //   // Define an async function to handle the logout logic
+  //   const handleLogout = async () => {
+  //     // Check if the response contains an error or specific messages
+  //     if (
+  //       datas?.message === "Session expired" ||
+  //       datas?.message === "User Unauthorized" ||
+  //       error?.data?.message === "Session expired" ||
+  //       error?.data?.message === "User Unauthorized"
+  //     ) {
+  //       try {
+  //         // Call the logout mutation
+  //         await logoutUserMutation({}).unwrap();
+
+  //         // Dispatch the logout action to update Redux state
+  //         dispatch(logoutUser());
+
+  //         // Clear cookies
+  //         Cookies.remove("token");
+  //         Cookies.remove("user-info");
+  //         Cookies.remove("token_creation_time");
+
+  //         // Redirect to login page with payload
+
+  //         router.push("/login");
+  //       } catch (error) {
+  //         console.error("Logout failed:", error);
+  //       }
+  //     }
+  //   };
+
+  //   // Call the async function
+  //   handleLogout();
+  // }, [datas?.message, error, logoutUserMutation, dispatch, router]);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
