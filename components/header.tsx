@@ -199,7 +199,13 @@ function Header() {
 
         {/* Centered FENZO Logo */}
         <div className="flex-grow flex justify-center">
-          <Image src={logo} alt="Logo" width={100} height={50} />
+          {logo.length < 1 ? (
+            <div className="flex items-center justify-center text-primary text-lg font-bold">
+              Logo
+            </div>
+          ) : (
+            <Image src={logo} alt="Logo" width={100} height={50} />
+          )}
         </div>
 
         {/* Right Side Icons (Language Toggle and Avatar) */}

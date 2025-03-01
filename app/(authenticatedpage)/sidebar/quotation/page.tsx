@@ -221,11 +221,11 @@ function Quotation() {
               <div className="flex justify-between mt-6">
                 <div>
                   <p className="font-semibold">Client Signature</p>
-                  <div className="mt-2 border-b-2 border-dashed border-gray-500 w-48"></div>
+                  <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
                 </div>
                 <div>
                   <p className="font-semibold">Fenzo-Events</p>
-                  <div className="mt-2 border-b-2 border-dashed border-gray-500 w-48"></div>
+                  <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
                 </div>
               </div>
             </div>
