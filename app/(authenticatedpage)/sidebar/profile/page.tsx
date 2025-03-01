@@ -98,7 +98,6 @@ function Profile() {
         oldPassword,
         newPassword,
       }).unwrap()) as any;
-      console.log(JSON.stringify(response, null, 2));
       toast.success(response?.message); // Fixed the toast.success call
       closeModals();
     } catch (error) {

@@ -47,7 +47,7 @@ const EnterPasswordForm = () => {
   const handleRegister = async (data: { password: any }) => {
     if (!phoneNumber || !fullName) {
       toast.error(
-        "Missing required information. Please go back and try again."
+        translations.login.registrationError,{autoClose: 2000,}
       );
       return;
     }
@@ -62,14 +62,15 @@ const EnterPasswordForm = () => {
 
       if (response) {
         dispatch(authenticateUser(response));
-        toast.success("Registration successful!");
+        toast.success(translations.login.registrationSuccess, {autoClose: 2000,});
         router.push("/login");
       } else {
         throw new Error("Registration failed");
       }
-    } catch (error) {
-      console.error("Registration error:", error);
-    } finally {
+    } catch (error: any) {
+          toast.error(error?.data?.message || translations.login.registrationFailed, {
+            autoClose: 2000,
+          });}finally {
       setLoading(false);
     }
   };
@@ -119,7 +120,7 @@ const EnterPasswordForm = () => {
             className="w-full bg-primary text-white hover:bg-[#faebdc] hover:text-primary py-2 rounded-md font-semibold cursor-pointer"
             disabled={loading}
           >
-            {loading ? translations.login.createAccount : translations.login.register}
+            {loading ? translations.login.registering : translations.login.register}
           </button>
         </form>
       </div>

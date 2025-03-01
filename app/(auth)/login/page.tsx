@@ -81,13 +81,8 @@ const LoginContent: React.FC<any> = ({
       }).unwrap();
 
       if (response) {
-        console.log(
-          "Dispatching authenticateUser with payload:",
-          response.data
-        );
         dispatch(authenticateUser(response.data));
-        console.log("response.data", response.data);
-        toast.success("Login Successful! Welcome back.", { autoClose: 2000 });
+        toast.success(translations.login.loginSuccess, { autoClose: 2000 });
         setTimeout(() => {
           if (payload) {
             router.push(
@@ -98,10 +93,10 @@ const LoginContent: React.FC<any> = ({
           }
         }, 1000);
       } else {
-        throw new Error("Invalid phone number or password");
+        throw new Error(translations.login.invalidLogin);
       }
     } catch (error: any) {
-      toast.error(error?.data?.message || "Login Failed. Please try again.", {
+      toast.error(error?.data?.message || translations.login.loginFailed, {
         autoClose: 2000,
       });
     } finally {
