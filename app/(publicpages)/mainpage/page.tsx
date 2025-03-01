@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import BookingPage from "@/components/bookingstep/BookingPage";
@@ -83,17 +83,27 @@ const RootPage = () => {
     setSelectedEventTypeId(eventTypeId);
   };
 
+  // Add useEffect to handle next step after state updates
+  useEffect(() => {
+    if (selectedDesignId) {
+      handleNext();
+    }
+  }, [selectedDesignId]); // Trigger when selectedDesignId changes
+
+  useEffect(() => {
+    if (selectedPackageId) {
+      handleNext();
+    }
+  }, [selectedPackageId]); // Trigger when selectedPackageId changes
+
   const handleDesignSelect = (designId: string | null) => {
-    setSelectedDesignId(designId);
+    setSelectedDesignId(designId); // Update state
     console.log("Selected Design ID:", designId);
-    handleNext();
   };
 
   const handlePackageSelect = (packageId: string | null) => {
-    setSelectedPackageId(packageId);
+    setSelectedPackageId(packageId); // Update state
     console.log("Selected Package ID:", packageId);
-
-    handleNext();
   };
 
   const handlePackageDetailsNext = () => {
