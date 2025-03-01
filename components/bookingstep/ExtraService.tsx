@@ -73,7 +73,9 @@ const validationSchema = Yup.object().shape({
   extraServices: Yup.array()
     .of(
       Yup.object().shape({
-        servicesProvider_id: Yup.string().required("Service provider is required"),
+        servicesProvider_id: Yup.string().required(
+          "Service provider is required"
+        ),
         packageName: Yup.string().required("Package is required"),
       })
     )
@@ -94,19 +96,28 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
   }>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [currentCategory, setCurrentCategory] = useState<string | null>(null);
-  const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
-  const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
+  const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>(
+    []
+  );
+  const [selectedProvider, setSelectedProvider] =
+    useState<ServiceProvider | null>(null);
   const [packages, setPackages] = useState<Package[]>([]);
-  const [ ,setErrors] = useState<{ [key: string]: string }>({});
+  const [, setErrors] = useState<{ [key: string]: string }>({});
   const translations = useSelector((state: any) => state.language.translations);
-  const currentLocale = useSelector((state: any) => state.language.currentLocale);
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
 
   // Filter categories with providerCount > 0
-  const filteredCategories = extraServices.filter(service => service.providerCount > 0);
+  const filteredCategories = extraServices.filter(
+    (service) => service.providerCount > 0
+  );
 
   const handleCategorySelect = (category: string) => {
     if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((cat) => cat !== category));
+      setSelectedCategories(
+        selectedCategories.filter((cat) => cat !== category)
+      );
       const updatedServiceProviders = { ...selectedServiceProviders };
       const updatedPackages = { ...selectedPackages };
       delete updatedServiceProviders[category];
@@ -118,7 +129,10 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     }
   };
 
-  const handleServiceProviderSelect = (category: string, provider: ServiceProvider) => {
+  const handleServiceProviderSelect = (
+    category: string,
+    provider: ServiceProvider
+  ) => {
     const updatedServiceProviders = { ...selectedServiceProviders };
     if (updatedServiceProviders[category] === provider._id) {
       delete updatedServiceProviders[category];
@@ -151,7 +165,9 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
   };
 
   const fetchPackages = (providerId: string) => {
-    fetch(`https://eventapp-back-cr86.onrender.com/api/v1/event/getSingleServiceProvider/${providerId}`)
+    fetch(
+      `https://eventapp-back-cr86.onrender.com/api/v1/event/getSingleServiceProvider/${providerId}`
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.status) {
@@ -242,7 +258,9 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
     }
   };
 
-  const currentCategoryIndex = selectedCategories.indexOf(currentCategory || "");
+  const currentCategoryIndex = selectedCategories.indexOf(
+    currentCategory || ""
+  );
 
   useEffect(() => {
     if (currentCategory) {
@@ -259,7 +277,9 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               setServiceProviders(data.servicesProviders);
             }
           })
-          .catch((error) => console.error("Error fetching service providers:", error));
+          .catch((error) =>
+            console.error("Error fetching service providers:", error)
+          );
       }
     }
   }, [currentCategory, extraServices]);
@@ -336,7 +356,9 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     imageSrc={service.image}
                     altText={service.serviceName}
                     category={service.serviceName}
-                    isSelected={selectedCategories.includes(service.serviceName)}
+                    isSelected={selectedCategories.includes(
+                      service.serviceName
+                    )}
                     onClick={() => handleCategorySelect(service.serviceName)}
                   />
                 </motion.div>
@@ -363,7 +385,11 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                 whileTap="tap"
               >
                 <span className="mr-2">
-                  {currentLocale === "ar" ? <FaChevronRight /> : <FaChevronLeft />}
+                  {currentLocale === "ar" ? (
+                    <FaChevronRight />
+                  ) : (
+                    <FaChevronLeft />
+                  )}
                 </span>
                 <span>{translations.booking.backBtn}</span>
               </motion.button>
@@ -387,7 +413,11 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
               >
                 <span>{translations.booking.nextBtn}</span>
                 <span className="ml-3">
-                  {currentLocale === "ar" ? <FaChevronLeft /> : <FaChevronRight />}
+                  {currentLocale === "ar" ? (
+                    <FaChevronLeft />
+                  ) : (
+                    <FaChevronRight />
+                  )}
                 </span>
               </motion.button>
             </div>
@@ -507,7 +537,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
           selectedServiceProviders[currentCategory] && (
             <div className="flex flex-col gap-5 justify-center items-center">
               <h2 className="text-center mt-2 text-primary font-bold text-lg">
-               {translations.booking.selectPackage} {currentCategory}
+                {translations.booking.selectPackage} {currentCategory}
               </h2>
               {selectedProvider && (
                 <div className="flex flex-col md:flex-row gap-5 mx-2">
@@ -529,7 +559,7 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                     {packages.map((pkg, index) => (
                       <motion.div
                         key={index}
-                        className={`flex max-sm:flex-col hover:bg-secondary items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
+                        className={`flex max-lg:flex-col hover:bg-secondary items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
                           selectedPackages[currentCategory] === pkg.packageName
                             ? "border-b-2 border-primary !border-b-primary"
                             : ""
@@ -553,15 +583,13 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                         whileTap="tap"
                       >
                         {/* Image Container */}
-                        <div className="relative h-20 w-24 sm:h-24 sm:w-28 lg:h-32 lg:w-36 flex-shrink-0">
-                          {" "}
-                          {/* Responsive width and height */}
+                        <div className="relative h-20 w-24 sm:h-24 sm:w-28 lg:h-32 lg:w-36 flex-shrink-0 overflow-hidden">
                           <Image
                             src={pkg.packageLogo}
                             alt={pkg.packageName}
                             width={1000} // Default width for larger screens
                             height={1000} // Default height for larger screens
-                            className="rounded-2xl object-scale-down" // Ensure the image covers the area
+                            className="rounded-2xl object-contain w-full h-full" // Ensure the image fits inside the container
                           />
                         </div>
                         {/* Text Content */}
