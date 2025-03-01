@@ -9,7 +9,7 @@ export function middleware(request) {
   // Calculate token expiration time (5 minutes from creation)
   const tokenCreationTime = request.cookies.get("token_creation_time")?.value;
   const tokenExpirationTime = tokenCreationTime
-    ? Number(tokenCreationTime) + 5 * 60 * 1000 // 5 minutes in milliseconds
+    ? Number(tokenCreationTime) + 1 * 24 * 60 * 60 * 1000 // 1 day in milliseconds
     : null;
   const currentTime = new Date().getTime();
 

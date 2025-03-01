@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import BookingPage from "@/components/bookingstep/BookingPage";
@@ -84,26 +84,17 @@ const RootPage = () => {
   };
 
   // Add useEffect to handle next step after state updates
-  useEffect(() => {
-    if (selectedDesignId) {
-      handleNext();
-    }
-  }, [selectedDesignId]); // Trigger when selectedDesignId changes
-
-  useEffect(() => {
-    if (selectedPackageId) {
-      handleNext();
-    }
-  }, [selectedPackageId]); // Trigger when selectedPackageId changes
 
   const handleDesignSelect = (designId: string | null) => {
     setSelectedDesignId(designId); // Update state
     console.log("Selected Design ID:", designId);
+    handleNext(); // Call handleNext directly
   };
 
   const handlePackageSelect = (packageId: string | null) => {
     setSelectedPackageId(packageId); // Update state
     console.log("Selected Package ID:", packageId);
+    handleNext(); // Call handleNext directly
   };
 
   const handlePackageDetailsNext = () => {
@@ -204,6 +195,17 @@ const RootPage = () => {
     }
   };
 
+  // useEffect(() => {
+  //   if (selectedDesignId) {
+  //     handleNext();
+  //   }
+  // }, [selectedDesignId]); // Trigger when selectedDesignId changes
+
+  // useEffect(() => {
+  //   if (selectedPackageId) {
+  //     handleNext();
+  //   }
+  // }, [selectedPackageId]); // Trigger when selectedPackageId changes
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);

@@ -34,8 +34,8 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload;
       state.token = action.payload.token;
-      Cookies.set("user-info", JSON.stringify(state.user), { expires: 1/8 });
-      Cookies.set("token", state.token, { expires: 1/8 });
+      Cookies.set("user-info", JSON.stringify(state.user), { expires: 1 });
+      Cookies.set("token", state.token, { expires: 1 });
     },
     logoutUser: (state) => {
       state.isAuthenticated = false;
@@ -46,12 +46,12 @@ export const authSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload;
-      Cookies.set("user-info", JSON.stringify(state.user), { expires: 1/8 });
+      Cookies.set("user-info", JSON.stringify(state.user), { expires: 1 });
     },
     socialAuthenticate: (state, action) => {
       state.isAuthenticated = true;
       state.token = action.payload;
-      Cookies.set("token", state.token, { expires: 1/8 });
+      Cookies.set("token", state.token, { expires: 1 });
     },
     setCSRFToken: (state, action) => {
       state.csrf_token = action.payload;
