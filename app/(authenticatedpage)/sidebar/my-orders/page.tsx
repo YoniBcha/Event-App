@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { Dropdown } from "primereact/dropdown";
+import PaymentModal from "@/components/payInfo";
 import {
   FaSortAmountDown,
   FaFilter,
@@ -71,6 +72,7 @@ interface RootState {
         city: string;
         quotation: string;
         date: string;
+        pay: string;
       };
     };
   };
@@ -81,6 +83,7 @@ const BookedEvents = () => {
   const [filterOption, setFilterOption] = useState<string>(""); // Default filter is empty string for "All"
   const [currentPage, setCurrentPage] = useState(1); // Current page
   const [pageSize] = useState(5); // Number of items per page
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
@@ -122,6 +125,13 @@ const BookedEvents = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     refetch();
+  };
+  const handlePaymentClick = () => {
+    setIsPaymentModalOpen(true); // Open the modal
+  };
+
+  const handleCloseModal = () => {
+    setIsPaymentModalOpen(false); // Close the modal
   };
 
   // const handlePageSizeChange = (size: number) => {
@@ -262,10 +272,18 @@ const BookedEvents = () => {
             </div>
           </div>
           <div className="flex flex-wrap md:flex-col gap-3 border-l-4 max-md:border-none border-primary md:pl-5 pl-1">
-            <div className="bg-primary w-40 p-1 max-md:h-fit text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-lg">
+            <div className="bg-primary w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-lg">
               {event.orderStatus}
             </div>
-            <div className="bg-[#dedede] p-1 max-md:h-fit text-lg text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg">
+            {event.orderStatus === "completed" && (
+              <button
+                className="bg-green-500 w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg hover:bg-green-600 text-center md:py-2 md:rounded-xl md:text-lg"
+                onClick={handlePaymentClick}
+              >
+                {translations.booking.pay}
+              </button>
+            )}
+            <div className="bg-[#dedede] p-1 max-md:h-fit text-lg max-sm:text-sm text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg">
               <Link
                 href={{
                   pathname: "/sidebar/quotation",
@@ -335,6 +353,12 @@ const BookedEvents = () => {
           </button>
         </div>
       </div>
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={handleCloseModal}
+        name="Sample Name"
+        accountNumber="1904637294923"
+      />
     </div>
   );
 };

@@ -128,11 +128,15 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
           <div className="flex justify-center items-center md:justify-end h-full w-full">
             <div className="flex flex-col justify-center items-center h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl relative">
               <Image
-                src={"/images/booking-image.jpg"}
-                alt="About Image"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-2xl"
+              src={
+                typeof window !== "undefined" && window.innerWidth >= 1024
+                ? "/images/booking2.jpg"
+                : "/images/booking-image.jpg"
+              }
+              alt="About Image"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-2xl"
               />
             </div>
           </div>
