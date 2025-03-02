@@ -11,7 +11,7 @@ import "swiper/css";
 
 import "swiper/css/pagination";
 import "./swiper-custom.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface Package {
@@ -55,8 +55,8 @@ function ChoosePackage({
     place,
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [selectedImage, setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
@@ -67,10 +67,10 @@ function ChoosePackage({
   const translations = useSelector((state: any) => state.language.translations);
 
   // Framer Motion Variants
-  const slideVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
+  // const slideVariants = {
+  //   hidden: { opacity: 0, y: 20 },
+  //   visible: { opacity: 1, y: 0 },
+  // };
 
   const cardVariants = {
     hover: {
@@ -98,19 +98,19 @@ function ChoosePackage({
     return () => window.removeEventListener("resize", handleResize);
   }, [isGridView]);
 
-  const handleImageClick = (image: string) => {
-    setSelectedImage(image);
-    setIsModalOpen(true);
-  };
+  // const handleImageClick = (image: string) => {
+  //   setSelectedImage(image);
+  //   setIsModalOpen(true);
+  // };
 
   const handleCardClick = (packageId: string) => {
     setSelectedPackageId(packageId);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedImage("");
-  };
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  //   setSelectedImage("");
+  // };
 
   // const toggleView = () => {
   //   setIsGridView(!isGridView);
@@ -198,7 +198,7 @@ function ChoosePackage({
                     className="relative w-full h-48"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleImageClick(eventPackage.image[0]);
+                      // handleImageClick(eventPackage.image[0]);
                     }}
                   >
                     <Image
@@ -259,7 +259,7 @@ function ChoosePackage({
                       className="relative w-full h-64"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleImageClick(eventPackage.image[0]);
+                        // handleImageClick(eventPackage.image[0]);
                       }}
                     >
                       <Image
@@ -297,7 +297,7 @@ function ChoosePackage({
       )}
 
       {/* Modal for Enlarged Image */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {isModalOpen && (
           <motion.div
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50"
@@ -325,7 +325,7 @@ function ChoosePackage({
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       <div className="flex justify-center gap-5 my-5">
         {/* Back Button */}

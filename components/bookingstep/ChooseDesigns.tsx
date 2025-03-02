@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import { useGetChooseDesignsQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -38,8 +38,8 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     isLoading: boolean;
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
+  // const [setIsModalOpen] = useState(false);
+  // const [setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
   const currentLocale = useSelector(
@@ -59,19 +59,19 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, [isGridView]);
 
-  const handleImageClick = (image: string) => {
-    setSelectedImage(image);
-    setIsModalOpen(true);
-  };
+  // const handleImageClick = (image: string) => {
+  //   setSelectedImage(image);
+  //   setIsModalOpen(true);
+  // };
 
   const handleCardClick = (designId: string) => {
     setSelectedDesignId(designId);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedImage("");
-  };
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  //   setSelectedImage("");
+  // };
 
   // const toggleView = () => {
   //   setIsGridView(!isGridView);
@@ -184,7 +184,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                     className="relative w-full h-48"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleImageClick(design.image);
+                      // handleImageClick(design.image);
                     }}
                   >
                     <Image
@@ -278,8 +278,8 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
       )}
 
       {/* Modal for Enlarged Image */}
-      <AnimatePresence>
-        {isModalOpen && (
+      {/* <AnimatePresence>
+        {&& (
           <motion.div
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50"
             onClick={closeModal}
@@ -306,7 +306,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       <div className="flex justify-center gap-5 my-5">
         {/* Back Button */}
