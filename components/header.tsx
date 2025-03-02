@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLogoutUserMutation } from "@/store/endpoints/apiSlice"; // Adjust the import path
 import { logoutUser } from "@/store/authReducer"; // Import the logoutUser action
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
@@ -19,7 +19,7 @@ function Header() {
   const avatarDropdownRef = useRef<HTMLDivElement>(null);
   const [currentLocale, setCurrentLocale] = useState("en");
   const [logo, setLogo] = useState("/path/to/default/logo.png");
-
+  const pathname = usePathname(); // Get the current path
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure we're on the client side
     const storedTheme = localStorage.getItem("appTheme");
@@ -166,31 +166,51 @@ function Header() {
         {/* Center Navigation Links (Hidden on Small Screens) */}
         <div className="hidden [@media(min-width:1000px)]:flex flex-row gap-5 items-center text-primary">
           <Link
-            className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
+            className={`hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg ${
+              pathname === "/"
+                ? "font-bold border-b-2 border-primary text-primary"
+                : ""
+            }`}
             href={"/"}
           >
             {translations.sidebar.home}
           </Link>
           <Link
-            className="hover:text-gray-500  hover:-translate-y-1 duration-200 text-lg"
+            className={`hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg ${
+              pathname === "/designs"
+                ? "font-bold border-b-2 border-primary text-primary"
+                : ""
+            }`}
             href={"/designs"}
           >
             {translations.sidebar.designs}
           </Link>
           <Link
-            className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
+            className={`hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg ${
+              pathname === "/about"
+                ? "font-bold border-b-2 border-primary text-primary"
+                : ""
+            }`}
             href={"/about"}
           >
             {translations.sidebar.about}
           </Link>
           <Link
-            className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
+            className={`hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg ${
+              pathname === "/contact"
+                ? "font-bold border-b-2 border-primary text-primary"
+                : ""
+            }`}
             href={"/contact"}
           >
             {translations.sidebar.contact}
           </Link>
           <Link
-            className="hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg"
+            className={`hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg ${
+              pathname === "/mainpage"
+                ? "font-bold border-b-2 border-primary text-primary"
+                : ""
+            }`}
             href={"/mainpage"}
           >
             {translations.sidebar.booking}
@@ -348,7 +368,13 @@ function Header() {
                 <Link href="/" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
                     <FaHome className="text-xl" />
-                    <div className="hover:text-gray-500">
+                    <div
+                      className={`hover:text-gray-500 ${
+                        pathname === "/"
+                          ? "font-bold border-b-2 border-primary text-primary"
+                          : ""
+                      }`}
+                    >
                       {translations.sidebar.home}
                     </div>
                   </div>
@@ -356,7 +382,13 @@ function Header() {
                 <Link href="/designs" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
                     <FaFileAlt className="text-xl" />
-                    <div className="hover:text-gray-500">
+                    <div
+                      className={`hover:text-gray-500 ${
+                        pathname === "/designs"
+                          ? "font-bold border-b-2 border-primary text-primary"
+                          : ""
+                      }`}
+                    >
                       {translations.sidebar.designs}
                     </div>
                   </div>
@@ -364,7 +396,13 @@ function Header() {
                 <Link href="/about" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
                     <FaUsers className="text-xl" />
-                    <div className="hover:text-gray-500">
+                    <div
+                      className={`hover:text-gray-500 ${
+                        pathname === "/about"
+                          ? "font-bold border-b-2 border-primary text-primary"
+                          : ""
+                      }`}
+                    >
                       {translations.sidebar.about}
                     </div>
                   </div>
@@ -372,7 +410,13 @@ function Header() {
                 <Link href="/contact" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
                     <FaComments className="text-xl" />
-                    <div className="hover:text-gray-500">
+                    <div
+                      className={`hover:text-gray-500 ${
+                        pathname === "/contact"
+                          ? "font-bold border-b-2 border-primary text-primary"
+                          : ""
+                      }`}
+                    >
                       {translations.sidebar.contact}
                     </div>
                   </div>
@@ -380,7 +424,13 @@ function Header() {
                 <Link href="/mainpage" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
                     <FaBook className="text-xl" />
-                    <div className="hover:text-gray-500">
+                    <div
+                      className={`hover:text-gray-500 ${
+                        pathname === "/mainpage"
+                          ? "font-bold border-b-2 border-primary text-primary"
+                          : ""
+                      }`}
+                    >
                       {translations.sidebar.booking}
                     </div>
                   </div>
