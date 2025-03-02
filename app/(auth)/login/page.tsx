@@ -151,7 +151,13 @@ const LoginContent: React.FC<any> = ({
           </button>
         </form>
 
-        <Link href={"/SendVerificationCode"}>
+        <Link
+          href={
+            payload
+              ? `/SendVerificationCode?payload=${encodeURIComponent(payload)}`
+              : "/SendVerificationCode"
+          }
+        >
           <p className="font-bold text-tertiary py-5">
             {translations.login.noAccount}
             <span className="text-primary hover:text-gray-500 font-bold cursor-pointer">

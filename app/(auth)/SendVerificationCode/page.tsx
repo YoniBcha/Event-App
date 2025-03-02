@@ -5,8 +5,8 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useRouter } from "next/navigation";
-import { toast,ToastContainer } from "react-toastify";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSendVerificationCodeMutation } from "@/store/endpoints/apiSlice";
 import Link from "next/link";
@@ -17,12 +17,14 @@ interface FormData {
   phoneNumber: string;
 }
 
-
 function SendVerificationCode() {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const payload = searchParams?.get("payload"); // Get the payload parameter
   const [sendVerificationCode] = useSendVerificationCodeMutation();
   const translations = useSelector((state: any) => state.language.translations);
+
   const schema = yup.object({
     fullName: yup.string().required(`${translations.login.nameRequire}`),
     phoneNumber: yup
@@ -30,7 +32,7 @@ function SendVerificationCode() {
       .matches(/^\d{10,15}$/, `${translations.login.phoneMust}`)
       .required(`${translations.login.phoneRequire}`),
   });
-  
+
   const {
     register,
     handleSubmit,
@@ -39,29 +41,34 @@ function SendVerificationCode() {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
- 
+
   const handleSendOTP: SubmitHandler<FormData> = async (data) => {
     setLoading(true);
     try {
       // Send only the phoneNumber in the payload
-      const payload = { phoneNumber: data.phoneNumber };
+      const requestPayload = { phoneNumber: data.phoneNumber };
 
-      await sendVerificationCode(payload).unwrap();
+      await sendVerificationCode(requestPayload).unwrap();
 
       toast.success(translations.login.verificationSuccess, {
         autoClose: 2000,
-      }
-      );
+      });
 
+      // Navigate to verifyUser route with payload if it exists
       router.push(
         `/verifyUser?phoneNumber=${encodeURIComponent(
           data.phoneNumber
-        )}&fullName=${encodeURIComponent(data.fullName)}`
+        )}&fullName=${encodeURIComponent(data.fullName)}${
+          payload ? `&payload=${encodeURIComponent(payload)}` : ""
+        }`
       );
     } catch (error: any) {
-          toast.error(error?.data?.message || translations.login.verificationFailed, {
-            autoClose: 2000,
-          });
+      toast.error(
+        error?.data?.message || translations.login.verificationFailed,
+        {
+          autoClose: 2000,
+        }
+      );
     } finally {
       setLoading(false);
     }
@@ -71,10 +78,10 @@ function SendVerificationCode() {
     <div className="flex items-center justify-center h-[75vh] w-full">
       <div className="rounded-lg text-center">
         <div className="text-primary text-3xl font-extrabold">
-        {translations.login.verfyTitle}
+          {translations.login.verfyTitle}
         </div>
         <div className="text-sm text-primary mb-9">
-        {translations.login.verfySubtitle}
+          {translations.login.verfySubtitle}
         </div>
 
         <form onSubmit={handleSubmit(handleSendOTP)} className="flex flex-col">
@@ -115,8 +122,10 @@ function SendVerificationCode() {
 
         <Link href={"/login"}>
           <div className="font-bold text-tertiary py-5">
-          {translations.login.hasAccount}{" "}
-            <span className="text-primary font-bold hover:text-gray-500 cursor-pointer">{translations.login.signIn}</span>
+            {translations.login.hasAccount}{" "}
+            <span className="text-primary font-bold hover:text-gray-500 cursor-pointer">
+              {translations.login.signIn}
+            </span>
           </div>
         </Link>
       </div>

@@ -35,8 +35,6 @@ interface VerificationFormInputs {
   code: string;
 }
 
-
-
 const VerificationPage: React.FC = () => {
   return (
     <>
@@ -61,6 +59,8 @@ const VerificationPageContent: React.FC = () => {
   const [digits, setDigits] = useState<string[]>(Array(4).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(4).fill(null));
   const translations = useSelector((state: any) => state.language.translations);
+  const payload = searchParams?.get("payload"); // Get the payload parameter
+
   const schema = yup.object({
     phoneNumber: yup
       .string()
@@ -71,6 +71,7 @@ const VerificationPageContent: React.FC = () => {
       .matches(/^\d{4}$/, `${translations.login.codeMust}`)
       .required(`${translations.login.codeRequire}`),
   });
+
   const {
     handleSubmit,
     setValue,
@@ -102,7 +103,6 @@ const VerificationPageContent: React.FC = () => {
     setValue("code", newDigits.join(""));
   };
 
-  // Use `useCallback` to create a stable ref callback
   const setInputRef = useCallback(
     (index: number) => (el: HTMLInputElement | null) => {
       inputRefs.current[index] = el;
@@ -117,13 +117,17 @@ const VerificationPageContent: React.FC = () => {
         phoneNumber: data.phoneNumber,
         code: data.code,
       }).unwrap()) as VerifyUserResponse;
-      router.push(
-        `/enterPassword?phoneNumber=${encodeURIComponent(
-          data.phoneNumber
-        )}&fullName=${encodeURIComponent(fullNameFromURL)}`
-      );
+
+      // Redirect to login with payload if it exists
+      if (payload) {
+        router.push(`/login?payload=${encodeURIComponent(payload)}`);
+      } else {
+        router.push("/login");
+      }
     } catch (error: any) {
-      toast.error(error?.data?.message || translations.login.invalidCode,{ autoClose: 2000 });
+      toast.error(error?.data?.message || translations.login.invalidCode, {
+        autoClose: 2000,
+      });
     } finally {
       setLoading(false);
     }
@@ -137,9 +141,11 @@ const VerificationPageContent: React.FC = () => {
     setResending(true);
     try {
       await sendVerificationCode({ phoneNumber: phoneNumberFromURL }).unwrap();
-      toast.success( translations.login.ResendSuccess, { autoClose: 2000 });
+      toast.success(translations.login.ResendSuccess, { autoClose: 2000 });
     } catch (error: any) {
-      toast.error(error?.data?.message || translations.login.ResendFailed, { autoClose: 2000 });
+      toast.error(error?.data?.message || translations.login.ResendFailed, {
+        autoClose: 2000,
+      });
     } finally {
       setResending(false);
     }
@@ -148,9 +154,11 @@ const VerificationPageContent: React.FC = () => {
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
       <div className="rounded-lg text-center">
-        <h2 className="text-2xl font-bold text-primary">{translations.login.verifyAccount}</h2>
+        <h2 className="text-2xl font-bold text-primary">
+          {translations.login.verifyAccount}
+        </h2>
         <p className="text-gray-600 mt-2 mb-6">
-        {translations.login.verifyAccountSubtitel}
+          {translations.login.verifyAccountSubtitel}
         </p>
 
         <form
@@ -159,15 +167,15 @@ const VerificationPageContent: React.FC = () => {
         >
           <div className="flex gap-3 space-x-2 justify-center">
             {digits.map((digit, index) => (
-             <input
-             key={index}
-             type="number"
-             maxLength={1}
-             value={digit}
-             onChange={(e) => handleDigitChange(index, e.target.value)}
-             ref={setInputRef(index)}
-             className="border border-primary rounded-lg p-3 text-center text-xl tracking-widest outline-none focus:ring-2 focus:ring-primary w-12 appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-           />
+              <input
+                key={index}
+                type="number"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleDigitChange(index, e.target.value)}
+                ref={setInputRef(index)}
+                className="border border-primary rounded-lg p-3 text-center text-xl tracking-widest outline-none focus:ring-2 focus:ring-primary w-12 appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
             ))}
           </div>
           {errors.code && (
@@ -188,7 +196,9 @@ const VerificationPageContent: React.FC = () => {
             onClick={handleResendCode}
             disabled={resending}
           >
-            {resending ? translations.login.resending : translations.login.resendCode}
+            {resending
+              ? translations.login.resending
+              : translations.login.resendCode}
           </button>
         </form>
       </div>
