@@ -55,7 +55,7 @@ const VerificationPageContent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [resending, setResending] = useState<boolean>(false);
   const [phoneNumberFromURL, setPhoneNumberFromURL] = useState<string>("");
-  const [, setFullNameFromURL] = useState<string>("");
+  const [fullNameFromURL, setFullNameFromURL] = useState<string>("");
   const [digits, setDigits] = useState<string[]>(Array(4).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(4).fill(null));
   const translations = useSelector((state: any) => state.language.translations);
@@ -118,12 +118,14 @@ const VerificationPageContent: React.FC = () => {
         code: data.code,
       }).unwrap()) as VerifyUserResponse;
 
-      // Redirect to login with payload if it exists
-      if (payload) {
-        router.push(`/login?payload=${encodeURIComponent(payload)}`);
-      } else {
-        router.push("/login");
-      }
+      // Redirect to enterPassword with payload if it exists
+      router.push(
+        `/enterPassword?phoneNumber=${encodeURIComponent(
+          data.phoneNumber
+        )}&fullName=${encodeURIComponent(fullNameFromURL)}${
+          payload ? `&payload=${encodeURIComponent(payload)}` : ""
+        }`
+      );
     } catch (error: any) {
       toast.error(error?.data?.message || translations.login.invalidCode, {
         autoClose: 2000,

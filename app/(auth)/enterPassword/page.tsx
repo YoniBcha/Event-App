@@ -9,13 +9,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRegisterUserMutation } from "@/store/endpoints/apiSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { authenticateUser } from "@/store/authReducer";
-
-
+import { useSelector } from "react-redux";
+// import { authenticateUser } from "@/store/authReducer";
 
 const EnterPasswordForm = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -24,7 +22,9 @@ const EnterPasswordForm = () => {
 
   const phoneNumber = searchParams.get("phoneNumber") || "";
   const fullName = searchParams.get("fullName") || "";
+  const payload = searchParams.get("payload"); // Get the payload parameter
   const translations = useSelector((state: any) => state.language.translations);
+
   const schema = yup.object({
     password: yup
       .string()
@@ -35,6 +35,7 @@ const EnterPasswordForm = () => {
       .oneOf([yup.ref("password")], `${translations.login.passwordMatch}`)
       .required(`${translations.login.confirmRequire}`),
   });
+
   const {
     register,
     handleSubmit,
@@ -46,9 +47,7 @@ const EnterPasswordForm = () => {
 
   const handleRegister = async (data: { password: any }) => {
     if (!phoneNumber || !fullName) {
-      toast.error(
-        translations.login.registrationError,{autoClose: 2000,}
-      );
+      toast.error(translations.login.registrationError, { autoClose: 2000 });
       return;
     }
 
@@ -61,16 +60,28 @@ const EnterPasswordForm = () => {
       }).unwrap();
 
       if (response) {
-        dispatch(authenticateUser(response));
-        toast.success(translations.login.registrationSuccess, {autoClose: 2000,});
-        router.push("/login");
+        // dispatch(authenticateUser(response));
+        toast.success(translations.login.registrationSuccess, {
+          autoClose: 2000,
+        });
+
+        // Redirect to login with payload if it exists
+        if (payload) {
+          router.push(`/login?payload=${encodeURIComponent(payload)}`);
+        } else {
+          router.push("/login");
+        }
       } else {
         throw new Error("Registration failed");
       }
     } catch (error: any) {
-          toast.error(error?.data?.message || translations.login.registrationFailed, {
-            autoClose: 2000,
-          });}finally {
+      toast.error(
+        error?.data?.message || translations.login.registrationFailed,
+        {
+          autoClose: 2000,
+        }
+      );
+    } finally {
       setLoading(false);
     }
   };
@@ -78,8 +89,8 @@ const EnterPasswordForm = () => {
   return (
     <div className="flex items-center justify-center h-[75vh] w-full">
       <div className="rounded-lg text-center">
-      <h2 className="text-2xl font-bold text-primary">
-        {translations.login.createPassword}
+        <h2 className="text-2xl font-bold text-primary">
+          {translations.login.createPassword}
         </h2>
         <p className="text-tertiary text-center mt-2 mb-6">
           {translations.login.createPasswordSubtitle}
@@ -120,7 +131,9 @@ const EnterPasswordForm = () => {
             className="w-full bg-primary text-white hover:bg-[#faebdc] hover:text-primary py-2 rounded-md font-semibold cursor-pointer"
             disabled={loading}
           >
-            {loading ? translations.login.registering : translations.login.register}
+            {loading
+              ? translations.login.registering
+              : translations.login.register}
           </button>
         </form>
       </div>
