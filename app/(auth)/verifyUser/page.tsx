@@ -55,7 +55,7 @@ const VerificationPageContent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [resending, setResending] = useState<boolean>(false);
   const [phoneNumberFromURL, setPhoneNumberFromURL] = useState<string>("");
-  const [fullNameFromURL, setFullNameFromURL] = useState<string>("");
+  const [, setFullNameFromURL] = useState<string>("");
   const [digits, setDigits] = useState<string[]>(Array(4).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(4).fill(null));
   const translations = useSelector((state: any) => state.language.translations);

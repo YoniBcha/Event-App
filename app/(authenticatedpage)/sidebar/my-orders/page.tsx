@@ -80,7 +80,7 @@ const BookedEvents = () => {
   const [sortOption, setSortOption] = useState<string>("newest");
   const [filterOption, setFilterOption] = useState<string>(""); // Default filter is empty string for "All"
   const [currentPage, setCurrentPage] = useState(1); // Current page
-  const [pageSize, setPageSize] = useState(5); // Number of items per page
+  const [pageSize] = useState(5); // Number of items per page
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
@@ -124,11 +124,11 @@ const BookedEvents = () => {
     refetch();
   };
 
-  const handlePageSizeChange = (size: number) => {
-    setPageSize(size);
-    setCurrentPage(1); // Reset to the first page when page size changes
-    refetch();
-  };
+  // const handlePageSizeChange = (size: number) => {
+  //   setPageSize(size);
+  //   setCurrentPage(1); // Reset to the first page when page size changes
+  //   refetch();
+  // };
 
   if (isLoading) {
     return (

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -18,9 +18,17 @@ interface FormData {
 }
 
 function SendVerificationCode() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SendVerificationCodeContent />
+    </Suspense>
+  );
+}
+
+const SendVerificationCodeContent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams(); // Now inside the Suspense boundary
   const payload = searchParams?.get("payload"); // Get the payload parameter
   const [sendVerificationCode] = useSendVerificationCodeMutation();
   const translations = useSelector((state: any) => state.language.translations);
@@ -132,6 +140,6 @@ function SendVerificationCode() {
       <ToastContainer />
     </div>
   );
-}
+};
 
 export default SendVerificationCode;
