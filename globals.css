@@ -245,3 +245,67 @@ body::after {
   background-color: var(--primary) !important; /* Use your primary color */
   color: white !important; /* Adjust text color for better contrast */
 }
+
+.p-dropdown:hover,
+.p-dropdown.p-focus {
+  border-color: var(--primary) !important; /* Primary color */
+}
+/* Custom Dropdown Styles */
+
+/* Dropdown Container */
+/* Custom Dropdown Styles */
+
+/* Dropdown Container */
+.p-dropdown {
+  border: 2px solid var(--secondary); /* Default border color */
+  border-radius: 0.375rem; /* Rounded corners */
+  background-color: #ffffff; /* Background color */
+  transition: border-color 0.2s, box-shadow 0.2s; /* Smooth transition */
+  padding: 0.5rem 1rem; /* Padding for the header */
+}
+
+/* Dropdown Hover State */
+.p-dropdown:hover {
+  border-color: var(--primary); /* Use primary color for hover border */
+}
+
+/* Dropdown Focus State */
+.p-dropdown.p-focus {
+  border-color: var(--primary); /* Use primary color for focus border */
+  box-shadow: 0 0 0 2px var(--secondary); /* Focus ring */
+}
+
+/* Dropdown Panel (Options List) */
+.p-dropdown-panel {
+  border: 1px solid var(--secondary); /* Border color */
+  border-radius: 0.375rem; /* Rounded corners */
+  background-color: #ffffff; /* Background color */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow */
+}
+
+/* Dropdown Items */
+.p-dropdown-item {
+  padding: 0.5rem 1rem; /* Padding */
+  color: #374151; /* Text color */
+}
+
+/* Dropdown Item Hover State */
+.p-dropdown-item:hover {
+  background-color: #f3f4f6; /* Background color on hover */
+}
+
+/* Selected Dropdown Item */
+.p-dropdown-item.p-highlight {
+  background-color: var(--primary); /* Use primary color for selected item */
+  color: #ffffff; /* Text color for selected item */
+}
+
+/* Dropdown Arrow Icon */
+.p-dropdown-trigger-icon {
+  color: var(--secondary); /* Use secondary color for arrow */
+}
+
+/* Dropdown Arrow Icon Hover State */
+.p-dropdown:hover .p-dropdown-trigger-icon {
+  color: var(--primary); /* Use primary color for arrow on hover */
+}

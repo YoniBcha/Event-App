@@ -6,8 +6,13 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { Dropdown } from "primereact/dropdown";
-import { FaSortAmountDown, FaFilter } from "react-icons/fa";
-import "primereact/resources/themes/lara-light-indigo/theme.css"; // Choose a theme
+import {
+  FaSortAmountDown,
+  FaFilter,
+  FaChevronRight,
+  FaChevronLeft,
+} from "react-icons/fa";
+// import "primereact/resources/themes/lara-light-indigo/theme.css"; // Choose a theme
 import "primereact/resources/primereact.min.css"; // Core CSS
 import "primeicons/primeicons.css"; // Icons
 
@@ -50,6 +55,7 @@ interface Event {
 
 interface ApiResponse {
   bookedEvents: Event[];
+  total: number; // Total number of events
   status: boolean;
   message: string;
 }
@@ -73,10 +79,16 @@ interface RootState {
 const BookedEvents = () => {
   const [sortOption, setSortOption] = useState<string>("newest");
   const [filterOption, setFilterOption] = useState<string>(""); // Default filter is empty string for "All"
-
+  const [currentPage, setCurrentPage] = useState(1); // Current page
+  const [pageSize, setPageSize] = useState(5); // Number of items per page
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const { data, isLoading, refetch } = useGetSelfBookedEventsQuery({
     status: filterOption === "all" ? "" : filterOption, // Pass empty string for "All"
     sort: sortOption === "newest" ? undefined : "oldest",
+    page: currentPage, // Pass current page to the API
+    size: pageSize, // Pass page size to the API
   });
 
   const translations = useSelector(
@@ -97,11 +109,24 @@ const BookedEvents = () => {
 
   const handleSortChange = (e: { value: string }) => {
     setSortOption(e.value);
+    setCurrentPage(1); // Reset to the first page when sorting changes
     refetch();
   };
 
   const handleFilterChange = (e: { value: string }) => {
     setFilterOption(e.value);
+    setCurrentPage(1); // Reset to the first page when filtering changes
+    refetch();
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    refetch();
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1); // Reset to the first page when page size changes
     refetch();
   };
 
@@ -159,6 +184,8 @@ const BookedEvents = () => {
     );
   }
 
+  const totalPages = Math.ceil(response.total / pageSize); // Calculate total pages
+
   return (
     <div className="container mx-auto">
       <h1 className="text-2xl font-bold mb-5 text-primary">
@@ -171,7 +198,7 @@ const BookedEvents = () => {
           onChange={handleSortChange}
           optionLabel="label"
           placeholder="Sort By"
-          className="w-36 p-dropdown-sm hover:bg-secondary" // Decreased width to 36 (w-36)
+          className="w-36 p-dropdown-sm hover:bg-secondary hover:border-primary" // Decreased width to 36 (w-36)
           itemTemplate={(option) => (
             <div className="flex items-center gap-2 w-full rounded-md">
               {option.icon}
@@ -258,6 +285,56 @@ const BookedEvents = () => {
           </div>
         </div>
       ))}
+      {/* Pagination Controls */}
+      <div className="flex w-full lg:w-[80%] justify-between items-center mt-8">
+        <div className=" font-bold text-primary">
+          Showing {(currentPage - 1) * pageSize + 1} to{" "}
+          {Math.min(currentPage * pageSize, response.total)} of {response.total}{" "}
+          results
+        </div>
+        <div className="flex  items-center gap-2">
+          <button
+            className="p-2 flex items-center bg-primary text-white rounded-md disabled:opacity-50"
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            {currentLocale === "ar" ? (
+              <FaChevronRight className="inline-block" /> // Flip icon for RTL
+            ) : (
+              <FaChevronLeft className="inline-block" /> // Default icon for LTR
+            )}
+          </button>
+
+          {/* Page Numbers */}
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                className={`px-3 py-1 rounded-md text-sm ${
+                  currentPage === index + 1
+                    ? "bg-primary text-white" // Active page
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300" // Inactive page
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+
+          <button
+            className="p-2 bg-primary flex items-center text-white rounded-md disabled:opacity-50"
+            disabled={currentPage >= totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            {currentLocale === "ar" ? (
+              <FaChevronLeft className="inline-block" /> // Flip icon for RTL
+            ) : (
+              <FaChevronRight className="inline-block" /> // Default icon for LTR
+            )}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

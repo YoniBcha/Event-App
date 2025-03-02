@@ -329,7 +329,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   </AnimatePresence>
                 </div>
               </div>
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center py-4 items-center">
                 <motion.button
                   type="submit"
                   className="flex items-center justify-center bg-primary text-white hover:bg-secondary hover:border hover:text-primary rounded-full px-10 py-3"
