@@ -161,7 +161,7 @@ const VerificationPageContent: React.FC = () => {
             {digits.map((digit, index) => (
              <input
              key={index}
-             type="number"
+             type="tel"
              maxLength={1}
              value={digit}
              onChange={(e) => handleDigitChange(index, e.target.value)}

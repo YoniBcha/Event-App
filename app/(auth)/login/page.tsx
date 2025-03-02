@@ -118,7 +118,7 @@ const LoginContent: React.FC<any> = ({
         >
           <div className="py-2 px-1 w-full bg-[#EEE7DF] rounded-xl mb-3">
             <input
-              type="text"
+              type="tel"
               placeholder={translations.login.mobilePlaceholder}
               {...register("phoneNumber")}
               className="bg-transparent outline-none px-3 text-tertiary w-full"

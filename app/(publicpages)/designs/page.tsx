@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Grid, Pagination } from "swiper/modules";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
@@ -91,9 +89,6 @@ function ChooseDesigns() {
     setSelectedImage("");
   };
 
-  const toggleView = () => {
-    setIsGridView(!isGridView);
-  };
 
   // const handleBackClick = () => {
   //   onBackClick?.(); // Use optional chaining to avoid errors if onBackClick is undefined
@@ -138,76 +133,13 @@ function ChooseDesigns() {
        {translations.sidebar.designs}
       </div>
 
-      <div className="flex justify-end items-center w-full">
-        <button
-          onClick={toggleView}
-          className="md:hidden p-2 rounded-lg text-gray-100 cursor-pointer"
-        >
-          {isGridView ? (
-            <Image
-              src={"/zip/menu.svg"}
-              width={32}
-              height={32}
-              alt="List View"
-            />
-          ) : (
-            <Image
-              src={"/zip/dashboard-square-01.svg"}
-              width={32}
-              height={32}
-              alt="Grid View"
-            />
-          )}
-        </button>
-      </div>
-
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
         </div>
-      ) : isGridView ? (
-        // Grid View
-        <div className="w-full px-4">
-          <Swiper
-            slidesPerView={1}
-            spaceBetween={10}
-            pagination={{ type: "fraction", el: ".swiper-pagination" }}
-            modules={[Grid, Pagination]}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
-            }}
-            className="mySwiper"
-          >
-            {designs.map((design: Design, index: number) => (
-              <SwiperSlide key={design._id || index}>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="flex flex-col hover:bg-secondary items-center cursor-pointer p-2 rounded-lg border border-gray-300 transition-all duration-300"
-                >
-                  <div
-                    className="relative w-full h-64"
-                    onClick={() => handleImageClick(design.image)}
-                  >
-                    <Image
-                      src={design.image}
-                      alt={design.eventDesign}
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-t-lg"
-                    />
-                  </div>
-                  <p className="mt-2 text-sm font-bold text-tertiary text-center">
-                    {design.eventDesign}
-                  </p>
-                </motion.div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
       ) : (
         // List View
-        <div className="flex flex-col gap-4 w-full px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full px-4">
           {designs.map((design: Design, index: number) => (
             <motion.div
               key={design._id || index}
