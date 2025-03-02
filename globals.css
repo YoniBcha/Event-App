@@ -234,3 +234,14 @@ body::after {
   cursor: pointer;
   background-color: var(--secondary); /* Darker color when hovered */
 }
+
+/* Override PrimeReact dropdown item hover color */
+.p-dropdown-items-wrapper .p-dropdown-item:hover {
+  background-color: var(--primary) !important; /* Use your primary color */
+  color: white !important; /* Adjust text color for better contrast */
+}
+/* Override PrimeReact active dropdown item color */
+.p-dropdown-items-wrapper .p-dropdown-item.p-highlight {
+  background-color: var(--primary) !important; /* Use your primary color */
+  color: white !important; /* Adjust text color for better contrast */
+}

@@ -1,7 +1,7 @@
 export const getSelfBookedEventsEndpoints = (builder) => ({
   getSelfBookedEvents: builder.query({
-    query: () => ({
-      url: "event/getSelfBookedEvents",
+    query: ({ status, sort }) => ({
+      url: `event/getSelfBookedEvents?orderStatus=${status}&sortOrder=${sort}`,
       method: "GET",
     }),
   }),

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiSlice as api } from "@/store/endpoints/apiSlice";
 
-const THEME_STORAGE_KEY = "appTheme";
+const THEME_STORAGE_KEY = "fenzoAppTheme";
 
 const loadThemeFromLocalStorage = () => {
   if (typeof window === "undefined") return null;
