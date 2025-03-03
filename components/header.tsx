@@ -22,7 +22,7 @@ function Header() {
   const pathname = usePathname(); // Get the current path
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure we're on the client side
-    const storedTheme = localStorage.getItem("appTheme");
+    const storedTheme = localStorage.getItem("fenzoAppTheme");
     if (storedTheme) {
       try {
         const { logo } = JSON.parse(storedTheme);
