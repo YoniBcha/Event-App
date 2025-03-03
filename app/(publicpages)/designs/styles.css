@@ -1,0 +1,91 @@
+/* Styles for the main Swiper in the modal */
+
+.modal-main-swiper {
+  height: 80%;
+  width: 100%;
+}
+
+.modal-main-swiper .swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-main-swiper .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Adjust as needed */
+}
+
+/* Styles for the thumbs Swiper in the modal */
+.modal-thumbs-swiper {
+  height: 20%;
+  box-sizing: border-box;
+  padding: 10px 0;
+}
+
+.modal-thumbs-swiper .swiper-slide {
+  width: 25%;
+  height: 100%;
+  opacity: 0.4;
+}
+
+.modal-thumbs-swiper .swiper-slide-thumb-active {
+  opacity: 1;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.modal-thumbs-swiper .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Custom styles for Swiper navigation buttons */
+.modal-main-swiper .swiper-button-next,
+.modal-main-swiper .swiper-button-prev {
+  background-color: var(--primary); /* Background color */
+  color: white; /* Arrow color */
+  width: 40px; /* Button width */
+  height: 40px; /* Button height */
+  border-radius: 50%; /* Rounded corners */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  cursor: pointer;
+}
+
+.modal-main-swiper .swiper-button-next::after,
+.modal-main-swiper .swiper-button-prev::after {
+  font-size: 20px; /* Arrow size */
+}
+
+.modal-main-swiper .swiper-button-next:hover,
+.modal-main-swiper .swiper-button-prev:hover {
+  background-color: var(--secondary); /* Hover background color */
+}
+
+/* Hide navigation buttons on mobile */
+@media (max-width: 639px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    transform: translateY(-50%) scale(0.75); /* Reduce size by 75% */
+    padding: 8px; /* Adjust padding for smaller size */
+  }
+
+  .swiper-button-next svg,
+  .swiper-button-prev svg {
+    width: 16px; /* Adjust icon size */
+    height: 16px;
+  }
+}

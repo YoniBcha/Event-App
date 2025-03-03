@@ -9,7 +9,6 @@ import { useGetChooseDesignsQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
-import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 

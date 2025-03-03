@@ -1,74 +1,57 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react"; // Add useRef
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import "swiper/css";
-import "swiper/css/grid";
-import "swiper/css/pagination";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
+import { IoIosArrowBack, IoIosArrowForward, IoMdClose } from "react-icons/io";
 
-interface Design {
-  _id: string;
-  eventDesign: string;
-  image: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
+import "swiper/css";
+import "./styles.css";
+import { useGetSingleDesignGalleryQuery } from "@/store/endpoints/apiSlice";
+import { Swiper as SwiperType } from "swiper"; // Import Swiper type
+
 interface RootState {
   language: {
     translations: {
       sidebar: {
-        "designs": string;
+        designs: string;
       };
     };
   };
 }
 
-// interface ChooseDesignsProps {
-//   id?: string; // Make id optional
-//   onNext?: (selectedDesignId: string | null) => void; // Make onNext optional
-//   onBackClick?: () => void; // Make onBackClick optional
-// }
-
 function ChooseDesigns() {
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
-  const [designs, setDesigns] = useState<Design[]>([]);
+  const [designs, setDesigns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
-  const [isGridView, setIsGridView] = useState(true);
+  const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 414 && !isGridView) {
-        setIsGridView(true); // Switch to grid view on larger screens
-      }
+  const prevButtonRef = useRef<HTMLButtonElement>(null); // Ref for prev button
+  const nextButtonRef = useRef<HTMLButtonElement>(null); // Ref for next button
 
-      if (window.innerWidth < 323 && isGridView) {
-        setIsGridView(false);
-      }
-    };
+  const { data: galleryData, isLoading: isGalleryLoading } =
+    useGetSingleDesignGalleryQuery<any>(selectedDesignId, {
+      skip: !selectedDesignId, // Skip the query if no design ID is selected
+    });
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isGridView]);
   useEffect(() => {
     const fetchDesigns = async () => {
       try {
         const response = await fetch(
-          "https://eventapp-back-cr86.onrender.com/api/v1/event/getEventDesigns"
+          "https://eventapp-back-cr86.onrender.com/api/v1/event/getDesignsGallery"
         );
-        if (!response.ok) {
-          throw new Error("Failed to fetch designs");
-        }
+        if (!response.ok) throw new Error("Failed to fetch designs");
+
         const data = await response.json();
-        setDesigns(data.eventDesigns);
+        setDesigns(data.data);
       } catch (error) {
         setError(error);
       } finally {
@@ -79,58 +62,37 @@ function ChooseDesigns() {
     fetchDesigns();
   }, []);
 
-  const handleImageClick = (image: string) => {
-    setSelectedImage(image);
+  // Reload the page once on the first visit
+  useEffect(() => {
+    const hasReloaded = localStorage.getItem("hasReloaded");
+    if (!hasReloaded) {
+      window.location.reload();
+      localStorage.setItem("hasReloaded", "true");
+    }
+    return () => {
+      // Clean up by removing the flag when the component unmounts
+      localStorage.removeItem("hasReloaded");
+    };
+  }, []);
+
+  const handleImageClick = (id: string) => {
+    console.log("Selected Design ID:", id);
+    setSelectedDesignId(id);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedImage("");
+    setSelectedDesignId(null);
+    setThumbsSwiper(null); // Reset thumbs swiper when modal closes
   };
-
-
-  // const handleBackClick = () => {
-  //   onBackClick?.(); // Use optional chaining to avoid errors if onBackClick is undefined
-  // };
 
   if (error) return <p>Failed to load designs</p>;
 
-  // Check if there are no designs
-  if (!isLoading && designs.length === 0) {
-    return (
-      <div className="flex flex-col gap-10  justify-center items-center">
-        <div className="text-primary font-bold text-xl md:text-3xl text-center">
-          No Designs Available
-        </div>
-        <button
-          // onClick={handleBackClick}
-          className="flex items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
-        >
-          <span className="mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 12 24"
-            >
-              <path
-                fill="#c2937b"
-                fillRule="evenodd"
-                d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
-              />
-            </svg>
-          </span>
-          <span>Back</span>
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-col gap-4 ">
+    <div className="flex flex-col gap-4">
       <div className="text-primary font-bold text-xl md:text-3xl pt-5 text-center">
-       {translations.sidebar.designs}
+        {translations.sidebar.designs}
       </div>
 
       {isLoading ? (
@@ -138,9 +100,8 @@ function ChooseDesigns() {
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
         </div>
       ) : (
-        // List View
         <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full px-4">
-          {designs.map((design: Design, index: number) => (
+          {designs.map((design: any, index: number) => (
             <motion.div
               key={design._id || index}
               whileHover={{ scale: 1.02 }}
@@ -148,40 +109,121 @@ function ChooseDesigns() {
             >
               <div
                 className="relative w-full h-48"
-                onClick={() => handleImageClick(design.image)}
+                onClick={() => handleImageClick(design._id)}
               >
                 <Image
-                  src={design.image}
-                  alt={design.eventDesign}
+                  src={design.images[0]}
+                  alt={design.designId.eventDesign}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-t-lg"
                 />
               </div>
               <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                {design.eventDesign}
+                {design.designId.eventDesign}
               </p>
             </motion.div>
           ))}
         </div>
       )}
 
-      {/* Modal for Enlarged Image */}
       {isModalOpen && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50"
-          onClick={closeModal}
-        >
-          <div className="relative w-11/12 md:w-3/4 lg:w-1/2 h-1/2 md:h-3/4 rounded-lg p-4">
-            <div className="relative w-full h-full">
-              <Image
-                src={selectedImage}
-                alt="Selected Image"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
-              />
-            </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 ">
+          <div className="relative w-11/12 h-1/2 md:h-3/4 rounded-lg backdrop-blur-lg bg-white/70 shadow-lg">
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-3 right-3 z-20 text-gray-200 hover:text-primary transition-all"
+            >
+              <IoMdClose size={28} />
+            </button>
+
+            {isGalleryLoading ? (
+              <div className="flex justify-center items-center h-full">
+                <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+              </div>
+            ) : (
+              <>
+                {/* Main Swiper */}
+                <Swiper
+                  spaceBetween={10}
+                  navigation={{
+                    nextEl: nextButtonRef.current,
+                    prevEl: prevButtonRef.current,
+                  }}
+                  thumbs={{ swiper: thumbsSwiper }}
+                  modules={[FreeMode, Navigation, Thumbs, Pagination]}
+                  className="modal-main-swiper"
+                  loop={true}
+                  onInit={(swiper: any) => {
+                    // Manually connect navigation buttons after Swiper initializes
+                    if (swiper.params.navigation) {
+                      swiper.params.navigation.nextEl = nextButtonRef.current;
+                      swiper.params.navigation.prevEl = prevButtonRef.current;
+                      swiper.navigation.init();
+                      swiper.navigation.update();
+                    }
+                  }}
+                >
+                  {galleryData.singleGallery.images.map(
+                    (image: any, index: any) => (
+                      <SwiperSlide key={index}>
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={image}
+                            alt="Gallery Image"
+                            layout="fill"
+                            objectFit="contain"
+                            className="rounded-lg"
+                          />
+                        </div>
+                      </SwiperSlide>
+                    )
+                  )}
+                </Swiper>
+
+                {/* Thumbs Swiper */}
+                <Swiper
+                  onSwiper={(swiper: SwiperType) => setThumbsSwiper(swiper)}
+                  spaceBetween={10}
+                  slidesPerView={4}
+                  freeMode={true}
+                  watchSlidesProgress={true}
+                  modules={[FreeMode, Navigation, Thumbs]}
+                  className="modal-thumbs-swiper"
+                >
+                  {galleryData.singleGallery.images.map(
+                    (image: any, index: any) => (
+                      <SwiperSlide key={index}>
+                        <div className="relative w-full h-20">
+                          <Image
+                            src={image}
+                            alt={`Thumbnail ${image}`}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-lg"
+                          />
+                        </div>
+                      </SwiperSlide>
+                    )
+                  )}
+                </Swiper>
+              </>
+            )}
+
+            {/* Custom Navigation Arrows */}
+            <button
+              ref={prevButtonRef}
+              className="swiper-button-prev cursor-pointer z-50 absolute top-1/2 left-4 transform -translate-y-1/2 bg-primary p-3 rounded-full text-white shadow-md"
+            >
+              <IoIosArrowBack size={20} /> {/* Previous arrow icon */}
+            </button>
+            <button
+              ref={nextButtonRef}
+              className="swiper-button-next absolute top-1/2 z-50 right-4 transform -translate-y-1/2 bg-primary p-3 rounded-full text-white shadow-md"
+            >
+              <IoIosArrowForward size={20} /> {/* Next arrow icon */}
+            </button>
           </div>
         </div>
       )}

@@ -14,6 +14,7 @@ import { userEndpoints } from "./userInfo";
 import { changePasswordEndpoints } from "./changePassword";
 import { updateProfileEndpoints } from "./updateProfile";
 import { getSingleSelfBookedEventsEndpoints } from "./getSingleSelfBookedEventsEndpoints";
+import { getSingleDesignGalleryEndpoints } from "./getSingleDesignsGallery";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -46,6 +47,7 @@ export const apiSlice = createApi({
     ...changePasswordEndpoints(builder),
     ...updateProfileEndpoints(builder),
     ...getSingleSelfBookedEventsEndpoints(builder),
+    ...getSingleDesignGalleryEndpoints(builder),
     ...getSelfBookedEventsEndpoints(builder), // ✅ Added new API endpoint
   }),
   refetchOnMountOrArgChange: true,
@@ -73,6 +75,7 @@ export const {
   useGetUserInfoQuery,
   useBookEventMutation,
   useGetSingleSelfBookedEventsQuery,
+  useGetSingleDesignGalleryQuery,
   useGetSelfBookedEventsQuery,
   useLogoutUserMutation,
 } = apiSlice;
