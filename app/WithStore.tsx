@@ -6,6 +6,7 @@ import { Provider, useDispatch } from "react-redux";
 import store from "@/store/index";
 import { useGetThemeColorQuery } from "@/store/endpoints/apiSlice";
 import { fetchThemeFromAPI } from "@/store/themeSlice";
+import SplashCursor from "@/components/animation/SplashCursor";
 
 interface WithStoreProps {
   children: ReactNode;
@@ -16,6 +17,7 @@ const WithStore = ({ children }: WithStoreProps) => {
     <div className="h-screen flex flex-col">
       <Provider store={store}>
         <ThemeFetcherAndApplier />
+        <SplashCursor />
         {children}
       </Provider>
     </div>
