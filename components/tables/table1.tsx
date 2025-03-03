@@ -12,6 +12,8 @@ interface PersonalData {
 
 interface EventDetails {
   packageName: string;
+  packagePrice: number;
+  status: string;
   place: string;
   city: string;
   date: string;
@@ -44,6 +46,8 @@ const BulkTable: React.FC<BulkTableProps> = ({
 
   const eventDetailsDefault = eventDetails || {
     packageName: "N/A",
+    packagePrice: 0,
+    status: "N/A",
     place: "N/A",
     city: "N/A",
     date: "N/A",
@@ -59,6 +63,8 @@ const BulkTable: React.FC<BulkTableProps> = ({
   const rowData = {
     ...personalDataDefault,
     packageName: eventDetailsDefault.packageName,
+    packagePrice: eventDetailsDefault.packagePrice,
+    status: eventDetailsDefault.status,
     place: eventDetailsDefault.place,
     city: eventDetailsDefault.city,
     date:
@@ -72,10 +78,13 @@ const BulkTable: React.FC<BulkTableProps> = ({
   // Define headers for the table
   const headers: { key: keyof typeof rowData; label: string }[] = [
     { key: "packageName", label: "Package Name" },
+    { key: "packagePrice", label: "Package Price" },
     { key: "fullName", label: "Full Name" },
     { key: "mobileNumber", label: "Mobile Number" },
     { key: "secondMobileNumber", label: "Second Mobile Number" },
     { key: "favoriteColors", label: "Favorite Colors" },
+    { key: "status", label: "Order Status" },
+
     { key: "place", label: "Place" },
     { key: "city", label: "City" },
     { key: "date", label: "Date" },
@@ -136,6 +145,20 @@ const BulkTable: React.FC<BulkTableProps> = ({
                       ></div>
                       <span className="text-xs sm:text-sm">{rowData[key]}</span>
                     </div>
+                  ) : key === "status" ? (
+                    <span
+                      className={`text-xs sm:text-sm px-3 py-1 rounded-full border ${
+                        rowData[key] === "completed"
+                          ? "bg-green-500 text-white"
+                          : rowData[key] === "rejected"
+                          ? "bg-red-500 text-white"
+                          : rowData[key] === "pending"
+                          ? "bg-yellow-500 text-black animate-zoom"
+                          : ""
+                      }`}
+                    >
+                      {rowData[key]}
+                    </span>
                   ) : (
                     <span className="text-xs sm:text-sm">{rowData[key]}</span>
                   )}

@@ -235,6 +235,11 @@ body::after {
   background-color: var(--secondary); /* Darker color when hovered */
 }
 
+/* Firefox scrollbar styling */
+.horizontal-scroll-container {
+  scrollbar-width: thin; /* "auto" | "thin" | "none" */
+  scrollbar-color: var(--primary) transparent; /* thumb and track colors */
+}
 /* Override PrimeReact dropdown item hover color */
 .p-dropdown-items-wrapper .p-dropdown-item:hover {
   background-color: var(--primary) !important; /* Use your primary color */
@@ -308,4 +313,20 @@ body::after {
 /* Dropdown Arrow Icon Hover State */
 .p-dropdown:hover .p-dropdown-trigger-icon {
   color: var(--primary); /* Use primary color for arrow on hover */
+}
+
+@keyframes zoom {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-zoom {
+  animation: zoom 1.5s infinite;
 }
