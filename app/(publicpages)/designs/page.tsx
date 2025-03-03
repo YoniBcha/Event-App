@@ -129,7 +129,7 @@ function ChooseDesigns() {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 ">
-          <div className="relative w-11/12 h-1/2 md:h-3/4 rounded-lg backdrop-blur-lg bg-white/70 shadow-lg">
+          <div className="relative w-11/12 h-1/2 md:h-3/4 rounded-lg backdrop-blur-lg bg-secondary pt-4 shadow-lg">
             {/* Close Button */}
             <button
               onClick={closeModal}
