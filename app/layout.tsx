@@ -32,9 +32,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <html lang={currentLocale} dir={currentLocale === "ar" ? "rtl" : "ltr"}>
-      <body
-        className={`antialiased px-4 md:px-20 horizontal-scroll-container `}
-      >
+      <body className={`antialiased px-4 md:px-20  `}>
         <div className="bottom-left -z-10"></div>
         <div className="bottom-right -z-10"></div>
 

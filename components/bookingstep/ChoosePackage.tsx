@@ -5,10 +5,15 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
-import { useGetPackageQuery } from "@/store/endpoints/apiSlice";
+import {
+  useGetPackageQuery,
+  useGetSingleDesignGalleryQuery,
+} from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
 import "swiper/css";
-
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "swiper/css/pagination";
 import "./swiper-custom.css";
 import { motion } from "framer-motion";
@@ -61,16 +66,64 @@ function ChoosePackage({
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
   );
+  const [designs, setDesigns] = useState<any>([]);
+  const [isLoadings, setIsLoading] = useState(true);
+  const [, setError] = useState<unknown>(null);
+  const [selectedImage, setSelectedImage] = useState<any>("");
+  const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
+  const { data: galleryData, isLoading: isGalleryLoading } =
+    useGetSingleDesignGalleryQuery<any>(selectedDesignId, {
+      skip: !selectedDesignId, // Skip the query if no design ID is selected
+    });
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
   const translations = useSelector((state: any) => state.language.translations);
+  useEffect(() => {
+    if (galleryData?.singleGallery?.images?.length > 0) {
+      setSelectedImage(galleryData);
+    }
+  }, [galleryData]);
+  const handleImageClick = (id: string) => {
+    console.log("Selected Design ID:", id);
+    setSelectedDesignId(id);
+  };
 
-  // Framer Motion Variants
-  // const slideVariants = {
-  //   hidden: { opacity: 0, y: 20 },
-  //   visible: { opacity: 1, y: 0 },
-  // };
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: true,
+  };
+
+  // Get images to display
+  const images = selectedImage
+    ? selectedImage?.singleGallery?.images // Use selectedImage if available
+    : designs?.data?.[0]?.images ?? []; // Fallback to an empty array if designs.data[0] is undefined
+  useEffect(() => {
+    const fetchDesigns = async () => {
+      try {
+        const response = await fetch(
+          "https://eventapp-back-cr86.onrender.com/api/v1/event/getDesignsGallery"
+        );
+        if (!response.ok) throw new Error("Failed to fetch designs");
+
+        const data = await response.json();
+        setDesigns(data);
+        console.log(JSON.stringify(data, null, 2));
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDesigns();
+  }, []);
 
   const cardVariants = {
     hover: {
@@ -121,7 +174,7 @@ function ChoosePackage({
   const packages = (data as { eventPackages: Package[] })?.eventPackages || [];
 
   // Check if there are no packages
-  if (!isLoading && packages.length === 0) {
+  if (!isLoading && packages?.length === 0) {
     return (
       <motion.div
         className="flex flex-col gap-10 h-full justify-center items-center"
@@ -166,8 +219,177 @@ function ChoosePackage({
     );
   }
 
+  // const imageVariants = {
+  //   hidden: { opacity: 0, scale: 0.9 },
+  //   visible: { opacity: 1, scale: 1 },
+  // };
+
+  const CustomPrevArrow = (props: any) => (
+    <div
+      className="absolute top-1/2 left-2 transform -translate-y-1/2 z-10 cursor-pointer bg-black/50 rounded-full p-1 hover:bg-secondary"
+      onClick={props.onClick}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </div>
+  );
+
+  const CustomNextArrow = (props: any) => (
+    <div
+      className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10 cursor-pointer bg-black/50 rounded-full p-1 hover:bg-secondary"
+      onClick={props.onClick}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </div>
+  );
   return (
     <div className="flex flex-col justify-center items-center gap-4 h-full">
+      <motion.div
+        className="w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className="flex-grow flex flex-col justify-center items-center w-full h-full mt-6 md:mt-0">
+          <div className="text-primary font-bold text-xl md:text-3xl py-5">
+            Gallery Designs
+          </div>
+
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <motion.div
+              className="flex flex-col gap-3 md:flex-row bg-gradient-to-r from-secondary to-white w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="flex flex-col w-full md:w-1/2 h-full">
+                <div className="flex flex-col w-full">
+                  {/* Slider Container */}
+                  {isLoadings || isGalleryLoading ? (
+                    <div className="flex justify-center items-center h-64">
+                      <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+                    </div>
+                  ) : (
+                    <div className="w-full rounded bg-transparent flex items-center justify-center relative overflow-hidden">
+                      <div className="w-full h-[300px] relative">
+                        <Slider
+                          {...settings}
+                          arrows={true} // Enable arrows
+                          dots={true} // Enable dots
+                          appendDots={(dots) => (
+                            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
+                              {/* Custom dots container */}
+                              <ul className="m-0 p-0 flex justify-center space-x-2">
+                                {dots}
+                              </ul>
+                            </div>
+                          )}
+                          prevArrow={<CustomPrevArrow />} // Custom previous arrow
+                          nextArrow={<CustomNextArrow />} // Custom next arrow
+                        >
+                          {images?.map((imgSrc: any, index: any) => (
+                            <div
+                              key={index}
+                              className="relative w-full h-[300px]"
+                            >
+                              <Image
+                                src={imgSrc}
+                                alt={`Slide ${index}`}
+                                fill
+                                className="object-cover rounded"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                priority
+                              />
+                            </div>
+                          ))}
+                        </Slider>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Thumbnail Grid */}
+                <div className="py-2 grid grid-cols-4 gap-2">
+                  {designs?.data?.map((data: any, index: any) => (
+                    <motion.div
+                      key={index}
+                      className={`rounded cursor-pointer ${
+                        selectedImage?.singleGallery?._id == data._id
+                          ? "border-4 border-primary "
+                          : ""
+                      } overflow-hidden relative w-full h-12 md:h-11`}
+                      onClick={() => handleImageClick(data._id)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Image
+                        src={data?.images[0]}
+                        alt={`Image ${index + 1}`}
+                        fill
+                        className="object-cover rounded"
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              <motion.div
+                className="w-full md:w-1/2 h-full   ml-0 md:ml-5 mt-5"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="mb-6">
+                  <h3 className="text-xl flex items-center font-semibold">
+                    {selectedImage
+                      ? selectedImage?.singleGallery?.designId.eventDesign
+                      : designs?.data?.[0]?.designId.eventDesign}
+                  </h3>
+                  <div
+                    className="mt-2 p-2 text-sm md:text-base overflow-hidden"
+                    style={{ wordWrap: "break-word" }}
+                    dangerouslySetInnerHTML={{
+                      __html: selectedImage
+                        ? selectedImage?.singleGallery?.description
+                        : designs?.data?.[0]?.description.replace(
+                            /\n/g,
+                            "<br />"
+                          ),
+                    }}
+                  />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
       <div className="text-primary font-bold text-2xl md:text-3xl pt-5 text-center">
         {translations.booking.choosePackage}
       </div>
