@@ -2,18 +2,14 @@
 "use client";
 import BulkTable from "@/components/tables/table1";
 import BulkTable2 from "@/components/tables/table2";
-import { logoutUser } from "@/store/authReducer";
-import {
-  useGetSingleSelfBookedEventsQuery,
-  useGetUserInfoQuery,
-  useLogoutUserMutation,
-} from "@/store/endpoints/apiSlice";
+// import { logoutUser } from "@/store/authReducer";
+import { useGetSingleSelfBookedEventsQuery } from "@/store/endpoints/apiSlice";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 function Quotation() {
   const [logo, setLogo] = useState("/path/to/default/logo.png");
   const searchParams = useSearchParams();
@@ -23,50 +19,49 @@ function Quotation() {
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const { data: datas, error } = useGetUserInfoQuery<any>({});
-  const [logoutUserMutation] = useLogoutUserMutation(); // Initialize the mutation
+  // const dispatch = useDispatch();
+  // const router = useRouter();
+  // const { data: datas, error } = useGetUserInfoQuery<any>({});
+  // const [logoutUserMutation] = useLogoutUserMutation(); // Initialize the mutation
   // const translations = useSelector(
   //   (state: RootState) => state.language.translations
   // );
 
-  useEffect(() => {
-    // Define an async function to handle the logout logic
-    const handleLogout = async () => {
-      // Check if the response contains an error or specific messages
-      if (
-        datas?.message === "Session expired" ||
-        datas?.message === "User Unauthorized" ||
-        error?.data?.message === "Session expired" ||
-        error?.data?.message === "User Unauthorized"
-      ) {
-        try {
-          // Call the logout mutation
-          await logoutUserMutation({}).unwrap();
+  // useEffect(() => {
+  //   // Define an async function to handle the logout logic
+  //   const handleLogout = async () => {
+  //     // Check if the response contains an error or specific messages
+  //     if (
+  //       datas?.message === "Session expired" ||
+  //       datas?.message === "User Unauthorized" ||
+  //       error?.data?.message === "Session expired" ||
+  //       error?.data?.message === "User Unauthorized"
+  //     ) {
+  //       try {
+  //         // Call the logout mutation
+  //         await logoutUserMutation({}).unwrap();
 
-          // Dispatch the logout action to update Redux state
-          dispatch(logoutUser());
+  //         // Dispatch the logout action to update Redux state
+  //         dispatch(logoutUser());
 
-          // Clear cookies
-          Cookies.remove("token");
-          Cookies.remove("user-info");
-          Cookies.remove("token_creation_time");
+  //         // Clear cookies
+  //         Cookies.remove("token");
+  //         Cookies.remove("user-info");
+  //         Cookies.remove("token_creation_time");
 
-          // Redirect to login page with payload
+  //         // Redirect to login page with payload
 
-          router.push("/login");
-        } catch (error) {
-          console.error("Logout failed:", error);
-        }
-      }
-    };
+  //         router.push("/login");
+  //       } catch (error) {
+  //         console.error("Logout failed:", error);
+  //       }
+  //     }
+  //   };
 
-    // Call the async function
-    handleLogout();
-  }, [datas?.message, error, logoutUserMutation, dispatch, router]); //   );
+  //   // Call the async function
+  //   handleLogout();
+  // }, [datas?.message, error, logoutUserMutation, dispatch, router]); //   );
 
-  console.log(JSON.stringify(data, null, 2));
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure we're on the client side
     const storedTheme = localStorage.getItem("fenzoAppTheme");
