@@ -63,7 +63,6 @@ function ChoosePackage({
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
   );
-  const [isLoadings] = useState(true);
 
   const [selectedImage, setSelectedImage] = useState<any>("");
   // const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
