@@ -83,6 +83,13 @@ function ChoosePackage({
       setSelectedImage(galleryData);
     }
   }, [galleryData]);
+
+  useEffect(() => {
+    const selectedPackageId = sessionStorage.getItem("selectedPackageId");
+    if (selectedPackageId) {
+      setSelectedPackageId(selectedPackageId);
+    }
+  }, [setSelectedPackageId]);
   // const handleImageClick = (id: string) => {
   //   console.log("Selected Design ID:", id);
   //   setSelectedDesignId(id);

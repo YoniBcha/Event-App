@@ -84,6 +84,13 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     }
   };
 
+  useEffect(() => {
+    const selectedDesignId = sessionStorage.getItem("selectedDesignId");
+    if (selectedDesignId) {
+      setSelectedDesignId(selectedDesignId);
+    }
+  }, [setSelectedDesignId]);
+
   const handleBackClick = () => {
     onBackClick();
   };

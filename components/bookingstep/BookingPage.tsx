@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -98,7 +98,24 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
     setValue("city", city, { shouldValidate: true }); // Update form value and trigger validation
     setShowCityDropdown(false);
   };
+  useEffect(() => {
+    const storedBookingData = sessionStorage.getItem("bookingData");
+    if (storedBookingData) {
+      const parsedData = JSON.parse(storedBookingData);
 
+      // Update form state with stored data
+      setSelectedPlace(parsedData.place);
+      setSelecteEvent(parsedData.event);
+      setSelectedCity(parsedData.city);
+      setSelectedDate(parsedData.date ? new Date(parsedData.date) : null);
+
+      // Update form values
+      setValue("place", parsedData.place);
+      setValue("event", parsedData.event);
+      setValue("city", parsedData.city);
+      setValue("date", parsedData.date ? new Date(parsedData.date) : null);
+    }
+  }, [setValue]);
   const handlePlaceChange = (place: string) => {
     if (selectedPlace === place) {
       setSelectedPlace(null); // Unselect if clicked twice
