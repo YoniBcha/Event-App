@@ -83,19 +83,29 @@ const RootPage = () => {
     setSelectedEventTypeId(eventTypeId);
   };
 
-  // Add useEffect to handle next step after state updates
-
   const handleDesignSelect = (designId: string | null) => {
-    setSelectedDesignId(designId); // Update state
-    console.log("Selected Design ID:", designId);
-    handleNext(); // Call handleNext directly
+    setSelectedDesignId(designId);
+    setCurrentStep(4); // Directly set the next step
   };
 
   const handlePackageSelect = (packageId: string | null) => {
-    setSelectedPackageId(packageId); // Update state
-    console.log("Selected Package ID:", packageId);
-    handleNext(); // Call handleNext directly
+    setSelectedPackageId(packageId);
+    setCurrentStep(5); // Directly set the next step
   };
+
+  // Add useEffect to handle next step after state updates
+
+  // const handleDesignSelect = (designId: string | null) => {
+  //   setSelectedDesignId(designId); // Update state
+  //   console.log("Selected Design ID:", designId);
+  //   handleNext(); // Call handleNext directly
+  // };
+
+  // const handlePackageSelect = (packageId: string | null) => {
+  //   setSelectedPackageId(packageId); // Update state
+  //   console.log("Selected Package ID:", packageId);
+  //   handleNext(); // Call handleNext directly
+  // };
 
   const handlePackageDetailsNext = () => {
     setCurrentStep(6);
