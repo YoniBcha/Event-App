@@ -62,9 +62,6 @@ const RootPage = () => {
     event: "",
     date: null,
   });
-  // const [selectedEventTypeId] = useState<string | null>(
-  //   bookingData.event ?? null
-  // );
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
@@ -73,7 +70,6 @@ const RootPage = () => {
     EventPackageAddition[]
   >([]);
 
-  // Retrieve the authenticated user from the store
   const authenticateUser = useSelector((state: any) => state.auth.user);
 
   const handleBookingData = (data: FormData) => {
@@ -83,43 +79,29 @@ const RootPage = () => {
 
   const handleDesignSelect = (designId: string | null) => {
     setSelectedDesignId(designId);
-    setCurrentStep(4); // Directly set the next step
+    setCurrentStep(3); // Updated step number
   };
 
   const handlePackageSelect = (packageId: string | null) => {
     setSelectedPackageId(packageId);
-    setCurrentStep(5); // Directly set the next step
+    setCurrentStep(4); // Updated step number
   };
 
-  // Add useEffect to handle next step after state updates
-
-  // const handleDesignSelect = (designId: string | null) => {
-  //   setSelectedDesignId(designId); // Update state
-  //   console.log("Selected Design ID:", designId);
-  //   handleNext(); // Call handleNext directly
-  // };
-
-  // const handlePackageSelect = (packageId: string | null) => {
-  //   setSelectedPackageId(packageId); // Update state
-  //   console.log("Selected Package ID:", packageId);
-  //   handleNext(); // Call handleNext directly
-  // };
-
   const handlePackageDetailsNext = () => {
-    setCurrentStep(6);
+    setCurrentStep(5); // Updated step number
   };
 
   const handleAdditionalDataSubmit = (data: {
     eventPackageAdditions: EventPackageAddition[];
   }) => {
     setEventPackageAdditions(data.eventPackageAdditions);
-    setCurrentStep(7);
+    setCurrentStep(6); // Updated step number
   };
 
   const handleExtraServiceSelect = (selectedService: ExtraServiceData) => {
     setExtraServices((prev) => {
       const updatedServices = [...prev, selectedService];
-      setCurrentStep(8);
+      setCurrentStep(7); // Updated step number
       return updatedServices;
     });
   };
@@ -144,26 +126,20 @@ const RootPage = () => {
 
       console.log("Payload to be sent:", payload);
 
-      // Store the payload in session storage
       sessionStorage.setItem("payload", JSON.stringify(payload));
 
-      // Check if the user is authenticated
       if (
         userInfo?.message === "Session expired" ||
         userInfo?.message === "User Unauthorized" ||
         userInfoError?.data?.message === "Session expired" ||
         userInfoError?.data?.message === "User Unauthorized"
       ) {
-        // Logout the user
         await logoutUserMutation({}).unwrap();
-        // Dispatch the logout action to update Redux state
         dispatch(logoutUser());
-        // Redirect to login page with the payload
         router.push(
           `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
         );
       } else {
-        // Proceed with the original logic if the user is authenticated
         if (!authenticateUser) {
           router.push(
             `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
@@ -181,48 +157,16 @@ const RootPage = () => {
     }
   };
 
-  // const handleNext = () => {
-  //   switch (currentStep) {
-  //     case 2:
-  //       if (selectedEventTypeId) {
-  //         setCurrentStep(3);
-  //       }
-  //       break;
-  //     case 3:
-  //       if (selectedDesignId) {
-  //         setCurrentStep(4);
-  //       }
-  //       break;
-  //     case 4:
-  //       if (selectedPackageId) {
-  //         setCurrentStep(5);
-  //       }
-  //       break;
-  //     default:
-  //       console.error("No selection made.");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (selectedDesignId) {
-  //     handleNext();
-  //   }
-  // }, [selectedDesignId]); // Trigger when selectedDesignId changes
-
-  // useEffect(() => {
-  //   if (selectedPackageId) {
-  //     handleNext();
-  //   }
-  // }, [selectedPackageId]); // Trigger when selectedPackageId changes
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
+
   const stepVariants = {
-    hidden: { opacity: 0, x: currentLocale === "en" ? 100 : -100 }, // Slide in from the right for English, left for Arabic
-    visible: { opacity: 1, x: 0 }, // Center of the screen
-    exit: { opacity: 0, x: currentLocale === "en" ? -100 : 100 }, // Slide out to the left for English, right for Arabic
+    hidden: { opacity: 0, x: currentLocale === "en" ? 100 : -100 },
+    visible: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: currentLocale === "en" ? -100 : 100 },
   };
 
   return (
@@ -252,12 +196,13 @@ const RootPage = () => {
               transition={{ duration: 0.3 }}
             >
               <ChooseDesigns
-                id={bookingData.event} // Pass the event ID from bookingData
+                id={bookingData.event}
                 onNext={handleDesignSelect}
                 onBackClick={handleBack}
               />
             </motion.div>
           )}
+
           {currentStep === 3 && selectedDesignId && (
             <motion.div
               key="step-3"
@@ -272,31 +217,14 @@ const RootPage = () => {
                 eventDesign={selectedDesignId}
                 eventType={bookingData.event}
                 onNext={handlePackageSelect}
-                onBackClick={() => setCurrentStep(2)}
-              />
-            </motion.div>
-          )}
-          {currentStep === 4 && selectedDesignId && bookingData && (
-            <motion.div
-              key="step-4"
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={stepVariants}
-              transition={{ duration: 0.3 }}
-            >
-              <ChoosePackage
-                place={bookingData?.place ?? ""}
-                eventDesign={selectedDesignId ?? ""}
-                eventType={bookingData.event ?? ""}
-                onNext={handlePackageSelect}
                 onBackClick={handleBack}
               />
             </motion.div>
           )}
-          {currentStep === 5 && selectedPackageId && (
+
+          {currentStep === 4 && selectedPackageId && (
             <motion.div
-              key="step-5"
+              key="step-4"
               initial="hidden"
               animate="visible"
               exit="exit"
@@ -310,9 +238,10 @@ const RootPage = () => {
               />
             </motion.div>
           )}
-          {currentStep === 6 && selectedPackageId && (
+
+          {currentStep === 5 && selectedPackageId && (
             <motion.div
-              key="step-6"
+              key="step-5"
               initial="hidden"
               animate="visible"
               exit="exit"
@@ -326,6 +255,23 @@ const RootPage = () => {
               />
             </motion.div>
           )}
+
+          {currentStep === 6 && (
+            <motion.div
+              key="step-6"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={stepVariants}
+              transition={{ duration: 0.3 }}
+            >
+              <ExtraService
+                onExtraServiceSelect={handleExtraServiceSelect}
+                onBack={handleBack}
+              />
+            </motion.div>
+          )}
+
           {currentStep === 7 && (
             <motion.div
               key="step-7"
@@ -335,28 +281,13 @@ const RootPage = () => {
               variants={stepVariants}
               transition={{ duration: 0.3 }}
             >
-              <ExtraService
-                // extraServices={extraServices}
-                onExtraServiceSelect={handleExtraServiceSelect}
-                onBack={handleBack}
-              />
-            </motion.div>
-          )}
-          {currentStep === 8 && (
-            <motion.div
-              key="step-8"
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={stepVariants}
-              transition={{ duration: 0.3 }}
-            >
               <PersonalDataComonents onSubmit={handlePersonalDataSubmit} />
             </motion.div>
           )}
-          {currentStep === 9 && personalData && (
+
+          {currentStep === 8 && personalData && (
             <motion.div
-              key="step-9"
+              key="step-8"
               initial="hidden"
               animate="visible"
               exit="exit"
