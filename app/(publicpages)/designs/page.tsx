@@ -38,9 +38,12 @@ function ChooseDesigns() {
   const nextButtonRef = useRef<HTMLButtonElement>(null); // Ref for next button
 
   const { data: galleryData, isLoading: isGalleryLoading } =
-    useGetSingleDesignGalleryQuery<any>(selectedDesignId, {
-      skip: !selectedDesignId, // Skip the query if no design ID is selected
-    });
+    useGetSingleDesignGalleryQuery<any>(
+      { id: selectedDesignId, designId: "" },
+      {
+        skip: !selectedDesignId, // Skip the query if no design ID is selected
+      }
+    );
 
   useEffect(() => {
     const fetchDesigns = async () => {
