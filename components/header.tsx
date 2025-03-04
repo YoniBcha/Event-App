@@ -211,7 +211,7 @@ function Header() {
                 ? "font-bold border-b-2 border-primary text-primary"
                 : ""
             }`}
-            href={"/mainpage"}
+            href={"/mainpage/1"}
           >
             {translations.sidebar.booking}
           </Link>
@@ -421,7 +421,7 @@ function Header() {
                     </div>
                   </div>
                 </Link>
-                <Link href="/mainpage" onClick={toggleDrawer}>
+                <Link href="/mainpage/1" onClick={toggleDrawer}>
                   <div className="flex items-center gap-2">
                     <FaBook className="text-xl" />
                     <div
