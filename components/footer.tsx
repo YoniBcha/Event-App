@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 function Footer() {
   return (
     <motion.div
@@ -17,8 +18,18 @@ function Footer() {
       </div>
 
       <div className="flex flex-row max-[400px]:gap-2 max-[300px]:flex-col gap-4">
-        <div className="hover:text-gray-500 cursor-pointer">Terms & Conditions</div>
-        <div className="hover:text-gray-500 cursor-pointer">Privacy Policy</div>
+        <Link
+          href={"/terms&conditions"}
+          className="hover:text-gray-500 cursor-pointer"
+        >
+          Terms & Conditions
+        </Link>
+        <Link
+          href={"/privacy_Policy"}
+          className="hover:text-gray-500 cursor-pointer"
+        >
+          Privacy Policy
+        </Link>
       </div>
     </motion.div>
   );
