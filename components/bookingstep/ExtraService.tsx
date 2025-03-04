@@ -54,6 +54,7 @@ interface Package {
   packageName: string;
   packageDescription: string;
   packageLogo: string;
+  packagePrice: number;
 }
 
 interface SelectedData {
@@ -599,6 +600,9 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                           </p>
                           <p className="text-primary text-sm">
                             {pkg.packageDescription}
+                          </p>
+                          <p className="text-primary font-bold text-lg">
+                            Price <span>{pkg.packagePrice}</span>
                           </p>
                         </div>
                       </motion.div>

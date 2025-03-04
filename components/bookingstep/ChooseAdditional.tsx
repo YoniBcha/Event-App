@@ -17,6 +17,7 @@ interface Addition {
     _id: string;
     typeName: string;
     typePicture: string;
+    price: number;
   }[];
 }
 
@@ -40,7 +41,9 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [, setHasSelection] = useState<boolean>(false);
-  const currentLocale = useSelector((state: any) => state.language.currentLocale);
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const queryResult = useGetAdditionalEndpointsQuery({});
 
   const { data, isLoading, isError } = queryResult as {
@@ -125,7 +128,9 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           quantity: quantities[key],
         };
       })
-      .filter((item) => item !== null && item.quantity > 0) as EventPackageAddition[];
+      .filter(
+        (item) => item !== null && item.quantity > 0
+      ) as EventPackageAddition[];
 
     onSubmit({ eventPackageAdditions });
   };
@@ -162,11 +167,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
           whileTap="tap"
         >
           <span className="mr-2">
-            {currentLocale === "ar" ? (
-              <FaChevronRight />
-            ) : (
-              <FaChevronLeft />
-            )}
+            {currentLocale === "ar" ? <FaChevronRight /> : <FaChevronLeft />}
           </span>
           <span>{translations.booking.backBtn}</span>
         </motion.button>
@@ -257,7 +258,12 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                               <div className="text-primary text-sm">
                                 {type.typeName}
                               </div>
+
+                              <div className="font-bold px-2">
+                                price {type.price}
+                              </div>
                             </div>
+
                             <div className="flex items-center gap-2">
                               <button
                                 className="px-2 rounded-lg bg-[#ffffff] hover:bg-primary hover:text-white text-gray-400"
