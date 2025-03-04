@@ -153,19 +153,17 @@ function ChoosePackage({
   //   setIsModalOpen(true);
   // };
 
-  // Auto-slide every 5 seconds
   useEffect(() => {
-    if (galleryData?.length === 0) return;
+    if (!galleryData?.singleGallery?.images?.length) return;
 
     const interval = setInterval(() => {
       setSelectedImageIndex(
-        (prevIndex) =>
-          (prevIndex + 1) % galleryData?.singleGallery?.images?.length
+        (prevIndex) => (prevIndex + 1) % galleryData.singleGallery.images.length
       );
     }, 5000); // 5 seconds
 
     return () => clearInterval(interval);
-  }, [selectedImageIndex]);
+  }, [galleryData?.singleGallery?.images, selectedImageIndex]);
 
   // Handle thumbnail click
   const handleThumbnailClick = (index: any) => {
