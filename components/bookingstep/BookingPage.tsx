@@ -11,12 +11,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCalendarAlt, FaCity, FaMapMarkerAlt } from "react-icons/fa";
+import { useGetEventTypesQuery } from "@/store/endpoints/apiSlice";
 
 const saudiCities = ["Jeddah", "Makkah", "Riyadh"];
 
 interface FormData {
   city: string;
   place: string;
+  event: string;
   date: Date | null;
 }
 
@@ -27,12 +29,15 @@ interface BookingPageProps {
 const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
   const [showPlaceDropdown, setShowPlaceDropdown] = useState<boolean>(false);
+  const [showEventDropdown, setShowEventDropdown] = useState<boolean>(false);
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedEvent, setSelecteEvent] = useState<any>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCityDropdown, setShowCityDropdown] = useState<boolean>(false);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
-
+  const { data } = useGetEventTypesQuery<any>({});
   const sortedCities = saudiCities.sort((a, b) => a.localeCompare(b));
   const filteredCities = sortedCities.filter((city) =>
     city.toLowerCase().includes(searchQuery.toLowerCase())
@@ -46,9 +51,11 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
           selectDate: string;
           selectCity: string;
           searchCity: string;
+          selectedEvent: string;
           bookBtn: string;
           cityRequire: string;
           placeRequire: string;
+          eventRequire: string;
           dateRequire: string;
         };
       };
@@ -62,10 +69,8 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const validationSchema = yup.object({
     city: yup.string().required(`${translations.booking.cityRequire}`),
     place: yup.string().required(`${translations.booking.placeRequire}`),
-    date: yup
-      .date()
-      .nullable() // Allow null values
-      .required(`${translations.booking.dateRequire}`), // Still enforce required validation
+    event: yup.string().required(`Event is required`),
+    date: yup.date().nullable().required(`${translations.booking.dateRequire}`),
   });
 
   const {
@@ -105,9 +110,22 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
     setShowPlaceDropdown(false);
   };
 
+  const handleEventChange = (eventId: string) => {
+    if (selectedEvent === eventId) {
+      setSelecteEvent(null); // Unselect if clicked twice
+      setValue("event", "", { shouldValidate: true }); // Update form value and trigger validation
+    } else {
+      setSelecteEvent(eventId);
+      setValue("event", eventId, { shouldValidate: true }); // Update form value and trigger validation
+    }
+    setShowEventDropdown(false);
+  };
+
   const onSubmit = (data: FormData) => {
     const payload = { ...data };
     setBookingPageData(payload);
+
+    console.log(JSON.stringify(payload, null, 2));
   };
 
   // Framer Motion Variants
@@ -128,15 +146,15 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
           <div className="flex justify-center items-center md:justify-end h-full w-full">
             <div className="flex flex-col justify-center items-center h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl relative">
               <Image
-              src={
-                typeof window !== "undefined" && window.innerWidth >= 1024
-                ? "/images/booking2.jpg"
-                : "/images/booking-image.jpg"
-              }
-              alt="About Image"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-2xl"
+                src={
+                  typeof window !== "undefined" && window.innerWidth >= 1024
+                    ? "/images/booking2.jpg"
+                    : "/images/booking-image.jpg"
+                }
+                alt="About Image"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-2xl"
               />
             </div>
           </div>
@@ -207,11 +225,89 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       </motion.div>
                     )}
                   </AnimatePresence>
+
                   {errors.place && (
                     <p className="text-red-500">{errors.place.message}</p>
                   )}
                 </div>
+                {/* Event Dropdown */}
+                <div className="relative">
+                  <div
+                    onClick={() => setShowEventDropdown(!showEventDropdown)}
+                    className="flex justify-between items-center rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
+                  >
+                    <div>
+                      <FaMapMarkerAlt className="text-2xl text-primary" />
+                    </div>
+                    <div className="">
+                      <div className="text-[#a1948d]">Select Event</div>
+                      <div className="text-[#a1948d] font-semibold">
+                        {selectedEvent
+                          ? data?.eventTypes?.find(
+                              (event: any) => event._id === selectedEvent
+                            )?.nameOfEvent
+                          : ""}
+                      </div>
+                    </div>
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                      >
+                        <rect width="24" height="24" fill="none" />
+                        <path
+                          fill="none"
+                          stroke="#281d1b"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m7 10l5 5m0 0l5-5"
+                        />
+                      </svg>
+                    </div>
+                  </div>
 
+                  {/* Event Dropdown */}
+                  <AnimatePresence>
+                    {showEventDropdown && (
+                      <motion.div
+                        className="absolute top-full mt-2 w-full bg-secondary border border-[#d4c9c0] rounded-lg shadow-lg z-10"
+                        variants={dropdownVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                      >
+                        {data?.eventTypes?.map((event: any) => (
+                          <label
+                            key={event._id}
+                            className="flex items-center p-2 hover:bg-primary cursor-pointer"
+                          >
+                            <input
+                              type="checkbox"
+                              name="event"
+                              value={event._id}
+                              checked={selectedEvent === event._id}
+                              onChange={() => handleEventChange(event._id)}
+                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
+                            />
+                            <span className="text-[#685651]">
+                              {event.nameOfEvent}
+                            </span>
+                          </label>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Error Handling for Event */}
+                  {errors.event && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.event.message}
+                    </p>
+                  )}
+                </div>
                 {/* Date Picker */}
                 <div className="">
                   <div
@@ -252,7 +348,6 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                     <p className="text-red-500">{errors.date.message}</p>
                   )}
                 </div>
-
                 {/* City Dropdown */}
                 <div className="">
                   <div
@@ -333,7 +428,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   </AnimatePresence>
                 </div>
               </div>
-              <div className="flex justify-center py-4 items-center">
+              <div className="flex justify-center pb-2 items-center">
                 <motion.button
                   type="submit"
                   className="flex items-center justify-center bg-primary text-white hover:bg-secondary hover:border hover:text-primary rounded-full px-10 py-3"

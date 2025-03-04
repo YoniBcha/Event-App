@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import BookingPage from "@/components/bookingstep/BookingPage";
-import EventType from "@/components/bookingstep/EventType";
+
 import ChooseDesigns from "@/components/bookingstep/ChooseDesigns";
 import ChoosePackage from "@/components/bookingstep/ChoosePackage";
 import PackageDetails from "@/components/bookingstep/PackageDetails";
@@ -21,6 +21,7 @@ import { logoutUser } from "@/store/authReducer";
 interface FormData {
   city: string;
   place: string;
+  event: string;
   date: Date | null;
 }
 
@@ -58,11 +59,12 @@ const RootPage = () => {
   const [bookingData, setBookingData] = useState<FormData>({
     city: "",
     place: "",
+    event: "",
     date: null,
   });
-  const [selectedEventTypeId, setSelectedEventTypeId] = useState<string | null>(
-    null
-  );
+  // const [selectedEventTypeId] = useState<string | null>(
+  //   bookingData.event ?? null
+  // );
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
@@ -77,10 +79,6 @@ const RootPage = () => {
   const handleBookingData = (data: FormData) => {
     setBookingData(data);
     setCurrentStep(2);
-  };
-
-  const handleEventTypeSelect = (eventTypeId: string) => {
-    setSelectedEventTypeId(eventTypeId);
   };
 
   const handleDesignSelect = (designId: string | null) => {
@@ -134,7 +132,7 @@ const RootPage = () => {
         place: bookingData.place,
         date: bookingData.date?.toISOString(),
         city: bookingData.city,
-        eventType: selectedEventTypeId,
+        eventType: bookingData.event,
         eventDesign: selectedDesignId,
         eventPackage: selectedPackageId,
         eventPackageAdditions: eventPackageAdditions,
@@ -183,27 +181,27 @@ const RootPage = () => {
     }
   };
 
-  const handleNext = () => {
-    switch (currentStep) {
-      case 2:
-        if (selectedEventTypeId) {
-          setCurrentStep(3);
-        }
-        break;
-      case 3:
-        if (selectedDesignId) {
-          setCurrentStep(4);
-        }
-        break;
-      case 4:
-        if (selectedPackageId) {
-          setCurrentStep(5);
-        }
-        break;
-      default:
-        console.error("No selection made.");
-    }
-  };
+  // const handleNext = () => {
+  //   switch (currentStep) {
+  //     case 2:
+  //       if (selectedEventTypeId) {
+  //         setCurrentStep(3);
+  //       }
+  //       break;
+  //     case 3:
+  //       if (selectedDesignId) {
+  //         setCurrentStep(4);
+  //       }
+  //       break;
+  //     case 4:
+  //       if (selectedPackageId) {
+  //         setCurrentStep(5);
+  //       }
+  //       break;
+  //     default:
+  //       console.error("No selection made.");
+  //   }
+  // };
 
   // useEffect(() => {
   //   if (selectedDesignId) {
@@ -243,7 +241,8 @@ const RootPage = () => {
               <BookingPage setBookingPageData={handleBookingData} />
             </motion.div>
           )}
-          {currentStep === 2 && (
+
+          {currentStep === 2 && bookingData.event && (
             <motion.div
               key="step-2"
               initial="hidden"
@@ -252,14 +251,14 @@ const RootPage = () => {
               variants={stepVariants}
               transition={{ duration: 0.3 }}
             >
-              <EventType
-                onEventTypeSelect={handleEventTypeSelect}
-                onNext={handleNext}
-                onBack={handleBack}
+              <ChooseDesigns
+                id={bookingData.event} // Pass the event ID from bookingData
+                onNext={handleDesignSelect}
+                onBackClick={handleBack}
               />
             </motion.div>
           )}
-          {currentStep === 3 && selectedEventTypeId && (
+          {currentStep === 3 && selectedDesignId && (
             <motion.div
               key="step-3"
               initial="hidden"
@@ -268,10 +267,12 @@ const RootPage = () => {
               variants={stepVariants}
               transition={{ duration: 0.3 }}
             >
-              <ChooseDesigns
-                id={selectedEventTypeId}
-                onNext={handleDesignSelect}
-                onBackClick={handleBack}
+              <ChoosePackage
+                place={bookingData.place}
+                eventDesign={selectedDesignId}
+                eventType={bookingData.event}
+                onNext={handlePackageSelect}
+                onBackClick={() => setCurrentStep(2)}
               />
             </motion.div>
           )}
@@ -287,7 +288,7 @@ const RootPage = () => {
               <ChoosePackage
                 place={bookingData?.place ?? ""}
                 eventDesign={selectedDesignId ?? ""}
-                eventType={selectedEventTypeId ?? ""}
+                eventType={bookingData.event ?? ""}
                 onNext={handlePackageSelect}
                 onBackClick={handleBack}
               />
