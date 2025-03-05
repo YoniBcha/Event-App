@@ -114,28 +114,58 @@ export default function MainPage() {
       router.push("/mainpage/1");
     }
 
-    if (currentStep === 3 && !selectedDesignId) {
+    if (currentStep === 3 && !selectedDesignId && !bookingData.event) {
       router.push("/mainpage/2");
     }
 
-    if (currentStep === 4 && !selectedPackageId) {
+    if (
+      currentStep === 4 &&
+      !selectedPackageId &&
+      !selectedDesignId &&
+      !bookingData.event
+    ) {
       router.push("/mainpage/3");
     }
 
-    if (currentStep === 5 && !selectedPackageId) {
+    if (
+      currentStep === 5 &&
+      !selectedPackageId &&
+      !selectedDesignId &&
+      !bookingData.event
+    ) {
       router.push("/mainpage/4");
     }
 
-    if (currentStep === 6 && !eventPackageAdditions) {
+    if (
+      currentStep === 6 &&
+      !selectedPackageId &&
+      !selectedDesignId &&
+      !bookingData.event
+    ) {
       router.push("/mainpage/5");
     }
 
-    if (currentStep === 7 && !extraServices) {
+    if (
+      currentStep === 7 &&
+      !selectedPackageId &&
+      !selectedDesignId &&
+      !bookingData.event
+    ) {
       router.push("/mainpage/6");
     }
 
-    if (currentStep === 8 && !personalData) {
+    if (
+      currentStep === 8 &&
+      !personalData &&
+      !selectedPackageId &&
+      !selectedDesignId &&
+      !bookingData.event
+    ) {
       router.push("/mainpage/7");
+    }
+
+    if (currentStep < 1 || currentStep > 8) {
+      router.push("/mainpage/1");
     }
   }, [
     currentStep,

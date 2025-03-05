@@ -72,10 +72,16 @@ const LoginContent: React.FC<any> = ({
 
   // Check for token on component mount
   useEffect(() => {
-    const token = Cookies.get("token"); // Check if the token exists in cookies
+    const token = Cookies.get("token");
+    const payload = sessionStorage.getItem("payload");
+    const selectedPackageId = sessionStorage.getItem("selectedPackageId");
+    // Check if the token exists in cookies
     if (token) {
-      // If the token exists, redirect to /sidebar/my-orders
-      router.replace("/sidebar/my-orders");
+      if (payload && selectedPackageId) {
+        router.replace("/mainpage/7");
+      } else {
+        router.replace("/sidebar/my-orders");
+      }
     }
   }, [router]);
 

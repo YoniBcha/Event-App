@@ -396,7 +396,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
             whileHover={"hover"}
             whileTap={"tap"}
           >
-            <span>Skip</span>
+            <span>Next</span>
             <span className="ml-3">
               {currentLocale === "ar" ? (
                 <AiOutlineLeft size={20} />
