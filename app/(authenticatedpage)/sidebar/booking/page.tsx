@@ -57,9 +57,7 @@ const MyOrdersContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const translations = useSelector((state: any) => state.language.translations);
 
-  // Fetch user info and check for token expiration
-
-  const [logoutUserMutation] = useLogoutUserMutation(); // Initialize the mutation
+  const [logoutUserMutation] = useLogoutUserMutation();
 
   useEffect(() => {
     let payloadParam = searchParams.get("payload");
@@ -86,6 +84,16 @@ const MyOrdersContent = () => {
       try {
         const result = await bookEvent(payload).unwrap();
         console.log("API Response:", JSON.stringify(result, null, 2));
+
+        // Clear the payload from localStorage
+        localStorage.removeItem("bookingPayload");
+
+        // Clear the payload from the URL
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete("payload");
+        window.history.replaceState(null, "", newUrl.toString());
+
+        // Open the success modal
         setIsModalOpen(true);
         sessionStorage.clear();
       } catch (error: any) {
@@ -118,6 +126,9 @@ const MyOrdersContent = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+
+    // Navigate to `/sidebar/my-orders` without the payload
+    router.replace("/sidebar/my-orders");
   };
 
   return (
@@ -127,6 +138,7 @@ const MyOrdersContent = () => {
       </h1>
       {payload ? (
         <div className="space-y-6">
+          {/* Render payload details */}
           <div className="flex flex-col md:flex-row gap-5">
             <div>
               <h2 className="text-primary text-lg font-medium mb-2">
@@ -309,7 +321,7 @@ const MyOrdersContent = () => {
           <motion.button
             onClick={() => {
               closeModal();
-              router.push("/sidebar/my-orders");
+              router.replace("/sidebar/my-orders");
             }}
             className="next-btn text-primary hover:bg-secondary bg-primary hover:text-white mt-6"
             variants={{
