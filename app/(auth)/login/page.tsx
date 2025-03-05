@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { authenticateUser } from "@/store/authReducer";
 import Link from "next/link";
+import Cookies from "js-cookie"; // Import Cookies to check for the token
 
 const schema = yup.object({
   phoneNumber: yup
@@ -69,6 +70,15 @@ const LoginContent: React.FC<any> = ({
   const payload = searchParams?.get("payload");
   const translations = useSelector((state: any) => state.language.translations);
 
+  // Check for token on component mount
+  useEffect(() => {
+    const token = Cookies.get("token"); // Check if the token exists in cookies
+    if (token) {
+      // If the token exists, redirect to /sidebar/my-orders
+      router.replace("/sidebar/my-orders");
+    }
+  }, [router]);
+
   const handleLogin = async (data: {
     phoneNumber: string;
     password: string;
@@ -83,6 +93,9 @@ const LoginContent: React.FC<any> = ({
       if (response) {
         dispatch(authenticateUser(response.data));
         toast.success(translations.login.loginSuccess, { autoClose: 2000 });
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete("payload");
+        window.history.replaceState(null, "", newUrl.toString());
         setTimeout(() => {
           if (payload) {
             router.push(
