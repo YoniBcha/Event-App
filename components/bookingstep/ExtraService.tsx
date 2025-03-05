@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 import { motion } from "framer-motion";
-import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
 
 interface ExtraServiceProps {
   onExtraServiceSelect: (selectedService: any) => void;

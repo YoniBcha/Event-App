@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useState, useEffect } from "react"; // Add useEffect
@@ -13,7 +14,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import "./swiper-custom.css"; // Create this file for custom styles
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
 import { Navigation, Pagination } from "swiper/modules";
 interface Design {
   _id: string;
@@ -41,9 +42,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   // const [setSelectedImage] = useState("");
   const [isGridView, setIsGridView] = useState(true);
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
-  const currentLocale = useSelector(
-    (state: any) => state.language.currentLocale
-  );
+  // const currentLocale = useSelector(
+  //   (state: any) => state.language.currentLocale
+  // );
   const translations = useSelector((state: any) => state.language.translations);
 
   // Handle window resize to dynamically switch to grid view on larger screens
@@ -77,13 +78,13 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   //   setIsGridView(!isGridView);
   // };
 
-  const handleNextClick = () => {
-    if (selectedDesignId) {
-      onNext(selectedDesignId);
-    } else {
-      alert("Please select a design before proceeding.");
-    }
-  };
+  // const handleNextClick = () => {
+  //   if (selectedDesignId) {
+  //     onNext(selectedDesignId);
+  //   } else {
+  //     alert("Please select a design before proceeding.");
+  //   }
+  // };
 
   useEffect(() => {
     const selectedDesignId = sessionStorage.getItem("selectedDesignId");
@@ -92,9 +93,9 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
     }
   }, [setSelectedDesignId]);
 
-  const handleBackClick = () => {
-    onBackClick();
-  };
+  // const handleBackClick = () => {
+  //   onBackClick();
+  // };
 
   // Framer Motion Variants
   const slideVariants = {
