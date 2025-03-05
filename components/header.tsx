@@ -67,7 +67,9 @@ function Header() {
   // const toggleAccountDropdown = () => {
   //   setIsAccountDropdownOpen(!isAccountDropdownOpen);
   // };
-
+  const handleClick = () => {
+    sessionStorage.clear(); // Clears all sessionStorage data
+  };
   const toggleAvatarDropdown = () => {
     setIsAvatarDropdownOpen(!isAvatarDropdownOpen);
   };
@@ -212,6 +214,7 @@ function Header() {
                 : ""
             }`}
             href={"/mainpage/1"}
+            onClick={handleClick} // Clears sessionStorage on click
           >
             {translations.sidebar.booking}
           </Link>
@@ -421,7 +424,14 @@ function Header() {
                     </div>
                   </div>
                 </Link>
-                <Link href="/mainpage/1" onClick={toggleDrawer}>
+
+                <Link
+                  href="/mainpage/1"
+                  onClick={() => {
+                    toggleDrawer();
+                    handleClick();
+                  }}
+                >
                   <div className="flex items-center gap-2">
                     <FaBook className="text-xl" />
                     <div
@@ -435,7 +445,6 @@ function Header() {
                     </div>
                   </div>
                 </Link>
-
                 {/* Language Selector */}
                 <div className="flex justify-between">
                   <div className="flex gap-2">
