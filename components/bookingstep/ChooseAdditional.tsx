@@ -258,12 +258,23 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                               <div className="text-primary text-sm">
                                 {type.typeName}
                               </div>
-
-                              <div className="font-bold px-2">
-                                price {type.price}
-                              </div>
                             </div>
 
+                            {/* Price and Currency Image Container */}
+                            <div className="flex items-center gap-1">
+                              <div className="font-bold">{type.price}</div>
+                              <Image
+                                src="/images/SR.png" // Ensure this path is correct
+                                alt="SR"
+                                width={10}
+                                height={10}
+                                className={`${
+                                  currentLocale === "ar" ? "scale-x-[-1]" : ""
+                                }`}
+                              />
+                            </div>
+
+                            {/* Quantity Controls */}
                             <div className="flex items-center gap-2">
                               <button
                                 className="px-2 rounded-lg bg-[#ffffff] hover:bg-primary hover:text-white text-gray-400"
@@ -280,7 +291,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                               </button>
                               <input
                                 type="number"
-                                className="w-12 text-center border rounded-lg tracking-widest outline-none focus:ring-2 focus:ring-primary  appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                className="w-12 text-center border rounded-lg tracking-widest outline-none focus:ring-2 focus:ring-primary appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 value={
                                   quantities[
                                     `${addition.additionName}-${type.typeName}`
