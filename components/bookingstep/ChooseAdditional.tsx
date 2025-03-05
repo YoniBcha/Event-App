@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useGetAdditionalEndpointsQuery } from "@/store/endpoints/apiSlice";
 import { useSelector } from "react-redux";
@@ -55,6 +52,25 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
     (state: { language: { translations: Translations } }) =>
       state.language.translations
   );
+
+  useEffect(() => {
+    const storedAdditions = sessionStorage.getItem("eventPackageAdditions");
+    if (storedAdditions) {
+      const eventPackageAdditions: EventPackageAddition[] =
+        JSON.parse(storedAdditions);
+      const initialQuantities = eventPackageAdditions.reduce((acc, item) => {
+        const addition = data?.packageAdditions.find(
+          (addition) => addition._id === item.additionId
+        );
+        if (addition) {
+          const key = `${addition.additionName}-${item.additionTypeName}`;
+          acc[key] = item.quantity;
+        }
+        return acc;
+      }, {} as Record<string, number>);
+      setQuantities(initialQuantities);
+    }
+  }, [data]);
 
   if (isError) return <div>Error fetching data</div>;
 

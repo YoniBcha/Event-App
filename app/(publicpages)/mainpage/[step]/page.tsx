@@ -192,14 +192,21 @@ export default function MainPage() {
     router.push("/mainpage/6");
   };
 
-  const handleExtraServiceSelect = (selectedService: ExtraServiceData) => {
-    setExtraServices((prev) => {
-      const updatedServices = [...prev, selectedService];
-      sessionStorage.setItem("extraServices", JSON.stringify(updatedServices));
-      router.push("/mainpage/7");
-      return updatedServices;
-    });
+  const handleExtraServiceSelect = (selectedService: any) => {
+    setExtraServices(selectedService);
+
+    sessionStorage.setItem("extraServices", JSON.stringify(selectedService));
+    router.push("/mainpage/7");
   };
+
+  //  const handleExtraServiceSelect = (selectedService: ExtraServiceData) => {
+  //    setExtraServices((prev) => {
+  //      const updatedServices = [...prev, selectedService];
+  //      sessionStorage.setItem("extraServices", JSON.stringify(updatedServices));
+  //      router.push("/mainpage/7");
+  //      return updatedServices;
+  //    });
+  //  };
 
   const handlePersonalDataSubmit = async (data: PersonalData) => {
     try {
