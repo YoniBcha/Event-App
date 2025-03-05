@@ -87,6 +87,7 @@ const MyOrdersContent = () => {
         const result = await bookEvent(payload).unwrap();
         console.log("API Response:", JSON.stringify(result, null, 2));
         setIsModalOpen(true);
+        sessionStorage.clear();
       } catch (error: any) {
         try {
           // Call the logout mutation
@@ -176,7 +177,7 @@ const MyOrdersContent = () => {
                 {translations.booking.packageAddition}
               </h2>
               <div className="text-tertiary text-base space-y-2">
-                {payload.eventPackageAdditions.length > 0 ? (
+                {payload?.eventPackageAdditions?.length > 0 ? (
                   payload.eventPackageAdditions.map((addition, index) => (
                     <p key={index}>
                       <span className="font-semibold">

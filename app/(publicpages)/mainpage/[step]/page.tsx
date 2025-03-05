@@ -30,12 +30,6 @@ interface EventPackageAddition {
   quantity: number;
 }
 
-interface ExtraServiceData {
-  extraServices: any;
-  servicesProvider_id: string;
-  packageName: string;
-}
-
 interface PersonalData {
   fullName: string;
   mobileNumber: string;
@@ -64,7 +58,7 @@ export default function MainPage() {
   const [eventPackageAdditions, setEventPackageAdditions] = useState<
     EventPackageAddition[]
   >([]);
-  const [extraServices, setExtraServices] = useState<ExtraServiceData[]>([]);
+  const [extraServices, setExtraServices] = useState<any>([]);
   const [personalData, setPersonalData] = useState<PersonalData | null>(null);
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
@@ -211,7 +205,7 @@ export default function MainPage() {
   const handlePersonalDataSubmit = async (data: PersonalData) => {
     try {
       setPersonalData(data);
-
+      console.log(JSON.stringify(extraServices, null, 2));
       const payload = {
         place: bookingData.place,
         date: bookingData.date, // Check if date is valid
@@ -220,9 +214,7 @@ export default function MainPage() {
         eventDesign: selectedDesignId,
         eventPackage: selectedPackageId,
         eventPackageAdditions: eventPackageAdditions,
-        extraServices: extraServices.flatMap(
-          (service) => service.extraServices
-        ),
+        extraServices: extraServices.extraServices,
         personalData: data,
       };
 

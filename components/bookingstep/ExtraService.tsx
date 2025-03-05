@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 import { motion } from "framer-motion";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
 
 interface ExtraServiceProps {
   onExtraServiceSelect: (selectedService: any) => void;
@@ -116,12 +116,23 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
   }, [currentProvider]);
 
   const handleServiceClick = (serviceName: string) => {
-    setCurrentService(serviceName);
-    setCurrentProvider(null);
+    if (currentService === serviceName) {
+      // Unselect the service if it's already selected
+      setCurrentService(null);
+      setCurrentProvider(null);
+    } else {
+      setCurrentService(serviceName);
+      setCurrentProvider(null);
+    }
   };
 
   const handleProviderClick = (providerId: string) => {
-    setCurrentProvider(providerId);
+    if (currentProvider === providerId) {
+      // Unselect the provider if it's already selected
+      setCurrentProvider(null);
+    } else {
+      setCurrentProvider(providerId);
+    }
   };
 
   const handlePackageSelect = (packageName: string) => {
@@ -131,12 +142,19 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
     );
 
     if (existingServiceIndex !== -1) {
-      updatedServices[existingServiceIndex] = {
-        serviceName: currentService!,
-        providerId: currentProvider!,
-        packageName,
-      };
+      // If the service already exists, update its package
+      if (updatedServices[existingServiceIndex].packageName === packageName) {
+        // Unselect the package if it's already selected
+        updatedServices.splice(existingServiceIndex, 1);
+      } else {
+        updatedServices[existingServiceIndex] = {
+          serviceName: currentService!,
+          providerId: currentProvider!,
+          packageName,
+        };
+      }
     } else {
+      // Add a new service with the selected package
       updatedServices.push({
         serviceName: currentService!,
         providerId: currentProvider!,
@@ -149,14 +167,23 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
     setCurrentProvider(null);
   };
 
-  const handleDone = () => {
-    const selectedData: SelectedData = {
-      extraServices: selectedServices.map((service) => ({
-        servicesProvider_id: service.providerId,
-        packageName: service.packageName,
-      })),
-    };
-    onExtraServiceSelect(selectedData);
+  const handleUnselectService = (serviceName: string) => {
+    const updatedServices = selectedServices.filter(
+      (s) => s.serviceName !== serviceName
+    );
+    setSelectedServices(updatedServices);
+  };
+
+  const handleDone = (skip = false) => {
+    const selectedData = skip
+      ? { extraServices: [] } // Pass the correct structure when skipping
+      : {
+          extraServices: selectedServices.map((service) => ({
+            servicesProvider_id: service.providerId,
+            packageName: service.packageName,
+          })),
+        };
+    onExtraServiceSelect(selectedData); // Pass the entire object
   };
 
   // Filter services that have providers
@@ -192,7 +219,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
             return (
               <motion.div
                 key={index}
-                className="rounded-3xl"
+                className="rounded-3xl relative"
                 variants={{
                   hover: {
                     scale: 1.05,
@@ -208,10 +235,18 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                 whileHover="hover"
                 whileTap="tap"
               >
+                {isServiceSelected && (
+                  <button
+                    className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-lg hover:bg-red-500 hover:text-white"
+                    onClick={() => handleUnselectService(service.serviceName)}
+                  >
+                    <FaTimes />
+                  </button>
+                )}
                 <div
                   className={`bg-[#FDFDF9] hover:bg-secondary rounded-3xl px-6 py-3 cursor-pointer ${
                     isServiceSelected
-                      ? "shadow-lg border-b-2 border-primary"
+                      ? "shadow-lg border-b-2 border-primary bg-secondary"
                       : ""
                   }`}
                   onClick={() => handleServiceClick(service.serviceName)}
@@ -250,7 +285,9 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                   <motion.div
                     key={index}
                     className={`px-6 py-5 hover:bg-secondary rounded-3xl shadow-lg cursor-pointer ${
-                      isProviderSelected ? "border-b-2 border-primary" : ""
+                      isProviderSelected
+                        ? "border-b-2 border-primary bg-secondary"
+                        : ""
                     }`}
                     onClick={() => handleProviderClick(provider._id)}
                     variants={{
@@ -303,8 +340,10 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                 return (
                   <motion.div
                     key={index}
-                    className={`flex max-lg:flex-col hover:bg-secondary items-center gap-2 bg-white p-2 rounded-xl cursor-pointer ${
-                      isPackageSelected ? "border-b-2 border-primary" : ""
+                    className={`flex max-lg:flex-col hover:bg-secondary items-center gap-2  p-2 rounded-xl cursor-pointer ${
+                      isPackageSelected
+                        ? "border-b-2 border-primary bg-secondary"
+                        : "bg-white"
                     }`}
                     onClick={() => handlePackageSelect(pkg.packageName)}
                     variants={{
@@ -363,7 +402,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
         {/* Buttons */}
         <div className="flex justify-center items-center gap-5 mt-5 md:mt-10">
           <motion.button
-            onClick={onBack}
+            onClick={() => handleDone(true)} // Call handleDone with skip=true
             className="back-btn hover:bg-secondary"
             variants={{
               hover: {
@@ -380,31 +419,30 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
             whileHover="hover"
             whileTap="tap"
           >
-            <span className="mr-2">
-              {currentLocale === "ar" ? <FaChevronRight /> : <FaChevronLeft />}
-            </span>
-            <span>{translations.booking.skip}</span>
+            <span>Skip</span>
           </motion.button>
-          <motion.button
-            onClick={handleDone}
-            className="next-btn bg-primary hover:bg-secondary hover:text-primary"
-            variants={{
-              hover: {
-                scale: 1.05,
-                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                transition: { duration: 0.2, ease: "easeInOut" },
-              },
-              tap: {
-                scale: 0.95,
-                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-                transition: { duration: 0.1, ease: "easeInOut" },
-              },
-            }}
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <span>{translations.booking.done}</span>
-          </motion.button>
+          {selectedServices.length > 0 && (
+            <motion.button
+              onClick={() => handleDone(false)} // Call handleDone with skip=false
+              className="next-btn bg-primary hover:bg-secondary hover:text-primary"
+              variants={{
+                hover: {
+                  scale: 1.05,
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                  transition: { duration: 0.2, ease: "easeInOut" },
+                },
+                tap: {
+                  scale: 0.95,
+                  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                  transition: { duration: 0.1, ease: "easeInOut" },
+                },
+              }}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <span>{translations.booking.done}</span>
+            </motion.button>
+          )}
         </div>
       </div>
     </div>
