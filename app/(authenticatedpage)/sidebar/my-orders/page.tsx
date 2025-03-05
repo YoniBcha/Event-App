@@ -304,7 +304,7 @@ const BookedEvents = () => {
         </div>
       ))}
       {/* Pagination Controls */}
-      <div className="flex w-full lg:w-[80%] justify-between items-center mt-8">
+      <div className="lg:flex-row flex-col flex w-full lg:w-[80%] justify-between items-center mt-8">
         <div className=" font-bold text-primary">
           Showing {(currentPage - 1) * pageSize + 1} to{" "}
           {Math.min(currentPage * pageSize, response.total)} of {response.total}{" "}
