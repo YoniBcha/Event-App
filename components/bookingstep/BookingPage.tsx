@@ -12,6 +12,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCalendarAlt, FaCity, FaMapMarkerAlt } from "react-icons/fa";
 import { useGetEventTypesQuery } from "@/store/endpoints/apiSlice";
+import { MdEventNote } from "react-icons/md";
 
 const saudiCities = ["Jeddah", "Makkah", "Riyadh"];
 
@@ -237,7 +238,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                     className="flex justify-between items-center rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
-                      <FaMapMarkerAlt className="text-2xl text-primary" />
+                      <MdEventNote className="text-2xl text-primary" />
                     </div>
                     <div className="">
                       <div className="text-[#a1948d]">Select Event</div>
