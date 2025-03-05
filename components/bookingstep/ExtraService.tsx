@@ -602,7 +602,18 @@ const ParentComponent: React.FC<ParentComponentProps> = ({
                             {pkg.packageDescription}
                           </p>
                           <p className="text-primary font-bold text-lg">
-                            Price <span>{pkg.packagePrice}</span>
+                            <span className="flex font-extrabold items-center gap-1">
+                              {pkg.packagePrice}{" "}
+                              <Image
+                                src="/images/SR.png" // Ensure this path is correct
+                                alt="SR"
+                                width={15}
+                                height={15}
+                                className={`${
+                                  currentLocale === "ar" ? "scale-x-[-1]" : ""
+                                }`}
+                              />
+                            </span>
                           </p>
                         </div>
                       </motion.div>
