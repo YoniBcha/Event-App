@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
 import { ChromePicker, ColorResult } from "react-color";
@@ -19,19 +19,21 @@ interface PersonalDataProps {
 }
 
 function PersonalData({ onSubmit }: PersonalDataProps) {
-  const [formData, setFormData] = useState<PersonalData>({
-    fullName: "",
-    mobileNumber: "",
-    secondMobileNumber: "",
-    favoriteColors: "#ffffff", // Default color
-    notes: "",
+  const [formData, setFormData] = useState<PersonalData>(() => {
+    const savedData = sessionStorage.getItem("personalData");
+    return savedData
+      ? JSON.parse(savedData)
+      : {
+          fullName: "",
+          mobileNumber: "",
+          secondMobileNumber: "",
+          favoriteColors: "#ffffff",
+          notes: "",
+        };
   });
-
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showColorPicker, setShowColorPicker] = useState(false);
-  // const currentLocale = useSelector(
-  //   (state: any) => state.language.currentLocale
-  // );
+
   interface RootState {
     language: {
       translations: {
@@ -59,6 +61,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
+
   // Yup validation schema
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required(`${translations.booking.fullNameRequire}`),
@@ -80,6 +83,26 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     ),
     notes: Yup.string().required(`${translations.booking.noteRequire}`),
   });
+
+  // Load saved data from sessionStorage on component mount
+  useEffect(() => {
+    const savedData = sessionStorage.getItem("personalData");
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData);
+        console.log("Loaded data from sessionStorage:", parsedData); // Debugging
+        setFormData(parsedData);
+      } catch (error) {
+        console.error("Error parsing sessionStorage data:", error);
+      }
+    }
+  }, []);
+
+  // Save form data to sessionStorage whenever it changes
+  useEffect(() => {
+    console.log("Saving data to sessionStorage:", formData); // Debugging
+    sessionStorage.setItem("personalData", JSON.stringify(formData));
+  }, [formData]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -158,7 +181,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                 {field.label}
               </label>
               <input
-                type={field.type} // Use the type from the field object
+                type={field.type}
                 name={field.name}
                 value={formData[field.name as keyof typeof formData] || ""}
                 onChange={handleInputChange}

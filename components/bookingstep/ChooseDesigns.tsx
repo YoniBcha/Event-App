@@ -64,7 +64,8 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   // };
 
   const handleCardClick = (designId: string) => {
-    setSelectedDesignId(designId);
+    setSelectedDesignId(designId); // Set the selected design ID
+    onNext(designId); // Trigger the next step
   };
 
   // const closeModal = () => {
@@ -345,43 +346,6 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             )}
           </span>
           <span>{translations.booking.backBtn}</span>
-        </motion.button>
-
-        {/* Next Button */}
-        <motion.button
-          onClick={handleNextClick}
-          disabled={!selectedDesignId}
-          className={`next-btn flex items-center p-2 rounded-lg text-white cursor-pointer ${
-            selectedDesignId
-              ? "bg-primary hover:bg-[#faebdc] hover:text-primary"
-              : "bg-gray-400 text-gray-100 cursor-not-allowed"
-          }`}
-          variants={{
-            hover: {
-              scale: 1.05,
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-              backgroundColor: getComputedStyle(document.documentElement)
-                .getPropertyValue("--secondary")
-                .trim(),
-              transition: { duration: 0.2, ease: "easeInOut" },
-            },
-            tap: {
-              scale: 0.95,
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-              transition: { duration: 0.1, ease: "easeInOut" },
-            },
-          }}
-          whileHover={selectedDesignId ? "hover" : {}}
-          whileTap={selectedDesignId ? "tap" : {}}
-        >
-          <span>{translations.booking.nextBtn}</span>
-          <span className="ml-3">
-            {currentLocale === "ar" ? (
-              <FaChevronLeft /> // Left arrow for Arabic
-            ) : (
-              <FaChevronRight /> // Right arrow for English
-            )}
-          </span>
         </motion.button>
       </div>
     </motion.div>

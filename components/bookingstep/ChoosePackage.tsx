@@ -453,12 +453,12 @@ function ChoosePackage({
               {packages.map((eventPackage: Package, index: number) => (
                 <motion.div
                   key={eventPackage._id || index}
+                  onClick={() => onNext(eventPackage._id)}
                   className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
                     selectedPackageId === eventPackage._id
                       ? "border-2 border-primary scale-105"
                       : "border border-gray-300"
                   }`}
-                  onClick={() => handleCardClick(eventPackage._id)}
                   variants={cardVariants}
                   whileHover="hover"
                   whileTap="tap"
@@ -512,7 +512,7 @@ function ChoosePackage({
               {packages.map((eventPackage: Package, index: number) => (
                 <SwiperSlide
                   key={eventPackage._id || index}
-                  onClick={() => handleCardClick(eventPackage._id)}
+                  onClick={() => onNext(eventPackage._id)}
                 >
                   <motion.div
                     className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
@@ -625,41 +625,6 @@ function ChoosePackage({
             )}
           </span>
           <span>{translations.booking.backBtn}</span>
-        </motion.button>
-
-        {/* Next Button */}
-        <motion.button
-          onClick={() => onNext(selectedPackageId)}
-          disabled={!selectedPackageId}
-          className={`next-btn flex items-center p-2 rounded-lg text-white cursor-pointer ${
-            selectedPackageId
-              ? "bg-primary hover:bg-secondary hover:text-primary"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          }`}
-          variants={{
-            hover: {
-              scale: 1.05,
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-
-              transition: { duration: 0.2, ease: "easeInOut" },
-            },
-            tap: {
-              scale: 0.95,
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-              transition: { duration: 0.1, ease: "easeInOut" },
-            },
-          }}
-          whileHover={selectedPackageId ? "hover" : {}}
-          whileTap={selectedPackageId ? "tap" : {}}
-        >
-          <span>{translations.booking.nextBtn}</span>
-          <span className="ml-3">
-            {currentLocale === "ar" ? (
-              <FaChevronLeft /> // Left arrow for Arabic
-            ) : (
-              <FaChevronRight /> // Right arrow for English
-            )}
-          </span>
         </motion.button>
       </div>
     </div>
