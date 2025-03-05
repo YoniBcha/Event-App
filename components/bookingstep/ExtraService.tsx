@@ -400,27 +400,30 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
         )}
 
         {/* Buttons */}
+
         <div className="flex justify-center items-center gap-5 mt-5 md:mt-10">
-          <motion.button
-            onClick={() => handleDone(true)} // Call handleDone with skip=true
-            className="back-btn hover:bg-secondary"
-            variants={{
-              hover: {
-                scale: 1.05,
-                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                transition: { duration: 0.2, ease: "easeInOut" },
-              },
-              tap: {
-                scale: 0.95,
-                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-                transition: { duration: 0.1, ease: "easeInOut" },
-              },
-            }}
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <span>Skip</span>
-          </motion.button>
+          {selectedServices.length < 1 && (
+            <motion.button
+              onClick={() => handleDone(true)} // Call handleDone with skip=true
+              className="back-btn hover:bg-secondary"
+              variants={{
+                hover: {
+                  scale: 1.05,
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                  transition: { duration: 0.2, ease: "easeInOut" },
+                },
+                tap: {
+                  scale: 0.95,
+                  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                  transition: { duration: 0.1, ease: "easeInOut" },
+                },
+              }}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <span>Skip</span>
+            </motion.button>
+          )}
           {selectedServices.length > 0 && (
             <motion.button
               onClick={() => handleDone(false)} // Call handleDone with skip=false

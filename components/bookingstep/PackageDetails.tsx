@@ -190,7 +190,7 @@ function PackageDetails({
 
       <div className="flex gap-5">
         {/* Back Button */}
-        <motion.button
+        {/* <motion.button
           onClick={onBack}
           className="back-btn flex items-center p-2 hover:bg-secondary rounded-lg border border-primary text-primary cursor-pointer"
           variants={{
@@ -217,7 +217,7 @@ function PackageDetails({
             )}
           </span>
           <span>{translations.booking.backBtn}</span>
-        </motion.button>
+        </motion.button> */}
 
         {/* Next Button */}
         <motion.button

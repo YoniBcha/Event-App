@@ -120,7 +120,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
         </div>
 
         {/* Back Button */}
-        <motion.button
+        {/* <motion.button
           onClick={onBackClick}
           className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
           variants={{
@@ -147,7 +147,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             )}
           </span>
           <span>{translations.booking.backBtn}</span>
-        </motion.button>
+        </motion.button> */}
       </motion.div>
     );
   }
@@ -317,7 +317,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
 
       <div className="flex justify-center gap-5 my-5">
         {/* Back Button */}
-        <motion.button
+        {/* <motion.button
           onClick={handleBackClick}
           className="back-btn flex items-center p-2 hover:bg-secondary rounded-lg border border-primary text-primary cursor-pointer"
           variants={{
@@ -346,7 +346,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
             )}
           </span>
           <span>{translations.booking.backBtn}</span>
-        </motion.button>
+        </motion.button> */}
       </div>
     </motion.div>
   );

@@ -224,7 +224,7 @@ function ChoosePackage({
         </div>
 
         {/* Back Button */}
-        <motion.button
+        {/* <motion.button
           onClick={onBackClick}
           className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
           variants={{
@@ -251,7 +251,7 @@ function ChoosePackage({
             )}
           </span>
           <span>{translations.booking.backBtn}</span>
-        </motion.button>
+        </motion.button> */}
       </motion.div>
     );
   }
@@ -598,7 +598,7 @@ function ChoosePackage({
 
       <div className="flex justify-center gap-5 my-5">
         {/* Back Button */}
-        <motion.button
+        {/* <motion.button
           onClick={onBackClick}
           className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
           variants={{
@@ -625,7 +625,7 @@ function ChoosePackage({
             )}
           </span>
           <span>{translations.booking.backBtn}</span>
-        </motion.button>
+        </motion.button> */}
       </div>
     </div>
   );

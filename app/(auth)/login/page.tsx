@@ -89,7 +89,8 @@ const LoginContent: React.FC<any> = ({
               `/sidebar/booking?payload=${encodeURIComponent(payload)}`
             );
           } else {
-            router.push("/sidebar/my-orders");
+            // Use `replace` to clear the back stack
+            router.replace("/sidebar/my-orders");
           }
         }, 1000);
       } else {

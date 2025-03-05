@@ -78,46 +78,46 @@ const EventTypeComponent = ({
 
   if (!isLoading && eventTypes.length === 0) {
     return (
-        <motion.div
-                    className="flex flex-col gap-10 h-full justify-center items-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-              <div className="text-primary font-bold text-xl md:text-3xl text-center">
-                {translations.booking.noEvent}
-              </div>
-      
-                   {/* Back Button */}
-              <motion.button
-                onClick={onBack}
-                className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
-                variants={{
-                  hover: {
-                    scale: 1.05,
-                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-      
-                    transition: { duration: 0.2, ease: "easeInOut" },
-                  },
-                  tap: {
-                    scale: 0.95,
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-                    transition: { duration: 0.1, ease: "easeInOut" },
-                  },
-                }}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                <span className="mr-2">
-                  {currentLocale === "ar" ? (
-                    <FaChevronRight /> // Right arrow for Arabic
-                  ) : (
-                    <FaChevronLeft /> // Left arrow for English
-                  )}
-                </span>
-                <span>{translations.booking.backBtn}</span>
-              </motion.button>
-             </motion.div>
+      <motion.div
+        className="flex flex-col gap-10 h-full justify-center items-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className="text-primary font-bold text-xl md:text-3xl text-center">
+          {translations.booking.noEvent}
+        </div>
+
+        {/* Back Button */}
+        {/* <motion.button
+          onClick={onBack}
+          className="back-btn flex items-center hover:bg-secondary p-2 rounded-lg border border-primary text-primary cursor-pointer"
+          variants={{
+            hover: {
+              scale: 1.05,
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+
+              transition: { duration: 0.2, ease: "easeInOut" },
+            },
+            tap: {
+              scale: 0.95,
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.1, ease: "easeInOut" },
+            },
+          }}
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <span className="mr-2">
+            {currentLocale === "ar" ? (
+              <FaChevronRight /> // Right arrow for Arabic
+            ) : (
+              <FaChevronLeft /> // Left arrow for English
+            )}
+          </span>
+          <span>{translations.booking.backBtn}</span>
+        </motion.button> */}
+      </motion.div>
     );
   }
 
@@ -214,7 +214,7 @@ const EventTypeComponent = ({
 
       <div className="flex flex-row gap-5 my-4">
         {/* Back Button */}
-        <motion.button
+        {/* <motion.button
           onClick={onBack}
           className="back-btn flex hover:bg-secondary items-center p-2 rounded-lg border border-primary text-primary cursor-pointer"
           variants={{
@@ -243,7 +243,7 @@ const EventTypeComponent = ({
             )}
           </span>
           <span>{translations.booking.backBtn}</span>
-        </motion.button>
+        </motion.button> */}
 
         {/* Next Button */}
         <motion.button
