@@ -340,7 +340,11 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
         {currentProvider && (
           <div className="flex flex-col gap-5 justify-center items-center">
             <h2 className="text-center mt-2 text-primary font-bold text-lg">
-              {translations.booking.selectPackage} {currentService}
+              {translations.booking.selectPackage} {currentService}{" "}
+              {
+                serviceProviders.find((p) => p._id === currentProvider)
+                  ?.providerName
+              }
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
               {packages.map((pkg, index) => {
