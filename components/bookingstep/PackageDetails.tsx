@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetPackageDetailQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+ 
 
 function PackageDetails({
   packageId,
@@ -71,13 +71,17 @@ function PackageDetails({
           </div>
         ) : (
           <motion.div
-            className="flex flex-col gap-3 md:flex-row bg-gradient-to-r from-secondary to-white w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl"
+            className="flex flex-col gap-3 cursor-pointer md:flex-row bg-secondary w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            onClick={handleNextClick}
           >
             <div className="flex flex-col w-full lg:w-1/4 md:w-2/4 h-full">
-              <div className="flex flex-col w-full">
+              <div
+                className="flex flex-col w-full"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div className="min-h-[200px] w-full rounded bg-slate-500 flex items-center justify-center relative overflow-hidden">
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -106,7 +110,10 @@ function PackageDetails({
                 </div>
               </div>
 
-              <div className="py-2 grid grid-cols-4 gap-2">
+              <div
+                className="py-2 grid grid-cols-4 gap-2"
+                onClick={(e) => e.stopPropagation()}
+              >
                 {packageData.eventPackage.image.map(
                   (imageUrl: any, index: any) => (
                     <motion.div
@@ -220,7 +227,7 @@ function PackageDetails({
         </motion.button> */}
 
         {/* Next Button */}
-        <motion.button
+        {/* <motion.button
           onClick={handleNextClick}
           className="next-btn flex items-center p-2 rounded-lg text-white bg-primary hover:bg-secondary hover:text-primary cursor-pointer"
           variants={{
@@ -247,7 +254,7 @@ function PackageDetails({
               <FaChevronRight /> // Right arrow for English
             )}
           </span>
-        </motion.button>
+        </motion.button> */}
       </div>
     </motion.div>
   );

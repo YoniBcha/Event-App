@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useState, useEffect, useRef } from "react"; // Add useRef
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
-import { IoIosArrowBack, IoIosArrowForward, IoMdClose } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 
-import "swiper/css";
 import "./styles.css";
 import { useGetSingleDesignGalleryQuery } from "@/store/endpoints/apiSlice";
-import { Swiper as SwiperType } from "swiper"; // Import Swiper type
 
 interface RootState {
   language: {
@@ -32,10 +28,6 @@ function ChooseDesigns() {
   const [error, setError] = useState<unknown>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
-  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
-
-  const prevButtonRef = useRef<HTMLButtonElement>(null); // Ref for prev button
-  const nextButtonRef = useRef<HTMLButtonElement>(null); // Ref for next button
 
   const { data: galleryData, isLoading: isGalleryLoading } =
     useGetSingleDesignGalleryQuery<any>(
@@ -87,7 +79,6 @@ function ChooseDesigns() {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDesignId(null);
-    setThumbsSwiper(null); // Reset thumbs swiper when modal closes
   };
 
   if (error) return <p>Failed to load designs</p>;
@@ -122,8 +113,11 @@ function ChooseDesigns() {
                   className="rounded-t-lg"
                 />
               </div>
-              <p className="mt-2 text-sm text-tertiary font-medium text-center">
+              <p className="mt-2 text-sm text-tertiary font-extrabold text-center">
                 {design.designId.eventDesign}
+              </p>
+              <p className="mt-2 text-sm text-tertiary font-medium text-center">
+                {design.description}
               </p>
             </motion.div>
           ))}
@@ -131,8 +125,8 @@ function ChooseDesigns() {
       )}
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 ">
-          <div className="relative w-11/12 h-1/2 md:h-3/4 rounded-lg backdrop-blur-lg bg-secondary pt-4 shadow-lg">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+          <div className="relative w-11/12 h-3/4 rounded-lg backdrop-blur-lg bg-secondary p-4 shadow-lg overflow-y-auto">
             {/* Close Button */}
             <button
               onClick={closeModal}
@@ -146,87 +140,42 @@ function ChooseDesigns() {
                 <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
               </div>
             ) : (
-              <>
-                {/* Main Swiper */}
-                <Swiper
-                  spaceBetween={10}
-                  navigation={{
-                    nextEl: nextButtonRef.current,
-                    prevEl: prevButtonRef.current,
-                  }}
-                  thumbs={{ swiper: thumbsSwiper }}
-                  modules={[FreeMode, Navigation, Thumbs, Pagination]}
-                  className="modal-main-swiper"
-                  loop={true}
-                  onInit={(swiper: any) => {
-                    // Manually connect navigation buttons after Swiper initializes
-                    if (swiper.params.navigation) {
-                      swiper.params.navigation.nextEl = nextButtonRef.current;
-                      swiper.params.navigation.prevEl = prevButtonRef.current;
-                      swiper.navigation.init();
-                      swiper.navigation.update();
-                    }
-                  }}
-                >
+              <div className="flex flex-col gap-6">
+                {/* Title and Description Section */}
+                <div className="text-center">
+                  <h2 className="text-2xl font-bold text-primary">
+                    {galleryData.singleGallery.designId.eventDesign}
+                  </h2>
+                </div>
+                {/* Image Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {galleryData.singleGallery.images.map(
-                    (image: any, index: any) => (
-                      <SwiperSlide key={index}>
-                        <div className="relative w-full h-full">
-                          <Image
-                            src={image}
-                            alt="Gallery Image"
-                            layout="fill"
-                            objectFit="contain"
-                            className="rounded-lg"
-                          />
+                    (image: any, index: number) => (
+                      <div
+                        key={index}
+                        className="relative w-full h-48 rounded-lg overflow-hidden border border-gray-300 shadow-md hover:shadow-lg transition-shadow duration-300"
+                      >
+                        <Image
+                          src={image}
+                          alt={`Gallery Image ${index + 1}`}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-lg"
+                        />
+                        <div className="text-center">
+                          <h2 className="text-2xl font-bold text-primary">
+                            {galleryData.singleGallery.designId.eventDesign}
+                          </h2>
+                          <p className="text-gray-300 mt-2">
+                            {galleryData.singleGallery.description}
+                          </p>
                         </div>
-                      </SwiperSlide>
+                      </div>
                     )
                   )}
-                </Swiper>
-
-                {/* Thumbs Swiper */}
-                <Swiper
-                  onSwiper={(swiper: SwiperType) => setThumbsSwiper(swiper)}
-                  spaceBetween={10}
-                  slidesPerView={4}
-                  freeMode={true}
-                  watchSlidesProgress={true}
-                  modules={[FreeMode, Navigation, Thumbs]}
-                  className="modal-thumbs-swiper"
-                >
-                  {galleryData.singleGallery.images.map(
-                    (image: any, index: any) => (
-                      <SwiperSlide key={index}>
-                        <div className="relative w-full h-20">
-                          <Image
-                            src={image}
-                            alt={`Thumbnail ${image}`}
-                            layout="fill"
-                            objectFit="cover"
-                            className="rounded-lg"
-                          />
-                        </div>
-                      </SwiperSlide>
-                    )
-                  )}
-                </Swiper>
-              </>
+                </div>
+              </div>
             )}
-
-            {/* Custom Navigation Arrows */}
-            <button
-              ref={prevButtonRef}
-              className="swiper-button-prev cursor-pointer z-50 absolute top-1/2 left-4 transform -translate-y-1/2 bg-primary p-3 rounded-full text-white shadow-md"
-            >
-              <IoIosArrowBack size={20} /> {/* Previous arrow icon */}
-            </button>
-            <button
-              ref={nextButtonRef}
-              className="swiper-button-next absolute top-1/2 z-50 right-4 transform -translate-y-1/2 bg-primary p-3 rounded-full text-white shadow-md"
-            >
-              <IoIosArrowForward size={20} /> {/* Next arrow icon */}
-            </button>
           </div>
         </div>
       )}

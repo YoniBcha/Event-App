@@ -5,12 +5,13 @@ import * as Yup from "yup";
 import { useSelector } from "react-redux";
 import { ChromePicker, ColorResult } from "react-color";
 import { motion } from "framer-motion";
+import { FaArrowRight, FaPlus } from "react-icons/fa";
 
 interface PersonalData {
   fullName: string;
   mobileNumber: string;
   secondMobileNumber: string;
-  favoriteColors: string;
+  favoriteColors: string[]; // Updated to store an array of colors
   notes: string;
 }
 
@@ -27,12 +28,13 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           fullName: "",
           mobileNumber: "",
           secondMobileNumber: "",
-          favoriteColors: "#ffffff",
+          favoriteColors: [], // Initialize as an empty array
           notes: "",
         };
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [selectedColor, setSelectedColor] = useState("#ffffff"); // Track the currently selected color
 
   interface RootState {
     language: {
@@ -78,9 +80,9 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           return value !== this.parent.mobileNumber;
         }
       ),
-    favoriteColors: Yup.string().required(
-      `${translations.booking.colorRequire}`
-    ),
+    favoriteColors: Yup.array()
+      .of(Yup.string())
+      .min(1, `${translations.booking.colorRequire}`), // Validate at least one color is selected
     notes: Yup.string().required(`${translations.booking.noteRequire}`),
   });
 
@@ -116,7 +118,24 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   };
 
   const handleColorChange = (color: ColorResult) => {
-    setFormData({ ...formData, favoriteColors: color.hex });
+    setSelectedColor(color.hex); // Update the selected color
+  };
+
+  const addColor = () => {
+    if (!formData.favoriteColors.includes(selectedColor)) {
+      setFormData((prevData) => ({
+        ...prevData,
+        favoriteColors: [...prevData.favoriteColors, selectedColor], // Add the selected color to the array
+      }));
+    }
+    setShowColorPicker(false); // Close the color picker
+  };
+
+  const removeColor = (color: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      favoriteColors: prevData.favoriteColors.filter((c) => c !== color), // Remove the color from the array
+    }));
   };
 
   const handleSubmit = async () => {
@@ -209,20 +228,42 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             <label className="font-medium text-tertiary text-md mb-2">
               {translations.booking.pickColor}
             </label>
-            <div className="relative">
+            <div className="flex items-center gap-2">
+              {/* Color Preview */}
               <div
                 className="w-10 h-10 rounded-lg cursor-pointer border border-primary"
-                style={{ backgroundColor: formData.favoriteColors }}
+                style={{
+                  backgroundColor: selectedColor,
+                }}
                 onClick={() => setShowColorPicker(!showColorPicker)}
               />
-              {showColorPicker && (
-                <div className="absolute z-10 mt-2">
-                  <ChromePicker
-                    color={formData.favoriteColors}
-                    onChange={handleColorChange}
-                  />
-                </div>
-              )}
+              {/* + Button to Add Color */}
+              <button
+                onClick={addColor}
+                className="p-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors duration-200"
+              >
+                <FaPlus />
+              </button>
+            </div>
+            {/* Color Picker */}
+            {showColorPicker && (
+              <div className="mt-2">
+                <ChromePicker
+                  color={selectedColor}
+                  onChange={handleColorChange}
+                />
+              </div>
+            )}
+            {/* Display Selected Colors */}
+            <div className="flex flex-wrap mt-2">
+              {formData.favoriteColors.map((color, index) => (
+                <div
+                  key={index}
+                  className="w-6 h-6 rounded-full m-1 cursor-pointer"
+                  style={{ backgroundColor: color }}
+                  onClick={() => removeColor(color)}
+                />
+              ))}
             </div>
             {errors.favoriteColors && (
               <div className="text-red-500 text-sm mt-1">
@@ -260,7 +301,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
         <motion.div className="flex justify-center mt-8">
           <motion.button
             onClick={handleSubmit}
-            className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-secondary hover:text-primary transition-colors duration-200"
+            className="p-3 rounded-full bg-primary text-white hover:bg-secondary hover:text-primary transition-colors duration-200"
             variants={{
               hover: {
                 scale: 1.05,
@@ -276,7 +317,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             whileHover="hover"
             whileTap="tap"
           >
-            {translations.booking.nextBtn} &gt;
+            <FaArrowRight className="text-xl" />
           </motion.button>
         </motion.div>
       </div>

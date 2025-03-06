@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -160,94 +161,10 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   return (
     <main className="">
       <form onSubmit={handleSubmit(onSubmit)} className="h-full">
-        <section className="flex flex-col md:flex-row w-full h-[80vh] gap-5 px-5">
-          <div className="flex justify-center items-center md:justify-end h-full w-full">
-            <div className="flex flex-col justify-center items-center h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl relative">
-              <Image
-                src={
-                  typeof window !== "undefined" && window.innerWidth >= 1024
-                    ? "/images/booking2.jpg"
-                    : "/images/booking-image.jpg"
-                }
-                alt="About Image"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-2xl"
-              />
-            </div>
-          </div>
-          <div className="flex justify-center items-center md:justify-start h-full w-full">
-            <div className="flex flex-col justify-center items-center h-full md:h-[80%] w-full lg:w-[60%] gap-5 rounded-2xl shadow-xl">
+        <section className="flex flex-col md:flex-row w-full justify-center h-[80vh] gap-5 px-5">
+          <div className="flex justify-center items-center md:justify-start h-full w-full md:w-[50%]">
+            <div className="flex flex-col justify-center items-center h-full  w-full gap-5 rounded-2xl shadow-xl">
               <div className="flex flex-col gap-5 relative w-[80%]">
-                {/* Place Dropdown */}
-                <div className="">
-                  <div
-                    onClick={() => setShowPlaceDropdown(!showPlaceDropdown)}
-                    className="flex justify-between items-center rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
-                  >
-                    <div>
-                      <FaMapMarkerAlt className="text-2xl text-primary" />
-                    </div>
-                    <div className="">
-                      <div className="text-[#a1948d]">
-                        {translations.booking.selectPlace}
-                      </div>
-                      <div className="text-[#a1948d] font-semibold">
-                        {selectedPlace || ""}
-                      </div>
-                    </div>
-                    <div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                      >
-                        <rect width="24" height="24" fill="none" />
-                        <path
-                          fill="none"
-                          stroke="#281d1b"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m7 10l5 5m0 0l5-5"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <AnimatePresence>
-                    {showPlaceDropdown && (
-                      <motion.div
-                        className="absolute top-10 mt-2 w-full bg-secondary  border border-[#d4c9c0] rounded-lg shadow-lg z-10"
-                        variants={dropdownVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="hidden"
-                      >
-                        {["outdoor", "indoor", "both"].map((place) => (
-                          <label
-                            key={place}
-                            className="flex items-center p-2 hover:bg-primary cursor-pointer"
-                          >
-                            <input
-                              type="checkbox"
-                              name="place"
-                              value={place}
-                              checked={selectedPlace === place}
-                              onChange={() => handlePlaceChange(place)}
-                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
-                            />
-                            <span className="text-[#685651]">{place}</span>
-                          </label>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {errors.place && (
-                    <p className="text-red-500">{errors.place.message}</p>
-                  )}
-                </div>
                 {/* Event Dropdown */}
                 <div className="relative">
                   <div
@@ -326,6 +243,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                     </p>
                   )}
                 </div>
+
                 {/* Date Picker */}
                 <div className="">
                   <div
@@ -364,6 +282,76 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   </div>
                   {errors.date && (
                     <p className="text-red-500">{errors.date.message}</p>
+                  )}
+                </div>
+
+                {/* Place Dropdown */}
+                <div className="relative">
+                  <div
+                    onClick={() => setShowPlaceDropdown(!showPlaceDropdown)}
+                    className="flex justify-between items-center rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
+                  >
+                    <div>
+                      <FaMapMarkerAlt className="text-2xl text-primary" />
+                    </div>
+                    <div className="">
+                      <div className="text-[#a1948d]">
+                        {translations.booking.selectPlace}
+                      </div>
+                      <div className="text-[#a1948d] font-semibold">
+                        {selectedPlace || ""}
+                      </div>
+                    </div>
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                      >
+                        <rect width="24" height="24" fill="none" />
+                        <path
+                          fill="none"
+                          stroke="#281d1b"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m7 10l5 5m0 0l5-5"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <AnimatePresence>
+                    {showPlaceDropdown && (
+                      <motion.div
+                        className="absolute top-full mt-2 w-full bg-secondary  border border-[#d4c9c0] rounded-lg shadow-lg z-10"
+                        variants={dropdownVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                      >
+                        {["outdoor", "indoor", "both"].map((place) => (
+                          <label
+                            key={place}
+                            className="flex items-center p-2 hover:bg-primary cursor-pointer"
+                          >
+                            <input
+                              type="checkbox"
+                              name="place"
+                              value={place}
+                              checked={selectedPlace === place}
+                              onChange={() => handlePlaceChange(place)}
+                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
+                            />
+                            <span className="text-[#685651]">{place}</span>
+                          </label>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {errors.place && (
+                    <p className="text-red-500">{errors.place.message}</p>
                   )}
                 </div>
                 {/* City Dropdown */}

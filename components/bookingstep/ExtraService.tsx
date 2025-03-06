@@ -237,21 +237,16 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                 whileHover="hover"
                 whileTap="tap"
               >
-                {isServiceSelected && (
-                  <button
-                    className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-lg hover:bg-red-500 hover:text-white"
-                    onClick={() => handleUnselectService(service.serviceName)}
-                  >
-                    <FaTimes />
-                  </button>
-                )}
                 <div
                   className={`bg-[#FDFDF9] hover:bg-secondary rounded-3xl px-6 py-3 cursor-pointer ${
                     isServiceSelected
                       ? "shadow-lg border-b-2 border-primary bg-secondary"
                       : ""
                   }`}
-                  onClick={() => handleServiceClick(service.serviceName)}
+                  onClick={() => {
+                    handleServiceClick(service.serviceName);
+                    handleUnselectService(service.serviceName);
+                  }}
                 >
                   <div className="relative rounded-full h-28 w-28 bg-[#c2937b]">
                     <Image

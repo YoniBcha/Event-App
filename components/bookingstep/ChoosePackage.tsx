@@ -322,7 +322,7 @@ function ChoosePackage({
             </div>
           ) : (
             <motion.div
-              className="flex flex-col gap-3 md:flex-row bg-gradient-to-r from-secondary to-white w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl"
+              className="flex flex-col gap-3 md:flex-row bg-secondary to-white w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -395,7 +395,7 @@ function ChoosePackage({
                           selectedImageIndex === index
                             ? "border-2 border-primary"
                             : ""
-                        } overflow-hidden relative w-full h-12 md:h-11`}
+                        } overflow-hidden relative w-full h-12 md:h-16`}
                         onClick={() => handleThumbnailClick(index)} // Update the selected image index
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -412,6 +412,7 @@ function ChoosePackage({
                   )}
                 </div>
               </div>
+
               <motion.div
                 className="w-full md:w-1/2 h-full ml-0 md:ml-5 mt-5"
                 initial={{ opacity: 0, x: 20 }}
@@ -449,8 +450,8 @@ function ChoosePackage({
       ) : (
         <>
           {/* List View for Small Devices (sm and below) */}
-          <div className="flex w-full sm:hidden flex-col gap-4">
-            <div className="grid grid-cols-1 gap-4 [@media(min-width:361px)]:grid-cols-2 [@media(min-width:639px)]:grid-cols-2">
+          <div className="flex w-full gap-4">
+            <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {packages.map((eventPackage: Package, index: number) => (
                 <motion.div
                   key={eventPackage._id || index}
@@ -464,13 +465,7 @@ function ChoosePackage({
                   whileHover="hover"
                   whileTap="tap"
                 >
-                  <div
-                    className="relative w-full h-48"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // handleImageClick(eventPackage.image[0]);
-                    }}
-                  >
+                  <div className="relative w-full h-48">
                     <Image
                       src={eventPackage.image[0]}
                       alt={eventPackage.packageName}
@@ -495,7 +490,7 @@ function ChoosePackage({
           </div>
 
           {/* Swiper for Medium Devices (md and above) */}
-          <div className="hidden sm:block w-[90%] px-4 relative">
+          <div className="hidden  w-[90%] px-4 relative">
             <Swiper
               modules={[Navigation, Pagination]}
               spaceBetween={20}

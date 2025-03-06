@@ -380,7 +380,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
 
           <motion.button
             onClick={handleNextClick}
-            className={`next-btn flex items-center p-2 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary`}
+            className={` flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary`}
             variants={{
               hover: {
                 scale: 1.05,
@@ -396,8 +396,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
             whileHover={"hover"}
             whileTap={"tap"}
           >
-            <span>Next</span>
-            <span className="ml-3">
+            <span className="">
               {currentLocale === "ar" ? (
                 <AiOutlineLeft size={20} />
               ) : (
