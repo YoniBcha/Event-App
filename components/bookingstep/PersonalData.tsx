@@ -161,7 +161,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <div className="w-full max-w-4xl p-6 max-[500px]:p-3 rounded-lg shadow-md">
+      <div className="w-full max-w-4xl p-6 max-[500px]:p-3 rounded-lg border-2 border-secondary shadow-lg">
         <motion.div
           className="text-center text-primary font-bold text-2xl mb-6"
           initial={{ opacity: 0, y: -20 }}

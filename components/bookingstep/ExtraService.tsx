@@ -341,7 +341,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
         {currentProvider && (
           <div className="flex flex-col gap-5 justify-center items-center">
             <h2 className="text-center mt-2 text-primary font-bold text-lg">
-              {translations.booking.selectPackage} {currentService}{" "}
+              {translations.booking.selectPackage}{" "}
               {
                 serviceProviders.find((p) => p._id === currentProvider)
                   ?.providerName
