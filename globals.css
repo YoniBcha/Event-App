@@ -40,7 +40,7 @@
     @apply flex items-center text-center mt-2 font-medium  cursor-pointer text-white text-lg border border-primary rounded-lg px-6 py-1 transition;
   }
   .input-field {
-    @apply bg-[#f7f4e9] py-2 max-sm:py-1 px-4 rounded-lg;
+    @apply bg-secondary py-2 max-sm:py-1 px-4 rounded-lg;
   }
 }
 .bg-today {

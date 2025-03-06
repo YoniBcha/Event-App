@@ -204,7 +204,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                 name={field.name}
                 value={formData[field.name as keyof typeof formData] || ""}
                 onChange={handleInputChange}
-                className={`border outline-none ${
+                className={`border outline-none  ${
                   errors[field.name as keyof typeof errors]
                     ? "border-red-500"
                     : "border-primary"
@@ -290,7 +290,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             rows={4}
             className={`border outline-none ${
               errors.notes ? "border-red-500" : "border-primary"
-            } bg-[#f7f4e9] py-2 px-4 w-full rounded-lg`}
+            } bg-secondary py-2 px-4 w-full rounded-lg`}
           ></textarea>
           {errors.notes && (
             <div className="text-red-500 text-sm mt-1">{errors.notes}</div>
