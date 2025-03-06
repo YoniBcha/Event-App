@@ -94,7 +94,8 @@ function Header() {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         avatarDropdownRef.current &&
-        !avatarDropdownRef.current.contains(event.target as Node)
+        !avatarDropdownRef.current.contains(event.target as Node) &&
+        !(event.target as HTMLElement).closest(".circle-button")
       ) {
         setIsAvatarDropdownOpen(false);
       }
@@ -257,9 +258,8 @@ function Header() {
             </div>
           </div>
           <div
-            className="h-10 w-10 rounded-full bg-gray-200 cursor-pointer"
+            className="h-10 w-10 rounded-full bg-gray-200 cursor-pointer circle-button"
             onClick={toggleAvatarDropdown}
-            ref={avatarDropdownRef}
           >
             <AnimatePresence>
               {isAvatarDropdownOpen && (
