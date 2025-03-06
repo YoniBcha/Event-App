@@ -11,7 +11,7 @@ function Footer() {
         stiffness: 100, // Adjusts the bounciness
         damping: 10, // Controls how quickly it settles
       }}
-      className="w-full py-2 md:py-7 bg-transparent flex flex-row justify-between items-center text-sm text-primary mt-auto"
+      className="w-full py-4 md:py-7 bg-transparent flex flex-row justify-between items-center text-sm text-primary mt-auto"
     >
       <div className="flex flex-row gap-4 items-center">
         <div>&copy; 2025 FENZO</div>

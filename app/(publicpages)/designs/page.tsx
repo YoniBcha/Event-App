@@ -68,7 +68,7 @@ function ChooseDesigns() {
   if (error) return <p>Failed to load designs</p>;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 mb-3">
       <div className="text-primary font-bold text-xl md:text-3xl pt-5 text-center">
         {translations.sidebar.designs}
       </div>
