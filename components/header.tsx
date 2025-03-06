@@ -179,7 +179,7 @@ function Header() {
           </Link>
           <Link
             className={`hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg ${
-              pathname === "/designs"
+              pathname.startsWith("/designs")
                 ? "font-bold border-b-2 border-primary text-primary"
                 : ""
             }`}
@@ -209,7 +209,7 @@ function Header() {
           </Link>
           <Link
             className={`hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg ${
-              pathname === "/mainpage"
+              pathname.startsWith("/mainpage")
                 ? "font-bold border-b-2 border-primary text-primary"
                 : ""
             }`}
@@ -387,7 +387,7 @@ function Header() {
                     <FaFileAlt className="text-xl" />
                     <div
                       className={`hover:text-gray-500 ${
-                        pathname === "/designs"
+                        pathname.startsWith("/designs")
                           ? "font-bold border-b-2 border-primary text-primary"
                           : ""
                       }`}
@@ -436,7 +436,7 @@ function Header() {
                     <FaBook className="text-xl" />
                     <div
                       className={`hover:text-gray-500 ${
-                        pathname === "/mainpage"
+                        pathname.startsWith("/mainpage")
                           ? "font-bold border-b-2 border-primary text-primary"
                           : ""
                       }`}
