@@ -9,7 +9,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCalendarAlt, FaCity, FaMapMarkerAlt } from "react-icons/fa";
 import { useGetEventTypesQuery } from "@/store/endpoints/apiSlice";

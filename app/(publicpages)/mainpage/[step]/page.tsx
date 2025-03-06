@@ -35,7 +35,7 @@ interface PersonalData {
   fullName: string;
   mobileNumber: string;
   secondMobileNumber?: string;
-  favoriteColors: string;
+  favoriteColors: string[];
   notes?: string;
 }
 
