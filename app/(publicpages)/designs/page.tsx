@@ -76,9 +76,9 @@ function ChooseDesigns() {
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-        </div>
+        </div> 
       ) : (
-        <div className="grid grid-cols-1  min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full px-4">
+        <div className="grid grid-cols-1 mx-auto lg:w-[75%] max-md:w-[85%] max-lg:w-[80%]  min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full px-4">
           {designs.map((design: any, index: number) => (
             <motion.div
               key={design._id || index}
