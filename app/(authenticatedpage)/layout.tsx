@@ -41,7 +41,7 @@ function Layout({ children }: RootLayoutProps) {
   return (
     <div className="flex flex-col md:flex-row w-full mb-10 gap-2 md:gap-6">
       {/* Mobile Header with Avatar and Edit Icon */}
-      <div className="md:hidden flex justify-center items-center p-4 bg-[#fbf4e8]">
+      <div className="md:hidden flex justify-center items-center p-4 bg-secondary">
         <div className="flex items-center gap-2">
           <div className="relative rounded-full border-4 border-primary w-16 h-16">
             <FiUser size={54} />

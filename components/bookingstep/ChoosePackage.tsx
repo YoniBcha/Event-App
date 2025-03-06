@@ -322,7 +322,7 @@ function ChoosePackage({
             </div>
           ) : (
             <motion.div
-              className="flex flex-col gap-3 md:flex-row bg-secondary to-white w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl"
+              className="flex flex-col gap-3 md:flex-row bg-secondary to-white w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit p-3 rounded-xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -450,8 +450,8 @@ function ChoosePackage({
       ) : (
         <>
           {/* List View for Small Devices (sm and below) */}
-          <div className="flex w-full gap-4">
-            <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="flex w-full lg:w-[75%] max-md:w-[85%] max-lg:w-[80%] gap-4">
+          <div className="grid w-full grid-cols-1 gap-4 min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {packages.map((eventPackage: Package, index: number) => (
                 <motion.div
                   key={eventPackage._id || index}

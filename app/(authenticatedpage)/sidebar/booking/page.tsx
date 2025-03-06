@@ -132,7 +132,7 @@ const MyOrdersContent = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-secondary rounded-lg shadow-md">
       <h1 className="text-primary text-2xl font-bold mb-6">
         {translations.myOrders}
       </h1>

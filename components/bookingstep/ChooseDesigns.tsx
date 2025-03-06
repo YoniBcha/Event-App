@@ -171,8 +171,8 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
       ) : (
         // Grid View
         <>
-          <div className="flex w-full gap-4">
-            <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="flex w-full lg:w-[75%] max-md:w-[85%] max-lg:w-[80%] gap-4">
+            <div className="grid w-full grid-cols-1 gap-4 min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {designs.map((design: Design, index: number) => (
                 <motion.div
                   key={design._id || index}
