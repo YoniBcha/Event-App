@@ -21,7 +21,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "react-toastify/dist/ReactToastify.css";
-import { MdOutlineCancel } from "react-icons/md";
+
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 interface Event {
@@ -82,6 +82,13 @@ interface RootState {
         reject: string;
         confirmReject: string;
         cancel: string;
+        canceling: string;
+        areyousuretocancelthisorder: string;
+        sampleName: string;
+        confirm: string;
+        paymentInformation: string;
+        name: string;
+        close: string;
       };
     };
   };
@@ -325,7 +332,7 @@ const BookedEvents = () => {
                 className="bg-red-500 w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg hover:bg-red-600 text-center md:py-2 md:rounded-xl md:text-lg"
                 onClick={() => handleRejectClick(event._id)}
               >
-                Cancel
+                {translations.booking.cancel}
               </button>
             )}
             <div className="bg-[#dedede] p-1 max-md:h-fit text-lg max-sm:text-sm text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg">
@@ -428,10 +435,9 @@ const BookedEvents = () => {
             {/* Header with Icon and Close Button */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <MdOutlineCancel className="text-2xl text-red-500" />{" "}
                 {/* Reject icon */}
                 <h2 className="text-xl text-primary font-bold">
-                  Are you sure to cancel this order?
+                  {translations.booking.areyousuretocancelthisorder}
                 </h2>
               </div>
               <button
@@ -450,16 +456,18 @@ const BookedEvents = () => {
                 disabled={isCanceling}
               >
                 {isCanceling ? (
-                  <span className="flex items-center gap-2">Canceling...</span>
+                  <span className="flex items-center gap-2">
+                    {translations.booking.canceling}
+                  </span>
                 ) : (
-                  "Confirm"
+                  translations.booking.cancel
                 )}
               </button>
               <button
                 className="bg-secondary text-gray-700 px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors"
                 onClick={handleCancelReject}
               >
-                Cancel
+                {translations.booking.cancel}
               </button>
             </div>
           </div>

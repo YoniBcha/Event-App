@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 function Footer() {
+  const translations = useSelector((state: any) => state.language.translations);
   return (
     <motion.div
       initial={{ x: "-100%" }} // Start from right corner
@@ -14,7 +18,7 @@ function Footer() {
       className="w-full py-4 md:py-7 bg-transparent flex flex-row justify-between items-center text-sm text-primary mt-auto"
     >
       <div className="flex flex-row gap-4 items-center">
-        <div>&copy; 2025 FENZO</div>
+        <div>&copy; 2025 {translations.fenzo}</div>
       </div>
 
       <div className="flex flex-row max-[400px]:gap-2 max-[300px]:flex-col gap-4">
@@ -22,13 +26,13 @@ function Footer() {
           href={"/terms&conditions"}
           className="hover:text-gray-500 cursor-pointer"
         >
-          Terms & Conditions
+          {translations.termsAndConditions}
         </Link>
         <Link
           href={"/privacy_Policy"}
           className="hover:text-gray-500 cursor-pointer"
         >
-          Privacy Policy
+          {translations.privacyPolicy}
         </Link>
       </div>
     </motion.div>

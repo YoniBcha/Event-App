@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -5,7 +6,7 @@ import * as Yup from "yup";
 import { useSelector } from "react-redux";
 import { ChromePicker, ColorResult } from "react-color";
 import { motion } from "framer-motion";
-import { FaArrowRight, FaPlus } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaPlus } from "react-icons/fa";
 
 interface PersonalData {
   fullName: string;
@@ -62,6 +63,9 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
 
   const translations = useSelector(
     (state: RootState) => state.language.translations
+  );
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
   );
 
   // Yup validation schema
@@ -317,7 +321,11 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             whileHover="hover"
             whileTap="tap"
           >
-            <FaArrowRight className="text-xl" />
+            {currentLocale === "ar" ? (
+              <FaArrowLeft className="text-xl" />
+            ) : (
+              <FaArrowRight className="text-xl" />
+            )}
           </motion.button>
         </motion.div>
       </div>

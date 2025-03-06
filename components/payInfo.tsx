@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import React from "react";
+import { useSelector } from "react-redux";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -13,19 +16,26 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   name,
   accountNumber,
 }) => {
+  const translations = useSelector((state: any) => state.language.translations);
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-xl font-bold mb-4">Payment Information</h2>
-        <p className="mb-2"><strong>Name:</strong> {name}</p>
-        <p className="mb-4"><strong>Account Number:</strong> {accountNumber}</p>
+        <h2 className="text-xl font-bold mb-4">
+          {translations.booking.paymentInformation}
+        </h2>
+        <p className="mb-2">
+          <strong>{translations.booking.name}:</strong> {name}
+        </p>
+        <p className="mb-4">
+          <strong>{translations.booking.accountNumber}:</strong> {accountNumber}
+        </p>
         <button
           onClick={onClose}
           className="bg-primary text-white px-4 py-2 rounded-md"
         >
-          Close
+          {translations.booking.close}
         </button>
       </div>
     </div>

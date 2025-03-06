@@ -313,7 +313,8 @@ function ChoosePackage({
       >
         <div className="flex-grow flex flex-col justify-center items-center w-full h-full mt-6 md:mt-0">
           <div className="text-primary font-bold text-xl md:text-3xl py-5">
-            Designs Details
+            {}
+            {translations.booking.designDetails}
           </div>
 
           {isLoading ? (
@@ -451,7 +452,7 @@ function ChoosePackage({
         <>
           {/* List View for Small Devices (sm and below) */}
           <div className="flex w-full lg:w-[75%] max-md:w-[85%] max-lg:w-[80%] gap-4">
-          <div className="grid w-full grid-cols-1 gap-4 min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid w-full grid-cols-1 gap-4 min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {packages.map((eventPackage: Package, index: number) => (
                 <motion.div
                   key={eventPackage._id || index}

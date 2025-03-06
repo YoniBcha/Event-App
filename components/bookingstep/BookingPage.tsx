@@ -175,7 +175,9 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       <MdEventNote className="text-2xl text-primary" />
                     </div>
                     <div className="">
-                      <div className="text-[#a1948d]">Select Event</div>
+                      <div className="text-[#a1948d]">
+                        {translations.booking.selectedEvent}
+                      </div>
                       <div className="text-[#a1948d] font-semibold">
                         {selectedEvent
                           ? data?.eventTypes?.find(
@@ -217,7 +219,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                         {data?.eventTypes?.map((event: any) => (
                           <label
                             key={event._id}
-                            className="flex items-center p-2 hover:bg-primary cursor-pointer"
+                            className="flex gap-2 items-center p-2 hover:bg-primary cursor-pointer"
                           >
                             <input
                               type="checkbox"
@@ -333,7 +335,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                         {["outdoor", "indoor", "both"].map((place) => (
                           <label
                             key={place}
-                            className="flex items-center p-2 hover:bg-primary cursor-pointer"
+                            className="flex items-center gap-2 p-2 hover:bg-primary cursor-pointer"
                           >
                             <input
                               type="checkbox"
@@ -417,7 +419,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                         {filteredCities.map((city) => (
                           <label
                             key={city}
-                            className="flex items-center p-2 hover:bg-primary cursor-pointer"
+                            className="flex gap-2 items-center p-2 hover:bg-primary cursor-pointer"
                           >
                             <input
                               type="checkbox"
