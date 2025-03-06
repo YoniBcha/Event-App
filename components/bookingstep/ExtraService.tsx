@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 import { motion } from "framer-motion";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 interface ExtraServiceProps {
   onExtraServiceSelect: (selectedService: any) => void;
