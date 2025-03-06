@@ -53,33 +53,6 @@ body {
   font-family: var(--font-primary);
 }
 /* Top-left image */
-body::before {
-  content: "";
-  position: fixed;
-  top: 120px;
-  left: 0;
-  z-index: -1;
-  width: 40%; /* Adjust size as needed */
-  height: 40%;
-  background-image: url("/images/f2 1.png"); /* Replace with your image path */
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: left;
-}
-
-/* Top-right image */
-body::after {
-  content: "";
-  position: fixed;
-  top: 120px;
-  z-index: -1;
-  right: 0;
-  width: 250px;
-  height: 350px;
-  background-image: url("/images/f1 1.png"); /* Replace with your image path */
-  background-size: cover;
-  background-position: center;
-}
 
 /* Bottom-left image */
 .bottom-left {

@@ -4,10 +4,9 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { IoMdClose } from "react-icons/io";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 import "./styles.css";
-import { useGetSingleDesignGalleryQuery } from "@/store/endpoints/apiSlice";
 
 interface RootState {
   language: {
@@ -26,16 +25,7 @@ function ChooseDesigns() {
   const [designs, setDesigns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
-
-  const { data: galleryData, isLoading: isGalleryLoading } =
-    useGetSingleDesignGalleryQuery<any>(
-      { id: selectedDesignId, designId: "" },
-      {
-        skip: !selectedDesignId, // Skip the query if no design ID is selected
-      }
-    );
+  const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
     const fetchDesigns = async () => {
@@ -71,14 +61,8 @@ function ChooseDesigns() {
   }, []);
 
   const handleImageClick = (id: string) => {
-    console.log("Selected Design ID:", id);
-    setSelectedDesignId(id);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedDesignId(null);
+    // Navigate to the dynamic route
+    router.push(`/designs/${id}`);
   };
 
   if (error) return <p>Failed to load designs</p>;
@@ -116,67 +100,8 @@ function ChooseDesigns() {
               <p className="mt-2 text-sm text-tertiary font-extrabold text-center">
                 {design.designId.eventDesign}
               </p>
-              <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                {design.description}
-              </p>
             </motion.div>
           ))}
-        </div>
-      )}
-
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-          <div className="relative w-11/12 h-3/4 rounded-lg backdrop-blur-lg bg-secondary p-4 shadow-lg overflow-y-auto">
-            {/* Close Button */}
-            <button
-              onClick={closeModal}
-              className="absolute top-3 right-3 z-20 text-gray-200 hover:text-primary transition-all"
-            >
-              <IoMdClose size={28} />
-            </button>
-
-            {isGalleryLoading ? (
-              <div className="flex justify-center items-center h-full">
-                <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-6">
-                {/* Title and Description Section */}
-                <div className="text-center">
-                  <h2 className="text-2xl font-bold text-primary">
-                    {galleryData.singleGallery.designId.eventDesign}
-                  </h2>
-                </div>
-                {/* Image Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {galleryData.singleGallery.images.map(
-                    (image: any, index: number) => (
-                      <div
-                        key={index}
-                        className="relative w-full h-48 rounded-lg overflow-hidden border border-gray-300 shadow-md hover:shadow-lg transition-shadow duration-300"
-                      >
-                        <Image
-                          src={image}
-                          alt={`Gallery Image ${index + 1}`}
-                          layout="fill"
-                          objectFit="cover"
-                          className="rounded-lg"
-                        />
-                        <div className="text-center">
-                          <h2 className="text-2xl font-bold text-primary">
-                            {galleryData.singleGallery.designId.eventDesign}
-                          </h2>
-                          <p className="text-gray-300 mt-2">
-                            {galleryData.singleGallery.description}
-                          </p>
-                        </div>
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       )}
     </div>

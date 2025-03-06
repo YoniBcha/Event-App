@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 import { motion } from "framer-motion";
-import { FaTimes } from "react-icons/fa";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 interface ExtraServiceProps {
   onExtraServiceSelect: (selectedService: any) => void;
@@ -70,6 +68,22 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (currentProvider && window.innerWidth <= 500) {
+      const selectedProviderIndex = serviceProviders.findIndex(
+        (provider) => provider._id === currentProvider
+      );
+      if (selectedProviderIndex !== -1) {
+        const reorderedProviders = [
+          ...serviceProviders.slice(0, selectedProviderIndex),
+          ...serviceProviders.slice(selectedProviderIndex + 1),
+          serviceProviders[selectedProviderIndex],
+        ];
+        setServiceProviders(reorderedProviders);
+      }
+    }
+  }, [currentProvider]);
 
   // Save selected services to sessionStorage
   useEffect(() => {
@@ -326,7 +340,11 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
         {currentProvider && (
           <div className="flex flex-col gap-5 justify-center items-center">
             <h2 className="text-center mt-2 text-primary font-bold text-lg">
-              {translations.booking.selectPackage} {currentService}
+              {translations.booking.selectPackage} {currentService}{" "}
+              {
+                serviceProviders.find((p) => p._id === currentProvider)
+                  ?.providerName
+              }
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-5">
               {packages.map((pkg, index) => {
