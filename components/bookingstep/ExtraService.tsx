@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 import { motion } from "framer-motion";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 interface ExtraServiceProps {
   onExtraServiceSelect: (selectedService: any) => void;
@@ -437,7 +438,13 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
               whileHover="hover"
               whileTap="tap"
             >
-              <span>Skip</span>
+              <span className="">
+                {currentLocale === "ar" ? (
+                  <AiOutlineLeft size={20} />
+                ) : (
+                  <AiOutlineRight size={20} />
+                )}
+              </span>
             </motion.button>
           )}
           {selectedServices.length > 0 && (
