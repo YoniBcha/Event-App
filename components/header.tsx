@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,11 +16,12 @@ import { FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAvatarDropdownOpen, setIsAvatarDropdownOpen] = useState(false);
-  const accountDropdownRef = useRef<HTMLDivElement>(null);
+  // const accountDropdownRef = useRef<HTMLDivElement>(null);
   const avatarDropdownRef = useRef<HTMLDivElement>(null);
   const [currentLocale, setCurrentLocale] = useState("en");
   const [logo, setLogo] = useState("/path/to/default/logo.png");
   const pathname = usePathname(); // Get the current path
+
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure we're on the client side
     const storedTheme = localStorage.getItem("fenzoAppTheme");
@@ -32,6 +34,7 @@ function Header() {
       }
     }
   }, []);
+
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state: any) => state.auth.isAuthenticated
@@ -64,12 +67,10 @@ function Header() {
     }
   }, []);
 
-  // const toggleAccountDropdown = () => {
-  //   setIsAccountDropdownOpen(!isAccountDropdownOpen);
-  // };
   const handleClick = () => {
     sessionStorage.clear(); // Clears all sessionStorage data
   };
+
   const toggleAvatarDropdown = () => {
     setIsAvatarDropdownOpen(!isAvatarDropdownOpen);
   };
@@ -92,8 +93,8 @@ function Header() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        accountDropdownRef.current &&
-        !accountDropdownRef.current.contains(event.target as Node)
+        avatarDropdownRef.current &&
+        !avatarDropdownRef.current.contains(event.target as Node)
       ) {
         setIsAvatarDropdownOpen(false);
       }
