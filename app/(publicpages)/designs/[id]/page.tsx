@@ -32,7 +32,7 @@ export default function DesignPage() {
       </div>
 
       {/* Image Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 mx-auto lg:w-[75%] max-md:w-[85%] max-lg:w-[80%]  min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full px-4">
         {designData?.singleGallery?.images.map(
           (image: string, index: number) => (
             <div
