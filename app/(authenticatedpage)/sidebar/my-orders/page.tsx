@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from "react";
 import {
@@ -431,7 +431,7 @@ const BookedEvents = () => {
                 <MdOutlineCancel className="text-2xl text-red-500" />{" "}
                 {/* Reject icon */}
                 <h2 className="text-xl text-primary font-bold">
-                  Are you sure to reject this order?
+                  Are you sure to cancel this order?
                 </h2>
               </div>
               <button
