@@ -160,10 +160,11 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   return (
     <main className="">
       <form onSubmit={handleSubmit(onSubmit)} className="h-full">
-        <section className="flex flex-col md:flex-row w-full justify-center h-[80vh] gap-5 px-5">
-          <div className="flex justify-center items-center md:justify-start h-full w-full md:w-[50%]">
-            <div className="flex flex-col justify-center items-center h-full  w-full gap-5 rounded-2xl shadow-xl">
-              <div className="flex flex-col gap-5 relative w-[80%]">
+        <section className="flex flex-col md:flex-row w-full justify-center items-center h-[80vh] gap-5 px-5">
+          <div className="flex justify-center items-center h-full w-full md:w-[50%]">
+            {/* Centered div with shadow-xl */}
+            <div className="flex flex-col justify-center items-center h-auto w-full max-w-[500px] gap-5 rounded-2xl shadow-xl p-6 ">
+              <div className="flex flex-col gap-5 w-full">
                 {/* Event Dropdown */}
                 <div className="relative">
                   <div
@@ -247,7 +248,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                 <div className="">
                   <div
                     onClick={() => setIsModalOpen(true)}
-                    className="flex justify-between items-center  rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
+                    className="flex justify-between items-center rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
                   >
                     <div>
                       <FaCalendarAlt className="text-2xl text-primary" />
@@ -323,7 +324,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   <AnimatePresence>
                     {showPlaceDropdown && (
                       <motion.div
-                        className="absolute top-full mt-2 w-full bg-secondary  border border-[#d4c9c0] rounded-lg shadow-lg z-10"
+                        className="absolute top-full mt-2 w-full bg-secondary border border-[#d4c9c0] rounded-lg shadow-lg z-10"
                         variants={dropdownVariants}
                         initial="hidden"
                         animate="visible"
@@ -353,8 +354,9 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                     <p className="text-red-500">{errors.place.message}</p>
                   )}
                 </div>
+
                 {/* City Dropdown */}
-                <div className="">
+                <div className="relative">
                   <div
                     onClick={() => setShowCityDropdown(!showCityDropdown)}
                     className="flex justify-between items-center rounded-xl border-2 bg-secondary px-3 py-2 w-full cursor-pointer"
@@ -409,7 +411,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full px-2 py-1 border-none  rounded-md focus:outline-none"
+                            className="w-full px-2 py-1 border-none rounded-md focus:outline-none"
                           />
                         </div>
                         {filteredCities.map((city) => (
