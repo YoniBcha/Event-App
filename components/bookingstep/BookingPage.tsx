@@ -163,7 +163,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
         <section className="flex flex-col md:flex-row w-full justify-center items-center h-[80vh] gap-5 px-5">
           <div className="flex justify-center items-center h-full w-full md:w-[50%]">
             {/* Centered div with shadow-xl */}
-            <div className="flex flex-col justify-center items-center h-auto w-full max-w-[500px] gap-5 rounded-2xl shadow-xl p-6 ">
+            <div className="flex flex-col justify-center items-center h-auto w-full max-w-[500px] gap-5 rounded-2xl border-2 border-secondary shadow-lg p-6 ">
               <div className="flex flex-col gap-5 w-full">
                 {/* Event Dropdown */}
                 <div className="relative">
