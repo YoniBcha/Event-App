@@ -6,7 +6,7 @@ interface PersonalData {
   fullName: string;
   mobileNumber: string;
   secondMobileNumber: string;
-  favoriteColors: string;
+  favoriteColors: string[]; // Updated to an array of strings
   notes: string;
 }
 
@@ -40,7 +40,7 @@ const BulkTable: React.FC<BulkTableProps> = ({
     fullName: "N/A",
     mobileNumber: "N/A",
     secondMobileNumber: "N/A",
-    favoriteColors: "#FFFFFF",
+    favoriteColors: ["#FFFFFF"], // Default to an array with a single color
     notes: "N/A",
   };
 
@@ -84,7 +84,6 @@ const BulkTable: React.FC<BulkTableProps> = ({
     { key: "secondMobileNumber", label: "Second Mobile Number" },
     { key: "favoriteColors", label: "Favorite Colors" },
     { key: "status", label: "Order Status" },
-
     { key: "place", label: "Place" },
     { key: "city", label: "City" },
     { key: "date", label: "Date" },
@@ -110,12 +109,19 @@ const BulkTable: React.FC<BulkTableProps> = ({
                 </th>
                 <td className="px-2 py-2 font-medium text-primary sm:px-4 sm:py-3">
                   {key === "favoriteColors" ? (
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-4 h-4 border sm:w-6 sm:h-6"
-                        style={{ backgroundColor: rowData[key] }}
-                      ></div>
-                      <span className="text-xs sm:text-sm">{rowData[key]}</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {rowData[key].map((color, colorIndex) => (
+                        <div
+                          key={colorIndex}
+                          className="flex items-center gap-1"
+                        >
+                          <div
+                            className="w-4 h-4 border sm:w-6 sm:h-6"
+                            style={{ backgroundColor: color }}
+                          ></div>
+                          <span className="text-xs sm:text-sm">{color}</span>
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <span className="text-xs sm:text-sm">{rowData[key]}</span>
@@ -138,12 +144,19 @@ const BulkTable: React.FC<BulkTableProps> = ({
                 </th>
                 <td className="px-2 py-2 font-medium text-primary sm:px-4 sm:py-3">
                   {key === "favoriteColors" ? (
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-4 h-4 border sm:w-6 sm:h-6"
-                        style={{ backgroundColor: rowData[key] }}
-                      ></div>
-                      <span className="text-xs sm:text-sm">{rowData[key]}</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {rowData[key].map((color, colorIndex) => (
+                        <div
+                          key={colorIndex}
+                          className="flex items-center gap-1"
+                        >
+                          <div
+                            className="w-4 h-4 border sm:w-6 sm:h-6"
+                            style={{ backgroundColor: color }}
+                          ></div>
+                          <span className="text-xs sm:text-sm">{color}</span>
+                        </div>
+                      ))}
                     </div>
                   ) : key === "status" ? (
                     <span

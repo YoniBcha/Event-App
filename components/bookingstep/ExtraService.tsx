@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 import { motion } from "framer-motion";
-import { FaTimes } from "react-icons/fa";
 
 interface ExtraServiceProps {
   onExtraServiceSelect: (selectedService: any) => void;
@@ -69,6 +68,22 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (currentProvider && window.innerWidth <= 500) {
+      const selectedProviderIndex = serviceProviders.findIndex(
+        (provider) => provider._id === currentProvider
+      );
+      if (selectedProviderIndex !== -1) {
+        const reorderedProviders = [
+          ...serviceProviders.slice(0, selectedProviderIndex),
+          ...serviceProviders.slice(selectedProviderIndex + 1),
+          serviceProviders[selectedProviderIndex],
+        ];
+        setServiceProviders(reorderedProviders);
+      }
+    }
+  }, [currentProvider]);
 
   // Save selected services to sessionStorage
   useEffect(() => {
