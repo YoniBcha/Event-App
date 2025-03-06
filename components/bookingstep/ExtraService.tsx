@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useGetExtraServiceQuery } from "@/store/endpoints/apiSlice";
 import { motion } from "framer-motion";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 interface ExtraServiceProps {
   onExtraServiceSelect: (selectedService: any) => void;
@@ -347,7 +348,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                   ?.providerName
               }
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-5">
               {packages.map((pkg, index) => {
                 const isPackageSelected = selectedServices.some(
                   (s) =>
@@ -418,11 +419,11 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
 
         {/* Buttons */}
 
-        <div className="flex justify-center items-center gap-5 mt-5 md:mt-10">
+        <div className="flex justify-center items-center gap-5 my-5 md:my-10">
           {selectedServices.length < 1 && (
             <motion.button
               onClick={() => handleDone(true)} // Call handleDone with skip=true
-              className="back-btn hover:bg-secondary"
+              className="flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
               variants={{
                 hover: {
                   scale: 1.05,

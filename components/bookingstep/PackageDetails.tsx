@@ -71,7 +71,7 @@ function PackageDetails({
           </div>
         ) : (
           <motion.div
-            className="flex flex-col gap-3 cursor-pointer md:flex-row bg-secondary w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit max-md:bg-transparent p-3 rounded-xl"
+            className="flex flex-col gap-3 cursor-pointer md:flex-row bg-secondary w-full max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 h-fit p-3 rounded-xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
