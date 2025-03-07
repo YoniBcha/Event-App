@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
+import Link from "next/link";
 
 function Footer() {
   const translations = useSelector((state: any) => state.language.translations);
@@ -23,22 +24,28 @@ function Footer() {
       </div>
 
       <div className="flex flex-row max-[400px]:gap-2 max-[300px]:flex-col gap-4">
-        <motion.a
-          href="/terms&conditions"
-          whileHover={{ scale: 1.05 }} // Scale up and change color on hover
+        <motion.div
+          whileHover={{ scale: 1.05 }} // Scale up on hover
           transition={{ type: "spring", stiffness: 300 }} // Smooth spring animation
-          className="hover:text-gray-500 cursor-pointer"
         >
-          {translations.termsAndConditions}
-        </motion.a>
-        <motion.a
-          href="/privacy_Policy"
-          whileHover={{ scale: 1.05 }} // Scale up and change color on hover
+          <Link
+            href={"/terms&conditions"}
+            className="hover:text-gray-500 cursor-pointer"
+          >
+            {translations.termsAndConditions}
+          </Link>
+        </motion.div>
+        <motion.div
+          whileHover={{ scale: 1.05 }} // Scale up on hover
           transition={{ type: "spring", stiffness: 300 }} // Smooth spring animation
-          className="hover:text-gray-500 cursor-pointer"
         >
-          {translations.privacyPolicy}
-        </motion.a>
+          <Link
+            href={"/privacy_Policy"}
+            className="hover:text-gray-500 cursor-pointer"
+          >
+            {translations.privacyPolicy}
+          </Link>
+        </motion.div>
       </div>
     </motion.div>
   );
