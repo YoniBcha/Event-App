@@ -17,6 +17,10 @@
   src: url("/fonts/Air-Light.otf") format("opentype");
 }
 
+@font-face {
+  font-family: "Bohemian Style";
+  src: url("/fonts/bohemian.otf") format("opentype");
+}
 :root {
   --background: #ffffff;
   --foreground: #171717;
