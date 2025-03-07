@@ -85,7 +85,7 @@ const Home: React.FC = () => {
           variants={itemVariants}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => router.push("/mainpage")}
+          onClick={() => router.push("/mainpage/1")}
         >
           {translations.startJourney}
         </motion.button>
