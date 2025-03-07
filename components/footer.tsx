@@ -4,8 +4,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+
 function Footer() {
   const translations = useSelector((state: any) => state.language.translations);
+
   return (
     <motion.div
       initial={{ x: "-100%" }} // Start from right corner
@@ -22,18 +24,22 @@ function Footer() {
       </div>
 
       <div className="flex flex-row max-[400px]:gap-2 max-[300px]:flex-col gap-4">
-        <Link
-          href={"/terms&conditions"}
+        <motion.a
+          href="/terms&conditions"
+          whileHover={{ scale: 1.05 }} // Scale up and change color on hover
+          transition={{ type: "spring", stiffness: 300 }} // Smooth spring animation
           className="hover:text-gray-500 cursor-pointer"
         >
           {translations.termsAndConditions}
-        </Link>
-        <Link
-          href={"/privacy_Policy"}
+        </motion.a>
+        <motion.a
+          href="/privacy_Policy"
+          whileHover={{ scale: 1.05 }} // Scale up and change color on hover
+          transition={{ type: "spring", stiffness: 300 }} // Smooth spring animation
           className="hover:text-gray-500 cursor-pointer"
         >
           {translations.privacyPolicy}
-        </Link>
+        </motion.a>
       </div>
     </motion.div>
   );
