@@ -4,9 +4,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // Import usePathname
 
 function Footer() {
   const translations = useSelector((state: any) => state.language.translations);
+  const pathname = usePathname(); // Get the current route
 
   return (
     <motion.div
@@ -30,7 +32,11 @@ function Footer() {
         >
           <Link
             href={"/terms&conditions"}
-            className="hover:text-gray-500 cursor-pointer"
+            className={`hover:text-gray-500 cursor-pointer ${
+              pathname === "/terms&conditions"
+                ? " border-b border-primary font-bold"
+                : ""
+            }`} // Active style
           >
             {translations.termsAndConditions}
           </Link>
@@ -41,7 +47,11 @@ function Footer() {
         >
           <Link
             href={"/privacy_Policy"}
-            className="hover:text-gray-500 cursor-pointer"
+            className={`hover:text-gray-500 cursor-pointer ${
+              pathname === "/privacy_Policy"
+                ? "border-b border-primary font-bold"
+                : ""
+            }`} // Active style
           >
             {translations.privacyPolicy}
           </Link>
