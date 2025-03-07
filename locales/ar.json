@@ -211,6 +211,8 @@
     "paymentInformation": "معلومات الدفع",
     "name": "الاسم",
     "close": "إغلاق",
+    "yes": "نعم",
+    "no": "لا",
     "accountNumber": "رقم الحساب",
     "ok": "حسنًا"
   },

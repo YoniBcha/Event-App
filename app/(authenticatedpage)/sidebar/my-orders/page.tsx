@@ -90,6 +90,8 @@ interface RootState {
         name: string;
         close: string;
         ok: string;
+        yes: string;
+        no: string;
       };
     };
   };
@@ -462,14 +464,14 @@ const BookedEvents = () => {
                     {translations.booking.canceling}
                   </span>
                 ) : (
-                  translations.booking.ok
+                  translations.booking.yes
                 )}
               </button>
               <button
                 className="bg-secondary text-gray-700 px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors"
                 onClick={handleCancelReject}
               >
-                {translations.booking.close}
+                {translations.booking.no}
               </button>
             </div>
           </div>

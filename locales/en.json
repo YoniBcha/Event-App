@@ -209,6 +209,8 @@
     "paymentInformation": "Payment Information",
     "name": "Name",
     "close": "Close",
+    "yes": "Yes",
+    "no": "No",
     "accountNumber": "Account Number"
   },
   "contact": {
