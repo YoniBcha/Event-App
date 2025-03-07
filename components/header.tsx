@@ -22,21 +22,8 @@ function Header() {
   // const accountDropdownRef = useRef<HTMLDivElement>(null);
   const avatarDropdownRef = useRef<HTMLDivElement>(null);
   const [currentLocale, setCurrentLocale] = useState("en");
-  const [setLogo] = useState("/path/to/default/logo.png");
   const pathname = usePathname(); // Get the current path
   const { data, isLoading } = useGetThemeColorQuery<any>({});
-  useEffect(() => {
-    if (typeof window === "undefined") return; // Ensure we're on the client side
-    const storedTheme = localStorage.getItem("fenzoAppTheme");
-    if (storedTheme) {
-      try {
-        const { logo } = JSON.parse(storedTheme);
-        setLogo(logo);
-      } catch (error) {
-        console.error("Failed to parse stored theme:", error);
-      }
-    }
-  }, []);
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
