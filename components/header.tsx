@@ -229,7 +229,17 @@ function Header() {
               Logo
             </div>
           ) : (
-            <Image src={logo} alt="Logo" width={100} height={50} />
+            <div className="relative w-[100px] h-[50px]">
+              {" "}
+              {/* Container with fixed dimensions */}
+              <Image
+                src={logo}
+                alt="Logo"
+                layout="fill" // Fill the container
+                objectFit="contain" // Ensure the image fits within the container
+                className="object-contain" // Tailwind CSS for object-fit
+              />
+            </div>
           )}
         </div>
 
