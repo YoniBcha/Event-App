@@ -5,7 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
-import { useLogoutUserMutation } from "@/store/endpoints/apiSlice"; // Adjust the import path
+import {
+  useGetThemeColorQuery,
+  useLogoutUserMutation,
+} from "@/store/endpoints/apiSlice"; // Adjust the import path
 import { logoutUser } from "@/store/authReducer"; // Import the logoutUser action
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 import { FaUser, FaBoxOpen, FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
@@ -19,9 +22,9 @@ function Header() {
   // const accountDropdownRef = useRef<HTMLDivElement>(null);
   const avatarDropdownRef = useRef<HTMLDivElement>(null);
   const [currentLocale, setCurrentLocale] = useState("en");
-  const [logo, setLogo] = useState("/path/to/default/logo.png");
+  const [setLogo] = useState("/path/to/default/logo.png");
   const pathname = usePathname(); // Get the current path
-
+  const { data, isLoading } = useGetThemeColorQuery<any>({});
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure we're on the client side
     const storedTheme = localStorage.getItem("fenzoAppTheme");
@@ -224,21 +227,24 @@ function Header() {
 
         {/* Centered FENZO Logo */}
         <div className="flex-grow flex justify-center">
-          {logo.length < 1 ? (
-            <div className="flex items-center justify-center text-primary text-lg font-bold">
+          {isLoading ? ( // Show "Logo" text while loading
+            <div className="flex items-center justify-center text-primary px-2 py-1 border border-primary text-lg font-bold">
               Logo
             </div>
-          ) : (
+          ) : data?.data?.logo ? ( // Show the logo image if data is available
             <div className="relative w-[100px] h-[50px]">
-              {" "}
-              {/* Container with fixed dimensions */}
               <Image
-                src={logo}
+                src={data.data.logo}
                 alt="Logo"
                 layout="fill" // Fill the container
                 objectFit="contain" // Ensure the image fits within the container
                 className="object-contain" // Tailwind CSS for object-fit
               />
+            </div>
+          ) : (
+            // Fallback to "Logo" text if no logo is available
+            <div className="flex items-center justify-center text-primary px-2 py-1 border border-primary text-lg font-bold">
+              Logo
             </div>
           )}
         </div>
@@ -367,7 +373,28 @@ function Header() {
           >
             <div className="">
               <div className="flex justify-between items-center px-6">
-                <Image src={logo} alt="Logo" width={100} height={50} />
+                <div className="flex-grow flex justify-center">
+                  {isLoading ? ( // Show "Logo" text while loading
+                    <div className="flex items-center justify-center text-primary px-2 py-1 border border-primary text-lg font-bold">
+                      Logo
+                    </div>
+                  ) : data?.data?.logo ? ( // Show the logo image if data is available
+                    <div className="relative w-[100px] h-[50px]">
+                      <Image
+                        src={data.data.logo}
+                        alt="Logo"
+                        layout="fill" // Fill the container
+                        objectFit="contain" // Ensure the image fits within the container
+                        className="object-contain" // Tailwind CSS for object-fit
+                      />
+                    </div>
+                  ) : (
+                    // Fallback to "Logo" text if no logo is available
+                    <div className="flex items-center justify-center text-primary px-2 py-1 border border-primary text-lg font-bold">
+                      Logo
+                    </div>
+                  )}
+                </div>
                 <button
                   className={`absolute ${
                     currentLocale === "ar" ? "left-4" : "right-4"

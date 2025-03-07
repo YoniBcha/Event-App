@@ -129,6 +129,7 @@ const BookedEvents = () => {
     { label: "Pending", value: "pending", icon: <FaFilter /> },
     { label: "Completed", value: "completed", icon: <FaFilter /> },
     { label: "Rejected", value: "rejected", icon: <FaFilter /> },
+    { label: "Cancelled", value: "cancelled", icon: <FaFilter /> },
   ];
 
   const handleSortChange = (e: { value: string }) => {
