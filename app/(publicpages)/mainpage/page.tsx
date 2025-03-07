@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-function mainpage() {
+function MainPage() {
   const router = useRouter();
   useEffect(() => {
     router.push("/mainpage/1");
@@ -11,4 +11,4 @@ function mainpage() {
   return null;
 }
 
-export default mainpage;
+export default MainPage;
