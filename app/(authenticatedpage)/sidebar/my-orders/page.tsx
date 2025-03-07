@@ -89,6 +89,7 @@ interface RootState {
         paymentInformation: string;
         name: string;
         close: string;
+        ok: string;
       };
     };
   };
@@ -461,7 +462,7 @@ const BookedEvents = () => {
                     {translations.booking.canceling}
                   </span>
                 ) : (
-                  translations.booking.cancel
+                  translations.booking.ok
                 )}
               </button>
               <button
