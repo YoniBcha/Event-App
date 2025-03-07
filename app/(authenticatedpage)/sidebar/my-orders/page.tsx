@@ -469,7 +469,7 @@ const BookedEvents = () => {
                 className="bg-secondary text-gray-700 px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors"
                 onClick={handleCancelReject}
               >
-                {translations.booking.cancel}
+                {translations.booking.close}
               </button>
             </div>
           </div>
