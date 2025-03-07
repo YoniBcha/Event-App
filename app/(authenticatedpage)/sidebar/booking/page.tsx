@@ -97,26 +97,30 @@ const MyOrdersContent = () => {
         setIsModalOpen(true);
         sessionStorage.clear();
       } catch (error: any) {
-        try {
-          // Call the logout mutation
-          await logoutUserMutation({}).unwrap();
+        if (
+          error.message === "User Unauthorized" ||
+          error.message === "Session expired"
+        ) {
+          try {
+            // Call the logout mutation
+            await logoutUserMutation({}).unwrap();
 
-          // Dispatch the logout action to update Redux state
-          dispatch(logoutUser());
+            // Dispatch the logout action to update Redux state
+            dispatch(logoutUser());
 
-          // Clear cookies (if applicable)
-          Cookies.remove("token");
-          Cookies.remove("user-info");
-          Cookies.remove("token_creation_time");
+            // Clear cookies (if applicable)
+            Cookies.remove("token");
+            Cookies.remove("user-info");
+            Cookies.remove("token_creation_time");
 
-          // Redirect to login page with the payload
-          router.push(
-            `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
-          );
-        } catch (logoutError) {
-          console.error("Logout failed:", logoutError);
+            // Redirect to login page with the payload
+            router.push(
+              `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
+            );
+          } catch (logoutError) {
+            console.error("Logout failed:", logoutError);
+          }
         }
-
         console.error("Error booking event:", error);
       }
     } else {

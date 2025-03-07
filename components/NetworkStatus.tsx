@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"; // Mark this as a Client Component
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const NetworkStatus = () => {
+  const translations = useSelector((state: any) => state.language.translations);
   useEffect(() => {
     let offlineToastId: string | undefined; // Store the ID of the offline toast
 
@@ -14,30 +17,24 @@ const NetworkStatus = () => {
           toast.dismiss(offlineToastId); // Dismiss the specific offline toast
           offlineToastId = undefined; // Reset the toast ID
         }
-        toast.success("You are back online!", {
+        toast.success(translations.back_online, {
           position: "top-center",
         });
       } else {
         // If the network is offline, show the offline toast and store its ID
-        offlineToastId = toast.error(
-          "You are offline. Please check your internet connection.",
-          {
-            position: "top-center",
-            duration: Infinity, // Keep the toast visible until dismissed
-          }
-        );
+        offlineToastId = toast.error(translations.offline, {
+          position: "top-center",
+          duration: Infinity, // Keep the toast visible until dismissed
+        });
       }
     };
 
     // Check initial network status
     if (!navigator.onLine) {
-      offlineToastId = toast.error(
-        "You are offline. Please check your internet connection.",
-        {
-          position: "top-center",
-          duration: Infinity, // Keep the toast visible until dismissed
-        }
-      );
+      offlineToastId = toast.error(translations.offline, {
+        position: "top-center",
+        duration: Infinity, // Keep the toast visible until dismissed
+      });
     }
 
     // Add event listeners for online/offline events

@@ -57,6 +57,8 @@
   "total_price_before_vat": "Total Price Before VAT",
   "vat_15": "VAT 15%",
   "total_price_after_vat": "Total Price After VAT",
+  "back_online": "أنت متصل بالإنترنت",
+  "offline": "أنت غير متصل بالإنترنت. يرجى التحقق من اتصالك بالإنترنت.",
 
   "login": {
     "title": "مرحبًا بعودتك!!",
