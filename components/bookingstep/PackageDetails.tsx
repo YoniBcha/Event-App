@@ -7,7 +7,6 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetPackageDetailQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
- 
 
 function PackageDetails({
   packageId,
@@ -77,11 +76,12 @@ function PackageDetails({
             transition={{ duration: 0.5 }}
             onClick={handleNextClick}
           >
-            <div className="flex flex-col w-full lg:w-1/4 md:w-2/4 h-full">
+            <div className="flex flex-col w-full lg:w-1/2 md:w-3/4 h-full">
               <div
                 className="flex flex-col w-full"
                 onClick={(e) => e.stopPropagation()}
               >
+                {/* Main Image Container */}
                 <div className="min-h-[200px] w-full rounded bg-slate-500 flex items-center justify-center relative overflow-hidden">
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -98,7 +98,7 @@ function PackageDetails({
                           src={selectedImage}
                           alt="Selected"
                           fill
-                          className="object-cover rounded"
+                          className="object-fill rounded"
                           sizes="(max-width: 768px) 100vw, 50vw"
                           priority
                         />
@@ -110,6 +110,7 @@ function PackageDetails({
                 </div>
               </div>
 
+              {/* Thumbnail Grid */}
               <div
                 className="py-2 grid grid-cols-4 gap-2"
                 onClick={(e) => e.stopPropagation()}
@@ -118,7 +119,7 @@ function PackageDetails({
                   (imageUrl: any, index: any) => (
                     <motion.div
                       key={index}
-                      className="rounded cursor-pointer overflow-hidden relative w-full h-12 md:h-6"
+                      className="rounded cursor-pointer overflow-hidden relative aspect-square w-full"
                       onClick={() => handleImageClick(imageUrl)}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -128,12 +129,14 @@ function PackageDetails({
                         alt={`Image ${index + 1}`}
                         fill
                         className="object-cover rounded"
+                        sizes="(max-width: 768px) 25vw, 12.5vw"
                       />
                     </motion.div>
                   )
                 )}
               </div>
 
+              {/* Additions Section */}
               <div className="justify-center relative items-center grid grid-cols-2 gap-3 border backdrop-blur-xl bg-white/70 border-white rounded-lg max-md:grid-cols-3 max-[400px]:grid-cols-2 pt-1 w-full">
                 {packageData?.eventPackage?.additions?.map((addition: any) =>
                   addition?.additionId?.typeDetail?.map(
