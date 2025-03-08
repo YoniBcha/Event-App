@@ -7,8 +7,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import html2pdf from "html2pdf.js";
 
 function Quotation() {
   const [logo, setLogo] = useState("/path/to/default/logo.png");
@@ -43,42 +42,17 @@ function Quotation() {
 
     const element = document.getElementById("quotation-page");
     if (element) {
-      // Adjust scale based on screen width
-      const isMobile = window.innerWidth <= 768; // Check if the screen is mobile
-      const scale = isMobile ? 1 : 2; // Use a smaller scale for mobile
-
+      // Configure html2pdf.js options
       const options = {
-        scale,
-        useCORS: true, // Ensure cross-origin images are allowed
-        logging: true, // Enable logging for debugging
-        allowTaint: true, // Allow tainted images
+        margin: 10, // Margin around the content
+        filename: `quotation-packageId=${id}.pdf`, // Name of the PDF file
+        image: { type: "jpeg", quality: 2 }, // Image quality
+        html2canvas: { scale: 2, useCORS: true, allowTaint: true }, // html2canvas options
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, // jsPDF options
       };
 
-      html2canvas(element, options).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png", 1.0); // Maximum quality
-        const pdf = new jsPDF("p", "mm", "a4"); // Use A4 size for the PDF
-
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-        let heightLeft = pdfHeight;
-        let position = 0;
-
-        // Add first page
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
-        heightLeft -= pdf.internal.pageSize.getHeight();
-
-        // Add additional pages if content exceeds one page
-        while (heightLeft > 0) {
-          position = heightLeft - pdfHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
-          heightLeft -= pdf.internal.pageSize.getHeight();
-        }
-
-        pdf.save(`quotation-packageId=${id}.pdf`);
-      });
+      // Generate the PDF
+      html2pdf().from(element).set(options).save();
     }
   };
 
