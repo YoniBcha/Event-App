@@ -43,8 +43,10 @@ function Quotation() {
 
     const element = document.getElementById("quotation-page");
     if (element) {
-      // Increase the scale for better quality
-      const scale = 2; // You can adjust this value for higher quality
+      // Adjust scale based on screen width
+      const isMobile = window.innerWidth <= 768; // Check if the screen is mobile
+      const scale = isMobile ? 1 : 2; // Use a smaller scale for mobile
+
       const options = {
         scale,
         useCORS: true, // Ensure cross-origin images are allowed
@@ -82,7 +84,10 @@ function Quotation() {
 
   return (
     <div>
-      <div id="quotation-page" className="p-4 rounded-md bg-[#fffff4]">
+      <div
+        id="quotation-page"
+        className="p-4 rounded-md bg-[#fffff4] w-full max-w-[800px] mx-auto"
+      >
         <div className="flex justify-start">Date of creation: 20/02/2003</div>
 
         <div className="flex flex-col w-full gap-3">
