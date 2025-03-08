@@ -392,11 +392,11 @@ function ChoosePackage({
                     (imgSrc: any, index: any) => (
                       <motion.div
                         key={index}
-                        className={`rounded cursor-pointer ${
+                        className={`rounded cursor-pointer aspect-square ${
                           selectedImageIndex === index
                             ? "border-2 border-primary"
                             : ""
-                        } overflow-hidden relative w-full h-12 md:h-16`}
+                        } overflow-hidden relative w-full`}
                         onClick={() => handleThumbnailClick(index)} // Update the selected image index
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -406,6 +406,7 @@ function ChoosePackage({
                           alt={`Thumbnail ${index}`}
                           fill
                           className="object-cover rounded"
+                          sizes="(max-width: 768px) 25vw, 12.5vw"
                           priority
                         />
                       </motion.div>
@@ -470,9 +471,8 @@ function ChoosePackage({
                     <Image
                       src={eventPackage.image[0]}
                       alt={eventPackage.packageName}
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-t-lg"
+                      fill
+                      className="object-fit rounded-t-lg"
                     />
                   </div>
                   <p className="mt-2 text-sm text-tertiary font-medium flex items-center text-center">
