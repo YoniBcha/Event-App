@@ -146,7 +146,7 @@ function Quotation() {
             {/* First Column */}
             <div className="flex flex-col justify-between">
               {/* Top Div */}
-              <div>
+              <div className="print-button">
                 <input
                   type="checkbox"
                   checked={showTerms}
