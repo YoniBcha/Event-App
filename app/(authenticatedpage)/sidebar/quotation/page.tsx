@@ -77,7 +77,7 @@ function Quotation() {
           heightLeft -= pdf.internal.pageSize.getHeight();
         }
 
-        pdf.save(`quotation-id=${id}.pdf`);
+        pdf.save(`quotation-packageId=${id}.pdf`);
       });
     }
   };
