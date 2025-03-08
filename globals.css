@@ -311,3 +311,7 @@ body {
 .aspect-square {
   aspect-ratio: 1 / 1;
 }
+
+.print-button {
+  display: block !important;
+}

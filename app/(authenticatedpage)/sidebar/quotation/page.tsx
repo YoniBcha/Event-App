@@ -7,7 +7,6 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import html2pdf from "html2pdf.js";
 
 function Quotation() {
   const [logo, setLogo] = useState("/path/to/default/logo.png");
@@ -33,29 +32,79 @@ function Quotation() {
     }
   }, []);
 
-  const handleDownload = () => {
+  // const handleDownload = () => {
+
+  //   if (!showTerms) {
+  //     setErrorMessage("Please check the Read checkbox to proceed.");
+  //     return;
+  //   }
+  //   setErrorMessage("");
+
+  //   const element = document.getElementById("quotation-page");
+  //   if (element) {
+  //     // Configure html2pdf.js options
+  //     const options = {
+  //       margin: 10, // Margin around the content
+  //       filename: `quotation-packageId=${id}.pdf`, // Name of the PDF file
+  //       image: { type: "jpeg", quality: 2 }, // Image quality
+  //       html2canvas: { scale: 2, useCORS: true, allowTaint: true }, // html2canvas options
+  //       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, // jsPDF options
+  //     };
+
+  //     // Generate the PDF
+  //     html2pdf().from(element).set(options).save();
+  //   }
+  // };
+
+  const handlePrint = () => {
     if (!showTerms) {
       setErrorMessage("Please check the Read checkbox to proceed.");
       return;
     }
     setErrorMessage("");
 
-    const element = document.getElementById("quotation-page");
-    if (element) {
-      // Configure html2pdf.js options
-      const options = {
-        margin: 10, // Margin around the content
-        filename: `quotation-packageId=${id}.pdf`, // Name of the PDF file
-        image: { type: "jpeg", quality: 2 }, // Image quality
-        html2canvas: { scale: 2, useCORS: true, allowTaint: true }, // html2canvas options
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, // jsPDF options
-      };
+    // Open the print dialog for the #quotation-page div
+    const printContents = document.getElementById("quotation-page")?.innerHTML;
+    const originalContents = document.body.innerHTML;
 
-      // Generate the PDF
-      html2pdf().from(element).set(options).save();
+    // Replace the body content with the quotation page content
+    if (printContents) {
+      // Add print-specific styles to remove headers, footers, links, and the print button
+      const printStyles = `
+      <style>
+        @media print {
+          @page {
+            margin: 0; /* Remove default margins */
+          }
+          body {
+            margin: 0; /* Remove body margins */
+          }
+          /* Hide headers, footers, and the print button */
+          .header, .footer, .no-print, .print-button {
+            display: none !important;
+          }
+          /* Remove web links */
+          a {
+            text-decoration: none !important;
+            color: inherit !important;
+          }
+        }
+      </style>
+    `;
+
+      // Combine the print content with the print styles
+      document.body.innerHTML = printStyles + printContents;
+
+      // Trigger the print dialog
+      window.print();
+
+      // Restore the original content
+      document.body.innerHTML = originalContents;
+
+      // Reload the page to restore functionality
+      window.location.reload();
     }
   };
-
   return (
     <div>
       <div
@@ -113,8 +162,8 @@ function Quotation() {
               {/* Bottom Div */}
               <div className="flex justify-center">
                 <div
-                  className="rounded-xl bg-primary mt-2 text-white px-10 py-1 w-fit cursor-pointer"
-                  onClick={handleDownload}
+                  className="rounded-xl bg-primary mt-2 text-white px-10 py-1 w-fit cursor-pointer print-button"
+                  onClick={handlePrint}
                 >
                   Download
                 </div>
