@@ -62,7 +62,9 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
       };
     };
   }
-
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
@@ -156,7 +158,14 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
     hidden: { opacity: 0, scale: 0.9 },
     visible: { opacity: 1, scale: 1 },
   };
-
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <main className="">
       <form onSubmit={handleSubmit(onSubmit)} className="h-full">
@@ -230,7 +239,10 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                               className="mr-2 w-4 h-4 border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
                             />
                             <span className="text-[#685651]">
-                              {event.nameOfEvent}
+                              {renderValue(
+                                event.nameOfEvent,
+                                event.translatedNameOfEvent
+                              )}
                             </span>
                           </label>
                         ))}

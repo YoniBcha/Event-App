@@ -19,6 +19,7 @@ import { Navigation, Pagination } from "swiper/modules";
 interface Design {
   _id: string;
   eventDesign: string;
+  translatedEventDesign: string;
   image: string;
   createdAt: string;
   updatedAt: string;
@@ -85,7 +86,17 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   //     alert("Please select a design before proceeding.");
   //   }
   // };
-
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   useEffect(() => {
     const selectedDesignId = sessionStorage.getItem("selectedDesignId");
     if (selectedDesignId) {
@@ -198,7 +209,10 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                     />
                   </div>
                   <p className="mt-2 text-sm text-tertiary font-medium text-center">
-                    {design.eventDesign}
+                    {renderValue(
+                      design.eventDesign,
+                      design.translatedEventDesign
+                    )}
                   </p>
                 </motion.div>
               ))}

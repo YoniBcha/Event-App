@@ -21,9 +21,11 @@ interface ServiceProvider {
 interface Package {
   _id: string;
   packageName: string;
+  translatedPackageName: string;
   packageDescription: string;
   packageLogo: string;
   packagePrice: number;
+  translatedPackageDescription: string;
 }
 
 interface SelectedData {
@@ -85,6 +87,15 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
       }
     }
   }, [currentProvider]);
+
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
 
   // Save selected services to sessionStorage
   useEffect(() => {
@@ -273,7 +284,10 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                     />
                   </div>
                   <div className="text-primary text-center font-bold mt-2">
-                    {service.serviceName}
+                    {renderValue(
+                      service.serviceName,
+                      service.translatedServiceName
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -389,10 +403,16 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                     </div>
                     <div>
                       <p className="text-primary font-bold text-lg">
-                        {pkg.packageName}
+                        {renderValue(
+                          pkg.packageName,
+                          pkg.translatedPackageName
+                        )}
                       </p>
                       <p className="text-primary text-sm">
-                        {pkg.packageDescription}
+                        {renderValue(
+                          pkg.packageDescription,
+                          pkg.translatedPackageDescription
+                        )}
                       </p>
                       <p className="text-primary font-bold text-lg">
                         <span className="flex font-extrabold items-center gap-1">

@@ -20,6 +20,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 interface Package {
   _id: string;
   packageName: string;
+  translatedPackageName: string;
   packagePrice: string;
   image: string[];
   description: string;
@@ -303,6 +304,15 @@ function ChoosePackage({
   //     </svg>
   //   </div>
   // );
+
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <div className="flex flex-col justify-center items-center gap-4 h-full">
       <motion.div
@@ -423,16 +433,20 @@ function ChoosePackage({
               >
                 <div className="mb-6">
                   <h3 className="text-xl flex items-center font-semibold">
-                    {selectedImage?.singleGallery?.designId.eventDesign}
+                    {renderValue(
+                      selectedImage?.singleGallery?.designId.eventDesign,
+                      selectedImage?.singleGallery?.designId
+                        .translatedEventDesign
+                    )}
                   </h3>
                   <div
                     className="mt-2 p-2 text-sm md:text-base overflow-hidden"
                     style={{ wordWrap: "break-word" }}
                     dangerouslySetInnerHTML={{
-                      __html: selectedImage?.singleGallery?.description.replace(
-                        /\n/g,
-                        "<br />"
-                      ),
+                      __html: renderValue(
+                        selectedImage?.singleGallery?.description,
+                        selectedImage?.singleGallery?.translatedDescription
+                      ).replace(/\n/g, "<br />"),
                     }}
                   />
                 </div>
@@ -476,7 +490,13 @@ function ChoosePackage({
                     />
                   </div>
                   <p className="mt-2 text-sm text-tertiary font-medium flex items-center text-center">
-                    {eventPackage.packageName} - {eventPackage.packagePrice}{" "}
+                    {
+                      renderValue(
+                        eventPackage.packageName,
+                        eventPackage.translatedPackageName
+                      ) // Render translated package name if available
+                    }
+                    - {eventPackage.packagePrice}{" "}
                     <Image
                       src="/images/SR.png"
                       alt="SR"

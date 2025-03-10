@@ -23,6 +23,16 @@ function PackageDetails({
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
+
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
+
   const [selectedImage, setSelectedImage] = useState("");
 
   React.useEffect(() => {
@@ -155,7 +165,10 @@ function PackageDetails({
                           alt={type?.typeName}
                         />
                         <div className="text-primary text-sm">
-                          {type?.typeName}
+                          {renderValue(
+                            type?.typeName,
+                            type?.translatedTypeName
+                          )}
                         </div>
                       </motion.div>
                     )
@@ -172,7 +185,10 @@ function PackageDetails({
             >
               <div className="mb-6">
                 <h3 className="text-xl flex items-center font-semibold">
-                  {packageData.eventPackage.packageName}{" "}
+                  {renderValue(
+                    packageData.eventPackage.packageName,
+                    packageData.eventPackage.translatedPackageName
+                  )}
                   {packageData.eventPackage.packagePrice}{" "}
                   <Image
                     src="/images/SR.png"
@@ -186,10 +202,10 @@ function PackageDetails({
                   className="mt-2 p-2 text-sm md:text-base overflow-hidden"
                   style={{ wordWrap: "break-word" }}
                   dangerouslySetInnerHTML={{
-                    __html: packageData.eventPackage.description.replace(
-                      /\n/g,
-                      "<br />"
-                    ),
+                    __html: renderValue(
+                      packageData.eventPackage.description,
+                      packageData.eventPackage.translatedDescription
+                    ).replace(/\n/g, "<br />"),
                   }}
                 />
               </div>
