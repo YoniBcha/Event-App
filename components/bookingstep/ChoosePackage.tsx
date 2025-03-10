@@ -444,8 +444,9 @@ function ChoosePackage({
                     style={{ wordWrap: "break-word" }}
                     dangerouslySetInnerHTML={{
                       __html: renderValue(
-                        selectedImage?.singleGallery?.description,
-                        selectedImage?.singleGallery?.translatedDescription
+                        selectedImage?.singleGallery?.description || "", // Fallback to empty string if undefined
+                        selectedImage?.singleGallery?.translatedDescription ||
+                          "" // Fallback to empty string if undefined
                       ).replace(/\n/g, "<br />"),
                     }}
                   />
