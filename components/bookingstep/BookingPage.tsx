@@ -14,8 +14,6 @@ import { FaCalendarAlt, FaCity, FaMapMarkerAlt } from "react-icons/fa";
 import { useGetEventTypesQuery } from "@/store/endpoints/apiSlice";
 import { MdEventNote } from "react-icons/md";
 
-const saudiCities = ["Jeddah", "Makkah", "Riyadh"];
-
 interface FormData {
   city: string;
   place: string;
@@ -27,11 +25,19 @@ interface BookingPageProps {
   setBookingPageData: (data: FormData) => void;
 }
 
+const saudiCities = [
+  { value: "Jeddah", label: "Jeddah", translatedLabel: "جدة" },
+  { value: "Makkah", label: "Makkah", translatedLabel: "مكة" },
+  { value: "Riyadh", label: "Riyadh", translatedLabel: "الرياض" },
+];
+
 const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
   const [showPlaceDropdown, setShowPlaceDropdown] = useState<boolean>(false);
   const [showEventDropdown, setShowEventDropdown] = useState<boolean>(false);
-
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedEvent, setSelecteEvent] = useState<any>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,10 +45,35 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { data } = useGetEventTypesQuery<any>({});
-  const sortedCities = saudiCities.sort((a, b) => a.localeCompare(b));
-  const filteredCities = sortedCities.filter((city) =>
-    city.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const sortedCities = saudiCities.sort((a, b) => {
+    const nameA = currentLocale === "ar" ? a.translatedLabel : a.label;
+    const nameB = currentLocale === "ar" ? b.translatedLabel : b.label;
+    return nameA.localeCompare(nameB);
+  });
+  const filteredCities = sortedCities.filter((city) => {
+    const englishName = city.label.toLowerCase();
+    const arabicName = city.translatedLabel.toLowerCase();
+    const query = searchQuery.toLowerCase();
+
+    return englishName.includes(query) || arabicName.includes(query);
+  });
+  const places = [
+    {
+      value: "outdoor",
+      label: "Outdoor",
+      translatedLabel: "في الهواء الطلق",
+    },
+    {
+      value: "indoor",
+      label: "Indoor",
+      translatedLabel: "داخلي",
+    },
+    {
+      value: "both",
+      label: "Both",
+      translatedLabel: "كلاهما",
+    },
+  ];
 
   interface RootState {
     language: {
@@ -62,9 +93,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
       };
     };
   }
-  const currentLocale = useSelector(
-    (state: any) => state.language.currentLocale
-  );
+
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
@@ -344,22 +373,32 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                         animate="visible"
                         exit="hidden"
                       >
-                        {["outdoor", "indoor", "both"].map((place) => (
-                          <label
-                            key={place}
-                            className="flex items-center gap-2 p-2 hover:bg-primary cursor-pointer"
-                          >
-                            <input
-                              type="checkbox"
-                              name="place"
-                              value={place}
-                              checked={selectedPlace === place}
-                              onChange={() => handlePlaceChange(place)}
-                              className="mr-2 w-4 h-4 border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
-                            />
-                            <span className="text-[#685651]">{place}</span>
-                          </label>
-                        ))}
+                        {["outdoor", "indoor", "both"].map((place) => {
+                          const placeData = places.find(
+                            (p) => p.value === place
+                          );
+                          return (
+                            <label
+                              key={place}
+                              className="flex items-center gap-2 p-2 hover:bg-primary cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                name="place"
+                                value={place} // Always use English for value
+                                checked={selectedPlace === place}
+                                onChange={() => handlePlaceChange(place)}
+                                className="mr-2 w-4 h-4 border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
+                              />
+                              <span className="text-[#685651]">
+                                {currentLocale === "ar" &&
+                                placeData?.translatedLabel
+                                  ? placeData.translatedLabel
+                                  : placeData?.label}
+                              </span>
+                            </label>
+                          );
+                        })}
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -430,18 +469,22 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                         </div>
                         {filteredCities.map((city) => (
                           <label
-                            key={city}
+                            key={city.value}
                             className="flex gap-2 items-center p-2 hover:bg-primary cursor-pointer"
                           >
                             <input
                               type="checkbox"
                               name="city"
-                              value={city}
-                              checked={selectedCity === city}
-                              onChange={() => handleCityChange(city)}
+                              value={city.value} // Always use English for value
+                              checked={selectedCity === city.value}
+                              onChange={() => handleCityChange(city.value)}
                               className="mr-2 w-4 h-4 border border-[#c2937b] rounded-full appearance-none checked:bg-primary checked:border-[#685651]"
                             />
-                            <span className="text-[#281d1b]">{city}</span>
+                            <span className="text-[#281d1b]">
+                              {currentLocale === "ar"
+                                ? city.translatedLabel
+                                : city.label}
+                            </span>
                           </label>
                         ))}
                       </motion.div>
