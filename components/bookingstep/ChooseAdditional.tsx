@@ -10,10 +10,13 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 interface Addition {
   _id: string;
   additionName: string;
+  translatedAdditionName: string;
+
   logo: string;
   typeDetail: {
     _id: string;
     typeName: string;
+    translatedTypeName: string;
     typePicture: string;
     price: number;
   }[];
@@ -22,6 +25,7 @@ interface Addition {
 interface EventPackageAddition {
   additionId: string;
   additionTypeName: string;
+
   quantity: number;
 }
 
@@ -54,6 +58,14 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
       state.language.translations
   );
 
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   useEffect(() => {
     const storedAdditions = sessionStorage.getItem("eventPackageAdditions");
     if (storedAdditions) {
@@ -221,7 +233,12 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                   </div>
                   <div className="flex items-center justify-between w-full py-3">
                     <div className="text-primary font-semibold px-7 text-lg">
-                      {addition.additionName}
+                      {
+                        renderValue(
+                          addition?.additionName,
+                          addition?.translatedAdditionName
+                        ) // Ensure this path is correct
+                      }
                     </div>
                     <div className="pr-3">
                       <svg
@@ -273,7 +290,12 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                                 className="rounded-full"
                               />
                               <div className="text-primary text-sm">
-                                {type.typeName}
+                                {
+                                  renderValue(
+                                    type.typeName,
+                                    type.translatedTypeName
+                                  ) // Ensure this path is correct
+                                }
                               </div>
                             </div>
 
