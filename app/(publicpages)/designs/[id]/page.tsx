@@ -4,12 +4,24 @@ import React from "react";
 import Image from "next/image";
 import { useGetSingleDesignGalleryQuery } from "@/store/endpoints/apiSlice";
 import { useParams } from "next/navigation"; // Use useParams instead of useSearchParams
+import { useSelector } from "react-redux";
 
 export default function DesignPage() {
   const params = useParams(); // Retrieve params
   const id = params.id as string; // Get the id from params
   const { data: designData, isLoading: isGalleryLoading } =
     useGetSingleDesignGalleryQuery<any>({ id, designId: "" });
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
 
   if (isGalleryLoading) {
     return (
@@ -24,10 +36,20 @@ export default function DesignPage() {
       {/* Title and Description Section */}
       <div className="text-center">
         <h1 className="text-2xl font-bold text-primary">
-          {designData?.singleGallery?.designId?.eventDesign}
+          {
+            renderValue(
+              designData?.singleGallery?.designId?.eventDesign,
+              designData?.singleGallery?.designId?.translatedEventDesign
+            ) // Render the translated value if the current locale is Arabic
+          }
         </h1>
         <p className="text-primary mt-2">
-          {designData?.singleGallery?.description}
+          {
+            renderValue(
+              designData?.singleGallery?.description,
+              designData?.singleGallery?.translatedDescription
+            ) // Render the translated value if the current locale is Arabic
+          }
         </p>
       </div>
 

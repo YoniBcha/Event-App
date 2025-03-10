@@ -22,11 +22,21 @@ function ChooseDesigns() {
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const [designs, setDesigns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
   const router = useRouter(); // Initialize useRouter
-
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   useEffect(() => {
     const fetchDesigns = async () => {
       try {
@@ -98,7 +108,10 @@ function ChooseDesigns() {
                 />
               </div>
               <p className="mt-2 text-sm text-tertiary font-extrabold text-center">
-                {design.designId.eventDesign}
+                {renderValue(
+                  design.designId.eventDesign,
+                  design.designId.translatedEventDesign
+                )}
               </p>
             </motion.div>
           ))}
