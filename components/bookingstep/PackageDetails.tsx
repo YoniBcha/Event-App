@@ -23,7 +23,8 @@ function PackageDetails({
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
   const renderValue = (
     defaultValue: string,
     translatedValue: string | undefined
@@ -147,16 +148,23 @@ function PackageDetails({
               </div>
 
               {/* Additions Section */}
-              <div className="justify-center relative items-center grid grid-cols-2 gap-3 border backdrop-blur-xl bg-white/70 border-white rounded-lg max-md:grid-cols-3 max-[400px]:grid-cols-2 pt-1 w-full">
+              <div
+                className="justify-center relative items-center grid grid-cols-2 gap-3 border backdrop-blur-xl bg-white/70 border-white rounded-lg max-md:grid-cols-3 max-[400px]:grid-cols-2 pt-1 w-full"
+                onClick={(e) => e.stopPropagation()}
+              >
                 {packageData?.eventPackage?.additions?.map((addition: any) =>
                   addition?.additionId?.typeDetail?.map(
                     (type: any, idx: any) => (
                       <motion.div
                         key={idx}
-                        className="flex w-full items-center gap-1 p-2"
+                        className="flex w-full items-center gap-1 p-2 cursor-pointer hover:bg-gray-100 rounded-lg"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.1 }}
+                        onClick={() => {
+                          setSelectedItem(type); // Set the selected item
+                          setIsModalOpen(true); // Open the modal
+                        }}
                       >
                         <Image
                           src={type?.typePicture}
@@ -175,6 +183,72 @@ function PackageDetails({
                   )
                 )}
               </div>
+              <AnimatePresence>
+                {isModalOpen && (
+                  <motion.div
+                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <motion.div
+                      className="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg"
+                      initial={{ scale: 0.9 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0.9 }}
+                    >
+                      <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-semibold text-primary">
+                          {renderValue(
+                            selectedItem?.typeName,
+                            selectedItem?.translatedTypeName
+                          )}
+                        </h2>
+                        <button
+                          onClick={() => setIsModalOpen(false)}
+                          className="text-gray-500 hover:text-gray-700"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-2">
+                          <Image
+                            src={selectedItem?.typePicture}
+                            width={40}
+                            height={40}
+                            alt={selectedItem?.typeName}
+                            className="rounded-full"
+                          />
+                          <div className="text-primary text-sm">
+                            {renderValue(
+                              selectedItem?.typeName,
+                              selectedItem?.translatedTypeName
+                            )}
+                          </div>
+                        </div>
+                        <div className="text-gray-600">
+                          {renderValue(
+                            selectedItem?.description,
+                            selectedItem?.translatedDescription
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <motion.div
