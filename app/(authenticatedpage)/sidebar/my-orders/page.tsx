@@ -37,10 +37,12 @@ interface Event {
   date: string;
   eventType: {
     nameOfEvent: string;
+    translatedNameOfEvent: string;
     image: string;
   };
   eventDesign: {
     eventDesign: string;
+    translatedEventDesign: string;
   };
   eventPackage: {
     packageName: string;
@@ -164,7 +166,14 @@ const BookedEvents = () => {
     setSelectedOrderId(orderId);
     setIsRejectModalOpen(true);
   };
-
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   const handleConfirmReject = async () => {
     if (selectedOrderId) {
       try {
@@ -296,14 +305,21 @@ const BookedEvents = () => {
             </div>
             <div className="flex flex-col gap-1">
               <div className="text-2xl max-md:text-xl text-primary">
-                {event.eventType.nameOfEvent} {translations.booking.event}
+                {renderValue(
+                  event.eventType.nameOfEvent,
+                  event.eventType.translatedNameOfEvent
+                )}
+                {translations.booking.event}
               </div>
               <p className="text-sm text-tertiary">
                 {translations.booking.package}: {event.eventPackage.packageName}
               </p>
               <p className="font-medium text-primary text-sm">
                 {translations.booking.eventDesign}:{" "}
-                {event.eventDesign.eventDesign}
+                {renderValue(
+                  event.eventDesign.eventDesign,
+                  event.eventDesign.translatedEventDesign
+                )}
               </p>
               <p className="text-tertiary text-sm">
                 {event.personalData.mobileNumber}
