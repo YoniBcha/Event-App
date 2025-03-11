@@ -11,7 +11,6 @@ interface Addition {
   _id: string;
   additionName: string;
   translatedAdditionName: string;
-
   logo: string;
   typeDetail: {
     _id: string;
@@ -25,7 +24,6 @@ interface Addition {
 interface EventPackageAddition {
   additionId: string;
   additionTypeName: string;
-
   quantity: number;
 }
 
@@ -43,6 +41,8 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [, setHasSelection] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // Moved to the top
+
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
@@ -66,6 +66,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
       ? translatedValue
       : defaultValue;
   };
+
   useEffect(() => {
     const storedAdditions = sessionStorage.getItem("eventPackageAdditions");
     if (storedAdditions) {
@@ -124,7 +125,6 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
       noAdditionAvaliable: string;
     };
   }
-  const [selectedImage, setSelectedImage] = useState<string | null>(null); // Track the selected image URL
 
   const handleImageClick = (imageUrl: string) => {
     setSelectedImage(imageUrl); // Open the modal with the clicked image
