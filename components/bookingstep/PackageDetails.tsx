@@ -226,17 +226,11 @@ function PackageDetails({
                         <div className="flex items-center gap-2">
                           <Image
                             src={selectedItem?.typePicture}
-                            width={40}
-                            height={40}
+                            width={60}
+                            height={60}
                             alt={selectedItem?.typeName}
                             className="rounded-full"
                           />
-                          <div className="text-primary text-sm">
-                            {renderValue(
-                              selectedItem?.typeName,
-                              selectedItem?.translatedTypeName
-                            )}
-                          </div>
                         </div>
                         <div className="text-gray-600">
                           {renderValue(

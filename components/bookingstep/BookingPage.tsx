@@ -218,9 +218,14 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                       </div>
                       <div className="text-[#a1948d] font-semibold">
                         {selectedEvent
-                          ? data?.eventTypes?.find(
-                              (event: any) => event._id === selectedEvent
-                            )?.nameOfEvent
+                          ? renderValue(
+                              data?.eventTypes?.find(
+                                (event: any) => event._id === selectedEvent
+                              )?.nameOfEvent,
+                              data?.eventTypes?.find(
+                                (event: any) => event._id === selectedEvent
+                              )?.translatedNameOfEvent
+                            )
                           : ""}
                       </div>
                     </div>
@@ -342,7 +347,16 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                         {translations.booking.selectPlace}
                       </div>
                       <div className="text-[#a1948d] font-semibold">
-                        {selectedPlace || ""}
+                        {selectedPlace
+                          ? renderValue(
+                              places.find(
+                                (place) => place.value === selectedPlace
+                              )?.label || "",
+                              places.find(
+                                (place) => place.value === selectedPlace
+                              )?.translatedLabel || ""
+                            )
+                          : ""}
                       </div>
                     </div>
                     <div>
@@ -422,7 +436,16 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                         {translations.booking.selectCity}
                       </div>
                       <div className="text-[#a1948d] font-semibold">
-                        {selectedCity || ""}
+                        {selectedCity
+                          ? renderValue(
+                              saudiCities.find(
+                                (city) => city.value === selectedCity
+                              )?.label || "",
+                              saudiCities.find(
+                                (city) => city.value === selectedCity
+                              )?.translatedLabel || ""
+                            )
+                          : ""}
                       </div>
                     </div>
                     <div>

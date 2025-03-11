@@ -299,7 +299,13 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
         {currentService && (
           <div className="flex flex-col gap-5 justify-center items-center">
             <h2 className="text-center mt-2 text-primary font-bold text-lg">
-              {translations.booking.select} {currentService}
+              {translations.booking.select}{" "}
+              {renderValue(
+                currentService,
+                data?.extraServices.find(
+                  (s: any) => s.serviceName === currentService
+                )?.translatedServiceName
+              )}
             </h2>
             <ul className="grid grid-cols-2 max-[500px]:gap-3 max-[500px]:grid-cols-1 md:grid-cols-3 gap-8">
               {serviceProviders.map((provider, index) => {
