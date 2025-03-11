@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { ChromePicker, ColorResult } from "react-color";
 import { motion } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaPlus } from "react-icons/fa";
+import Image from "next/image";
 
 interface PersonalData {
   fullName: string;
@@ -336,6 +337,8 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           </motion.div>
 
           {/* Image Picker for Multiple Images */}
+          {/* Image Picker for Multiple Images */}
+          {/* Image Picker for Multiple Images */}
           <motion.div
             className="flex flex-col"
             initial={{ opacity: 0, x: -20 }}
@@ -350,13 +353,76 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               name="images"
               multiple
               onChange={(e) => {
-                const files = Array.from(e.target.files || []);
-                setFormData({ ...formData, images: files });
+                const files = Array.from(e.target.files || []).filter(
+                  (file) => file instanceof File
+                ); // Ensure only valid File objects are added
+                setFormData((prevData) => ({
+                  ...prevData,
+                  images: [...prevData.images, ...files], // Append new files to existing ones
+                }));
               }}
               className="border outline-none border-primary input-field"
             />
             {errors.images && (
               <div className="text-red-500 text-sm mt-1">{errors.images}</div>
+            )}
+
+            {/* Image Preview Box */}
+            {formData.images.length > 0 && (
+              <div className="mt-4">
+                <h3 className="font-medium text-tertiary text-md mb-2">
+                  Selected Images:
+                </h3>
+                <div className="grid grid-cols-3 gap-2">
+                  {formData.images.map((file, index) => {
+                    // Ensure the file is valid before creating a URL
+                    if (file instanceof File) {
+                      return (
+                        <div
+                          key={index}
+                          className="relative w-full h-24 rounded-lg overflow-hidden"
+                        >
+                          <Image
+                            src={URL.createObjectURL(file)} // Create a URL for the file
+                            alt={`Selected Image ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                          {/* Remove Button */}
+                          <button
+                            onClick={() => {
+                              const updatedImages = formData.images.filter(
+                                (_, i) => i !== index
+                              );
+                              setFormData({
+                                ...formData,
+                                images: updatedImages,
+                              });
+                            }}
+                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <line x1="18" y1="6" x2="6" y2="18" />
+                              <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                          </button>
+                        </div>
+                      );
+                    }
+                    return null; // Skip invalid files
+                  })}
+                </div>
+              </div>
             )}
           </motion.div>
 

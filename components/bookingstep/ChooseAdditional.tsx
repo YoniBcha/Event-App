@@ -124,7 +124,15 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
       noAdditionAvaliable: string;
     };
   }
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // Track the selected image URL
 
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl); // Open the modal with the clicked image
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null); // Close the modal
+  };
   const handleNextClick = () => {
     const eventPackageAdditions: EventPackageAddition[] = Object.keys(
       quantities
@@ -282,20 +290,26 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                             className="flex items-center justify-between"
                           >
                             <div className="flex items-center gap-2">
-                              <Image
-                                src={type.typePicture}
-                                width={20}
-                                height={20}
-                                alt={type.typeName}
-                                className="rounded-full"
-                              />
+                              {/* Clickable Image */}
+                              <div
+                                onClick={() =>
+                                  handleImageClick(type.typePicture)
+                                } // Open modal on click
+                                className="cursor-pointer"
+                              >
+                                <Image
+                                  src={type.typePicture}
+                                  width={20}
+                                  height={20}
+                                  alt={type.typeName}
+                                  className="rounded-full"
+                                />
+                              </div>
                               <div className="text-primary text-sm">
-                                {
-                                  renderValue(
-                                    type.typeName,
-                                    type.translatedTypeName
-                                  ) // Ensure this path is correct
-                                }
+                                {renderValue(
+                                  type.typeName,
+                                  type.translatedTypeName
+                                )}
                               </div>
                             </div>
 
@@ -303,7 +317,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                             <div className="flex items-center gap-1">
                               <div className="font-bold">{type.price}</div>
                               <Image
-                                src="/images/SR.png" // Ensure this path is correct
+                                src="/images/SR.png"
                                 alt="SR"
                                 width={10}
                                 height={10}
@@ -364,6 +378,56 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                           </div>
                         ))}
                       </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Small Fixed-Size Image Modal */}
+                <AnimatePresence>
+                  {selectedImage && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="fixed inset-0 flex items-center justify-center bg-black/20 bg-opacity-50 z-50"
+                      onClick={closeModal} // Close modal when clicking outside
+                    >
+                      <motion.div
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0.8 }}
+                        transition={{ duration: 0.3 }}
+                        className="relative bg-white p-4 rounded-lg shadow-lg w-[300px] h-[300px] flex items-center justify-center" // Fixed size
+                        onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking inside
+                      >
+                        <Image
+                          src={selectedImage}
+                          alt="Selected Image"
+                          width={250} // Adjust image size to fit modal
+                          height={250}
+                          className="object-contain w-full h-full"
+                        />
+                        <button
+                          onClick={closeModal}
+                          className="absolute top-2 right-2 p-2 bg-primary text-white rounded-full hover:bg-secondary transition-colors duration-200"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </button>
+                      </motion.div>
                     </motion.div>
                   )}
                 </AnimatePresence>

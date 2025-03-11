@@ -10,7 +10,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { logoutUser } from "@/store/authReducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 // import { RootState } from "@reduxjs/toolkit/query";
@@ -24,9 +24,7 @@ function Profile() {
   const router = useRouter();
   const { data: datas, error } = useGetUserInfoQuery<any>({});
   const [logoutUserMutation] = useLogoutUserMutation(); // Initialize the mutation
-  // const translations = useSelector(
-  //   (state: RootState) => state.language.translations
-  // );
+  const translations = useSelector((state: any) => state.language.translations);
 
   useEffect(() => {
     // Define an async function to handle the logout logic
@@ -135,29 +133,33 @@ function Profile() {
       {isUpdateProfileModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-lg font-bold mb-4">Update Profile</h2>
+            <h2 className="text-lg font-bold mb-4">
+              {translations.update_profile}
+            </h2>
             <form onSubmit={handleProfileUpdateSubmit}>
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">
-                  Full Name
+                  {translations.full_name}
                 </label>
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="w-full px-4 py-2 outline-none rounded-lg border border-gray-300"
-                  placeholder="Full Name"
+                  placeholder={translations.full_name}
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Email</label>
+                <label className="block text-sm font-medium mb-1">
+                  {translations.email}
+                </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-2 outline-none rounded-lg border border-gray-300"
-                  placeholder="email@example.com"
+                  placeholder={translations.example_email}
                 />
               </div>
               <div className="flex justify-end gap-2">
@@ -166,14 +168,14 @@ function Profile() {
                   onClick={closeModals}
                   className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
                 >
-                  Cancel
+                  {translations.cancel}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:bg-gray-300"
                   disabled={isUpdatingProfile}
                 >
-                  {isUpdatingProfile ? "Saving..." : "Save"}
+                  {isUpdatingProfile ? "Saving..." : translations.save}
                 </button>
               </div>
             </form>
@@ -185,31 +187,33 @@ function Profile() {
       {isChangePasswordModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-lg font-bold mb-4">Change Password</h2>
+            <h2 className="text-lg font-bold mb-4">
+              {translations.change_password}
+            </h2>
             <form onSubmit={handlePasswordChangeSubmit}>
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">
-                  Old Password
+                  {translations.old_password}
                 </label>
                 <input
                   type="password"
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
                   className="w-full px-4 py-2 outline-none rounded-lg border border-gray-300"
-                  placeholder="Old Password"
+                  placeholder={translations.old_password}
                   required
                 />
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">
-                  New Password
+                  {translations.new_password}
                 </label>
                 <input
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   className="w-full px-4 py-2 outline-none rounded-lg border border-gray-300"
-                  placeholder="New Password"
+                  placeholder={translations.new_password}
                   required
                 />
               </div>
@@ -219,14 +223,14 @@ function Profile() {
                   onClick={closeModals}
                   className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
                 >
-                  Cancel
+                  {translations.cancel}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:bg-gray-300"
                   disabled={isChangingPassword}
                 >
-                  {isChangingPassword ? "Saving..." : "Save"}
+                  {isChangingPassword ? "Saving..." : translations.save}
                 </button>
               </div>
             </form>
@@ -240,12 +244,12 @@ function Profile() {
           <div className="rounded-full h-20 w-20 bg-slate-500 mb-2 sm:mb-0 sm:mr-4 flex items-center justify-center"></div>
         </div>
         <div className="flex flex-col flex-1 w-full">
-          <div className="font-bold">Full Name</div>
+          <div className="font-bold">{translations.full_name}</div>
           <div>
             <input
               type="text"
               className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-secondary"
-              placeholder={data?.data?.fullName || "Full Name"}
+              placeholder={data?.data?.fullName || translations.full_name}
             />
           </div>
         </div>
@@ -253,8 +257,12 @@ function Profile() {
 
       <div className="flex flex-row items-center justify-between">
         <div className="text-primary flex flex-col gap-1 items-start">
-          <div className="text-primary text-lg font-bold">SMS Notification</div>
-          <div className="font-extralight text-sm">Receive Updates Via Sms</div>
+          <div className="text-primary text-lg font-bold">
+            {translations.sms_notification}
+          </div>
+          <div className="font-extralight text-sm">
+            {translations.receive_updates_via_sms}
+          </div>
         </div>
         <div className="text-primary">
           <input type="checkbox" />
@@ -264,10 +272,10 @@ function Profile() {
       <div className="flex flex-row items-center justify-between">
         <div className="text-primary flex flex-col gap-1 items-start">
           <div className="text-primary text-lg font-bold">
-            Email Notification
+            {translations.email_notification}
           </div>
           <div className="font-extralight text-sm">
-            Receive Updates Via Email
+            {translations.receive_updates_via_email}
           </div>
         </div>
         <div className="text-primary">
@@ -276,18 +284,20 @@ function Profile() {
       </div>
 
       <hr className="bg-tertiary hidden md:block md:h-0" />
-      <div className="font-bold text-2xl">Account Information</div>
+      <div className="font-bold text-2xl">
+        {translations.account_information}
+      </div>
       <div className="flex gap-5 flex-col md:flex-row w-full">
         <div className="flex md:w-1/2 flex-col items-start">
-          <div>Email</div>
+          <div>{translations.email}</div>
           <input
             type="text"
             className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-secondary"
-            placeholder={data?.data?.email || "email@example.com"}
+            placeholder={data?.data?.email || translations.example_email}
           />
         </div>
         <div className="flex w-full flex-col items-start">
-          <div>Phone Number</div>
+          <div>{translations.phone_number}</div>
           <input
             type="text"
             className="w-full px-4 py-3 outline-none rounded-3xl placeholder:text-gray-500 bg-secondary"
@@ -302,13 +312,13 @@ function Profile() {
           className="py-1 px-3 rounded-xl bg-secondary hover:bg-primary hover:text-white cursor-pointer text-primary border border-gray-300"
           onClick={handleUpdateProfile}
         >
-          Update Profile
+          {translations.update_profile}
         </div>
         <div
           className="py-1 px-3 rounded-xl bg-secondary hover:bg-primary hover:text-white cursor-pointer text-primary border border-gray-300"
           onClick={handleChangePassword}
         >
-          Change Password
+          {translations.change_password}
         </div>
       </div>
     </div>
