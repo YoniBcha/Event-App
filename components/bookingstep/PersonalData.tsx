@@ -12,8 +12,12 @@ interface PersonalData {
   fullName: string;
   mobileNumber: string;
   secondMobileNumber: string;
-  favoriteColors: string[]; // Updated to store an array of colors
+  favoriteColors: string[]; // For favorite colors
+  dressColors: string[]; // For dress colors
   notes: string;
+  numberOfPeople: number; // Number of people invited
+  place: string; // Place for the event
+  images: File[]; // Multiple images
 }
 
 interface PersonalDataProps {
@@ -30,12 +34,19 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           mobileNumber: "",
           secondMobileNumber: "",
           favoriteColors: [], // Initialize as an empty array
+          dressColors: [], // Initialize as an empty array
           notes: "",
+          numberOfPeople: 1, // Default to 1
+          place: "", // Initialize as empty
+          images: [], // Initialize as empty array
         };
   });
+
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [showColorPicker, setShowColorPicker] = useState(false);
-  const [selectedColor, setSelectedColor] = useState("#ffffff"); // Track the currently selected color
+  const [showFavoriteColorPicker, setShowFavoriteColorPicker] = useState(false); // For favorite colors
+  const [showDressColorPicker, setShowDressColorPicker] = useState(false); // For dress colors
+  const [selectedFavoriteColor, setSelectedFavoriteColor] = useState("#ffffff"); // Selected favorite color
+  const [selectedDressColor, setSelectedDressColor] = useState("#ffffff"); // Selected dress color
 
   interface RootState {
     language: {
@@ -86,8 +97,18 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
       ),
     favoriteColors: Yup.array()
       .of(Yup.string())
-      .min(1, `${translations.booking.colorRequire}`), // Validate at least one color is selected
+      .min(1, `${translations.booking.colorRequire}`), // Validate at least one favorite color
+    dressColors: Yup.array()
+      .of(Yup.string())
+      .min(1, "At least one dress color is required"), // Validate at least one dress color
     notes: Yup.string().required(`${translations.booking.noteRequire}`),
+    numberOfPeople: Yup.number()
+      .required("Number of people is required")
+      .min(1, "At least 1 person is required"),
+    place: Yup.string().required("Place is required"),
+    images: Yup.array()
+      .of(Yup.mixed().required("An image is required"))
+      .min(1, "At least one image is required"),
   });
 
   // Load saved data from sessionStorage on component mount
@@ -121,24 +142,35 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     }
   };
 
-  const handleColorChange = (color: ColorResult) => {
-    setSelectedColor(color.hex); // Update the selected color
+  const handleFavoriteColorChange = (color: ColorResult) => {
+    setSelectedFavoriteColor(color.hex); // Update the selected favorite color
   };
 
-  const addColor = () => {
-    if (!formData.favoriteColors.includes(selectedColor)) {
+  const handleDressColorChange = (color: ColorResult) => {
+    setSelectedDressColor(color.hex); // Update the selected dress color
+  };
+
+  const addColor = (field: "favoriteColors" | "dressColors", color: string) => {
+    if (!formData[field].includes(color)) {
       setFormData((prevData) => ({
         ...prevData,
-        favoriteColors: [...prevData.favoriteColors, selectedColor], // Add the selected color to the array
+        [field]: [...prevData[field], color],
       }));
     }
-    setShowColorPicker(false); // Close the color picker
+    if (field === "favoriteColors") {
+      setShowFavoriteColorPicker(false); // Close the favorite color picker
+    } else {
+      setShowDressColorPicker(false); // Close the dress color picker
+    }
   };
 
-  const removeColor = (color: string) => {
+  const removeColor = (
+    field: "favoriteColors" | "dressColors",
+    color: string
+  ) => {
     setFormData((prevData) => ({
       ...prevData,
-      favoriteColors: prevData.favoriteColors.filter((c) => c !== color), // Remove the color from the array
+      [field]: prevData[field].filter((c) => c !== color),
     }));
   };
 
@@ -176,102 +208,266 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[
-            {
-              label: translations.booking.fullName,
-              name: "fullName",
-              type: "text",
-            },
-            {
-              label: translations.booking.mobileNumber,
-              name: "mobileNumber",
-              type: "tel",
-            },
-            {
-              label: translations.booking.secondMobileNumber,
-              name: "secondMobileNumber",
-              type: "tel",
-            },
-          ].map((field, index) => (
-            <motion.div
-              key={field.name}
-              className="flex flex-col"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.3 }}
-            >
-              <label className="font-medium text-tertiary text-md mb-2">
-                {field.label}
-              </label>
-              <input
-                type={field.type}
-                name={field.name}
-                value={formData[field.name as keyof typeof formData] || ""}
-                onChange={handleInputChange}
-                className={`border outline-none  ${
-                  errors[field.name as keyof typeof errors]
-                    ? "border-red-500"
-                    : "border-primary"
-                } input-field`}
-              />
-              {errors[field.name] && (
-                <div className="text-red-500 text-sm mt-1">
-                  {errors[field.name]}
-                </div>
-              )}
-            </motion.div>
-          ))}
+          {/* Full Name */}
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              {translations.booking.fullName}
+            </label>
+            <input
+              type="text"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleInputChange}
+              className={`border outline-none ${
+                errors.fullName ? "border-red-500" : "border-primary"
+              } input-field`}
+            />
+            {errors.fullName && (
+              <div className="text-red-500 text-sm mt-1">{errors.fullName}</div>
+            )}
+          </motion.div>
+
+          {/* Mobile Number */}
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              {translations.booking.mobileNumber}
+            </label>
+            <input
+              type="tel"
+              name="mobileNumber"
+              value={formData.mobileNumber}
+              onChange={handleInputChange}
+              className={`border outline-none ${
+                errors.mobileNumber ? "border-red-500" : "border-primary"
+              } input-field`}
+            />
+            {errors.mobileNumber && (
+              <div className="text-red-500 text-sm mt-1">
+                {errors.mobileNumber}
+              </div>
+            )}
+          </motion.div>
+
+          {/* Second Mobile Number */}
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              {translations.booking.secondMobileNumber}
+            </label>
+            <input
+              type="tel"
+              name="secondMobileNumber"
+              value={formData.secondMobileNumber}
+              onChange={handleInputChange}
+              className={`border outline-none ${
+                errors.secondMobileNumber ? "border-red-500" : "border-primary"
+              } input-field`}
+            />
+            {errors.secondMobileNumber && (
+              <div className="text-red-500 text-sm mt-1">
+                {errors.secondMobileNumber}
+              </div>
+            )}
+          </motion.div>
+
+          {/* Number of People Invited */}
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              Number of People Invited
+            </label>
+            <input
+              type="number"
+              name="numberOfPeople"
+              value={formData.numberOfPeople}
+              onChange={handleInputChange}
+              min={1}
+              className={`border outline-none ${
+                errors.numberOfPeople ? "border-red-500" : "border-primary"
+              } input-field appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+            />
+            {errors.numberOfPeople && (
+              <div className="text-red-500 text-sm mt-1">
+                {errors.numberOfPeople}
+              </div>
+            )}
+          </motion.div>
+
+          {/* Place */}
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              Place
+            </label>
+            <input
+              type="text"
+              name="place"
+              value={formData.place}
+              onChange={handleInputChange}
+              className={`border outline-none ${
+                errors.place ? "border-red-500" : "border-primary"
+              } input-field`}
+            />
+            {errors.place && (
+              <div className="text-red-500 text-sm mt-1">{errors.place}</div>
+            )}
+          </motion.div>
+
+          {/* Image Picker for Multiple Images */}
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.6, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              Upload Images (Multiple)
+            </label>
+            <input
+              type="file"
+              name="images"
+              multiple
+              onChange={(e) => {
+                const files = Array.from(e.target.files || []);
+                setFormData({ ...formData, images: files });
+              }}
+              className="border outline-none border-primary input-field"
+            />
+            {errors.images && (
+              <div className="text-red-500 text-sm mt-1">{errors.images}</div>
+            )}
+          </motion.div>
 
           {/* Favorite Colors */}
           <motion.div
             className="flex flex-col"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.3 }}
+            transition={{ delay: 0.7, duration: 0.3 }}
           >
             <label className="font-medium text-tertiary text-md mb-2">
-              {translations.booking.pickColor}
+              Favorite Colors
             </label>
             <div className="flex items-center gap-2">
               {/* Color Preview */}
               <div
                 className="w-10 h-10 rounded-lg cursor-pointer border border-primary"
                 style={{
-                  backgroundColor: selectedColor,
+                  backgroundColor: selectedFavoriteColor,
                 }}
-                onClick={() => setShowColorPicker(!showColorPicker)}
+                onClick={() =>
+                  setShowFavoriteColorPicker(!showFavoriteColorPicker)
+                }
               />
               {/* + Button to Add Color */}
               <button
-                onClick={addColor}
+                onClick={() =>
+                  addColor("favoriteColors", selectedFavoriteColor)
+                }
                 className="p-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors duration-200"
               >
                 <FaPlus />
               </button>
             </div>
             {/* Color Picker */}
-            {showColorPicker && (
+            {showFavoriteColorPicker && (
               <div className="mt-2">
                 <ChromePicker
-                  color={selectedColor}
-                  onChange={handleColorChange}
+                  color={selectedFavoriteColor}
+                  onChange={handleFavoriteColorChange}
                 />
               </div>
             )}
-            {/* Display Selected Colors */}
+            {/* Display Selected Favorite Colors */}
             <div className="flex flex-wrap mt-2">
               {formData.favoriteColors.map((color, index) => (
                 <div
                   key={index}
                   className="w-6 h-6 rounded-full m-1 cursor-pointer"
                   style={{ backgroundColor: color }}
-                  onClick={() => removeColor(color)}
+                  onClick={() => removeColor("favoriteColors", color)}
                 />
               ))}
             </div>
             {errors.favoriteColors && (
               <div className="text-red-500 text-sm mt-1">
                 {errors.favoriteColors}
+              </div>
+            )}
+          </motion.div>
+
+          {/* Dress Colors */}
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              Dress Colors
+            </label>
+            <div className="flex items-center gap-2">
+              {/* Color Preview */}
+              <div
+                className="w-10 h-10 rounded-lg cursor-pointer border border-primary"
+                style={{
+                  backgroundColor: selectedDressColor,
+                }}
+                onClick={() => setShowDressColorPicker(!showDressColorPicker)}
+              />
+              {/* + Button to Add Color */}
+              <button
+                onClick={() => addColor("dressColors", selectedDressColor)}
+                className="p-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors duration-200"
+              >
+                <FaPlus />
+              </button>
+            </div>
+            {/* Color Picker */}
+            {showDressColorPicker && (
+              <div className="mt-2">
+                <ChromePicker
+                  color={selectedDressColor}
+                  onChange={handleDressColorChange}
+                />
+              </div>
+            )}
+            {/* Display Selected Dress Colors */}
+            <div className="flex flex-wrap mt-2">
+              {formData.dressColors.map((color, index) => (
+                <div
+                  key={index}
+                  className="w-6 h-6 rounded-full m-1 cursor-pointer"
+                  style={{ backgroundColor: color }}
+                  onClick={() => removeColor("dressColors", color)}
+                />
+              ))}
+            </div>
+            {errors.dressColors && (
+              <div className="text-red-500 text-sm mt-1">
+                {errors.dressColors}
               </div>
             )}
           </motion.div>
@@ -282,7 +478,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           className="mt-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.3 }}
+          transition={{ delay: 0.9, duration: 0.3 }}
         >
           <label className="font-medium text-tertiary text-md mb-2">
             {translations.booking.notes}

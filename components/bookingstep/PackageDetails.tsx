@@ -88,11 +88,10 @@ function PackageDetails({
             onClick={handleNextClick}
           >
             <div className="flex flex-col w-full lg:w-1/2 md:w-3/4 h-full">
-              <div
+              {/* <div
                 className="flex flex-col w-full"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Main Image Container */}
                 <div className="min-h-[200px] w-full rounded bg-slate-500 flex items-center justify-center relative overflow-hidden">
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -119,10 +118,10 @@ function PackageDetails({
                     </motion.div>
                   </AnimatePresence>
                 </div>
-              </div>
+              </div> */}
 
               {/* Thumbnail Grid */}
-              <div
+              {/* <div
                 className="py-2 grid grid-cols-4 gap-2"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -145,11 +144,11 @@ function PackageDetails({
                     </motion.div>
                   )
                 )}
-              </div>
+              </div> */}
 
               {/* Additions Section */}
               <div
-                className="justify-center relative items-center grid grid-cols-2 gap-3 border backdrop-blur-xl bg-white/70 border-white rounded-lg max-md:grid-cols-3 max-[400px]:grid-cols-2 pt-1 w-full"
+                className="justify-center relative items-center grid grid-cols-1 gap-3 border backdrop-blur-xl bg-white/70 border-white rounded-lg  pt-1 w-full"
                 onClick={(e) => e.stopPropagation()}
               >
                 {packageData?.eventPackage?.additions?.map((addition: any) =>
@@ -157,7 +156,7 @@ function PackageDetails({
                     (type: any, idx: any) => (
                       <motion.div
                         key={idx}
-                        className="flex w-full items-center gap-1 p-2 cursor-pointer hover:bg-gray-100 rounded-lg"
+                        className="flex w-full items-start gap-3 p-2 cursor-pointer hover:bg-gray-100 rounded-lg"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.1 }}
@@ -166,16 +165,34 @@ function PackageDetails({
                           setIsModalOpen(true); // Open the modal
                         }}
                       >
-                        <Image
-                          src={type?.typePicture}
-                          width={20}
-                          height={20}
-                          alt={type?.typeName}
-                        />
-                        <div className="text-primary text-sm">
-                          {renderValue(
-                            type?.typeName,
-                            type?.translatedTypeName
+                        {/* Image on the left side */}
+                        <div className="relative w-12 h-12 flex-shrink-0">
+                          <Image
+                            src={type?.typePicture}
+                            alt={type?.typeName}
+                            fill
+                            className="rounded-lg object-cover"
+                          />
+                        </div>
+
+                        {/* Title and description stacked vertically */}
+                        <div className="flex flex-col gap-1">
+                          {/* Title */}
+                          <div className="text-primary font-semibold">
+                            {renderValue(
+                              type?.typeName,
+                              type?.translatedTypeName
+                            )}
+                          </div>
+
+                          {/* Description */}
+                          {type?.typeDescription && (
+                            <div className="text-sm text-gray-600">
+                              {renderValue(
+                                type?.typeDescription,
+                                type?.translatedTypeDescription
+                              )}
+                            </div>
                           )}
                         </div>
                       </motion.div>
@@ -183,6 +200,17 @@ function PackageDetails({
                   )
                 )}
               </div>
+              <div className="flex justify-center items-center">
+                Total {packageData.eventPackage.packagePrice}{" "}
+                <Image
+                  src="/images/SR.png"
+                  alt="SR"
+                  width={20}
+                  height={20}
+                  className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
+                />
+              </div>
+
               <AnimatePresence>
                 {isModalOpen && (
                   <motion.div
@@ -257,14 +285,6 @@ function PackageDetails({
                     packageData.eventPackage.packageName,
                     packageData.eventPackage.translatedPackageName
                   )}
-                  {packageData.eventPackage.packagePrice}{" "}
-                  <Image
-                    src="/images/SR.png"
-                    alt="SR"
-                    width={20}
-                    height={20}
-                    className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
-                  />
                 </h3>
                 <div
                   className="mt-2 p-2 text-sm md:text-base overflow-hidden"
