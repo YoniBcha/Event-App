@@ -292,9 +292,10 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                             <div className="flex items-center gap-2">
                               {/* Clickable Image */}
                               <div
-                                onClick={() =>
-                                  handleImageClick(type.typePicture)
-                                } // Open modal on click
+                                onClick={(event) => {
+                                  handleImageClick(type.typePicture);
+                                  event.stopPropagation();
+                                }} // Open modal on click
                                 className="cursor-pointer"
                               >
                                 <Image
