@@ -248,12 +248,28 @@ const MyOrdersContent = () => {
                 <span className="font-semibold">
                   {translations.booking.favoriteColor}:
                 </span>{" "}
+                {payload.personalData.favoriteColors.map((color, index) => (
+                  <span
+                    key={index}
+                    className="inline-block w-4 h-4 rounded-full mr-2"
+                    style={{ backgroundColor: color }}
+                    title={color} // Optional: Show the color code on hover
+                  />
+                ))}
                 {payload.personalData.favoriteColors.join(", ")}
               </p>
               <p>
                 <span className="font-semibold">
                   {translations.booking.dressColor}:
                 </span>{" "}
+                {payload.personalData.dressColor.map((color, index) => (
+                  <span
+                    key={index}
+                    className="inline-block w-4 h-4 rounded-full mr-2"
+                    style={{ backgroundColor: color }}
+                    title={color} // Optional: Show the color code on hover
+                  />
+                ))}
                 {payload.personalData.dressColor.join(", ")}
               </p>
               <p>
