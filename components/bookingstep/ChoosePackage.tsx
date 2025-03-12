@@ -479,6 +479,7 @@ function ChoosePackage({
                   variants={cardVariants}
                   whileHover="hover"
                   whileTap="tap"
+                  key={eventPackage._id || index}
                 >
                   {/* First Row: Image and Package Details */}
                   <div className="flex flex-row gap-4 w-full items-start">
@@ -509,10 +510,10 @@ function ChoosePackage({
                       {" "}
                       {/* Changed justify-center to justify-start */}
                       {/* Package Name and Price */}
-                      <div className="flex flex-row gap-2 w-full  items-center">
+                      <div className="flex flex-row gap-2 w-full justify-between pt-4 items-center">
                         {/* Package Name */}
                         <div className="text-xl font-extrabold text-tertiary flex-shrink-0">
-                          {eventPackage.packageName} -
+                          {eventPackage.packageName}
                         </div>
 
                         {/* Price and Currency Image */}
