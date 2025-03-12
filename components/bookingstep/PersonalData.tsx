@@ -55,12 +55,10 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   const [loading, setLoading] = useState(false);
 
   const translations = useSelector((state: any) => state.language.translations);
-   const isOtherSelected = ![
-    translations.palace,
-    translations.hall,
-    translations.private
-   ].includes(formData.place);
-   const placeOptions = [
+  const isOtherSelected = !["Palace", "Hall", "Private"].includes(
+    formData.place
+  );
+  const placeOptions = [
     { label: translations.selectOption, value: "" },
     { label: translations.palace, value: "Palace" },
     { label: translations.hall, value: "Hall" },
@@ -68,8 +66,6 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     { label: translations.other, value: "Other" },
   ];
 
-
- 
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
@@ -409,64 +405,73 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           </motion.div>
 
           {/* Place */}
-         
- <motion.div
-      className="flex flex-col"
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.5, duration: 0.3 }}
-    >
-      <label className="font-medium text-tertiary text-md mb-2">
-        {translations.booking.place}
-      </label>
 
-      {/* PrimeReact Dropdown for Place */}
-      <Dropdown
-        value={isOtherSelected ? "Other" : formData.place}
-        options={placeOptions}
-        onChange={(e) => {
-          const selectedValue = e.value;
-          if (selectedValue === "Other") {
-            // If "Other" is selected, clear the place value
-            setFormData((prevFormData) => ({ ...prevFormData, place: "" }));
-          } else {
-            // Otherwise, update the place value
-            setFormData((prevFormData) => ({ ...prevFormData, place: selectedValue }));
-          }
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              {translations.booking.place}
+            </label>
 
-          // Clear the error if the user selects a valid option
-          if (errors.place) {
-            setErrors((prevErrors) => ({ ...prevErrors, place: "" }));
-          }
-        }}
-        placeholder="Select an option"
-        className={`w-full ${errors.place ? "p-invalid" : ""}`} // PrimeReact's invalid class for errors
-      />
+            {/* PrimeReact Dropdown for Place */}
+            <Dropdown
+              value={isOtherSelected ? "Other" : formData.place}
+              options={placeOptions}
+              onChange={(e) => {
+                const selectedValue = e.value;
+                if (selectedValue === "Other") {
+                  // If "Other" is selected, clear the place value
+                  setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    place: "",
+                  }));
+                } else {
+                  // Otherwise, update the place value
+                  setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    place: selectedValue,
+                  }));
+                }
 
-      {/* Conditional Input for "Other" */}
-      {isOtherSelected && (
-        <input
-          type="text"
-          name="place"
-          value={formData.place}
-          onChange={(e) => {
-            setFormData((prevFormData) => ({ ...prevFormData, place: e.target.value }));
-            if (errors.place) {
-              setErrors((prevErrors) => ({ ...prevErrors, place: "" }));
-            }
-          }}
-          placeholder="Enter your choice"
-          className={`border outline-none mt-2 ${
-            errors.place ? "border-red-500" : "border-primary"
-          } input-field`}
-        />
-      )}
+                // Clear the error if the user selects a valid option
+                if (errors.place) {
+                  setErrors((prevErrors) => ({ ...prevErrors, place: "" }));
+                }
+              }}
+              placeholder="Select an option"
+              className={`w-full ${errors.place ? "p-invalid" : ""}`} // PrimeReact's invalid class for errors
+            />
 
-      {/* Error Message */}
-      {errors.place && (
-        <div className="text-red-500 text-sm mt-1">{errors.place}</div>
-      )}
-    </motion.div>
+            {/* Conditional Input for "Other" */}
+            {isOtherSelected && (
+              <input
+                type="text"
+                name="place"
+                value={formData.place}
+                onChange={(e) => {
+                  setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    place: e.target.value,
+                  }));
+                  if (errors.place) {
+                    setErrors((prevErrors) => ({ ...prevErrors, place: "" }));
+                  }
+                }}
+                placeholder="Enter your choice"
+                className={`border outline-none mt-2 ${
+                  errors.place ? "border-red-500" : "border-primary"
+                } input-field`}
+              />
+            )}
+
+            {/* Error Message */}
+            {errors.place && (
+              <div className="text-red-500 text-sm mt-1">{errors.place}</div>
+            )}
+          </motion.div>
           {/* Image Picker for Multiple Images */}
           <motion.div
             className="flex flex-col"
