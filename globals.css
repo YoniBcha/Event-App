@@ -75,11 +75,11 @@ body::before {
 body::after {
   content: "";
   position: absolute;
-  top: 2%;
+  top: 5%;
   z-index: -1;
   right: 0;
-  width: 45%;
-  height: 45%;
+  width: 30%;
+  height: 30%;
   background-image: url("/images/illustration-drawing-white-rose-flower 4.png"); /* Replace with your image path */
   background-size: contain;
   background-repeat: no-repeat;
