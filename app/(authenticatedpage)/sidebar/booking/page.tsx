@@ -279,7 +279,9 @@ const MyOrdersContent = () => {
                 {payload.personalData.notes || "No notes"}
               </p>
               <p>
-                <span className="font-semibold">number of people:</span>{" "}
+                <span className="font-semibold">
+                  {translations.booking.number_of_people}:
+                </span>{" "}
                 {payload.personalData.noOfPeople}
               </p>
             </div>

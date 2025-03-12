@@ -372,7 +372,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             transition={{ delay: 0.4, duration: 0.3 }}
           >
             <label className="font-medium text-tertiary text-md mb-2">
-              Number of People Invited
+              {translations.booking.number_of_People_Invited}
             </label>
             <input
               type="number"
@@ -399,7 +399,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             transition={{ delay: 0.5, duration: 0.3 }}
           >
             <label className="font-medium text-tertiary text-md mb-2">
-              Place
+              {translations.booking.place}
             </label>
             <input
               type="text"
@@ -423,14 +423,14 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             transition={{ delay: 0.6, duration: 0.3 }}
           >
             <label className="font-medium text-tertiary text-md mb-2">
-              Upload Images (Multiple)
+              {translations.booking.upload_Images}
             </label>
 
             {/* Drag-and-Drop Area */}
             <div className="w-full h-auto rounded border border-primary flex-col justify-start items-start inline-flex">
               <div className="self-stretch h-24 px-8 pt-8 pb-6 flex-col justify-start items-start flex">
                 <div className="self-stretch text-primary   text-2xl font-semibold font-['Inter'] leading-9">
-                  select image
+                  {translations.booking.select_images}
                 </div>
               </div>
               <div className="self-stretch px-8 py-2 flex-col justify-start items-start gap-6 flex">
@@ -464,7 +464,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                             htmlFor="imageInput"
                             className="text-lg leading-6 font-medium text-primary p-4 rounded cursor-pointer"
                           >
-                            Browse
+                            {translations.booking.browse}
                           </label>
                           <input
                             id="imageInput"
@@ -477,7 +477,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                             className="hidden"
                           />
                         </div>
-                        <p className="text-gray-500">Subtitle</p>
+                        {/* <p className="text-gray-500"></p> */}
                       </>
                     )}
                   </div>
@@ -490,7 +490,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                       onClick={handleClearImages}
                       className="text-white bg-primary hover:bg-secondary dark:text-white cursor-pointer rounded-xl px-4 py-1.5 text-sm font-medium font-['Inter'] leading-normal tracking-tight"
                     >
-                      Clear Images
+                      {translations.booking.clear_Images}
                     </div>
                   </div>
                 </div>
@@ -512,7 +512,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             transition={{ delay: 0.7, duration: 0.3 }}
           >
             <label className="font-medium text-tertiary text-md mb-2">
-              Favorite Colors
+              {translations.booking.favorite_Colors}
             </label>
             <div className="flex items-center gap-2">
               {/* Color Preview */}
@@ -570,7 +570,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             transition={{ delay: 0.8, duration: 0.3 }}
           >
             <label className="font-medium text-tertiary text-md mb-2">
-              Dress Colors
+              {translations.booking.dress_Colors}
             </label>
             <div className="flex items-center gap-2">
               {/* Color Preview */}
