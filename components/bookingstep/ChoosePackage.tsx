@@ -487,10 +487,10 @@ function ChoosePackage({
                     {/* Image (40% width) */}
                     <div
                       className="relative w-[40%] flex-shrink-0" // 40% width
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // handleImageClick(eventPackage.image[0]);
-                      }}
+                      // onClick={(e) => {
+                      //   e.stopPropagation();
+                      //   // handleImageClick(eventPackage.image[0]);
+                      // }}
                     >
                       <div className="pb-[100%] relative">
                         {" "}
