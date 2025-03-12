@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { useSelector } from "react-redux";
 import { ChromePicker, ColorResult } from "react-color";
 import { motion } from "framer-motion";
-import { FaArrowLeft, FaArrowRight, FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { Dropdown } from "primereact/dropdown";
