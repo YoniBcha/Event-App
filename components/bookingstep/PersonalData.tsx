@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaPlus, FaTrash } from "react-icons/fa";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { Dropdown } from "primereact/dropdown";
 
 interface PersonalData {
   fullName: string;
@@ -52,7 +53,23 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+
   const translations = useSelector((state: any) => state.language.translations);
+   const isOtherSelected = ![
+    translations.palace,
+    translations.hall,
+    translations.private
+   ].includes(formData.place);
+   const placeOptions = [
+    { label: translations.selectOption, value: "" },
+    { label: translations.palace, value: "Palace" },
+    { label: translations.hall, value: "Hall" },
+    { label: translations.private, value: "Private" },
+    { label: translations.other, value: "Other" },
+  ];
+
+
+ 
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
@@ -392,29 +409,64 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           </motion.div>
 
           {/* Place */}
-          <motion.div
-            className="flex flex-col"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5, duration: 0.3 }}
-          >
-            <label className="font-medium text-tertiary text-md mb-2">
-              {translations.booking.place}
-            </label>
-            <input
-              type="text"
-              name="place"
-              value={formData.place}
-              onChange={handleInputChange}
-              className={`border outline-none ${
-                errors.place ? "border-red-500" : "border-primary"
-              } input-field`}
-            />
-            {errors.place && (
-              <div className="text-red-500 text-sm mt-1">{errors.place}</div>
-            )}
-          </motion.div>
+         
+ <motion.div
+      className="flex flex-col"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.5, duration: 0.3 }}
+    >
+      <label className="font-medium text-tertiary text-md mb-2">
+        {translations.booking.place}
+      </label>
 
+      {/* PrimeReact Dropdown for Place */}
+      <Dropdown
+        value={isOtherSelected ? "Other" : formData.place}
+        options={placeOptions}
+        onChange={(e) => {
+          const selectedValue = e.value;
+          if (selectedValue === "Other") {
+            // If "Other" is selected, clear the place value
+            setFormData((prevFormData) => ({ ...prevFormData, place: "" }));
+          } else {
+            // Otherwise, update the place value
+            setFormData((prevFormData) => ({ ...prevFormData, place: selectedValue }));
+          }
+
+          // Clear the error if the user selects a valid option
+          if (errors.place) {
+            setErrors((prevErrors) => ({ ...prevErrors, place: "" }));
+          }
+        }}
+        placeholder="Select an option"
+        className={`w-full ${errors.place ? "p-invalid" : ""}`} // PrimeReact's invalid class for errors
+      />
+
+      {/* Conditional Input for "Other" */}
+      {isOtherSelected && (
+        <input
+          type="text"
+          name="place"
+          value={formData.place}
+          onChange={(e) => {
+            setFormData((prevFormData) => ({ ...prevFormData, place: e.target.value }));
+            if (errors.place) {
+              setErrors((prevErrors) => ({ ...prevErrors, place: "" }));
+            }
+          }}
+          placeholder="Enter your choice"
+          className={`border outline-none mt-2 ${
+            errors.place ? "border-red-500" : "border-primary"
+          } input-field`}
+        />
+      )}
+
+      {/* Error Message */}
+      {errors.place && (
+        <div className="text-red-500 text-sm mt-1">{errors.place}</div>
+      )}
+    </motion.div>
           {/* Image Picker for Multiple Images */}
           <motion.div
             className="flex flex-col"

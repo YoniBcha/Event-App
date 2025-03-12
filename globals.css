@@ -66,7 +66,7 @@ body::before {
   z-index: -1;
   width: 45%; /* Adjust size as needed */
   height: 45%;
-  background-image: url("/images/illustration-drawing-white-rose-flower 7.png"); /* Replace with your image path */
+  background-image: url("/images/flower9.png"); /* Replace with your image path */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left;
@@ -81,7 +81,7 @@ body::after {
   right: 0;
   width: 30%;
   height: 30%;
-  background-image: url("/images/illustration-drawing-white-rose-flower 4.png"); /* Replace with your image path */
+  background-image: url("/images/flower8.png"); /* Replace with your image path */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: right;

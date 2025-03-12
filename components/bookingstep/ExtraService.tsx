@@ -503,7 +503,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
           {selectedServices.length > 0 && (
             <motion.button
               onClick={() => handleDone(false)} // Call handleDone with skip=false
-              className="next-btn bg-primary hover:bg-secondary hover:text-primary"
+              className="flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
               variants={{
                 hover: {
                   scale: 1.05,
@@ -519,7 +519,13 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
               whileHover="hover"
               whileTap="tap"
             >
-              <span>{translations.booking.done}</span>
+               <span className="">
+                            {currentLocale === "ar" ? (
+                              <AiOutlineLeft size={20} />
+                            ) : (
+                              <AiOutlineRight size={20} />
+                            )}
+                          </span>
             </motion.button>
           )}
         </div>

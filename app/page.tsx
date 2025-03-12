@@ -79,6 +79,7 @@ const Home: React.FC = () => {
         >
           {translations.fenzo}
         </motion.div>
+        <motion.div variants={itemVariants}>{translations.subTitle1}</motion.div>
         <motion.div variants={itemVariants}>{translations.subTitle}</motion.div>
         <motion.button
           className="p-2 text-gray-100 bg-primary hover:bg-secondary hover:text-primary rounded"
