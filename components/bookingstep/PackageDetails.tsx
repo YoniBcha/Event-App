@@ -159,7 +159,7 @@ function PackageDetails({
                     (type: any, idx: any) => (
                       <motion.div
                         key={idx}
-                        className="flex w-full items-start gap-3 p-2 cursor-pointer hover:bg-gray-100 rounded-lg"
+                        className="flex w-full items-start gap-3 p-2 cursor-pointer hover:bg-secondary rounded-lg"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.1 }}
