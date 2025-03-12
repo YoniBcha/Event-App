@@ -303,7 +303,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                                   width={20}
                                   height={20}
                                   alt={type.typeName}
-                                  className="rounded-full"
+                                  className=" border border-primary"
                                 />
                               </div>
                               <div className="text-primary text-sm">
@@ -315,14 +315,14 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                             </div>
 
                             {/* Price and Currency Image Container */}
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1 ">
                               <div className="font-bold">{type.price}</div>
                               <Image
                                 src="/images/SR.png"
                                 alt="SR"
                                 width={10}
                                 height={10}
-                                className={`${
+                                className={` ${
                                   currentLocale === "ar" ? "scale-x-[-1]" : ""
                                 }`}
                               />

@@ -57,6 +57,34 @@ body {
   font-family: var(--font-primary);
 }
 /* Top-left image */
+body::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: -1;
+  width: 45%; /* Adjust size as needed */
+  height: 45%;
+  background-image: url("/images/illustration-drawing-white-rose-flower 7.png"); /* Replace with your image path */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+
+/* Top-right image */
+body::after {
+  content: "";
+  position: absolute;
+  top: 2%;
+  z-index: -1;
+  right: 0;
+  width: 45%;
+  height: 45%;
+  background-image: url("/images/illustration-drawing-white-rose-flower 4.png"); /* Replace with your image path */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+}
 
 /* Bottom-left image */
 .bottom-left {
