@@ -62,10 +62,10 @@ body::before {
   content: "";
   position: fixed;
   top: 50%;
-  left: -4%;
+  left: -2%;
   z-index: -1;
-  width: 45%; /* Adjust size as needed */
-  height: 45%;
+  width: 40%; /* Adjust size as needed */
+  height: 40%;
   background-image: url("/images/flower9.png"); /* Replace with your image path */
   background-size: contain;
   background-repeat: no-repeat;
@@ -79,8 +79,8 @@ body::after {
   top: 5%;
   z-index: -1;
   right: 0;
-  width: 25%;
-  height: 25%;
+  width: 20%;
+  height: 20%;
   background-image: url("/images/flower8.png"); /* Replace with your image path */
   background-size: contain;
   background-repeat: no-repeat;
