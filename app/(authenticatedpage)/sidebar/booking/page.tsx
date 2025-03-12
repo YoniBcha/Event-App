@@ -357,7 +357,7 @@ const MyOrdersContent = () => {
 
       {/* Success Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="flex flex-col items-center bg-primary text-white justify-center gap-2">
+        <div className="flex flex-col items-center bg-primary text-white justify-center gap-2 p-2 rounded-2xl  w-[90%] md:w-[60%]">
           <Image
             src="/images/thanks icon.png"
             alt="Success"
