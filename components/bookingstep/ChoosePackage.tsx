@@ -468,12 +468,10 @@ function ChoosePackage({
         <>
           {/* List View for Small Devices (sm and below) */}
           <div className="flex w-full lg:w-[75%] max-md:w-[85%] max-lg:w-[80%] gap-4">
-            <div className="grid w-full grid-cols-1 gap-4 min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid w-full grid-cols-1 gap-4 min-[500px]:grid-cols-2 ">
               {packages.map((eventPackage: Package, index: number) => (
                 <motion.div
-                  key={eventPackage._id || index}
-                  onClick={() => onNext(eventPackage._id)}
-                  className={`flex flex-col justify-center items-center bg-gray-100 rounded-lg overflow-hidden cursor-pointer p-2 transition-all duration-300 ${
+                  className={`flex flex-col cursor-pointer bg-secondary p-2 rounded-lg transition-all duration-300 ${
                     selectedPackageId === eventPackage._id
                       ? "border-2 border-primary scale-105"
                       : "border border-gray-300"
@@ -482,30 +480,70 @@ function ChoosePackage({
                   whileHover="hover"
                   whileTap="tap"
                 >
-                  <div className="relative w-full h-48">
-                    <Image
-                      src={eventPackage.image[0]}
-                      alt={eventPackage.packageName}
-                      fill
-                      className="object-fit rounded-t-lg"
-                    />
+                  {/* First Row: Image and Package Details */}
+                  <div className="flex flex-row gap-4 w-full items-start">
+                    {" "}
+                    {/* Added items-start */}
+                    {/* Image (40% width) */}
+                    <div
+                      className="relative w-[40%] flex-shrink-0" // 40% width
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // handleImageClick(eventPackage.image[0]);
+                      }}
+                    >
+                      <div className="pb-[100%] relative">
+                        {" "}
+                        {/* Maintain aspect ratio (1:1) */}
+                        <Image
+                          src={eventPackage.image[0]}
+                          alt={eventPackage.packageName}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-lg"
+                        />
+                      </div>
+                    </div>
+                    {/* Package Name, Price, and Description (60% width) */}
+                    <div className="w-[60%] flex flex-col justify-start">
+                      {" "}
+                      {/* Changed justify-center to justify-start */}
+                      {/* Package Name and Price */}
+                      <div className="flex flex-row gap-2 w-full  items-center">
+                        {/* Package Name */}
+                        <div className="text-xl font-extrabold text-tertiary flex-shrink-0">
+                          {eventPackage.packageName} -
+                        </div>
+
+                        {/* Price and Currency Image */}
+                        <div className="flex flex-row items-center text-xl font-extrabold text-tertiary">
+                          {eventPackage.packagePrice}
+                          <span className=" pt-[0.2rem]">
+                            <Image
+                              src="/images/SR.png"
+                              alt="SR"
+                              width={20}
+                              height={20}
+                              className={
+                                currentLocale === "ar" ? "scale-x-[-1]" : ""
+                              }
+                            />
+                          </span>
+                        </div>
+                      </div>
+                      {/* Description (Truncated) */}
+                      {eventPackage.description && (
+                        <div
+                          className="mt-2 text-sm text-gray-600 truncate"
+                          title={eventPackage.description}
+                        >
+                          {eventPackage.description.length > 20
+                            ? `${eventPackage.description.substring(0, 20)}...`
+                            : eventPackage.description}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <p className="mt-2 text-sm text-tertiary font-medium flex items-center text-center">
-                    {
-                      renderValue(
-                        eventPackage.packageName,
-                        eventPackage.translatedPackageName
-                      ) // Render translated package name if available
-                    }
-                    - {eventPackage.packagePrice}{" "}
-                    <Image
-                      src="/images/SR.png"
-                      alt="SR"
-                      width={20}
-                      height={20}
-                      className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
-                    />
-                  </p>
                 </motion.div>
               ))}
             </div>

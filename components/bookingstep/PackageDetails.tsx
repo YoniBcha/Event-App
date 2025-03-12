@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetPackageDetailQuery } from "@/store/endpoints/apiSlice"; // Import the Redux query
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 function PackageDetails({
   packageId,
@@ -366,6 +367,32 @@ function PackageDetails({
 
       <div className="flex gap-5">
         {/* Back Button */}
+        <motion.button
+          onClick={onBack}
+          className=" flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
+          variants={{
+            hover: {
+              scale: 1.05,
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.2, ease: "easeInOut" },
+            },
+            tap: {
+              scale: 0.95,
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+              transition: { duration: 0.1, ease: "easeInOut" },
+            },
+          }}
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <span className="">
+            {currentLocale === "ar" ? (
+              <AiOutlineRight size={20} />
+            ) : (
+              <AiOutlineLeft size={20} />
+            )}
+          </span>
+        </motion.button>
         {/* <motion.button
           onClick={onBack}
           className="back-btn flex items-center p-2 hover:bg-secondary rounded-lg border border-primary text-primary cursor-pointer"

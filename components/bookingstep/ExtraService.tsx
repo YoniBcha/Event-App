@@ -445,6 +445,32 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
         {/* Buttons */}
 
         <div className="flex justify-center items-center gap-5 my-5 md:my-10">
+          <motion.button
+            onClick={onBack}
+            className=" flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
+            variants={{
+              hover: {
+                scale: 1.05,
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                transition: { duration: 0.2, ease: "easeInOut" },
+              },
+              tap: {
+                scale: 0.95,
+                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                transition: { duration: 0.1, ease: "easeInOut" },
+              },
+            }}
+            whileHover="hover"
+            whileTap="tap"
+          >
+            <span className="">
+              {currentLocale === "ar" ? (
+                <AiOutlineRight size={20} />
+              ) : (
+                <AiOutlineLeft size={20} />
+              )}
+            </span>
+          </motion.button>
           {selectedServices.length < 1 && (
             <motion.button
               onClick={() => handleDone(true)} // Call handleDone with skip=true
@@ -473,6 +499,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
               </span>
             </motion.button>
           )}
+
           {selectedServices.length > 0 && (
             <motion.button
               onClick={() => handleDone(false)} // Call handleDone with skip=false
