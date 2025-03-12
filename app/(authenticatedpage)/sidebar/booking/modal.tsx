@@ -11,7 +11,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, children }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center ">
-      <div className="flex flex-col justify-center items-center bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[40%]">
+      <div className="flex flex-col justify-center items-center bg-white p-1 rounded-lg shadow-lg w-[90%] md:w-[60%]">
         {children}
       </div>
     </div>

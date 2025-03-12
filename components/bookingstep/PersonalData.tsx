@@ -722,10 +722,16 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white border-t-2 border-t-transparent rounded-full animate-spin"></div>
               </div>
-            ) : currentLocale === "ar" ? (
-              <FaArrowLeft className="text-xl" />
             ) : (
-              <FaArrowRight className="text-xl" />
+              <Image
+                src={"/images/icon-buy1.png"}
+                alt={currentLocale === "ar" ? "Arrow Left" : "Arrow Right"}
+                width={24} // Adjust width as needed
+                height={24} // Adjust height as needed
+                className={`text-xl ${
+                  currentLocale === "ar" ? "scale-x-[-1]" : ""
+                }`} // Add any additional styling here
+              />
             )}
           </motion.button>
         </motion.div>

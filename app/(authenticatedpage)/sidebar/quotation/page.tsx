@@ -109,14 +109,38 @@ function Quotation() {
     <div>
       <div
         id="quotation-page"
-        className="p-4 rounded-md bg-[#fffff4] w-full max-w-[800px] mx-auto"
+        className="p-4 rounded-md bg-[#fffff4] w-full max-w-[800px] mx-auto relative" // Add `relative` for positioning
       >
-        <div className="flex justify-start">Date of creation: 20/02/2003</div>
+        {/* Header Section */}
+        <div className="flex justify-between items-center mb-4">
+          {/* Date of Creation */}
+          <div>Date of creation: 20/02/2003</div>
 
+          {/* Status in the Top-Right Corner */}
+          {data && data.bookedEvents && (
+            <div
+              className={`text-sm font-semibold px-3 py-1 rounded-full border absolute right-4 top-4 ${
+                data.bookedEvents.orderStatus === "completed"
+                  ? "bg-green-500 text-white"
+                  : data.bookedEvents.orderStatus === "rejected"
+                  ? "bg-red-500 text-white"
+                  : data.bookedEvents.orderStatus === "pending"
+                  ? "bg-yellow-500 text-black animate-zoom"
+                  : "bg-gray-500 text-white"
+              }`}
+            >
+              {data.bookedEvents.orderStatus}
+            </div>
+          )}
+        </div>
+
+        {/* Logo (Centered) */}
+        <div className="flex-grow flex justify-center py-2">
+          <Image src={logo} alt="Logo" width={80} height={40} />
+        </div>
+
+        {/* Rest of the Quotation Content */}
         <div className="flex flex-col w-full gap-3">
-          <div className="flex-grow flex justify-center">
-            <Image src={logo} alt="Logo" width={80} height={40} />
-          </div>
           {data && data.bookedEvents ? (
             <BulkTable
               personalData={data.bookedEvents.personalData}
@@ -134,6 +158,8 @@ function Quotation() {
           ) : (
             <div>No booked events data available.</div>
           )}
+
+          {/* Other Sections */}
           <div className="text-lg text-primary">
             This offer is valid for one week from the date of creation
           </div>
@@ -142,6 +168,7 @@ function Quotation() {
             extraServices={data?.bookedEvents?.priceDetails?.extraServices}
           />
 
+          {/* Total Price Table */}
           <div className="flex flex-row justify-between">
             {/* First Column */}
             <div className="flex flex-col justify-between">

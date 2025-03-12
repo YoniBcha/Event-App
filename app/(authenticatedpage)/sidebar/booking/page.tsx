@@ -357,22 +357,22 @@ const MyOrdersContent = () => {
 
       {/* Success Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="flex flex-col items-center justify-center gap-3">
+        <div className="flex flex-col items-center bg-primary text-white justify-center gap-2">
           <Image
-            src="/zip/Checkmark.png"
+            src="/images/thanks icon.png"
             alt="Success"
-            width={40}
-            height={40}
+            width={200}
+            height={200}
           />
-          <h2 className="text-center text-2xl md:text-3xl text-primary font-bold mb-4">
+          <h2 className="text-center text-xl md:text-xl text-white font-bold mb-1">
             {translations.booking.thankYou}
           </h2>
-          <p className="text-base text-primary text-center">
+          <p className="text-base text-white text-center">
             {translations.booking.thankYouSubtitle}
           </p>
           <motion.button
             onClick={closeModal}
-            className="next-btn text-primary hover:bg-secondary bg-primary hover:text-white mt-6"
+            className="next-btn text-white hover:bg-secondary bg-secondary hover:text-white mt-6"
             variants={{
               hover: {
                 scale: 1.05,

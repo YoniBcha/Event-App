@@ -40,9 +40,9 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
           <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-[#F3EFE7] text-left text-sm font-light">
             <thead className="bg-[#C3937A] text-white">
               <tr>
-                <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
+                {/* <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
                   Id
-                </th>
+                </th> */}
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
                   Addition Name
                 </th>
@@ -64,9 +64,9 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
               {eventPackageAdditions?.length > 0 ? (
                 eventPackageAdditions?.map((item: any, index) => (
                   <tr key={index} className="border-b-2 border-[#EFE7DF]">
-                    <td className="border-r px-4 py-2 font-medium">
+                    {/* <td className="border-r px-4 py-2 font-medium">
                       {item._id}
-                    </td>
+                    </td> */}
                     <td className="border-r px-4 py-2 font-medium">
                       {item.name}
                     </td>
@@ -103,9 +103,9 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
           <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-[#F3EFE7] text-left text-sm font-light">
             <thead className="bg-[#C3937A] text-white">
               <tr>
-                <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
+                {/* <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
                   Package id
-                </th>
+                </th> */}
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
                   Package Name
                 </th>
@@ -121,9 +121,9 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
               {extraServices?.length > 0 ? (
                 extraServices?.map((service: any, index) => (
                   <tr key={index} className="border-b-2 border-[#EFE7DF]">
-                    <td className="border-r px-4 py-2 font-medium">
+                    {/* <td className="border-r px-4 py-2 font-medium">
                       {service._id}
-                    </td>
+                    </td> */}
                     <td className="border-r px-4 py-2 font-medium">
                       {service.package}
                     </td>

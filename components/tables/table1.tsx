@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import moment from "moment";
+import Image from "next/image"; // Import the Image component
+import { useSelector } from "react-redux";
 
 // Define the type for personal data and additional fields
 interface PersonalData {
@@ -7,7 +10,9 @@ interface PersonalData {
   mobileNumber: string;
   secondMobileNumber: string;
   favoriteColors: string[]; // Updated to an array of strings
+  dressColor: string[];
   notes: string;
+  place: string; // Added place to PersonalData
 }
 
 interface EventDetails {
@@ -41,14 +46,18 @@ const BulkTable: React.FC<BulkTableProps> = ({
     mobileNumber: "N/A",
     secondMobileNumber: "N/A",
     favoriteColors: ["#FFFFFF"], // Default to an array with a single color
+    dressColor: ["#FFFFFF"],
+    place: "N/A", // Default place for personalData
     notes: "N/A",
   };
-
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const eventDetailsDefault = eventDetails || {
     packageName: "N/A",
     packagePrice: 0,
     status: "N/A",
-    place: "N/A",
+    place: "N/A", // Default place for eventDetails
     city: "N/A",
     date: "N/A",
     eventType: {
@@ -65,7 +74,8 @@ const BulkTable: React.FC<BulkTableProps> = ({
     packageName: eventDetailsDefault.packageName,
     packagePrice: eventDetailsDefault.packagePrice,
     status: eventDetailsDefault.status,
-    place: eventDetailsDefault.place,
+    location: personalDataDefault.place, // First place (from personalData)
+    place: eventDetailsDefault.place, // Second place (from eventDetails)
     city: eventDetailsDefault.city,
     date:
       eventDetailsDefault.date !== "N/A"
@@ -75,40 +85,43 @@ const BulkTable: React.FC<BulkTableProps> = ({
     eventDesign: eventDetailsDefault.eventDesign.eventDesign,
   };
 
-  // Define headers for the table
-  const headers: { key: keyof typeof rowData; label: string }[] = [
-    { key: "packageName", label: "Package Name" },
-    { key: "packagePrice", label: "Package Price" },
+  // Define headers for the first table (up to "Location")
+  const firstTableHeaders: { key: keyof typeof rowData; label: string }[] = [
     { key: "fullName", label: "Full Name" },
     { key: "mobileNumber", label: "Mobile Number" },
     { key: "secondMobileNumber", label: "Second Mobile Number" },
-    { key: "favoriteColors", label: "Favorite Colors" },
-    { key: "status", label: "Order Status" },
-    { key: "place", label: "Place" },
-    { key: "city", label: "City" },
-    { key: "date", label: "Date" },
     { key: "eventType", label: "Event Type" },
-    { key: "eventDesign", label: "Event Design" },
+    { key: "location", label: "Location" }, // First place (from personalData)
+    { key: "date", label: "Date" },
+    { key: "city", label: "City" },
+    { key: "place", label: "Place" }, // Second place (from eventDetails)
+    { key: "favoriteColors", label: "Favorite Colors" },
+    { key: "dressColor", label: "Dress Color" },
   ];
 
-  // Split data into two halves for two columns
-  const half = Math.ceil(headers.length / 2);
-  const firstColumn = headers.slice(0, half);
-  const secondColumn = headers.slice(half);
+  // Define headers for the second table (remaining fields)
+  const secondTableHeaders: { key: keyof typeof rowData; label: string }[] = [
+    { key: "eventDesign", label: "Event Design" },
+    { key: "packagePrice", label: "Package Price" },
+    { key: "packageName", label: "Package Name" },
+  ];
+
+  // Get the current locale (assuming it's stored in a context or state)
+  // Replace with your actual locale logic
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      {/* First Column */}
+      {/* First Table */}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-secondary text-left text-sm font-light">
           <tbody>
-            {firstColumn.map(({ key, label }, index) => (
+            {firstTableHeaders.map(({ key, label }, index) => (
               <tr key={index} className="border-b border-[#EFE7DF]">
                 <th className="border-r border-[#EFE7DF] px-2 py-2 font-extrabold sm:px-4 sm:py-3">
                   {label}
                 </th>
                 <td className="px-2 py-2 font-medium text-primary sm:px-4 sm:py-3">
-                  {key === "favoriteColors" ? (
+                  {key === "favoriteColors" || key === "dressColor" ? (
                     <div className="flex flex-wrap items-center gap-2">
                       {rowData[key].map((color, colorIndex) => (
                         <div
@@ -133,32 +146,17 @@ const BulkTable: React.FC<BulkTableProps> = ({
         </table>
       </div>
 
-      {/* Second Column */}
+      {/* Second Table */}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-secondary text-left text-sm font-light">
           <tbody>
-            {secondColumn.map(({ key, label }, index) => (
+            {secondTableHeaders.map(({ key, label }, index) => (
               <tr key={index} className="border-b border-[#EFE7DF]">
                 <th className="border-r border-[#EFE7DF] px-2 py-2 font-extrabold sm:px-4 sm:py-3">
                   {label}
                 </th>
                 <td className="px-2 py-2 font-medium text-primary sm:px-4 sm:py-3">
-                  {key === "favoriteColors" ? (
-                    <div className="flex flex-wrap items-center gap-2">
-                      {rowData[key].map((color, colorIndex) => (
-                        <div
-                          key={colorIndex}
-                          className="flex items-center gap-1"
-                        >
-                          <div
-                            className="w-4 h-4 border sm:w-6 sm:h-6"
-                            style={{ backgroundColor: color }}
-                          ></div>
-                          <span className="text-xs sm:text-sm">{color}</span>
-                        </div>
-                      ))}
-                    </div>
-                  ) : key === "status" ? (
+                  {key === "status" ? (
                     <span
                       className={`text-xs sm:text-sm px-3 py-1 rounded-full border ${
                         rowData[key] === "completed"
@@ -172,6 +170,17 @@ const BulkTable: React.FC<BulkTableProps> = ({
                     >
                       {rowData[key]}
                     </span>
+                  ) : key === "packagePrice" ? (
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs sm:text-sm">{rowData[key]}</span>
+                      <Image
+                        src="/images/SR.png"
+                        alt="SR"
+                        width={20}
+                        height={20}
+                        className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
+                      />
+                    </div>
                   ) : (
                     <span className="text-xs sm:text-sm">{rowData[key]}</span>
                   )}
