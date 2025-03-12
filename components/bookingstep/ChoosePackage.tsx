@@ -467,11 +467,11 @@ function ChoosePackage({
       ) : (
         <>
           {/* List View for Small Devices (sm and below) */}
-          <div className="flex w-full lg:w-[75%] max-md:w-[85%] max-lg:w-[80%] gap-4">
+          <div className="flex w-full lg:w-[75%]    gap-1">
             <div className="grid w-full grid-cols-1 gap-4 min-[500px]:grid-cols-2 ">
               {packages.map((eventPackage: Package, index: number) => (
                 <motion.div
-                  className={`flex flex-col cursor-pointer bg-secondary  rounded-lg transition-all duration-300 ${
+                  className={`flex flex-col cursor-pointer bg-secondary p-2 rounded-lg transition-all duration-300 ${
                     selectedPackageId === eventPackage._id
                       ? "border-2 border-primary scale-105"
                       : "border border-gray-300"
@@ -484,8 +484,6 @@ function ChoosePackage({
                 >
                   {/* First Row: Image and Package Details */}
                   <div className="flex flex-row gap-4 w-full items-start">
-                    {" "}
-                    {/* Added items-start */}
                     {/* Image (40% width) */}
                     <div
                       className="relative w-[40%] flex-shrink-0" // 40% width
@@ -506,21 +504,20 @@ function ChoosePackage({
                         />
                       </div>
                     </div>
+
                     {/* Package Name, Price, and Description (60% width) */}
                     <div className="w-[60%] flex flex-col justify-start">
-                      {" "}
-                      {/* Changed justify-center to justify-start */}
                       {/* Package Name and Price */}
                       <div className="flex flex-row gap-2 w-full justify-between pt-4 items-center">
                         {/* Package Name */}
-                        <div className="text-xl font-extrabold text-tertiary flex-shrink-0">
+                        <div className="text-sm md:text-xl lg:text-2xl font-extrabold text-tertiary flex-shrink-0">
                           {eventPackage.packageName}
                         </div>
 
                         {/* Price and Currency Image */}
-                        <div className="flex flex-row items-center text-xl  font-extrabold text-tertiary">
+                        <div className="flex flex-row items-center text-sm md:text-xl lg:text-2xl font-extrabold text-tertiary">
                           {eventPackage.packagePrice}
-                          <span className=" pt-[0.2rem]">
+                          <span className="pt-[0.2rem]">
                             <Image
                               src="/images/SR.png"
                               alt="SR"
@@ -533,10 +530,11 @@ function ChoosePackage({
                           </span>
                         </div>
                       </div>
+
                       {/* Description (Truncated) */}
                       {eventPackage.description && (
                         <div
-                          className="mt-2 text-sm text-gray-600 truncate"
+                          className="mt-2 text-xs sm:text-sm md:text-base text-gray-600 truncate"
                           title={eventPackage.description}
                         >
                           {eventPackage.description.length > 20

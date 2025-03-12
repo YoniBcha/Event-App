@@ -60,9 +60,9 @@ body {
 
 body::before {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 50%;
-  left: 0;
+  left: -4%;
   z-index: -1;
   width: 45%; /* Adjust size as needed */
   height: 45%;
@@ -75,12 +75,12 @@ body::before {
 /* Top-right image */
 body::after {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 5%;
   z-index: -1;
   right: 0;
-  width: 30%;
-  height: 30%;
+  width: 25%;
+  height: 25%;
   background-image: url("/images/flower8.png"); /* Replace with your image path */
   background-size: contain;
   background-repeat: no-repeat;
