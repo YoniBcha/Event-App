@@ -388,7 +388,7 @@ const MyOrdersContent = () => {
             whileHover="hover"
             whileTap="tap"
           >
-            {translations.booking.nextBtn}
+            {translations.booking.done}
           </motion.button>
         </div>
       </Modal>
