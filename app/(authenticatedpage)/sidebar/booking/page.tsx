@@ -38,6 +38,7 @@ interface Payload {
     notes?: string;
     noOfPeople: number;
     imageOfPlace: string[];
+    place: string;
   };
 }
 
@@ -283,6 +284,12 @@ const MyOrdersContent = () => {
                   {translations.booking.number_of_people}:
                 </span>{" "}
                 {payload.personalData.noOfPeople}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.place}:
+                </span>{" "}
+                {payload.personalData.place}
               </p>
             </div>
           </div>
