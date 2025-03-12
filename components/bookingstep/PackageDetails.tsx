@@ -72,7 +72,10 @@ function PackageDetails({
     >
       <div className="flex-grow flex flex-col justify-center items-center w-full h-full mt-6 md:mt-0">
         <div className="text-primary font-bold text-xl md:text-3xl py-5">
-          {translations.booking.packageDetails}
+          {renderValue(
+            packageData?.eventPackage?.packageName,
+            packageData?.eventPackage?.translatedPackageName
+          )}
         </div>
 
         {isLoading ? (
@@ -200,15 +203,24 @@ function PackageDetails({
                   )
                 )}
               </div>
-              <div className="flex justify-center items-center">
-                Total {packageData.eventPackage.packagePrice}{" "}
-                <Image
-                  src="/images/SR.png"
-                  alt="SR"
-                  width={20}
-                  height={20}
-                  className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
-                />
+              <div className="flex flex-row gap-2 justify-end px-3 py-1 items-center">
+                <span className="text-primary font-bold">
+                  {translations.total}:
+                </span>
+                <span className="font-bold flex">
+                  <p className="text-black text-xl font-extrabold">
+                    {" "}
+                    {packageData.eventPackage.packagePrice}
+                  </p>
+
+                  <Image
+                    src="/images/SR.png"
+                    alt="SR"
+                    width={20}
+                    height={20}
+                    className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
+                  />
+                </span>{" "}
               </div>
 
               <AnimatePresence>
@@ -257,7 +269,7 @@ function PackageDetails({
                             width={60}
                             height={60}
                             alt={selectedItem?.typeName}
-                            className="rounded-full"
+                            className=""
                           />
                         </div>
                         <div className="text-gray-600">
@@ -280,12 +292,7 @@ function PackageDetails({
               transition={{ duration: 0.5 }}
             >
               <div className="mb-6">
-                <h3 className="text-xl flex items-center font-semibold">
-                  {renderValue(
-                    packageData.eventPackage.packageName,
-                    packageData.eventPackage.translatedPackageName
-                  )}
-                </h3>
+                <h3 className="text-xl flex items-center font-semibold"></h3>
                 <div
                   className="mt-2 p-2 text-sm md:text-base overflow-hidden"
                   style={{ wordWrap: "break-word" }}
