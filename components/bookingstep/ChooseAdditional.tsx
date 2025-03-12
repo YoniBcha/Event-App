@@ -296,14 +296,14 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                                   handleImageClick(type.typePicture);
                                   event.stopPropagation();
                                 }} // Open modal on click
-                                className="cursor-pointer"
+                                className="cursor-zoom-in"
                               >
                                 <Image
                                   src={type.typePicture}
                                   width={20}
                                   height={20}
                                   alt={type.typeName}
-                                  className=" border border-primary"
+                                  className="hover:scale-105 duration-200 border border-primary"
                                 />
                               </div>
                               <div className="text-primary text-sm">
