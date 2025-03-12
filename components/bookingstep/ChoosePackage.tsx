@@ -471,7 +471,7 @@ function ChoosePackage({
             <div className="grid w-full grid-cols-1 gap-4 min-[500px]:grid-cols-2 ">
               {packages.map((eventPackage: Package, index: number) => (
                 <motion.div
-                  className={`flex flex-col cursor-pointer bg-secondary p-2 rounded-lg transition-all duration-300 ${
+                  className={`flex flex-col cursor-pointer bg-secondary  rounded-lg transition-all duration-300 ${
                     selectedPackageId === eventPackage._id
                       ? "border-2 border-primary scale-105"
                       : "border border-gray-300"
@@ -479,6 +479,7 @@ function ChoosePackage({
                   variants={cardVariants}
                   whileHover="hover"
                   whileTap="tap"
+                  onClick={() => onNext(eventPackage._id)}
                   key={eventPackage._id || index}
                 >
                   {/* First Row: Image and Package Details */}
@@ -517,7 +518,7 @@ function ChoosePackage({
                         </div>
 
                         {/* Price and Currency Image */}
-                        <div className="flex flex-row items-center text-xl font-extrabold text-tertiary">
+                        <div className="flex flex-row items-center text-xl  font-extrabold text-tertiary">
                           {eventPackage.packagePrice}
                           <span className=" pt-[0.2rem]">
                             <Image

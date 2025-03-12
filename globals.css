@@ -62,17 +62,16 @@ body::before {
   content: "";
   position: absolute;
   top: 50%;
-  left: -1%;
+  left: 0;
   z-index: -1;
   width: 45%; /* Adjust size as needed */
   height: 45%;
-  background-image: url("/images/illustration-drawing-white-rose-flower 7.png"),
-    /* First image */
-      url("/images/illustration-drawing-white-rose-flower 6.png"); /* Second image */
-  background-size: 30% auto, /* Size for the first image */ 20% auto; /* Size for the second image */
+  background-image: url("/images/illustration-drawing-white-rose-flower 7.png"); /* Replace with your image path */
+  background-size: contain;
   background-repeat: no-repeat;
-  background-position: left, /* Position for the first image */ left -6% top 10%; /* Position for the second image (10% left shift, 20% from the top) */
+  background-position: left;
 }
+
 /* Top-right image */
 body::after {
   content: "";

@@ -89,6 +89,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
           placeRequire: string;
           eventRequire: string;
           dateRequire: string;
+          event_is_required: string;
         };
       };
     };
@@ -101,7 +102,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
   const validationSchema = yup.object({
     city: yup.string().required(`${translations.booking.cityRequire}`),
     place: yup.string().required(`${translations.booking.placeRequire}`),
-    event: yup.string().required(`Event is required`),
+    event: yup.string().required(`${translations.booking.event_is_required}`),
     date: yup.date().nullable().required(`${translations.booking.dateRequire}`),
   });
 
