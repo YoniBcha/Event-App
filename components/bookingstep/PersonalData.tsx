@@ -164,13 +164,21 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   };
 
   const handleRemoveImage = (index: number) => {
-    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
-    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+    const updatedImages = [...previewImages];
+    updatedImages.splice(index, 1);
+    setPreviewImages(updatedImages);
+
+    const updatedFormData = { ...formData, imageOfPlace: updatedImages };
+    setFormData(updatedFormData);
+    sessionStorage.setItem("personalData", JSON.stringify(updatedFormData));
   };
 
   const handleClearImages = () => {
     setSelectedImages([]);
     setPreviewImages([]);
+    const updatedFormData = { ...formData, imageOfPlace: [] };
+    setFormData(updatedFormData);
+    sessionStorage.setItem("personalData", JSON.stringify(updatedFormData));
   };
 
   const uploadImages = async (files: File[]) => {
@@ -209,6 +217,12 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     setLoading(true); // Start loading
 
     try {
+      // Check if there are already uploaded images in session storage
+      if (formData.imageOfPlace.length > 0) {
+        await onSubmit(formData); // Submit the existing data
+        return;
+      }
+
       // Upload images and get URLs
       const uploadedUrls = await uploadImages(selectedImages);
 
@@ -220,15 +234,10 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
         return;
       }
 
-      // Ensure imageOfPlace is an array before spreading
-      const currentImageOfPlace = Array.isArray(formData.imageOfPlace)
-        ? formData.imageOfPlace
-        : [];
-
       // Update formData with uploaded image URLs
       const updatedFormData = {
         ...formData,
-        imageOfPlace: [...currentImageOfPlace, ...uploadedUrls],
+        imageOfPlace: [...formData.imageOfPlace, ...uploadedUrls],
       };
 
       // Update the state with the new form data
