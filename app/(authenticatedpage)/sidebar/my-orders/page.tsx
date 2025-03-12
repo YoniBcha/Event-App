@@ -312,7 +312,8 @@ const BookedEvents = () => {
                 {translations.booking.event}
               </div>
               <p className="text-sm text-tertiary">
-                {translations.booking.package}: {event.eventPackage.packageName}
+                {translations.booking.package}:{" "}
+                {event?.eventPackage?.packageName}
               </p>
               <p className="font-medium text-primary text-sm">
                 {translations.booking.eventDesign}:{" "}

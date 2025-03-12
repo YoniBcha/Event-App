@@ -37,6 +37,10 @@ interface PersonalData {
   secondMobileNumber?: string;
   favoriteColors: string[];
   notes?: string;
+  noOfPeople: number;
+  imageOfPlace: string[]; // Store URLs instead of File objects
+  dressColor: string[];
+  place: string;
 }
 
 export default function MainPage() {

@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,9 +10,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import { useLogoutUserMutation } from "@/store/endpoints/apiSlice";
-import { logoutUser } from "@/store/authReducer"; // Import the logoutUser action
+import { logoutUser } from "@/store/authReducer";
 
-// Define the Payload interface
 interface Payload {
   place: string;
   date: string;
@@ -35,8 +32,11 @@ interface Payload {
     fullName: string;
     mobileNumber: string;
     secondMobileNumber?: string;
-    favoriteColors: string;
+    favoriteColors: string[];
+    dressColor: string[];
     notes?: string;
+    noOfPeople: number;
+    imageOfPlace: string[];
   };
 }
 
@@ -63,7 +63,7 @@ const MyOrdersContent = () => {
     let payloadParam = searchParams.get("payload");
 
     if (!payloadParam) {
-      payloadParam = localStorage.getItem("bookingPayload"); // Retrieve from localStorage
+      payloadParam = localStorage.getItem("bookingPayload");
     }
 
     if (payloadParam) {
@@ -85,15 +85,12 @@ const MyOrdersContent = () => {
         const result = await bookEvent(payload).unwrap();
         console.log("API Response:", JSON.stringify(result, null, 2));
 
-        // Clear the payload from localStorage
         localStorage.removeItem("bookingPayload");
 
-        // Clear the payload from the URL
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.delete("payload");
         window.history.replaceState(null, "", newUrl.toString());
 
-        // Open the success modal
         setIsModalOpen(true);
         sessionStorage.clear();
       } catch (error: any) {
@@ -102,18 +99,13 @@ const MyOrdersContent = () => {
           error.message === "Session expired"
         ) {
           try {
-            // Call the logout mutation
             await logoutUserMutation({}).unwrap();
-
-            // Dispatch the logout action to update Redux state
             dispatch(logoutUser());
 
-            // Clear cookies (if applicable)
             Cookies.remove("token");
             Cookies.remove("user-info");
             Cookies.remove("token_creation_time");
 
-            // Redirect to login page with the payload
             router.push(
               `/login?payload=${encodeURIComponent(JSON.stringify(payload))}`
             );
@@ -130,8 +122,6 @@ const MyOrdersContent = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-
-    // Navigate to `/sidebar/my-orders` without the payload
     router.replace("/sidebar/my-orders");
   };
 
@@ -142,131 +132,163 @@ const MyOrdersContent = () => {
       </h1>
       {payload ? (
         <div className="space-y-6">
-          {/* Render payload details */}
-          <div className="flex flex-col md:flex-row gap-5">
-            <div>
-              <h2 className="text-primary text-lg font-medium mb-2">
-                {translations.booking.eventDetails}
-              </h2>
-              <div className="text-tertiary text-base space-y-2">
-                <p>
-                  <span className="font-semibold">
-                    {translations.booking.place}:
-                  </span>{" "}
-                  {payload.place}
-                </p>
-                <p>
-                  <span className="font-semibold">
-                    {translations.booking.date}:
-                  </span>{" "}
-                  {payload.date}
-                </p>
-                <p>
-                  <span className="font-semibold">
-                    {translations.booking.city}:
-                  </span>{" "}
-                  {payload.city}
-                </p>
-                <p>
-                  <span className="font-semibold">
-                    {translations.booking.eventType}:
-                  </span>{" "}
-                  {payload.eventType || "Not specified"}
-                </p>
-                <p>
-                  <span className="font-semibold">
-                    {translations.booking.eventDesign}:
-                  </span>{" "}
-                  {payload.eventDesign || "Not specified"}
-                </p>
-                <p>
-                  <span className="font-semibold">
-                    {translations.booking.eventPackage}:
-                  </span>{" "}
-                  {payload.eventPackage || "Not specified"}
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-primary text-lg font-medium mb-2">
-                {translations.booking.packageAddition}
-              </h2>
-              <div className="text-tertiary text-base space-y-2">
-                {payload?.eventPackageAdditions?.length > 0 ? (
-                  payload.eventPackageAdditions.map((addition, index) => (
-                    <p key={index}>
-                      <span className="font-semibold">
-                        {translations.booking.addition} {index + 1}:
-                      </span>{" "}
-                      {addition.additionTypeName || "Unnamed addition"}
-                    </p>
-                  ))
-                ) : (
-                  <p>{translations.booking.noAddition}</p>
-                )}
-              </div>
-
-              <div>
-                <h2 className="text-primary text-lg font-medium mb-2">
-                  {translations.booking.extraServices}
-                </h2>
-                <div className="text-tertiary text-base space-y-2">
-                  {payload.extraServices.length > 0 ? (
-                    payload.extraServices.map((service, index) => (
-                      <p key={index}>
-                        <span className="font-semibold">
-                          {translations.booking.service} {index + 1}:
-                        </span>{" "}
-                        {service.packageName || "Unnamed service"}
-                      </p>
-                    ))
-                  ) : (
-                    <p>{translations.booking.noService}</p>
-                  )}
-                </div>
-                <div>
-                  <h2 className="text-primary text-lg font-medium mb-2">
-                    {translations.booking.personalData}
-                  </h2>
-                  <div className="text-tertiary text-base space-y-2">
-                    <p>
-                      <span className="font-semibold">
-                        {translations.booking.fullName}:
-                      </span>{" "}
-                      {payload.personalData.fullName}
-                    </p>
-                    <p>
-                      <span className="font-semibold">
-                        {translations.booking.mobileNumber}:
-                      </span>{" "}
-                      {payload.personalData.mobileNumber}
-                    </p>
-                    <p>
-                      <span className="font-semibold">
-                        {translations.booking.secondMobileNumber}:
-                      </span>{" "}
-                      {payload.personalData.secondMobileNumber ||
-                        "Not provided"}
-                    </p>
-                    <p>
-                      <span className="font-semibold">
-                        {translations.booking.favoriteColor}:
-                      </span>{" "}
-                      {payload.personalData.favoriteColors}
-                    </p>
-                    <p>
-                      <span className="font-semibold">
-                        {translations.booking.notes}:
-                      </span>{" "}
-                      {payload.personalData.notes || "No notes"}
-                    </p>
-                  </div>
-                </div>
-              </div>
+          {/* Event Details */}
+          <div>
+            <h2 className="text-primary text-lg font-medium mb-2">
+              {translations.booking.eventDetails}
+            </h2>
+            <div className="text-tertiary text-base space-y-2">
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.place}:
+                </span>{" "}
+                {payload.place}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.date}:
+                </span>{" "}
+                {new Date(payload.date).toLocaleDateString()}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.city}:
+                </span>{" "}
+                {payload.city}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.eventType}:
+                </span>{" "}
+                {payload.eventType || "Not specified"}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.eventDesign}:
+                </span>{" "}
+                {payload.eventDesign || "Not specified"}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.eventPackage}:
+                </span>{" "}
+                {payload.eventPackage || "Not specified"}
+              </p>
             </div>
           </div>
 
+          {/* Package Additions */}
+          <div>
+            <h2 className="text-primary text-lg font-medium mb-2">
+              {translations.booking.packageAddition}
+            </h2>
+            <div className="text-tertiary text-base space-y-2">
+              {payload.eventPackageAdditions.length > 0 ? (
+                payload.eventPackageAdditions.map((addition, index) => (
+                  <p key={index}>
+                    <span className="font-semibold">
+                      {translations.booking.addition} {index + 1}:
+                    </span>{" "}
+                    {addition.additionTypeName} (Quantity: {addition.quantity})
+                  </p>
+                ))
+              ) : (
+                <p>{translations.booking.noAddition}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Extra Services */}
+          <div>
+            <h2 className="text-primary text-lg font-medium mb-2">
+              {translations.booking.extraServices}
+            </h2>
+            <div className="text-tertiary text-base space-y-2">
+              {payload.extraServices.length > 0 ? (
+                payload.extraServices.map((service, index) => (
+                  <p key={index}>
+                    <span className="font-semibold">
+                      {translations.booking.service} {index + 1}:
+                    </span>{" "}
+                    {service.packageName}
+                  </p>
+                ))
+              ) : (
+                <p>{translations.booking.noService}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Personal Data */}
+          <div>
+            <h2 className="text-primary text-lg font-medium mb-2">
+              {translations.booking.personalData}
+            </h2>
+            <div className="text-tertiary text-base space-y-2">
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.fullName}:
+                </span>{" "}
+                {payload.personalData.fullName}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.mobileNumber}:
+                </span>{" "}
+                {payload.personalData.mobileNumber}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.secondMobileNumber}:
+                </span>{" "}
+                {payload.personalData.secondMobileNumber || "Not provided"}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.favoriteColor}:
+                </span>{" "}
+                {payload.personalData.favoriteColors.join(", ")}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.dressColor}:
+                </span>{" "}
+                {payload.personalData.dressColor.join(", ")}
+              </p>
+              <p>
+                <span className="font-semibold">
+                  {translations.booking.notes}:
+                </span>{" "}
+                {payload.personalData.notes || "No notes"}
+              </p>
+              <p>
+                <span className="font-semibold">number of people:</span>{" "}
+                {payload.personalData.noOfPeople}
+              </p>
+            </div>
+          </div>
+
+          {/* Images of Place */}
+          <div>
+            <h2 className="text-primary text-lg font-medium mb-2">
+              {translations.booking.imageOfPlace}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {payload.personalData.imageOfPlace.map((imageUrl, index) => (
+                <div key={index} className="relative">
+                  <Image
+                    src={imageUrl}
+                    alt={`Place Image ${index + 1}`}
+                    width={200}
+                    height={200}
+                    className="rounded-lg"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit Button */}
           <div>
             <motion.button
               onClick={handleSubmit}
@@ -274,14 +296,13 @@ const MyOrdersContent = () => {
               className={`px-6 py-2 rounded-lg ${
                 isLoading
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-primary  hover:bg-secondary hover:text-primary"
+                  : "bg-primary hover:bg-secondary hover:text-primary"
               } text-white transition-colors duration-200`}
               variants={{
                 hover: {
                   scale: 1.05,
                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
                   borderColor: "#a57a6a",
-
                   transition: { duration: 0.2, ease: "easeInOut" },
                 },
                 tap: {
@@ -308,6 +329,7 @@ const MyOrdersContent = () => {
         <p>Loading payload...</p>
       )}
 
+      {/* Success Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="flex flex-col items-center justify-center gap-3">
           <Image
@@ -323,10 +345,7 @@ const MyOrdersContent = () => {
             {translations.booking.thankYouSubtitle}
           </p>
           <motion.button
-            onClick={() => {
-              closeModal();
-              router.replace("/sidebar/my-orders");
-            }}
+            onClick={closeModal}
             className="next-btn text-primary hover:bg-secondary bg-primary hover:text-white mt-6"
             variants={{
               hover: {

@@ -6,19 +6,20 @@ import * as Yup from "yup";
 import { useSelector } from "react-redux";
 import { ChromePicker, ColorResult } from "react-color";
 import { motion } from "framer-motion";
-import { FaArrowLeft, FaArrowRight, FaPlus } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaPlus, FaTrash } from "react-icons/fa";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 interface PersonalData {
   fullName: string;
   mobileNumber: string;
   secondMobileNumber: string;
-  favoriteColors: string[]; // For favorite colors
-  dressColors: string[]; // For dress colors
+  favoriteColors: string[];
   notes: string;
-  numberOfPeople: number; // Number of people invited
-  place: string; // Place for the event
-  images: File[]; // Multiple images
+  noOfPeople: number;
+  imageOfPlace: string[]; // Store URLs instead of File objects
+  dressColor: string[];
+  place: string;
 }
 
 interface PersonalDataProps {
@@ -34,53 +35,28 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           fullName: "",
           mobileNumber: "",
           secondMobileNumber: "",
-          favoriteColors: [], // Initialize as an empty array
-          dressColors: [], // Initialize as an empty array
+          favoriteColors: [],
+          dressColor: [],
           notes: "",
-          numberOfPeople: 1, // Default to 1
-          place: "", // Initialize as empty
-          images: [], // Initialize as empty array
+          noOfPeople: 1,
+          place: "",
+          imageOfPlace: [], // Initialize as empty array for URLs
         };
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [showFavoriteColorPicker, setShowFavoriteColorPicker] = useState(false); // For favorite colors
-  const [showDressColorPicker, setShowDressColorPicker] = useState(false); // For dress colors
-  const [selectedFavoriteColor, setSelectedFavoriteColor] = useState("#ffffff"); // Selected favorite color
-  const [selectedDressColor, setSelectedDressColor] = useState("#ffffff"); // Selected dress color
-
-  interface RootState {
-    language: {
-      translations: {
-        booking: {
-          personalData: string;
-          fullName: string;
-          mobileNumber: string;
-          secondMobileNumber: string;
-          pickColor: string;
-          notes: string;
-          nextBtn: string;
-          fullNameRequire: string;
-          colorRequire: string;
-          noteRequire: string;
-          mobileRequire: string;
-          secondMobileRequire: string;
-          mobileMust: string;
-          secondMobileMust: string;
-          secondMobileNotMatch: string;
-        };
-      };
-    };
-  }
-
-  const translations = useSelector(
-    (state: RootState) => state.language.translations
-  );
+  const [showFavoriteColorPicker, setShowFavoriteColorPicker] = useState(false);
+  const [showDressColorPicker, setShowDressColorPicker] = useState(false);
+  const [selectedFavoriteColor, setSelectedFavoriteColor] = useState("#ffffff");
+  const [selectedDressColor, setSelectedDressColor] = useState("#ffffff");
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const translations = useSelector((state: any) => state.language.translations);
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
 
-  // Yup validation schema
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required(`${translations.booking.fullNameRequire}`),
     mobileNumber: Yup.string()
@@ -98,21 +74,20 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
       ),
     favoriteColors: Yup.array()
       .of(Yup.string())
-      .min(1, `${translations.booking.colorRequire}`), // Validate at least one favorite color
-    dressColors: Yup.array()
+      .min(1, `${translations.booking.colorRequire}`),
+    dressColor: Yup.array()
       .of(Yup.string())
-      .min(1, "At least one dress color is required"), // Validate at least one dress color
+      .min(1, "At least one dress color is required"),
     notes: Yup.string().required(`${translations.booking.noteRequire}`),
-    numberOfPeople: Yup.number()
+    noOfPeople: Yup.number()
       .required("Number of people is required")
       .min(1, "At least 1 person is required"),
     place: Yup.string().required("Place is required"),
-    images: Yup.array()
-      .of(Yup.mixed().required("An image is required"))
+    imageOfPlace: Yup.array()
+      .of(Yup.string().required("An image URL is required"))
       .min(1, "At least one image is required"),
   });
 
-  // Load saved data from sessionStorage on component mount
   useEffect(() => {
     const savedData = sessionStorage.getItem("personalData");
     if (savedData) {
@@ -120,15 +95,18 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
         const parsedData = JSON.parse(savedData);
         console.log("Loaded data from sessionStorage:", parsedData); // Debugging
         setFormData(parsedData);
+
+        // Set preview images if imageOfPlace exists
+        if (parsedData.imageOfPlace && parsedData.imageOfPlace.length > 0) {
+          setPreviewImages(parsedData.imageOfPlace);
+        }
       } catch (error) {
         console.error("Error parsing sessionStorage data:", error);
       }
     }
   }, []);
 
-  // Save form data to sessionStorage whenever it changes
   useEffect(() => {
-    console.log("Saving data to sessionStorage:", formData); // Debugging
     sessionStorage.setItem("personalData", JSON.stringify(formData));
   }, [formData]);
 
@@ -144,14 +122,14 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   };
 
   const handleFavoriteColorChange = (color: ColorResult) => {
-    setSelectedFavoriteColor(color.hex); // Update the selected favorite color
+    setSelectedFavoriteColor(color.hex);
   };
 
   const handleDressColorChange = (color: ColorResult) => {
-    setSelectedDressColor(color.hex); // Update the selected dress color
+    setSelectedDressColor(color.hex);
   };
 
-  const addColor = (field: "favoriteColors" | "dressColors", color: string) => {
+  const addColor = (field: "favoriteColors" | "dressColor", color: string) => {
     if (!formData[field].includes(color)) {
       setFormData((prevData) => ({
         ...prevData,
@@ -159,14 +137,14 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
       }));
     }
     if (field === "favoriteColors") {
-      setShowFavoriteColorPicker(false); // Close the favorite color picker
+      setShowFavoriteColorPicker(false);
     } else {
-      setShowDressColorPicker(false); // Close the dress color picker
+      setShowDressColorPicker(false);
     }
   };
 
   const removeColor = (
-    field: "favoriteColors" | "dressColors",
+    field: "favoriteColors" | "dressColor",
     color: string
   ) => {
     setFormData((prevData) => ({
@@ -175,19 +153,111 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     }));
   };
 
+  const handleImageSelection = (files: FileList | null) => {
+    if (files && files.length > 0) {
+      const newImages = Array.from(files);
+      setSelectedImages((prev) => [...prev, ...newImages]);
+
+      const newPreviewUrls = newImages.map((file) => URL.createObjectURL(file));
+      setPreviewImages((prev) => [...prev, ...newPreviewUrls]);
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleClearImages = () => {
+    setSelectedImages([]);
+    setPreviewImages([]);
+  };
+
+  const uploadImages = async (files: File[]) => {
+    const uploadedUrls: string[] = [];
+
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("images", file);
+
+      try {
+        const response = await fetch(
+          "https://eventapp-back-cr86.onrender.com/api/v1/admin/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const result = await response.json();
+
+        if (response.ok && result.imageUrls?.[0]?.url) {
+          uploadedUrls.push(result.imageUrls[0].url);
+        } else {
+          toast.error(result.message || "Image upload failed");
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Error occurred while uploading images");
+      }
+    }
+
+    return uploadedUrls;
+  };
+
   const handleSubmit = async () => {
+    setLoading(true); // Start loading
+
     try {
-      await validationSchema.validate(formData, { abortEarly: false });
-      onSubmit(formData);
+      // Upload images and get URLs
+      const uploadedUrls = await uploadImages(selectedImages);
+
+      console.log("Uploaded URLs:", JSON.stringify(uploadedUrls, null, 2));
+
+      if (uploadedUrls.length === 0) {
+        toast.error("No images were uploaded");
+        setLoading(false); // Stop loading on error
+        return;
+      }
+
+      // Ensure imageOfPlace is an array before spreading
+      const currentImageOfPlace = Array.isArray(formData.imageOfPlace)
+        ? formData.imageOfPlace
+        : [];
+
+      // Update formData with uploaded image URLs
+      const updatedFormData = {
+        ...formData,
+        imageOfPlace: [...currentImageOfPlace, ...uploadedUrls],
+      };
+
+      // Update the state with the new form data
+      setFormData(updatedFormData);
+
+      // Validate the updated form data
+      await validationSchema.validate(updatedFormData, { abortEarly: false });
+
+      // Submit the form data
+      await onSubmit(updatedFormData); // Ensure onSubmit is awaited
       setErrors({});
+
+      // Clear selected images and previews after successful submission
+      setSelectedImages([]);
+      setPreviewImages([]);
     } catch (validationErrors) {
       const newErrors: Record<string, string> = {};
       if (validationErrors instanceof Yup.ValidationError) {
         validationErrors.inner.forEach((error) => {
           newErrors[error.path as string] = error.message;
         });
+      } else {
+        // Handle other errors (e.g., network errors)
+        toast.error("An error occurred while submitting the form");
+        console.error("Submission error:", validationErrors);
       }
       setErrors(newErrors);
+    } finally {
+      setLoading(false); // Stop loading in all cases
     }
   };
 
@@ -297,17 +367,17 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             </label>
             <input
               type="number"
-              name="numberOfPeople"
-              value={formData.numberOfPeople}
+              name="noOfPeople"
+              value={formData.noOfPeople}
               onChange={handleInputChange}
               min={1}
               className={`border outline-none ${
-                errors.numberOfPeople ? "border-red-500" : "border-primary"
+                errors.noOfPeople ? "border-red-500" : "border-primary"
               } input-field appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
             />
-            {errors.numberOfPeople && (
+            {errors.noOfPeople && (
               <div className="text-red-500 text-sm mt-1">
-                {errors.numberOfPeople}
+                {errors.noOfPeople}
               </div>
             )}
           </motion.div>
@@ -337,8 +407,6 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           </motion.div>
 
           {/* Image Picker for Multiple Images */}
-          {/* Image Picker for Multiple Images */}
-          {/* Image Picker for Multiple Images */}
           <motion.div
             className="flex flex-col"
             initial={{ opacity: 0, x: -20 }}
@@ -348,80 +416,81 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             <label className="font-medium text-tertiary text-md mb-2">
               Upload Images (Multiple)
             </label>
-            <input
-              type="file"
-              name="images"
-              multiple
-              onChange={(e) => {
-                const files = Array.from(e.target.files || []).filter(
-                  (file) => file instanceof File
-                ); // Ensure only valid File objects are added
-                setFormData((prevData) => ({
-                  ...prevData,
-                  images: [...prevData.images, ...files], // Append new files to existing ones
-                }));
-              }}
-              className="border outline-none border-primary input-field"
-            />
-            {errors.images && (
-              <div className="text-red-500 text-sm mt-1">{errors.images}</div>
-            )}
 
-            {/* Image Preview Box */}
-            {formData.images.length > 0 && (
-              <div className="mt-4">
-                <h3 className="font-medium text-tertiary text-md mb-2">
-                  Selected Images:
-                </h3>
-                <div className="grid grid-cols-3 gap-2">
-                  {formData.images.map((file, index) => {
-                    // Ensure the file is valid before creating a URL
-                    if (file instanceof File) {
-                      return (
-                        <div
-                          key={index}
-                          className="relative w-full h-24 rounded-lg overflow-hidden"
-                        >
-                          <Image
-                            src={URL.createObjectURL(file)} // Create a URL for the file
-                            alt={`Selected Image ${index + 1}`}
-                            fill
-                            className="object-cover"
-                          />
-                          {/* Remove Button */}
-                          <button
-                            onClick={() => {
-                              const updatedImages = formData.images.filter(
-                                (_, i) => i !== index
-                              );
-                              setFormData({
-                                ...formData,
-                                images: updatedImages,
-                              });
-                            }}
-                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <line x1="18" y1="6" x2="6" y2="18" />
-                              <line x1="6" y1="6" x2="18" y2="18" />
-                            </svg>
-                          </button>
-                        </div>
-                      );
-                    }
-                    return null; // Skip invalid files
-                  })}
+            {/* Drag-and-Drop Area */}
+            <div className="w-full h-auto rounded border border-primary flex-col justify-start items-start inline-flex">
+              <div className="self-stretch h-24 px-8 pt-8 pb-6 flex-col justify-start items-start flex">
+                <div className="self-stretch text-primary   text-2xl font-semibold font-['Inter'] leading-9">
+                  select image
                 </div>
+              </div>
+              <div className="self-stretch px-8 py-2 flex-col justify-start items-start gap-6 flex">
+                <div className="self-stretch justify-start items-start gap-4 flex">
+                  <div className="h-full rounded-lg border-2 border-dashed border-primary flex flex-1 flex-col justify-center items-center">
+                    {previewImages.length > 0 ? (
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-5">
+                        {previewImages.map((img: string, index: number) => (
+                          <div key={index} className="relative group">
+                            <Image
+                              src={img}
+                              alt={`Preview ${index}`}
+                              width={1000}
+                              height={1000}
+                              className="object-contain h-32 w-32 rounded-lg border-2 border-dashed"
+                            />
+                            <button
+                              onClick={() => handleRemoveImage(index)}
+                              className="absolute -top-2 -right-3 bg-red-500 text-white text-sm p-1 rounded-full"
+                              aria-label="Remove Image"
+                            >
+                              <FaTrash className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <>
+                        <div className="rounded-md flex justify-center items-center cursor-pointer">
+                          <label
+                            htmlFor="imageInput"
+                            className="text-lg leading-6 font-medium text-primary p-4 rounded cursor-pointer"
+                          >
+                            Browse
+                          </label>
+                          <input
+                            id="imageInput"
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={(e) =>
+                              handleImageSelection(e.target.files)
+                            }
+                            className="hidden"
+                          />
+                        </div>
+                        <p className="text-gray-500">Subtitle</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="self-stretch px-8 pt-6 pb-8 justify-end items-center gap-4 inline-flex">
+                <div className="rounded-md justify-center items-center flex">
+                  <div className="px-2 py-1.5 flex-col justify-center items-center gap-2 inline-flex">
+                    <div
+                      onClick={handleClearImages}
+                      className="text-white bg-primary hover:bg-secondary dark:text-white cursor-pointer rounded-xl px-4 py-1.5 text-sm font-medium font-['Inter'] leading-normal tracking-tight"
+                    >
+                      Clear Images
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {errors.imageOfPlace && (
+              <div className="text-red-500 text-sm mt-1">
+                {errors.imageOfPlace}
               </div>
             )}
           </motion.div>
@@ -505,7 +574,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               />
               {/* + Button to Add Color */}
               <button
-                onClick={() => addColor("dressColors", selectedDressColor)}
+                onClick={() => addColor("dressColor", selectedDressColor)}
                 className="p-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors duration-200"
               >
                 <FaPlus />
@@ -522,18 +591,18 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             )}
             {/* Display Selected Dress Colors */}
             <div className="flex flex-wrap mt-2">
-              {formData.dressColors.map((color, index) => (
+              {formData?.dressColor?.map((color, index) => (
                 <div
                   key={index}
                   className="w-6 h-6 rounded-full m-1 cursor-pointer"
                   style={{ backgroundColor: color }}
-                  onClick={() => removeColor("dressColors", color)}
+                  onClick={() => removeColor("dressColor", color)}
                 />
               ))}
             </div>
-            {errors.dressColors && (
+            {errors.dressColor && (
               <div className="text-red-500 text-sm mt-1">
-                {errors.dressColors}
+                {errors.dressColor}
               </div>
             )}
           </motion.div>
@@ -567,7 +636,8 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
         <motion.div className="flex justify-center mt-8">
           <motion.button
             onClick={handleSubmit}
-            className="p-3 rounded-full bg-primary text-white hover:bg-secondary hover:text-primary transition-colors duration-200"
+            className="p-3 rounded-full bg-primary text-white hover:bg-secondary hover:text-primary transition-colors duration-200 flex items-center justify-center"
+            disabled={loading} // Disable the button while loading
             variants={{
               hover: {
                 scale: 1.05,
@@ -583,7 +653,11 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             whileHover="hover"
             whileTap="tap"
           >
-            {currentLocale === "ar" ? (
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-2 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : currentLocale === "ar" ? (
               <FaArrowLeft className="text-xl" />
             ) : (
               <FaArrowRight className="text-xl" />
