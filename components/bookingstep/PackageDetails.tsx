@@ -223,7 +223,7 @@ function PackageDetails({
                 </span>{" "}
               </div>
 
-              <AnimatePresence>
+              {/* <AnimatePresence>
                 {isModalOpen && (
                   <motion.div
                     className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -279,6 +279,61 @@ function PackageDetails({
                           )}
                         </div>
                       </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence> */}
+
+              <AnimatePresence>
+                {isModalOpen && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-50 z-50"
+                    onClick={() => setIsModalOpen(false)}
+                  >
+                    <motion.div
+                      initial={{ scale: 0.8 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0.8 }}
+                      transition={{ duration: 0.3 }}
+                      className="relative bg-white  flex-col  p-4 rounded-lg shadow-lg w-[300px] h-[300px] flex items-center justify-center" // Fixed size
+                      onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking inside
+                    >
+                      <h2 className="text-xl font-semibold text-primary">
+                        {renderValue(
+                          selectedItem?.typeName,
+                          selectedItem?.translatedTypeName
+                        )}
+                      </h2>
+                      <Image
+                        src={selectedItem?.typePicture}
+                        alt="Selected Image"
+                        width={250} // Adjust image size to fit modal
+                        height={250}
+                        className="object-contain w-full h-full"
+                      />
+                      <button
+                        onClick={() => setIsModalOpen(false)}
+                        className="absolute top-2 right-2 p-2 bg-primary text-white rounded-full hover:bg-secondary transition-colors duration-200"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18" />
+                          <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                      </button>
                     </motion.div>
                   </motion.div>
                 )}
