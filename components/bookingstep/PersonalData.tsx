@@ -59,7 +59,6 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     formData.place
   );
   const placeOptions = [
-    { label: translations.selectOption, value: "" },
     { label: translations.palace, value: "Palace" },
     { label: translations.hall, value: "Hall" },
     { label: translations.private, value: "Private" },
