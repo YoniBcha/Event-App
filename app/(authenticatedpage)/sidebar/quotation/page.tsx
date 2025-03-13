@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import html2pdf from "html2pdf.js";
 
 function Quotation() {
   const [logo, setLogo] = useState("/path/to/default/logo.png");
@@ -20,6 +21,7 @@ function Quotation() {
     (state: any) => state.language.currentLocale
   );
   const translations = useSelector((state: any) => state.language.translations);
+
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure we're on the client side
     const storedTheme = localStorage.getItem("fenzoAppTheme");
@@ -33,79 +35,94 @@ function Quotation() {
     }
   }, []);
 
-  // const handleDownload = () => {
-
-  //   if (!showTerms) {
-  //     setErrorMessage("Please check the Read checkbox to proceed.");
-  //     return;
-  //   }
-  //   setErrorMessage("");
-
-  //   const element = document.getElementById("quotation-page");
-  //   if (element) {
-  //     // Configure html2pdf.js options
-  //     const options = {
-  //       margin: 10, // Margin around the content
-  //       filename: `quotation-packageId=${id}.pdf`, // Name of the PDF file
-  //       image: { type: "jpeg", quality: 2 }, // Image quality
-  //       html2canvas: { scale: 2, useCORS: true, allowTaint: true }, // html2canvas options
-  //       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, // jsPDF options
-  //     };
-
-  //     // Generate the PDF
-  //     html2pdf().from(element).set(options).save();
-  //   }
-  // };
-
-  const handlePrint = () => {
+  const handleDownload = () => {
     if (!showTerms) {
       setErrorMessage("Please check the Read checkbox to proceed.");
       return;
     }
     setErrorMessage("");
 
-    // Open the print dialog for the #quotation-page div
-    const printContents = document.getElementById("quotation-page")?.innerHTML;
-    const originalContents = document.body.innerHTML;
+    const element = document.getElementById("quotation-page");
+    if (element) {
+      // Configure html2pdf.js options
+      const options = {
+        margin: 10, // Margin around the content
+        filename: `quotation-packageId=${id}.pdf`, // Name of the PDF file
+        image: { type: "jpeg", quality: 2 }, // Image quality
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          ignoreElements: (element: any) => {
+            // Ignore elements with specific classes or IDs
+            return (
+              element.classList.contains("no-pdf") || // Add this class to elements to exclude
+              element.id === "status-section" || // Exclude status section
+              element.id === "download-section" // Exclude download section
+            );
+          },
+        }, // html2canvas options
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, // jsPDF options
+      };
 
-    // Replace the body content with the quotation page content
-    if (printContents) {
-      // Add print-specific styles to remove headers, footers, links, and the print button
-      const printStyles = `
-      <style>
-        @media print {
-          @page {
-            margin: 0; /* Remove default margins */
-          }
-          body {
-            margin: 0; /* Remove body margins */
-          }
-          /* Hide headers, footers, and the print button */
-          .header, .footer, .no-print, .print-button {
-            display: none !important;
-          }
-          /* Remove web links */
-          a {
-            text-decoration: none !important;
-            color: inherit !important;
-          }
-        }
-      </style>
-    `;
-
-      // Combine the print content with the print styles
-      document.body.innerHTML = printStyles + printContents;
-
-      // Trigger the print dialog
-      window.print();
-
-      // Restore the original content
-      document.body.innerHTML = originalContents;
-
-      // Reload the page to restore functionality
-      window.location.reload();
+      // Generate the PDF
+      html2pdf().from(element).set(options).save();
     }
   };
+
+  // const handlePrint = () => {
+  //   if (!showTerms) {
+  //     setErrorMessage("Please check the Read checkbox to proceed.");
+  //     return;
+  //   }
+  //   setErrorMessage("");
+
+  //   // Open the print dialog for the #quotation-page div
+  //   const printContents = document.getElementById("quotation-page")?.innerHTML;
+  //   const originalContents = document.body.innerHTML;
+
+  //   // Replace the body content with the quotation page content
+  //   if (printContents) {
+  //     // Add print-specific styles to remove headers, footers, links, and the print button
+  //     const printStyles = `
+  //     <style>
+  //       @media print {
+  //         @page {
+  //           margin: 0; /* Remove default margins */
+  //         }
+  //         body {
+  //           margin: 0; /* Remove body margins */
+  //         }
+  //         /* Hide headers, footers, and the print button */
+  //         .header, .footer, .no-print, .print-button {
+  //           display: none !important;
+  //         }
+  //         /* Remove web links */
+  //         a {
+  //           text-decoration: none !important;
+  //           color: inherit !important;
+  //         }
+  //         /* Hide elements for PDF */
+  //         .no-pdf, #status-section, #download-section {
+  //           display: none !important;
+  //         }
+  //       }
+  //     </style>
+  //   `;
+
+  //     // Combine the print content with the print styles
+  //     document.body.innerHTML = printStyles + printContents;
+
+  //     // Trigger the print dialog
+  //     window.print();
+
+  //     // Restore the original content
+  //     document.body.innerHTML = originalContents;
+
+  //     // Reload the page to restore functionality
+  //     window.location.reload();
+  //   }
+  // };
 
   const statusTranslations = {
     pending: translations.booking.pending,
@@ -113,6 +130,7 @@ function Quotation() {
     rejected: translations.booking.rejected,
     cancelled: translations.booking.cancelled,
   };
+
   return (
     <div>
       <div
@@ -130,6 +148,7 @@ function Quotation() {
           {/* Status in the Top-Right Corner */}
           {data && data.bookedEvents && (
             <div
+              id="status-section" // Add ID for exclusion
               className={`text-sm font-semibold px-3 py-1 rounded-full border absolute top-4 
       ${currentLocale === "ar" ? "left-4" : "right-4"} 
       ${
@@ -189,9 +208,16 @@ function Quotation() {
           {/* Total Price Table */}
           <div className="flex flex-row justify-between">
             {/* First Column */}
-            <div className="flex flex-col justify-between">
+            <div
+              id="download-section"
+              className="flex flex-col justify-between"
+            >
+              {" "}
+              {/* Add ID for exclusion */}
               {/* Top Div */}
-              <div className="print-button">
+              <div className="print-button no-pdf">
+                {" "}
+                {/* Add class for exclusion */}
                 <input
                   type="checkbox"
                   checked={showTerms}
@@ -207,8 +233,8 @@ function Quotation() {
               {/* Bottom Div */}
               <div className="flex justify-center">
                 <div
-                  className="rounded-xl bg-primary mt-2 text-white px-10 py-1 w-fit cursor-pointer print-button"
-                  onClick={handlePrint}
+                  className="rounded-xl bg-primary mt-2 text-white px-10 py-1 w-fit cursor-pointer print-button no-pdf" // Add class for exclusion
+                  onClick={handleDownload}
                 >
                   {translations.download}
                 </div>
