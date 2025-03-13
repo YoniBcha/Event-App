@@ -18,7 +18,7 @@ function Quotation() {
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
-
+  const translations = useSelector((state: any) => state.language.translations);
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure we're on the client side
     const storedTheme = localStorage.getItem("fenzoAppTheme");
@@ -105,6 +105,13 @@ function Quotation() {
       window.location.reload();
     }
   };
+
+  const statusTranslations = {
+    pending: translations.booking.pending,
+    completed: translations.booking.completed,
+    rejected: translations.booking.rejected,
+    cancelled: translations.booking.cancelled,
+  };
   return (
     <div>
       <div
@@ -114,22 +121,29 @@ function Quotation() {
         {/* Header Section */}
         <div className="flex justify-between items-center mb-4">
           {/* Date of Creation */}
-          <div>Date of creation: 20/02/2003</div>
+          <div>{translations.date_of_creation}: 20/02/2003</div>
 
           {/* Status in the Top-Right Corner */}
           {data && data.bookedEvents && (
             <div
-              className={`text-sm font-semibold px-3 py-1 rounded-full border absolute right-4 top-4 ${
-                data.bookedEvents.orderStatus === "completed"
-                  ? "bg-green-500 text-white"
-                  : data.bookedEvents.orderStatus === "rejected"
-                  ? "bg-red-500 text-white"
-                  : data.bookedEvents.orderStatus === "pending"
-                  ? "bg-yellow-500 text-black animate-zoom"
-                  : "bg-gray-500 text-white"
-              }`}
+              className={`text-sm font-semibold px-3 py-1 rounded-full border absolute top-4 
+      ${currentLocale === "ar" ? "left-4" : "right-4"} 
+      ${
+        data.bookedEvents.orderStatus === "completed"
+          ? "bg-green-500 text-white"
+          : data.bookedEvents.orderStatus === "rejected"
+          ? "bg-red-500 text-white"
+          : data.bookedEvents.orderStatus === "pending"
+          ? "bg-yellow-500 text-black animate-zoom"
+          : "bg-gray-500 text-white"
+      }`}
             >
-              {data.bookedEvents.orderStatus}
+              {currentLocale === "ar"
+                ? statusTranslations[
+                    data.bookedEvents
+                      .orderStatus as keyof typeof statusTranslations
+                  ] || data.bookedEvents.orderStatus
+                : data.bookedEvents.orderStatus}
             </div>
           )}
         </div>
@@ -156,12 +170,12 @@ function Quotation() {
               }}
             />
           ) : (
-            <div>No booked events data available.</div>
+            <div>{translations.no_booked_events}</div>
           )}
 
           {/* Other Sections */}
           <div className="text-lg text-primary">
-            This offer is valid for one week from the date of creation
+            {translations.offer_validity}
           </div>
           <BulkTable2
             eventPackageAdditions={data?.bookedEvents?.priceDetails?.additions}
@@ -181,7 +195,7 @@ function Quotation() {
                     setShowTerms(e.target.checked);
                   }}
                 />{" "}
-                <span>READ</span>
+                <span>{translations.read}</span>
               </div>
               {errorMessage && !showTerms && (
                 <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
@@ -192,7 +206,7 @@ function Quotation() {
                   className="rounded-xl bg-primary mt-2 text-white px-10 py-1 w-fit cursor-pointer print-button"
                   onClick={handlePrint}
                 >
-                  Download
+                  {translations.download}
                 </div>
               </div>
             </div>
@@ -203,7 +217,7 @@ function Quotation() {
                 <tbody>
                   <tr className="border-b border-gray-100">
                     <td className="py-2 px-3 border-r border-gray-100">
-                      Total Price Before Vat
+                      {translations.total_price_before_vat}
                     </td>
                     <td className="flex py-2 px-3 justify-center items-center border-r border-gray-100">
                       {data?.bookedEvents?.priceBeforeVat}{" "}
@@ -221,7 +235,7 @@ function Quotation() {
 
                   <tr className="border-b border-gray-100">
                     <td className="py-2 px-3 border-r border-gray-100">
-                      VAT 15%
+                      {translations.vat_15}
                     </td>
                     <td className="flex py-2 px-3 justify-center items-center border-r border-gray-100">
                       {data?.bookedEvents?.vatAmount}{" "}
@@ -239,7 +253,7 @@ function Quotation() {
 
                   <tr>
                     <td className="py-2 px-3 border-r border-gray-100">
-                      Total Price After Vat
+                      {translations.total_price_after_vat}
                     </td>
                     <td className="flex py-2 px-3 justify-center items-center border-r border-gray-200">
                       {data?.bookedEvents?.priceAfterVat}{" "}
@@ -263,80 +277,23 @@ function Quotation() {
           {showTerms && (
             <div className="mt-6 p-4 border-t border-gray-100">
               <h2 className="text-center text-xl font-bold underline">
-                TERMS AND CONDITIONS
+                {translations.terms.title}
               </h2>
               <ul className="list-disc text-primary pl-6 mt-4">
-                <li>
-                  The agreed deposit is paid by the first party (the customer)
-                  to confirm the order. In the event of cancellation, even if it
-                  is after two days, it is non-refundable and is the right of
-                  the second party.
-                </li>
-                <li>
-                  In cases of first-degree death or an accident to one of the
-                  parties to the event, the amount is kept as a balance for the
-                  customer that he can use during a period to be agreed upon.
-                </li>
-                <li>
-                  If the type of party is changed or the party is changed after
-                  the event is postponed, any purchases will be deducted from
-                  the deposit and then the rest of the amount will be agreed
-                  upon with a new invoice.
-                </li>
-                <li>
-                  The order is detailed in the invoice. Any information provided
-                  over the phone or WhatsApp is not recognized.
-                </li>
-                <li>
-                  Any additions by the first party will increase the amount and
-                  a new invoice will be created.
-                </li>
-                <li>
-                  Venzo must be notified of any additions at least 3 days before
-                  the event. Otherwise, Venzo has the right to refuse additional
-                  work during this period due to time constraints.
-                </li>
-                <li>
-                  Rented items must be returned in full and sold items are the
-                  customer&apos;s responsibility.
-                </li>
-                <li>
-                  Any damage to the items caused by the customer will be borne
-                  by the customer.
-                </li>
-                <li>
-                  Venzo must be informed of the presence of a second contractor
-                  at the same event. If Venzo is not informed and there is a
-                  conflict between Venzo and the other contractor, Venzo has the
-                  right to leave.
-                </li>
-                <li>
-                  In case of changing the place, Venzo must be informed, and if
-                  it results in changing the amount, the first party must know
-                  this and abide by it.
-                </li>
-                <li>
-                  It is preferable for someone to contact Venzo from the first
-                  party to maintain the organization of the work.
-                </li>
-                <li>
-                  Venzo is not responsible for damages due to factors beyond its
-                  control such as weather, natural disasters and global events
-                  unless Saudi law provides for this, such as the Corona
-                  incident.
-                </li>
-                <li>
-                  The terms and conditions are read and agreed to either in
-                  writing or by paying the deposit.
-                </li>
+                {Array.isArray(translations.terms.items) &&
+                  translations.terms.items.map(
+                    (item: string, index: number) => <li key={index}>{item}</li>
+                  )}
               </ul>
               <div className="flex justify-between mt-6">
                 <div>
-                  <p className="font-semibold">Client Signature</p>
+                  <p className="font-semibold">
+                    {translations.client_signature}
+                  </p>
                   <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
                 </div>
                 <div>
-                  <p className="font-semibold">Fenzo-Events</p>
+                  <p className="font-semibold">{translations.fenzo_events}</p>
                   <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
                 </div>
               </div>

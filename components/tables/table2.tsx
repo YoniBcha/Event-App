@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
+import { useSelector } from "react-redux";
 
 // Define types for event package additions
 interface EventPackageAddition {
@@ -31,11 +32,25 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
   eventPackageAdditions,
   extraServices,
 }) => {
+  // const currentLocale = useSelector(
+  //   (state: any) => state.language.currentLocale
+  // );
+  const translations = useSelector((state: any) => state.language.translations);
+  // const renderValue = (
+  //   defaultValue: string,
+  //   translatedValue: string | undefined
+  // ) => {
+  //   return currentLocale === "ar" && translatedValue
+  //     ? translatedValue
+  //     : defaultValue;
+  // };
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* First Table: Event Package Additions */}
       <div>
-        <h2 className="text-lg font-semibold mb-2">Event Package Additions</h2>
+        <h2 className="text-lg font-semibold mb-2">
+          {translations.event_package_additions}
+        </h2>
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-[#F3EFE7] text-left text-sm font-light">
             <thead className="bg-[#C3937A] text-white">
@@ -44,19 +59,19 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
                   Id
                 </th> */}
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
-                  Addition Name
+                  {translations.addition_name}
                 </th>
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
-                  Type
+                  {translations.type}
                 </th>
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
-                  Unit Price
+                  {translations.unit_price}
                 </th>
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
-                  Quantity
+                  {translations.quantity}
                 </th>
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
-                  Total Price
+                  {translations.total_price}
                 </th>
               </tr>
             </thead>
@@ -87,7 +102,7 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
               ) : (
                 <tr>
                   <td colSpan={6} className="text-center py-4">
-                    No event package additions available
+                    {translations.no_event_package_additions}
                   </td>
                 </tr>
               )}
@@ -98,7 +113,9 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
 
       {/* Second Table: Extra Services */}
       <div>
-        <h2 className="text-lg font-semibold mb-2">Extra Services</h2>
+        <h2 className="text-lg font-semibold mb-2">
+          {translations.extra_services}
+        </h2>
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse border-2 border-[#EFE7DF] text-primary bg-[#F3EFE7] text-left text-sm font-light">
             <thead className="bg-[#C3937A] text-white">
@@ -107,13 +124,13 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
                   Package id
                 </th> */}
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
-                  Package Name
+                  {translations.package_name}
                 </th>
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
-                  Package Price
+                  {translations.package_price}
                 </th>
                 <th className="border-b-2 border-r border-[#EFE7DF] px-4 py-5 font-medium">
-                  Provider Name
+                  {translations.provider_name}
                 </th>
               </tr>
             </thead>
@@ -138,7 +155,7 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
               ) : (
                 <tr>
                   <td colSpan={4} className="text-center py-4">
-                    No extra services available
+                    {translations.no_extra_services}
                   </td>
                 </tr>
               )}

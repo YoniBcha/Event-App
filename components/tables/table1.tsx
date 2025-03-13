@@ -18,15 +18,19 @@ interface PersonalData {
 interface EventDetails {
   packageName: string;
   packagePrice: number;
+  translatedPackageName?: string;
+
   status: string;
   place: string;
   city: string;
   date: string;
   eventType: {
     nameOfEvent: string;
+    translatedNameOfEvent?: string;
   };
   eventDesign: {
     eventDesign: string;
+    translatedEventDesign?: string;
   };
 }
 
@@ -53,25 +57,40 @@ const BulkTable: React.FC<BulkTableProps> = ({
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
+  const translations = useSelector((state: any) => state.language.translations);
   const eventDetailsDefault = eventDetails || {
     packageName: "N/A",
     packagePrice: 0,
+    translatedPackageName: "N/A",
+
     status: "N/A",
     place: "N/A", // Default place for eventDetails
     city: "N/A",
     date: "N/A",
     eventType: {
       nameOfEvent: "N/A",
+      translatedNameOfEvent: "N/A",
     },
     eventDesign: {
       eventDesign: "N/A",
+      translatedEventDesign: "N/A",
     },
   };
-
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   // Combine personal data and event details into a single row
   const rowData = {
     ...personalDataDefault,
-    packageName: eventDetailsDefault.packageName,
+    packageName: renderValue(
+      eventDetailsDefault.packageName,
+      eventDetailsDefault.translatedPackageName
+    ),
     packagePrice: eventDetailsDefault.packagePrice,
     status: eventDetailsDefault.status,
     location: personalDataDefault.place, // First place (from personalData)
@@ -81,29 +100,36 @@ const BulkTable: React.FC<BulkTableProps> = ({
       eventDetailsDefault.date !== "N/A"
         ? moment(eventDetailsDefault.date).format("DD-MM-YYYY")
         : "N/A",
-    eventType: eventDetailsDefault.eventType.nameOfEvent,
-    eventDesign: eventDetailsDefault.eventDesign.eventDesign,
+    eventType: renderValue(
+      eventDetailsDefault.eventType.nameOfEvent,
+      eventDetailsDefault.eventType.translatedNameOfEvent
+    ),
+
+    eventDesign: renderValue(
+      eventDetailsDefault.eventDesign.eventDesign,
+      eventDetailsDefault.eventDesign.translatedEventDesign
+    ),
   };
 
   // Define headers for the first table (up to "Location")
   const firstTableHeaders: { key: keyof typeof rowData; label: string }[] = [
-    { key: "fullName", label: "Full Name" },
-    { key: "mobileNumber", label: "Mobile Number" },
-    { key: "secondMobileNumber", label: "Second Mobile Number" },
-    { key: "eventType", label: "Event Type" },
-    { key: "location", label: "Location" }, // First place (from personalData)
-    { key: "date", label: "Date" },
-    { key: "city", label: "City" },
-    { key: "place", label: "Place" }, // Second place (from eventDetails)
-    { key: "favoriteColors", label: "Favorite Colors" },
-    { key: "dressColor", label: "Dress Color" },
+    { key: "fullName", label: translations.full_name },
+    { key: "mobileNumber", label: translations.mobile_number },
+    { key: "secondMobileNumber", label: translations.second_mobile_number },
+    { key: "eventType", label: translations.event_type },
+    { key: "location", label: translations.location }, // First place (from personalData)
+    { key: "date", label: translations.date },
+    { key: "city", label: translations.city },
+    { key: "place", label: translations.place }, // Second place (from eventDetails)
+    { key: "favoriteColors", label: translations.booking.favoriteColor },
+    { key: "dressColor", label: translations.booking.dressColor },
   ];
 
   // Define headers for the second table (remaining fields)
   const secondTableHeaders: { key: keyof typeof rowData; label: string }[] = [
-    { key: "eventDesign", label: "Event Design" },
-    { key: "packagePrice", label: "Package Price" },
-    { key: "packageName", label: "Package Name" },
+    { key: "eventDesign", label: translations.event_design },
+    { key: "packagePrice", label: translations.package_price },
+    { key: "packageName", label: translations.package_name },
   ];
 
   // Get the current locale (assuming it's stored in a context or state)
