@@ -16,6 +16,7 @@ import {
   FaFilter,
   FaChevronRight,
   FaChevronLeft,
+  FaSortAmountUp,
 } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "primereact/resources/primereact.min.css";
@@ -143,7 +144,7 @@ const BookedEvents = () => {
     {
       label: translations.booking.newest,
       value: "newest",
-      icon: <FaSortAmountDown />,
+      icon: <FaSortAmountUp />,
     },
     {
       label: translations.booking.oldest,
@@ -332,7 +333,7 @@ const BookedEvents = () => {
       {response?.bookedEvents.map((event: Event) => (
         <div
           key={event._id}
-          className="flex flex-col md:flex-row w-full lg:w-[80%] gap-10 max-md:gap-2 mb-6 p-3 border rounded-2xl shadow-lg bg-white"
+          className="flex flex-col md:flex-row w-full lg:w-[80%] gap-10 max-md:gap-2 justify-between mb-6 p-3 border rounded-2xl shadow-lg bg-white"
         >
           <div className="flex flex-row gap-2">
             <div>

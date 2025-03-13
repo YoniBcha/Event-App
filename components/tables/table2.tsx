@@ -32,18 +32,18 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
   eventPackageAdditions,
   extraServices,
 }) => {
-  // const currentLocale = useSelector(
-  //   (state: any) => state.language.currentLocale
-  // );
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
   const translations = useSelector((state: any) => state.language.translations);
-  // const renderValue = (
-  //   defaultValue: string,
-  //   translatedValue: string | undefined
-  // ) => {
-  //   return currentLocale === "ar" && translatedValue
-  //     ? translatedValue
-  //     : defaultValue;
-  // };
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* First Table: Event Package Additions */}
@@ -83,10 +83,10 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
                       {item._id}
                     </td> */}
                     <td className="border-r px-4 py-2 font-medium">
-                      {item.name}
+                      {renderValue(item.name, item.translatedName)}
                     </td>
                     <td className="border-r px-4 py-2 font-medium">
-                      {item.type}
+                      {renderValue(item.type, item.translatedType)}
                     </td>
                     <td className="border-r px-4 py-2 font-medium">
                       {item.unitPrice}
@@ -142,7 +142,8 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
                       {service._id}
                     </td> */}
                     <td className="border-r px-4 py-2 font-medium">
-                      {service.package}
+                      {renderValue(service.package, service.translatedPackage)}
+                      {}
                     </td>
                     <td className="border-r px-4 py-2 font-medium">
                       {service.price}

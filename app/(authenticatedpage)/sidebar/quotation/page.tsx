@@ -3,6 +3,7 @@
 import BulkTable from "@/components/tables/table1";
 import BulkTable2 from "@/components/tables/table2";
 import { useGetSingleSelfBookedEventsQuery } from "@/store/endpoints/apiSlice";
+import moment from "moment";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -121,7 +122,10 @@ function Quotation() {
         {/* Header Section */}
         <div className="flex justify-between items-center mb-4">
           {/* Date of Creation */}
-          <div>{translations.date_of_creation}: 20/02/2003</div>
+          <div>
+            {translations.date_of_creation}:{" "}
+            {moment(data?.bookedEvents?.createdAt).format("MMMM DD, YYYY")}
+          </div>
 
           {/* Status in the Top-Right Corner */}
           {data && data.bookedEvents && (
