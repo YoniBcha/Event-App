@@ -241,6 +241,16 @@
     "yes": "نعم",
     "no": "لا",
     "accountNumber": "رقم الحساب",
+    "sortBy": "ترتيب حسب",
+    "filterBy": "تصفية حسب",
+    "newest": "الأحدث",
+    "oldest": "الأقدم",
+    "pending": "قيد الانتظار",
+    "completed": "مكتمل",
+    "cancelled": "ملغى",
+    "all": "الكل",
+    "rejected": "مرفوض",
+    "no_orders_found": "لم يتم العثور على طلبات",
     "ok": "حسنًا"
   },
   "contact": {

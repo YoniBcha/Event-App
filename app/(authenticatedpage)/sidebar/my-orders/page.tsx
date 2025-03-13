@@ -94,6 +94,16 @@ interface RootState {
         ok: string;
         yes: string;
         no: string;
+        sortBy: string;
+        filterBy: string;
+        newest: string;
+        oldest: string;
+        all: string;
+        pending: any;
+        completed: string;
+        rejected: string;
+        cancelled: string;
+        no_orders_found: string;
       };
     };
   };
@@ -115,7 +125,7 @@ const BookedEvents = () => {
 
   const { data, isLoading, refetch } = useGetSelfBookedEventsQuery({
     status: filterOption === "all" ? "" : filterOption,
-    sort: sortOption === "newest" ? undefined : "oldest",
+    sort: sortOption === "newest" ? "" : "oldest",
     page: currentPage,
     size: pageSize,
   });
@@ -123,18 +133,47 @@ const BookedEvents = () => {
   const translations = useSelector(
     (state: RootState) => state.language.translations
   );
-
+  const statusTranslations = {
+    pending: translations.booking.pending,
+    completed: translations.booking.completed,
+    rejected: translations.booking.rejected,
+    cancelled: translations.booking.cancelled,
+  };
   const sortOptions = [
-    { label: "Newest", value: "newest", icon: <FaSortAmountDown /> },
-    { label: "Oldest", value: "oldest", icon: <FaSortAmountDown /> },
+    {
+      label: translations.booking.newest,
+      value: "newest",
+      icon: <FaSortAmountDown />,
+    },
+    {
+      label: translations.booking.oldest,
+      value: "oldest",
+      icon: <FaSortAmountDown />,
+    },
   ];
 
   const filterOptions = [
-    { label: "All", value: "all", icon: <FaFilter /> },
-    { label: "Pending", value: "pending", icon: <FaFilter /> },
-    { label: "Completed", value: "completed", icon: <FaFilter /> },
-    { label: "Rejected", value: "rejected", icon: <FaFilter /> },
-    { label: "Cancelled", value: "cancelled", icon: <FaFilter /> },
+    { label: translations.booking.all, value: "all", icon: <FaFilter /> },
+    {
+      label: translations.booking.pending,
+      value: "pending",
+      icon: <FaFilter />,
+    },
+    {
+      label: translations.booking.completed,
+      value: "completed",
+      icon: <FaFilter />,
+    },
+    {
+      label: translations.booking.rejected,
+      value: "rejected",
+      icon: <FaFilter />,
+    },
+    {
+      label: translations.booking.cancelled,
+      value: "cancelled",
+      icon: <FaFilter />,
+    },
   ];
 
   const handleSortChange = (e: { value: string }) => {
@@ -213,8 +252,8 @@ const BookedEvents = () => {
             options={sortOptions}
             onChange={handleSortChange}
             optionLabel="label"
-            placeholder="Sort By"
-            className="w-36 p-dropdown-sm hover:bg-secondary"
+            placeholder={translations.booking.sortBy}
+            className="w-36 p-dropdown-sm hover:bg-secondary hover:border-primary"
             itemTemplate={(option) => (
               <div className="flex items-center gap-2 w-full rounded-md">
                 {option.icon}
@@ -227,7 +266,7 @@ const BookedEvents = () => {
             options={filterOptions}
             onChange={handleFilterChange}
             optionLabel="label"
-            placeholder="Filter By"
+            placeholder={translations.booking.filterBy}
             className="w-36 p-dropdown-sm hover:bg-secondary"
             itemTemplate={(option) => (
               <div className="flex items-center gap-2 w-full rounded-md">
@@ -238,7 +277,9 @@ const BookedEvents = () => {
           />
         </div>
         <div className="flex justify-center items-center h-64">
-          <p className="text-xl text-gray-500">No orders found.</p>
+          <p className="text-xl text-gray-500">
+            {translations.booking.no_orders_found}
+          </p>
         </div>
       </div>
     );
@@ -264,7 +305,7 @@ const BookedEvents = () => {
           options={sortOptions}
           onChange={handleSortChange}
           optionLabel="label"
-          placeholder="Sort By"
+          placeholder={translations.booking.sortBy}
           className="w-36 p-dropdown-sm hover:bg-secondary hover:border-primary"
           itemTemplate={(option) => (
             <div className="flex items-center gap-2 w-full rounded-md">
@@ -278,7 +319,7 @@ const BookedEvents = () => {
           options={filterOptions}
           onChange={handleFilterChange}
           optionLabel="label"
-          placeholder="Filter By"
+          placeholder={translations.booking.filterBy}
           className="w-36 p-dropdown-sm hover:bg-secondary"
           itemTemplate={(option) => (
             <div className="flex items-center gap-2 w-full rounded-md">
@@ -338,7 +379,11 @@ const BookedEvents = () => {
           </div>
           <div className="flex flex-wrap md:flex-col gap-3 border-l-4 max-md:border-none border-primary md:pl-5 pl-1">
             <div className="bg-primary w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-lg">
-              {event.orderStatus}
+              {currentLocale === "ar"
+                ? statusTranslations[
+                    event.orderStatus as keyof typeof statusTranslations
+                  ] || event.orderStatus
+                : event.orderStatus}
             </div>
             {event.orderStatus === "completed" && (
               <button

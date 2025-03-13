@@ -240,6 +240,16 @@
     "close": "Close",
     "yes": "Yes",
     "no": "No",
+    "sortBy": "Sort By",
+    "filterBy": "Filter By",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "all": "All",
+    "pending": "Pending",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "rejected": "Rejected",
+    "no_orders_found": "No orders found.",
     "accountNumber": "Account Number"
   },
   "contact": {
