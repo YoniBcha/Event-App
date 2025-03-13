@@ -21,6 +21,7 @@ interface PersonalData {
   imageOfPlace: string[]; // Store URLs instead of File objects
   dressColor: string[];
   place: string;
+  length: number;
 }
 
 interface PersonalDataProps {
@@ -96,13 +97,9 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
       .min(2, `${translations.booking.at_least_2_people_are_required}`)
       .max(1000, `${translations.booking.number_of_people_cannot_exceed_1000}`),
     place: Yup.string().required(`${translations.booking.place_is_required}`),
-    imageOfPlace: Yup.array()
-      .of(
-        Yup.string().required(
-          `${translations.booking.an_image_URL_is_required}`
-        )
-      )
-      .min(1, `${translations.booking.at_least_one_image_is_required}`),
+    imageOfPlace: Yup.array().of(
+      Yup.string().required(`${translations.booking.an_image_URL_is_required}`)
+    ),
   });
 
   useEffect(() => {
@@ -152,7 +149,12 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
         ...prevData,
         [field]: [...prevData[field], color],
       }));
+
+      // Clear the error for the field when a color is added
+      setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
     }
+
+    // Hide the color picker
     if (field === "favoriteColors") {
       setShowFavoriteColorPicker(false);
     } else {
@@ -168,6 +170,11 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
       ...prevData,
       [field]: prevData[field].filter((c) => c !== color),
     }));
+
+    // Clear the error for the field if no colors are left
+    if (formData[field].length === 1) {
+      setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
+    }
   };
 
   const handleImageSelection = (files: FileList | null) => {
@@ -234,45 +241,46 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     setLoading(true); // Start loading
 
     try {
-      // Check if there are already uploaded images in session storage
-      if (formData.imageOfPlace.length > 0) {
+      // Step 1: Validate the entire form data before proceeding
+      await validationSchema.validate(formData, { abortEarly: false });
+
+      // Step 2: Check if there are already uploaded images in session storage
+      if (formData?.length > 0 && formData.imageOfPlace.length > 0) {
         await onSubmit(formData); // Submit the existing data
         return;
       }
 
-      // Upload images and get URLs
+      // Step 3: Upload images and get URLs (only if validation passes)
       const uploadedUrls = await uploadImages(selectedImages);
 
       console.log("Uploaded URLs:", JSON.stringify(uploadedUrls, null, 2));
 
-      if (uploadedUrls.length === 0) {
-        toast.error("No images were uploaded");
+      if (uploadedUrls?.length === 0 && formData?.imageOfPlace.length == 0) {
+        toast.error(`${translations.booking.no_images_were_uploaded}`);
         setLoading(false); // Stop loading on error
         return;
       }
 
-      // Update formData with uploaded image URLs
+      // Step 4: Update formData with uploaded image URLs
       const updatedFormData = {
         ...formData,
         imageOfPlace: [...formData.imageOfPlace, ...uploadedUrls],
       };
 
-      // Update the state with the new form data
+      // Step 5: Update the state with the new form data
       setFormData(updatedFormData);
 
-      // Validate the updated form data
-      await validationSchema.validate(updatedFormData, { abortEarly: false });
-
-      // Submit the form data
+      // Step 6: Submit the form data (only if all fields are valid)
       await onSubmit(updatedFormData); // Ensure onSubmit is awaited
       setErrors({});
 
-      // Clear selected images and previews after successful submission
+      // Step 7: Clear selected images and previews after successful submission
       setSelectedImages([]);
       setPreviewImages([]);
     } catch (validationErrors) {
       const newErrors: Record<string, string> = {};
       if (validationErrors instanceof Yup.ValidationError) {
+        // Map Yup validation errors to the errors state
         validationErrors.inner.forEach((error) => {
           newErrors[error.path as string] = error.message;
         });

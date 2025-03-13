@@ -175,6 +175,7 @@
     "place_is_required": "المكان مطلوب",
     "an_image_URL_is_required": "عنوان URL للصورة مطلوب",
     "at_least_one_image_is_required": "مطلوب على الأقل صورة واحدة",
+    "no_images_were_uploaded": "لم يتم تحميل أي صور",
     "select_images": "اختر الصور",
     "browse": "تصفح",
     "clear_Images": "مسح الصور",

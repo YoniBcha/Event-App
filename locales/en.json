@@ -183,6 +183,7 @@
     "place_is_required": "Place is required",
     "an_image_URL_is_required": "An image URL is required",
     "at_least_one_image_is_required": "At least one image is required",
+    "no_images_were_uploaded": "No images were uploaded",
     "Place": "Place",
     "clear_Images": "Clear Images",
     "favorite_Colors": "Favorite Colors",
