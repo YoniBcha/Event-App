@@ -89,15 +89,20 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
       .min(1, `${translations.booking.colorRequire}`),
     dressColor: Yup.array()
       .of(Yup.string())
-      .min(1, "At least one dress color is required"),
+      .min(1, `${translations.booking.at_least_one_dress_color_is_required}`),
     notes: Yup.string().required(`${translations.booking.noteRequire}`),
     noOfPeople: Yup.number()
-      .required("Number of people is required")
-      .min(1, "At least 1 person is required"),
-    place: Yup.string().required("Place is required"),
+      .required(`${translations.booking.number_of_people_is_required}`)
+      .min(2, `${translations.booking.at_least_2_people_are_required}`)
+      .max(1000, `${translations.booking.number_of_people_cannot_exceed_1000}`),
+    place: Yup.string().required(`${translations.booking.place_is_required}`),
     imageOfPlace: Yup.array()
-      .of(Yup.string().required("An image URL is required"))
-      .min(1, "At least one image is required"),
+      .of(
+        Yup.string().required(
+          `${translations.booking.an_image_URL_is_required}`
+        )
+      )
+      .min(1, `${translations.booking.at_least_one_image_is_required}`),
   });
 
   useEffect(() => {
