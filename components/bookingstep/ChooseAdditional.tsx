@@ -24,6 +24,7 @@ interface Addition {
 interface EventPackageAddition {
   additionId: string;
   additionTypeName: string;
+  translatedTypeName: string; // Add this field
   quantity: number;
 }
 
@@ -162,6 +163,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
         return {
           additionId: addition._id,
           additionTypeName: typeName,
+          translatedTypeName: type.translatedTypeName, // Add translated type name
           quantity: quantities[key],
         };
       })

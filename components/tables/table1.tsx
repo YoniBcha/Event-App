@@ -87,10 +87,8 @@ const BulkTable: React.FC<BulkTableProps> = ({
   // Combine personal data and event details into a single row
   const rowData = {
     ...personalDataDefault,
-    packageName: renderValue(
-      eventDetailsDefault.packageName,
-      eventDetailsDefault.translatedPackageName
-    ),
+    packageName: eventDetailsDefault.packageName,
+
     packagePrice: eventDetailsDefault.packagePrice,
     status: eventDetailsDefault.status,
     location: personalDataDefault.place, // First place (from personalData)

@@ -83,10 +83,10 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
                       {item._id}
                     </td> */}
                     <td className="border-r px-4 py-2 font-medium">
-                      {renderValue(item.name, item.translatedName)}
+                      {renderValue(item.name, item.translatedAdditionName)}
                     </td>
                     <td className="border-r px-4 py-2 font-medium">
-                      {renderValue(item.type, item.translatedType)}
+                      {renderValue(item.type, item.translatedTypeName)}
                     </td>
                     <td className="border-r px-4 py-2 font-medium">
                       {item.unitPrice}
@@ -142,7 +142,10 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
                       {service._id}
                     </td> */}
                     <td className="border-r px-4 py-2 font-medium">
-                      {renderValue(service.package, service.translatedPackage)}
+                      {renderValue(
+                        service.package,
+                        service.translatedPackageName
+                      )}
                       {}
                     </td>
                     <td className="border-r px-4 py-2 font-medium">

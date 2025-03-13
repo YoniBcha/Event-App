@@ -32,6 +32,7 @@ interface SelectedData {
   extraServices: {
     servicesProvider_id: string;
     packageName: string;
+    translatedPackageName?: string; // Add this field
   }[];
 }
 
@@ -210,6 +211,9 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
           extraServices: selectedServices.map((service) => ({
             servicesProvider_id: service.providerId,
             packageName: service.packageName,
+            translatedPackageName: packages.find(
+              (pkg) => pkg.packageName === service.packageName
+            )?.translatedPackageName, // Add translated package name
           })),
         };
     onExtraServiceSelect(selectedData); // Pass the entire object
@@ -519,13 +523,13 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
               whileHover="hover"
               whileTap="tap"
             >
-               <span className="">
-                            {currentLocale === "ar" ? (
-                              <AiOutlineLeft size={20} />
-                            ) : (
-                              <AiOutlineRight size={20} />
-                            )}
-                          </span>
+              <span className="">
+                {currentLocale === "ar" ? (
+                  <AiOutlineLeft size={20} />
+                ) : (
+                  <AiOutlineRight size={20} />
+                )}
+              </span>
             </motion.button>
           )}
         </div>

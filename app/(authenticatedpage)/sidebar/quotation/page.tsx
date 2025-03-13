@@ -130,7 +130,14 @@ function Quotation() {
     rejected: translations.booking.rejected,
     cancelled: translations.booking.cancelled,
   };
-
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <div>
       <div
@@ -182,7 +189,11 @@ function Quotation() {
             <BulkTable
               personalData={data.bookedEvents.personalData}
               eventDetails={{
-                packageName: data.bookedEvents.eventPackage.packageName,
+                packageName: renderValue(
+                  data.bookedEvents.priceDetails.eventPackage.name,
+                  data.bookedEvents.priceDetails.eventPackage
+                    .translatedPackageName
+                ),
                 packagePrice: data.bookedEvents.eventPackage.packagePrice,
                 status: data.bookedEvents.orderStatus,
                 place: data.bookedEvents.place,
