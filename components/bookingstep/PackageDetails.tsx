@@ -423,14 +423,13 @@ function PackageDetails({
         </motion.button> */}
 
         {/* Next Button */}
-        {/* <motion.button
+        <motion.button
           onClick={handleNextClick}
-          className="next-btn flex items-center p-2 rounded-lg text-white bg-primary hover:bg-secondary hover:text-primary cursor-pointer"
+          className=" flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
           variants={{
             hover: {
               scale: 1.05,
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-
               transition: { duration: 0.2, ease: "easeInOut" },
             },
             tap: {
@@ -442,15 +441,14 @@ function PackageDetails({
           whileHover="hover"
           whileTap="tap"
         >
-          <span>{translations.booking.nextBtn}</span>
-          <span className="ml-3">
+          <span className="">
             {currentLocale === "ar" ? (
-              <FaChevronLeft /> // Left arrow for Arabic
+              <AiOutlineLeft size={20} />
             ) : (
-              <FaChevronRight /> // Right arrow for English
+              <AiOutlineRight size={20} />
             )}
           </span>
-        </motion.button> */}
+        </motion.button>
       </div>
     </motion.div>
   );
