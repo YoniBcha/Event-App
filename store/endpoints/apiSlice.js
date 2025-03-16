@@ -9,6 +9,7 @@ import { chooseAdditionalEndpoints } from "./chooseAdditionalEndpoints";
 import { getExtraServiceEndpoint } from "./getExtraServiceEndpoint";
 import { contactUsEndpoints } from "./constactus";
 import { bookEventEndpoints } from "./bookEventEndpoints";
+import { preBookEventEndpoints } from "./preBookEventEndpoints";
 import { getSelfBookedEventsEndpoints } from "./getSelfBookedEventsEndpoints"; // ✅ Import the new API
 import { userEndpoints } from "./userInfo";
 import { changePasswordEndpoints } from "./changePassword";
@@ -44,6 +45,7 @@ export const apiSlice = createApi({
     ...getExtraServiceEndpoint(builder),
     ...contactUsEndpoints(builder),
     ...bookEventEndpoints(builder),
+    ...preBookEventEndpoints(builder),
     ...userEndpoints(builder),
     ...changePasswordEndpoints(builder),
     ...cancelOrderEndpoints(builder),
@@ -76,6 +78,7 @@ export const {
   useGetDjQuery,
   useGetUserInfoQuery,
   useBookEventMutation,
+  usePreBookEventMutation,
   useCancelOrderMutation,
   useGetSingleSelfBookedEventsQuery,
   useGetSingleDesignGalleryQuery,
