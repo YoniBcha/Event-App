@@ -208,8 +208,8 @@ function PackageDetails({
                 <span className="text-primary font-bold">
                   {translations.total}:
                 </span>
-                <span className="font-bold flex">
-                  <p className="text-black text-xl font-extrabold">
+                <span className="font-bold flex items-center">
+                  <p className="text-black text-xl  items-center font-extrabold">
                     {" "}
                     {packageData.eventPackage.packagePrice}
                   </p>
@@ -218,7 +218,7 @@ function PackageDetails({
                     src="/images/SR.png"
                     alt="SR"
                     width={20}
-                    height={20}
+                    height={15}
                     className={currentLocale === "ar" ? "scale-x-[-1]" : ""}
                   />
                 </span>{" "}
