@@ -9,6 +9,7 @@
   "palace": "Palace",
   "hall": "Hall",
   "private": "Private",
+  "noDesign": "No design gallery content is available.",
   "other": "Other",
   "priceDetails": "Price Details",
   "loadingPayload": "Loading payload...",

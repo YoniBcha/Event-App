@@ -26,6 +26,7 @@ interface Package {
   description: string;
   eventType: string;
   eventDesign: string;
+  translatedDescription: string;
   place: string;
   additions: {
     additionId: string;
@@ -338,120 +339,130 @@ function ChoosePackage({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="flex flex-col w-full md:w-1/2 h-full">
-                <div className="flex flex-col w-full">
-                  {/* Slider Container */}
-                  {isGalleryLoading ? (
-                    <div className="flex justify-center items-center h-64">
-                      <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+              {galleryData?.singleGallery?.images?.length > 0 ? (
+                <>
+                  <div className="flex flex-col w-full md:w-1/2 h-full">
+                    <div className="flex flex-col w-full">
+                      {/* Slider Container */}
+                      {isGalleryLoading ? (
+                        <div className="flex justify-center items-center h-64">
+                          <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+                        </div>
+                      ) : (
+                        <div className="w-full rounded bg-transparent flex items-center justify-center relative overflow-hidden">
+                          <div className="w-full h-[300px] relative">
+                            {/* Framer Motion Slide Effect */}
+                            <AnimatePresence mode="wait">
+                              <motion.div
+                                key={selectedImageIndex}
+                                initial={{ opacity: 0, x: 100 }} // Slide in from the right
+                                animate={{ opacity: 1, x: 0 }} // Center the slide
+                                exit={{ opacity: 0, x: -100 }} // Slide out to the left
+                                transition={{ duration: 0.5 }}
+                                className="absolute w-full h-full"
+                              >
+                                <Image
+                                  src={
+                                    galleryData?.singleGallery?.images[
+                                      selectedImageIndex
+                                    ]
+                                  }
+                                  alt={`Slide ${selectedImageIndex}`}
+                                  fill
+                                  className="object-cover rounded"
+                                  sizes="(max-width: 768px) 100vw, 50vw"
+                                  priority
+                                />
+                              </motion.div>
+                            </AnimatePresence>
+
+                            {/* Navigation Buttons */}
+                            <button
+                              aria-label="previous slide"
+                              className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-primary hover:bg-secondary rounded-full w-6 h-6 flex items-center justify-center"
+                              onClick={handlePrevSlide}
+                            >
+                              <FaChevronLeft size={16} className="text-lg" />{" "}
+                              {/* Use React Icon */}
+                            </button>
+
+                            <button
+                              aria-label="next slide"
+                              className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-primary hover:bg-secondary rounded-full w-6 h-6 flex items-center justify-center"
+                              onClick={handleNextSlide}
+                            >
+                              <FaChevronRight size={16} className="text-lg" />{" "}
+                              {/* Use React Icon */}
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="w-full rounded bg-transparent flex items-center justify-center relative overflow-hidden">
-                      <div className="w-full h-[300px] relative">
-                        {/* Framer Motion Slide Effect */}
-                        <AnimatePresence mode="wait">
+
+                    {/* Thumbnail Grid */}
+                    <div className="py-2 grid grid-cols-4 gap-2">
+                      {galleryData?.singleGallery?.images?.map(
+                        (imgSrc: any, index: any) => (
                           <motion.div
-                            key={selectedImageIndex}
-                            initial={{ opacity: 0, x: 100 }} // Slide in from the right
-                            animate={{ opacity: 1, x: 0 }} // Center the slide
-                            exit={{ opacity: 0, x: -100 }} // Slide out to the left
-                            transition={{ duration: 0.5 }}
-                            className="absolute w-full h-full"
+                            key={index}
+                            className={`rounded cursor-pointer aspect-square ${
+                              selectedImageIndex === index
+                                ? "border-2 border-primary"
+                                : ""
+                            } overflow-hidden relative w-full`}
+                            onClick={() => handleThumbnailClick(index)} // Update the selected image index
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                           >
                             <Image
-                              src={
-                                galleryData?.singleGallery?.images[
-                                  selectedImageIndex
-                                ]
-                              }
-                              alt={`Slide ${selectedImageIndex}`}
+                              src={imgSrc}
+                              alt={`Thumbnail ${index}`}
                               fill
                               className="object-cover rounded"
-                              sizes="(max-width: 768px) 100vw, 50vw"
+                              sizes="(max-width: 768px) 25vw, 12.5vw"
                               priority
                             />
                           </motion.div>
-                        </AnimatePresence>
-
-                        {/* Navigation Buttons */}
-                        <button
-                          aria-label="previous slide"
-                          className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-primary hover:bg-secondary rounded-full w-6 h-6 flex items-center justify-center"
-                          onClick={handlePrevSlide}
-                        >
-                          <FaChevronLeft size={16} className="text-lg" />{" "}
-                          {/* Use React Icon */}
-                        </button>
-
-                        <button
-                          aria-label="next slide"
-                          className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-primary hover:bg-secondary rounded-full w-6 h-6 flex items-center justify-center"
-                          onClick={handleNextSlide}
-                        >
-                          <FaChevronRight size={16} className="text-lg" />{" "}
-                          {/* Use React Icon */}
-                        </button>
-                      </div>
+                        )
+                      )}
                     </div>
-                  )}
-                </div>
+                  </div>
 
-                {/* Thumbnail Grid */}
-                <div className="py-2 grid grid-cols-4 gap-2">
-                  {galleryData?.singleGallery?.images?.map(
-                    (imgSrc: any, index: any) => (
-                      <motion.div
-                        key={index}
-                        className={`rounded cursor-pointer aspect-square ${
-                          selectedImageIndex === index
-                            ? "border-2 border-primary"
-                            : ""
-                        } overflow-hidden relative w-full`}
-                        onClick={() => handleThumbnailClick(index)} // Update the selected image index
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Image
-                          src={imgSrc}
-                          alt={`Thumbnail ${index}`}
-                          fill
-                          className="object-cover rounded"
-                          sizes="(max-width: 768px) 25vw, 12.5vw"
-                          priority
-                        />
-                      </motion.div>
-                    )
-                  )}
+                  <motion.div
+                    className="w-full md:w-1/2 h-full ml-0 md:ml-5 mt-5"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <div className="mb-6">
+                      <h3 className="text-xl flex items-center font-semibold">
+                        {renderValue(
+                          selectedImage?.singleGallery?.designId.eventDesign,
+                          selectedImage?.singleGallery?.designId
+                            .translatedEventDesign
+                        )}
+                      </h3>
+                      <div
+                        className="mt-2 p-2 text-sm md:text-base overflow-hidden"
+                        style={{ wordWrap: "break-word" }}
+                        dangerouslySetInnerHTML={{
+                          __html: renderValue(
+                            selectedImage?.singleGallery?.description || "", // Fallback to empty string if undefined
+                            selectedImage?.singleGallery
+                              ?.translatedDescription || "" // Fallback to empty string if undefined
+                          ).replace(/\n/g, "<br />"),
+                        }}
+                      />
+                    </div>
+                  </motion.div>
+                </>
+              ) : (
+                <div className="flex justify-center items-center w-full h-32">
+                  <p className="text-gray-500 font-bold">
+                    {translations.noDesign}
+                  </p>
                 </div>
-              </div>
-
-              <motion.div
-                className="w-full md:w-1/2 h-full ml-0 md:ml-5 mt-5"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <div className="mb-6">
-                  <h3 className="text-xl flex items-center font-semibold">
-                    {renderValue(
-                      selectedImage?.singleGallery?.designId.eventDesign,
-                      selectedImage?.singleGallery?.designId
-                        .translatedEventDesign
-                    )}
-                  </h3>
-                  <div
-                    className="mt-2 p-2 text-sm md:text-base overflow-hidden"
-                    style={{ wordWrap: "break-word" }}
-                    dangerouslySetInnerHTML={{
-                      __html: renderValue(
-                        selectedImage?.singleGallery?.description || "", // Fallback to empty string if undefined
-                        selectedImage?.singleGallery?.translatedDescription ||
-                          "" // Fallback to empty string if undefined
-                      ).replace(/\n/g, "<br />"),
-                    }}
-                  />
-                </div>
-              </motion.div>
+              )}
             </motion.div>
           )}
         </div>
@@ -511,7 +522,10 @@ function ChoosePackage({
                       <div className="flex flex-row gap-2 w-full justify-between pt-4 items-center">
                         {/* Package Name */}
                         <div className="text-sm md:text-xl lg:text-2xl font-extrabold text-tertiary flex-shrink-0">
-                          {eventPackage.packageName}
+                          {renderValue(
+                            eventPackage.packageName,
+                            eventPackage.translatedPackageName
+                          )}
                         </div>
 
                         {/* Price and Currency Image */}
@@ -538,8 +552,14 @@ function ChoosePackage({
                           title={eventPackage.description}
                         >
                           {eventPackage.description.length > 20
-                            ? `${eventPackage.description.substring(0, 20)}...`
-                            : eventPackage.description}
+                            ? `${renderValue(
+                                eventPackage.description,
+                                eventPackage.translatedDescription
+                              ).substring(0, 20)}...`
+                            : renderValue(
+                                eventPackage.description,
+                                eventPackage.translatedDescription
+                              )}
                         </div>
                       )}
                     </div>
