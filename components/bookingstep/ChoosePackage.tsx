@@ -513,7 +513,7 @@ function ChoosePackage({
                       {/* Package Name and Price */}
                       <div className="flex flex-row gap-2 w-full justify-between pt-4 items-center md:flex-col lg:flex-row md:items-start">
                         {/* Package Name */}
-                        <div className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold text-tertiary flex-shrink-0">
+                        <div className="text-sm sm:text-base lg:text-xl font-extrabold text-tertiary flex-shrink-0">
                           {renderValue(
                             eventPackage.packageName,
                             eventPackage.translatedPackageName
@@ -521,7 +521,7 @@ function ChoosePackage({
                         </div>
 
                         {/* Price and Currency Image */}
-                        <div className="flex flex-row items-center text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold text-tertiary">
+                        <div className="flex flex-row items-center text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl font-extrabold text-tertiary">
                           {eventPackage.packagePrice}
                           <span className="pt-[0.2rem]">
                             <Image
