@@ -300,22 +300,21 @@ function PackageDetails({
                       animate={{ scale: 1 }}
                       exit={{ scale: 0.8 }}
                       transition={{ duration: 0.3 }}
-                      className="relative bg-white  flex-col  p-4 rounded-lg shadow-lg w-[300px] h-[300px] flex items-center justify-center" // Fixed size
-                      onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking inside
+                      className="relative bg-white flex flex-col p-6 rounded-lg shadow-lg max-w-[90%] max-h-[90%] overflow-y-auto"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <h2 className="text-xl font-semibold text-primary">
-                        {renderValue(
-                          selectedItem?.typeName,
-                          selectedItem?.translatedTypeName
-                        )}
+                      <h2 className="text-xl font-semibold text-primary mb-4 break-words">
+                        {selectedItem?.typeName}
                       </h2>
-                      <Image
-                        src={selectedItem?.typePicture}
-                        alt="Selected Image"
-                        width={250} // Adjust image size to fit modal
-                        height={250}
-                        className="object-contain w-full h-full"
-                      />
+                      <div className="flex-1 flex items-center justify-center">
+                        <Image
+                          src={selectedItem?.typePicture}
+                          alt="Selected Image"
+                          width={250}
+                          height={250}
+                          className="object-contain max-w-full max-h-full"
+                        />
+                      </div>
                       <button
                         onClick={() => setIsModalOpen(false)}
                         className="absolute top-2 right-2 p-2 bg-primary text-white rounded-full hover:bg-secondary transition-colors duration-200"
