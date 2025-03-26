@@ -4,7 +4,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import ProgressBar from "@/components/ProgressBar";
 import CircularProgressBar from "@/components/ProgressBar";
 
 const Home: React.FC = () => {
