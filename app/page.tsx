@@ -4,6 +4,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import ProgressBar from "@/components/ProgressBar";
+import CircularProgressBar from "@/components/ProgressBar";
 
 const Home: React.FC = () => {
   const translations = useSelector((state: any) => state.language.translations);
@@ -79,8 +81,42 @@ const Home: React.FC = () => {
         >
           {translations.fenzo}
         </motion.div>
-        <motion.div variants={itemVariants}>{translations.subTitle1}</motion.div>
+        <motion.div variants={itemVariants}>
+          {translations.subTitle1}
+        </motion.div>
         <motion.div variants={itemVariants}>{translations.subTitle}</motion.div>
+
+        <div className="grid grid-cols-3 w-full h-full justify-center gap-2 lg:gap-16">
+          <CircularProgressBar
+            value={86}
+            label="Weddings Designed"
+            primaryColor="text-primary"
+            secondaryColor="text-secondary"
+            size={100}
+            strokeWidth={4}
+            textSize="text-4xl"
+          />
+          <CircularProgressBar
+            value={50}
+            sign="+"
+            label="Milestones"
+            primaryColor="text-primary"
+            secondaryColor="text-secondary"
+            size={100}
+            strokeWidth={4}
+            textSize="text-4xl"
+          />
+          <CircularProgressBar
+            value={70}
+            label="Happy Clients"
+            primaryColor="text-primary"
+            secondaryColor="text-secondary"
+            strokeWidth={4}
+            size={100}
+            textSize="text-4xl"
+          />
+        </div>
+
         <motion.button
           className="p-2 text-gray-100 bg-primary hover:bg-secondary hover:text-primary rounded"
           variants={itemVariants}
