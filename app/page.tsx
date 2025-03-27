@@ -97,7 +97,7 @@ const Home: React.FC = () => {
           />
           <CircularProgressBar
             value={50}
-            sign="+"
+            // sign="+"
             label="Milestones"
             primaryColor="text-primary"
             secondaryColor="text-secondary"
