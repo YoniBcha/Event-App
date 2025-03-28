@@ -95,7 +95,7 @@ const Home: React.FC = () => {
             strokeWidth={4}
             textSize="text-4xl"
           />
-          <CircularProgressBar
+          {/* <CircularProgressBar
             value={50}
             // sign="+"
             label="Milestones"
@@ -104,7 +104,8 @@ const Home: React.FC = () => {
             size={100}
             strokeWidth={4}
             textSize="text-4xl"
-          />
+          /> */}
+          <div></div>
           <CircularProgressBar
             value={70}
             label="Happy Clients"
