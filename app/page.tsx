@@ -85,36 +85,41 @@ const Home: React.FC = () => {
         </motion.div>
         <motion.div variants={itemVariants}>{translations.subTitle}</motion.div>
 
-        <div className="flex w-full h-full justify-center items-center gap-2 lg:gap-16">
-          <CircularProgressBar
-            value={86}
-            label="Weddings Designed"
-            primaryColor="text-primary"
-            secondaryColor="text-secondary"
-            size={100}
-            strokeWidth={4}
-            textSize="text-4xl"
-          />
-          <CircularProgressBar
-            value={70}
-            label="Happy Clients"
-            primaryColor="text-primary"
-            secondaryColor="text-secondary"
-            strokeWidth={4}
-            size={100}
-            textSize="text-4xl"
-          />
-        </div>
+        {/* Container for bars and button */}
+        <div className="flex flex-col items-center w-full gap-8">
+          {/* Bars container */}
+          <div className="flex justify-center items-center gap-2 lg:gap-16">
+            <CircularProgressBar
+              value={86}
+              label="Weddings Designed"
+              primaryColor="text-primary"
+              secondaryColor="text-secondary"
+              size={100}
+              strokeWidth={4}
+              textSize="text-4xl"
+            />
+            <CircularProgressBar
+              value={70}
+              label="Happy Clients"
+              primaryColor="text-primary"
+              secondaryColor="text-secondary"
+              strokeWidth={4}
+              size={100}
+              textSize="text-4xl"
+            />
+          </div>
 
-        <motion.button
-          className="p-2 text-gray-100 bg-primary hover:bg-secondary hover:text-primary rounded"
-          variants={itemVariants}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => router.push("/mainpage/1")}
-        >
-          {translations.startJourney}
-        </motion.button>
+          {/* Button positioned below bars */}
+          <motion.button
+            className="p-2 text-gray-100 bg-primary  self-start hover:bg-secondary hover:text-primary rounded"
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => router.push("/mainpage/1")}
+          >
+            {translations.startJourney}
+          </motion.button>
+        </div>
       </motion.div>
 
       <div className="w-1/2 sm:hidden md:flex flex-row gap-2 mx-3 justify-evenly">
