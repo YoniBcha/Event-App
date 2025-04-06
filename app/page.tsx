@@ -85,7 +85,7 @@ const Home: React.FC = () => {
         </motion.div>
         <motion.div variants={itemVariants}>{translations.subTitle}</motion.div>
 
-        <div className="grid grid-cols-3 w-full h-full justify-center gap-2 lg:gap-16">
+        <div className="flex w-full h-full justify-center items-center gap-2 lg:gap-16">
           <CircularProgressBar
             value={86}
             label="Weddings Designed"
@@ -95,17 +95,6 @@ const Home: React.FC = () => {
             strokeWidth={4}
             textSize="text-4xl"
           />
-          {/* <CircularProgressBar
-            value={50}
-            // sign="+"
-            label="Milestones"
-            primaryColor="text-primary"
-            secondaryColor="text-secondary"
-            size={100}
-            strokeWidth={4}
-            textSize="text-4xl"
-          /> */}
-          <div></div>
           <CircularProgressBar
             value={70}
             label="Happy Clients"
