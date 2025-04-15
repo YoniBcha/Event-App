@@ -36,6 +36,7 @@ function PackageDetails({
   };
 
   const [selectedImage, setSelectedImage] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   React.useEffect(() => {
     if (packageData?.eventPackage?.image?.length > 0) {
@@ -53,16 +54,23 @@ function PackageDetails({
     }
   };
 
-  // Framer Motion Variants
-  const imageVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { opacity: 1, scale: 1 },
-  };
+  const getDescription = () => {
+    const fullDescription = renderValue(
+      packageData?.eventPackage?.description,
+      packageData?.eventPackage?.translatedDescription
+    ).replace(/\n/g, "<br />");
 
-  // const buttonVariants = {
-  //   hover: { scale: 1.05 },
-  //   tap: { scale: 0.95 },
-  // };
+    if (
+      typeof window !== "undefined" &&
+      window.innerWidth < 768 &&
+      !isExpanded
+    ) {
+      return fullDescription.length > 150
+        ? `${fullDescription.substring(0, 150)}...`
+        : fullDescription;
+    }
+    return fullDescription;
+  };
 
   return (
     <motion.div
@@ -92,65 +100,6 @@ function PackageDetails({
             onClick={handleNextClick}
           >
             <div className="flex flex-col w-full lg:w-1/2 md:w-3/4 h-full">
-              {/* <div
-                className="flex flex-col w-full"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="min-h-[200px] w-full rounded bg-slate-500 flex items-center justify-center relative overflow-hidden">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={selectedImage}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                      variants={imageVariants}
-                      transition={{ duration: 0.3 }}
-                      className="w-full h-full"
-                    >
-                      {selectedImage ? (
-                        <Image
-                          src={selectedImage}
-                          alt="Selected"
-                          fill
-                          className="object-fill rounded"
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          priority
-                        />
-                      ) : (
-                        <span>Select an image</span>
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-              </div> */}
-
-              {/* Thumbnail Grid */}
-              {/* <div
-                className="py-2 grid grid-cols-4 gap-2"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {packageData.eventPackage.image.map(
-                  (imageUrl: any, index: any) => (
-                    <motion.div
-                      key={index}
-                      className="rounded cursor-pointer overflow-hidden relative aspect-square w-full"
-                      onClick={() => handleImageClick(imageUrl)}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Image
-                        src={imageUrl}
-                        alt={`Image ${index + 1}`}
-                        fill
-                        className="object-cover rounded"
-                        sizes="(max-width: 768px) 25vw, 12.5vw"
-                      />
-                    </motion.div>
-                  )
-                )}
-              </div> */}
-
-              {/* Additions Section */}
               <div
                 className="justify-center relative items-center grid grid-cols-1 gap-3 border backdrop-blur-xl bg-white/70 border-white rounded-lg  pt-1 w-full"
                 onClick={(e) => e.stopPropagation()}
@@ -224,67 +173,6 @@ function PackageDetails({
                 </span>{" "}
               </div>
 
-              {/* <AnimatePresence>
-                {isModalOpen && (
-                  <motion.div
-                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <motion.div
-                      className="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg"
-                      initial={{ scale: 0.9 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0.9 }}
-                    >
-                      <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-primary">
-                          {renderValue(
-                            selectedItem?.typeName,
-                            selectedItem?.translatedTypeName
-                          )}
-                        </h2>
-                        <button
-                          onClick={() => setIsModalOpen(false)}
-                          className="text-gray-500 hover:text-gray-700"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-2">
-                          <Image
-                            src={selectedItem?.typePicture}
-                            width={60}
-                            height={60}
-                            alt={selectedItem?.typeName}
-                            className=""
-                          />
-                        </div>
-                        <div className="text-gray-600">
-                          {renderValue(
-                            selectedItem?.description,
-                            selectedItem?.translatedDescription
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence> */}
-
               <AnimatePresence>
                 {isModalOpen && (
                   <motion.div
@@ -352,12 +240,27 @@ function PackageDetails({
                   className="mt-2 p-2 text-sm md:text-base overflow-hidden"
                   style={{ wordWrap: "break-word" }}
                   dangerouslySetInnerHTML={{
-                    __html: renderValue(
-                      packageData.eventPackage.description,
-                      packageData.eventPackage.translatedDescription
-                    ).replace(/\n/g, "<br />"),
+                    __html: getDescription(),
                   }}
                 />
+                {typeof window !== "undefined" &&
+                  window.innerWidth < 570 &&
+                  renderValue(
+                    packageData?.eventPackage?.description,
+                    packageData?.eventPackage?.translatedDescription
+                  ).length > 50 && (
+                    <button
+                      onClick={(e) => {
+                        setIsExpanded(!isExpanded);
+                        e.stopPropagation();
+                      }}
+                      className="text-primary font-semibold text-sm mt-1"
+                    >
+                      {isExpanded
+                        ? translations.see_less
+                        : translations.see_more}
+                    </button>
+                  )}
               </div>
             </motion.div>
           </motion.div>
@@ -392,36 +295,7 @@ function PackageDetails({
             )}
           </span>
         </motion.button>
-        {/* <motion.button
-          onClick={onBack}
-          className="back-btn flex items-center p-2 hover:bg-secondary rounded-lg border border-primary text-primary cursor-pointer"
-          variants={{
-            hover: {
-              scale: 1.05,
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-              borderColor: "#a57a6a",
-              transition: { duration: 0.2, ease: "easeInOut" },
-            },
-            tap: {
-              scale: 0.95,
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-              transition: { duration: 0.1, ease: "easeInOut" },
-            },
-          }}
-          whileHover="hover"
-          whileTap="tap"
-        >
-          <span className="mr-2">
-            {currentLocale === "ar" ? (
-              <FaChevronRight /> // Right arrow for Arabic
-            ) : (
-              <FaChevronLeft /> // Left arrow for English
-            )}
-          </span>
-          <span>{translations.booking.backBtn}</span>
-        </motion.button> */}
 
-        {/* Next Button */}
         <motion.button
           onClick={handleNextClick}
           className=" flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"

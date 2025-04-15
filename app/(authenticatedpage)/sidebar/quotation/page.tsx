@@ -219,16 +219,15 @@ function Quotation() {
           {/* Total Price Table */}
           <div className="flex flex-row justify-between">
             {/* First Column */}
-            <div
+            <div></div>
+            {/* <div
               id="download-section"
               className="flex flex-col justify-between"
             >
               {" "}
-              {/* Add ID for exclusion */}
-              {/* Top Div */}
+            
               <div className="print-button no-pdf">
-                {" "}
-                {/* Add class for exclusion */}
+       
                 <input
                   type="checkbox"
                   checked={showTerms}
@@ -241,16 +240,9 @@ function Quotation() {
               {errorMessage && !showTerms && (
                 <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
               )}
-              {/* Bottom Div */}
-              <div className="flex justify-center">
-                <div
-                  className="rounded-xl bg-primary mt-2 text-white px-10 py-1 w-fit cursor-pointer print-button no-pdf" // Add class for exclusion
-                  onClick={handleDownload}
-                >
-                  {translations.download}
-                </div>
-              </div>
-            </div>
+               
+              
+            </div> */}
 
             {/* Second Column - Table */}
             <div className="rounded-lg p-4">
@@ -315,31 +307,37 @@ function Quotation() {
           </div>
 
           {/* Terms and Conditions Section */}
-          {showTerms && (
-            <div className="mt-6 p-4 border-t border-gray-100">
-              <h2 className="text-center text-xl font-bold underline">
-                {translations.terms.title}
-              </h2>
-              <ul className="list-disc text-primary pl-6 mt-4">
-                {Array.isArray(translations.terms.items) &&
-                  translations.terms.items.map(
-                    (item: string, index: number) => <li key={index}>{item}</li>
-                  )}
-              </ul>
-              <div className="flex justify-between mt-6">
-                <div>
-                  <p className="font-semibold">
-                    {translations.client_signature}
-                  </p>
-                  <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
-                </div>
-                <div>
-                  <p className="font-semibold">{translations.fenzo_events}</p>
-                  <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
-                </div>
+
+          <div className="mt-6 p-4 border-t border-gray-100">
+            <h2 className="text-center text-xl font-bold underline">
+              {translations.terms.title}
+            </h2>
+            <ul className="list-disc text-primary pl-6 mt-4">
+              {Array.isArray(translations.terms.items) &&
+                translations.terms.items.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))}
+            </ul>
+            <div className="flex justify-between mt-6">
+              <div>
+                <p className="font-semibold">{translations.client_signature}</p>
+                <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
+              </div>
+              <div>
+                <p className="font-semibold">{translations.fenzo_events}</p>
+                <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
               </div>
             </div>
-          )}
+          </div>
+
+          <div className="flex justify-center">
+            <div
+              className="rounded-xl bg-primary mt-2 text-white px-10 py-1 w-fit cursor-pointer print-button no-pdf" // Add class for exclusion
+              onClick={handleDownload}
+            >
+              {translations.download}
+            </div>
+          </div>
         </div>
       </div>
     </div>

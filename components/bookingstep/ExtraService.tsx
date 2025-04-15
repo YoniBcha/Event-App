@@ -418,12 +418,17 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                           pkg.translatedPackageName
                         )}
                       </p>
-                      <p className="text-primary text-sm">
+
+                      <div
+                        className="text-primary text-sm"
+                        style={{ whiteSpace: "pre-line" }}
+                      >
                         {renderValue(
                           pkg.packageDescription,
                           pkg.translatedPackageDescription
                         )}
-                      </p>
+                      </div>
+
                       <p className="text-primary font-bold text-lg">
                         <span className="flex font-extrabold items-center gap-1">
                           {pkg.packagePrice}{" "}

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -82,6 +82,44 @@ const MyOrdersContent = () => {
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const submitButtonRef = useRef<HTMLDivElement>(null);
+  const [hasScrolledToButton, setHasScrolledToButton] = useState(false);
+
+  // Scroll handler
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (submitButtonRef.current && !hasScrolledToButton && !acceptedTerms) {
+  //       const buttonRect = submitButtonRef.current.getBoundingClientRect();
+  //       const isVisible = buttonRect.top <= window.innerHeight * 0.75; // When 75% of viewport scrolled
+
+  //       if (isVisible) {
+  //         setShowTermsModal(true);
+  //         setHasScrolledToButton(true);
+  //         // Remove listener after first trigger
+  //         window.removeEventListener("scroll", handleScroll);
+  //       }
+  //     }
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, [acceptedTerms, hasScrolledToButton]);
+
+  // Also check on initial render if already scrolled
+  // useEffect(() => {
+  //   if (submitButtonRef.current && !acceptedTerms) {
+  //     const buttonRect = submitButtonRef.current.getBoundingClientRect();
+  //     const isVisible = buttonRect.top <= window.innerHeight;
+
+  //     if (isVisible) {
+  //       setShowTermsModal(true);
+  //       setHasScrolledToButton(true);
+  //     }
+  //   }
+  // }, [acceptedTerms]);
+
   useEffect(() => {
     let payloadParam = searchParams.get("payload");
 
@@ -246,7 +284,6 @@ const MyOrdersContent = () => {
               ))}
             </div>
           </div>
-
           {/* Package Additions */}
           <div className="bg-secondary p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
@@ -259,7 +296,7 @@ const MyOrdersContent = () => {
                     <span className="font-medium text-gray-600">
                       {translations.booking.addition} {index + 1}:
                     </span>
-                    <span className="ml-2 text-gray-800">
+                    <span className=" flex text-center text-gray-800">
                       {renderValue(
                         addition.additionTypeName,
                         addition.translatedTypeName
@@ -275,7 +312,6 @@ const MyOrdersContent = () => {
               )}
             </div>
           </div>
-
           {/* Extra Services */}
           <div className="bg-secondary p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
@@ -303,7 +339,6 @@ const MyOrdersContent = () => {
               )}
             </div>
           </div>
-
           {/* Personal Data */}
           <div className="bg-secondary p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
@@ -338,9 +373,9 @@ const MyOrdersContent = () => {
                           />
                         )
                       )}
-                      <span>
+                      {/* <span>
                         {payloads.personalData.favoriteColors.join(", ")}
-                      </span>
+                      </span> */}
                     </div>
                   ),
                 },
@@ -356,7 +391,7 @@ const MyOrdersContent = () => {
                           title={color}
                         />
                       ))}
-                      <span>{payloads.personalData.dressColor.join(", ")}</span>
+                      {/* <span>{payloads.personalData.dressColor.join(", ")}</span> */}
                     </div>
                   ),
                 },
@@ -382,7 +417,6 @@ const MyOrdersContent = () => {
               ))}
             </div>
           </div>
-
           {/* Images of Place */}
           <div className="bg-secondary p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
@@ -407,7 +441,6 @@ const MyOrdersContent = () => {
               ))}
             </div>
           </div>
-
           {/* Price Details */}
           <div className="bg-secondary p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
@@ -415,134 +448,298 @@ const MyOrdersContent = () => {
             </h2>
             <div className="text-gray-700 space-y-3">
               {/* Event Package */}
-              <div className="flex items-center">
-                <span className="font-medium text-gray-600 w-48">
+              <div className="flex flex-col items-center">
+                <span className="font-medium flex w-full text-start text-gray-600 ">
                   {translations.booking.eventPackage}:
                 </span>
-                <span className="text-gray-800 flex items-center">
-                  {renderValue(
-                    payloads.priceDetails.eventPackage.name,
-                    payloads.priceDetails.eventPackage.translatedPackageName
-                  )}{" "}
-                  ({payloads.priceDetails.eventPackage.price}{" "}
-                  <Image
-                    src="/images/SR.png"
-                    alt="SR"
-                    width={15}
-                    height={3}
-                    className={`ml-1 ${
-                      currentLocale === "ar" ? "scale-x-[-1]" : ""
-                    }`}
-                  />
-                  )
-                </span>
+                <table className="w-full  rounded-lg overflow-hidden">
+                  <thead className="bg-primary">
+                    <tr className="bg-primary-50">
+                      <th className="py-3 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
+                        {translations.booking.package}
+                      </th>
+                      <th className="py-3 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
+                        {translations.booking.price}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="border border-gray-200">
+                    <tr className=" border-b border-gray-200">
+                      <td className="py-3 px-4">
+                        {renderValue(
+                          payloads.priceDetails.eventPackage.name,
+                          payloads.priceDetails.eventPackage
+                            .translatedPackageName
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <span className="flex items-center justify-end">
+                          {payloads.priceDetails.eventPackage.price}
+                          <Image
+                            src="/images/SR.png"
+                            alt="SR"
+                            width={15}
+                            height={3}
+                            className={`ml-1 ${
+                              currentLocale === "ar" ? "scale-x-[-1]" : ""
+                            }`}
+                          />
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
 
               {/* Additions */}
-              <div className="flex items-center">
-                <span className="font-medium text-gray-600 w-48">
-                  {translations.booking.addition}:{" "}
-                </span>
-                <span className="text-gray-800">
-                  {payloads.priceDetails.additions
-                    .map((addition: any) =>
-                      renderValue(
-                        `${addition.name} - ${addition.type} (${addition.quantity} x ${addition.unitPrice} = ${addition.totalPrice})`,
-                        `${addition.translatedAdditionName} ${addition.translatedTypeName} (${addition.quantity} x ${addition.unitPrice} = ${addition.totalPrice})`
-                      )
-                    )
-                    .join(", ")}
-                </span>
-              </div>
+              {payloads.priceDetails.additions.length > 0 && (
+                <div className="flex flex-col items-center">
+                  <span className="font-medium w-full flex text-start text-gray-600 ">
+                    {translations.booking.addition}:{" "}
+                  </span>
+                  <table className="w-full  rounded-lg overflow-hidden">
+                    <thead>
+                      <tr className="bg-primary">
+                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
+                          {translations.booking.addition}
+                        </th>
+                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
+                          {translations.booking.type}
+                        </th>
+                        <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
+                          {translations.booking.quantity}
+                        </th>
+                        <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
+                          {translations.booking.unit_price}
+                        </th>
+                        <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
+                          {translations.booking.total}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="border border-gray-200">
+                      {payloads.priceDetails.additions.map(
+                        (addition: any, index: number) => (
+                          <tr
+                            key={index}
+                            className={`${
+                              index !==
+                              payloads.priceDetails.additions.length - 1
+                                ? "border-b border-gray-200"
+                                : ""
+                            }`}
+                          >
+                            <td className="py-2 px-4">
+                              {renderValue(
+                                addition.name,
+                                addition.translatedAdditionName
+                              )}
+                            </td>
+                            <td className="py-2 px-4">
+                              {renderValue(
+                                addition.type,
+                                addition.translatedTypeName
+                              )}
+                            </td>
+                            <td className="py-2 px-4 text-right">
+                              {addition.quantity}
+                            </td>
+                            <td className="py-2 px-4 flex flex-row items-center justify-center text-right">
+                              {addition.unitPrice}
+                              <Image
+                                src="/images/SR.png"
+                                alt="SR"
+                                width={15}
+                                height={3}
+                                className={`ml-1 inline ${
+                                  currentLocale === "ar" ? "scale-x-[-1]" : ""
+                                }`}
+                              />
+                            </td>
+                            <td className="py-2 px-4  text-right">
+                              {addition.totalPrice}
+                              <Image
+                                src="/images/SR.png"
+                                alt="SR"
+                                width={15}
+                                height={3}
+                                className={`ml-1 inline ${
+                                  currentLocale === "ar" ? "scale-x-[-1]" : ""
+                                }`}
+                              />
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
 
               {/* Extra Services */}
-              <div className="flex items-center">
-                <span className="font-medium text-gray-600 w-48">
-                  {translations.booking.extraServices}:
-                </span>
-                <span className="text-gray-800">
-                  {payloads.priceDetails.extraServices
-                    .map((service: any) =>
-                      renderValue(
-                        `${service.package} (${service.price}) - ${service.provider}`,
-                        `${service.translatedPackageName} (${service.price}  ) - ${service.provider}`
-                      )
-                    )
-                    .join(", ")}
-                </span>
-              </div>
+              {payloads.priceDetails.extraServices.length > 0 && (
+                <div className="flex flex-col items-center">
+                  <span className="font-medium w-full flex text-start text-gray-600 ">
+                    {translations.booking.extraServices}:
+                  </span>
+                  <table className="w-full  rounded-lg overflow-hidden">
+                    <thead>
+                      <tr className="bg-primary">
+                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
+                          {translations.booking.service}
+                        </th>
+                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
+                          {translations.booking.provider}
+                        </th>
+                        <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
+                          {translations.booking.price}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="border border-gray-200">
+                      {payloads.priceDetails.extraServices.map(
+                        (service: any, index: number) => (
+                          <tr
+                            key={index}
+                            className={`${
+                              index !==
+                              payloads.priceDetails.extraServices.length - 1
+                                ? "border-b border-gray-200"
+                                : ""
+                            }`}
+                          >
+                            <td className="py-2 px-4">
+                              {renderValue(
+                                service.package,
+                                service.translatedPackageName
+                              )}
+                            </td>
+                            <td className="py-2 px-4">{service.provider}</td>
+                            <td className="py-2 px-4 text-right">
+                              {service.price}
+                              <Image
+                                src="/images/SR.png"
+                                alt="SR"
+                                width={15}
+                                height={3}
+                                className={`ml-1 inline ${
+                                  currentLocale === "ar" ? "scale-x-[-1]" : ""
+                                }`}
+                              />
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
 
               {/* Total Price Before VAT */}
-              <div className="flex items-center">
-                <span className="font-medium text-gray-600 w-48">
-                  {translations.total_price_before_vat}:
-                </span>
-                <span className="text-gray-800 flex items-center">
-                  {payloads.priceBeforeVat}{" "}
-                  <Image
-                    src="/images/SR.png"
-                    alt="SR"
-                    width={15}
-                    height={3}
-                    className={`ml-1 ${
-                      currentLocale === "ar" ? "scale-x-[-1]" : ""
-                    }`}
-                  />
-                </span>
-              </div>
+              <div className="flex flex-row w-full items-center justify-center">
+                <div className="w-1/2"></div>
+                <table className="w-1/2">
+                  <tbody className="w-full border border-gray-200 rounded-lg overflow-hidden">
+                    {/* Total Price Before VAT */}
+                    <tr className="border-b border-gray-200">
+                      <td className="py-2 pl-4 border-r border-gray-200">
+                        <span className="font-medium text-gray-600">
+                          {translations.total_price_before_vat}:
+                        </span>
+                      </td>
+                      <td className="py-2 pr-4 text-right">
+                        <span className="text-gray-800 flex items-center justify-end">
+                          {payloads.priceBeforeVat}
+                          <Image
+                            src="/images/SR.png"
+                            alt="SR"
+                            width={15}
+                            height={3}
+                            className={`ml-1 ${
+                              currentLocale === "ar" ? "scale-x-[-1]" : ""
+                            }`}
+                          />
+                        </span>
+                      </td>
+                    </tr>
 
-              {/* VAT Amount */}
-              <div className="flex items-center">
-                <span className="font-medium text-gray-600 w-48">
-                  {translations.vat_15}:
-                </span>
-                <span className="text-gray-800 flex items-center">
-                  {payloads.vatAmount}{" "}
-                  <Image
-                    src="/images/SR.png"
-                    alt="SR"
-                    width={15}
-                    height={3}
-                    className={`ml-1 ${
-                      currentLocale === "ar" ? "scale-x-[-1]" : ""
-                    }`}
-                  />
-                </span>
-              </div>
+                    {/* VAT Amount */}
+                    <tr className="border-b border-gray-200">
+                      <td className="py-2 pl-4 border-r border-gray-200">
+                        <span className="font-medium text-gray-600">
+                          {translations.vat_15}:
+                        </span>
+                      </td>
+                      <td className="py-2 pr-4 text-right">
+                        <span className="text-gray-800 flex items-center justify-end">
+                          {payloads.vatAmount}
+                          <Image
+                            src="/images/SR.png"
+                            alt="SR"
+                            width={15}
+                            height={3}
+                            className={`ml-1 ${
+                              currentLocale === "ar" ? "scale-x-[-1]" : ""
+                            }`}
+                          />
+                        </span>
+                      </td>
+                    </tr>
 
-              {/* Total Price After VAT */}
-              <div className="flex items-center">
-                <span className="font-medium text-gray-600 w-48">
-                  {translations.total_price_after_vat}:
-                </span>
-                <span className="text-gray-800 flex items-center">
-                  {payloads.priceAfterVat}{" "}
-                  <Image
-                    src="/images/SR.png"
-                    alt="SR"
-                    width={15}
-                    height={3}
-                    className={`ml-1 ${
-                      currentLocale === "ar" ? "scale-x-[-1]" : ""
-                    }`}
-                  />
-                </span>
+                    {/* Total Price After VAT */}
+                    <tr>
+                      <td className="py-2 pl-4 border-r border-gray-200">
+                        <span className="font-medium text-gray-600">
+                          {translations.total_price_after_vat}:
+                        </span>
+                      </td>
+                      <td className="py-2 pr-4 text-right">
+                        <span className="text-gray-800 flex items-center justify-end">
+                          {payloads.priceAfterVat}
+                          <Image
+                            src="/images/SR.png"
+                            alt="SR"
+                            width={15}
+                            height={3}
+                            className={`ml-1 ${
+                              currentLocale === "ar" ? "scale-x-[-1]" : ""
+                            }`}
+                          />
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-center space-x-4">
+          <div
+            ref={submitButtonRef}
+            className="flex justify-center space-x-4 mt-8 scroll-mt-16" // Added scroll-margin
+          >
             <motion.button
-              onClick={handleSubmit}
+              onClick={() => {
+                // if (!acceptedTerms) {
+                //   setShowTermsModal(true);
+                //   // Scroll to terms if not visible
+                //   submitButtonRef.current?.scrollIntoView({
+                //     behavior: "smooth",
+                //   });
+                //   toast.error(translations.booking.mustAcceptTerms);
+                //   return;
+                // }
+                handleSubmit();
+              }}
               disabled={isLoading}
-              className={`px-3 py-2 rounded-xl text-lg hover:bg-secondary hover:text-primary font-semibold ${
+              className={`px-3 py-2 rounded-xl text-lg font-semibold transition-colors ${
                 isLoading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-primary hover:bg-primary-dark text-secondary"
-              } transition-colors duration-200`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              }`}
+              whileHover={!isLoading ? { scale: 1.05 } : {}}
+              whileTap={!isLoading ? { scale: 0.95 } : {}}
             >
               {isLoading
                 ? translations.booking.submitting
@@ -590,8 +787,100 @@ const MyOrdersContent = () => {
           </motion.button>
         </div>
       </Modal>
+      {/* Terms and Conditions */}
     </div>
   );
 };
 
 export default MyOrders;
+
+//  <Modal
+//    isOpen={showTermsModal}
+//    onClose={() => {
+//      if (!acceptedTerms) {
+//        toast.error(translations.booking.mustAcceptTerms);
+//      } else {
+//        setShowTermsModal(false);
+//      }
+//    }}
+//  >
+//    <div className="  bg-white flex flex-col items-center p-8 rounded-lg max-w-4xl max-h-[80vh] overflow-y-auto">
+//      <h2 className="text-2xl font-bold  ">
+//        {translations.booking.termsAndConditions}
+//      </h2>
+
+//      {/* Terms content */}
+//      <div className="  p-4   border-gray-100">
+//        <h2 className="text-center text-xl font-bold underline">
+//          {translations.terms.title}
+//        </h2>
+//        <ul className="list-disc text-primary pl-6 mt-4">
+//          {Array.isArray(translations.terms.items) &&
+//            translations.terms.items.map((item: string, index: number) => (
+//              <li key={index}>{item}</li>
+//            ))}
+//        </ul>
+//      </div>
+
+//      <label className="flex items-center cursor-pointer">
+//        <div className="relative">
+//          <input
+//            type="checkbox"
+//            id="modalAcceptTerms"
+//            checked={acceptedTerms}
+//            onChange={(e) => {
+//              setAcceptedTerms(e.target.checked);
+//              if (e.target.checked) {
+//                toast.success(translations.booking.termsAccepted);
+//              }
+//            }}
+//            className="sr-only" // Hide the default checkbox
+//          />
+//          <div
+//            className={`block w-5 h-5 rounded border-2 border-primary ${
+//              acceptedTerms ? "bg-primary" : "bg-white"
+//            }`}
+//          >
+//            {acceptedTerms && (
+//              <svg
+//                className="absolute inset-0 w-5 h-5 text-white"
+//                viewBox="0 0 20 20"
+//                fill="none"
+//              >
+//                <path
+//                  d="M6 10L9 13L14 7"
+//                  stroke="currentColor"
+//                  strokeWidth="2"
+//                  strokeLinecap="round"
+//                  strokeLinejoin="round"
+//                />
+//              </svg>
+//            )}
+//          </div>
+//        </div>
+//        <span className="ml-2 text-gray-700">
+//          {translations.booking.iAgreeToTerms}
+//        </span>
+//      </label>
+
+//      <div className="flex justify-center gap-4">
+//        <button
+//          onClick={() => {
+//            if (acceptedTerms) {
+//              setShowTermsModal(false);
+//            } else {
+//              toast.error(translations.booking.mustAcceptTerms);
+//            }
+//          }}
+//          className={`px-6 py-2 rounded-lg transition-colors ${
+//            acceptedTerms
+//              ? "bg-primary text-white hover:bg-primary-dark"
+//              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+//          }`}
+//          disabled={!acceptedTerms}
+//        >
+//          {translations.booking.continueToOrder}
+//        </button>
+//      </div>
+//    </div>
+//  </Modal>;

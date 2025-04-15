@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import Image from "next/image";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -88,14 +89,32 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
                     <td className="border-r px-4 py-2 font-medium">
                       {renderValue(item.type, item.translatedTypeName)}
                     </td>
-                    <td className="border-r px-4 py-2 font-medium">
-                      {item.unitPrice}
+                    <td className="border-r px-4 flex flex-row items-center justify-center py-2 font-medium">
+                      {item.unitPrice}{" "}
+                      <Image
+                        src="/images/SR.png"
+                        alt="SR"
+                        width={10}
+                        height={10}
+                        className={`ml-1 ${
+                          currentLocale === "ar" ? "scale-x-[-1]" : ""
+                        }`}
+                      />
                     </td>
                     <td className="border-r px-4 py-2 font-medium">
                       {item.quantity}
                     </td>
-                    <td className="border-r px-4 py-2 font-medium">
-                      {item.totalPrice}
+                    <td className="border-r px-4 flex flex-row items-center justify-center py-2 font-medium">
+                      {item.totalPrice}{" "}
+                      <Image
+                        src="/images/SR.png"
+                        alt="SR"
+                        width={10}
+                        height={10}
+                        className={`ml-1 ${
+                          currentLocale === "ar" ? "scale-x-[-1]" : ""
+                        }`}
+                      />
                     </td>
                   </tr>
                 ))
@@ -148,8 +167,17 @@ const BulkTable2: React.FC<BulkTable2Props> = ({
                       )}
                       {}
                     </td>
-                    <td className="border-r px-4 py-2 font-medium">
-                      {service.price}
+                    <td className="border-r px-4 py-2 flex flex-row items-center justify-center font-medium">
+                      {service.price}{" "}
+                      <Image
+                        src="/images/SR.png"
+                        alt="SR"
+                        width={10}
+                        height={10}
+                        className={`ml-1 ${
+                          currentLocale === "ar" ? "scale-x-[-1]" : ""
+                        }`}
+                      />
                     </td>
                     <td className="border-r px-4 py-2 font-medium">
                       {service.provider}

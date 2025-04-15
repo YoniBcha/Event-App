@@ -344,3 +344,17 @@ body::after {
 .print-button {
   display: block !important;
 }
+
+/* In your global CSS */
+.p-calendar {
+  width: 100%;
+}
+
+.p-calendar .p-inputtext {
+  border: 1px solid var(--primary-color);
+  border-radius: 0.375rem;
+}
+
+.p-calendar .p-datepicker {
+  border: 1px solid var(--primary-color);
+}

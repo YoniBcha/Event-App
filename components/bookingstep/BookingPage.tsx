@@ -90,6 +90,7 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
           eventRequire: string;
           dateRequire: string;
           event_is_required: string;
+          selectLocationType: string;
         };
       };
     };
@@ -382,12 +383,20 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                   <AnimatePresence>
                     {showPlaceDropdown && (
                       <motion.div
-                        className="absolute top-full mt-2 w-full bg-secondary border border-[#d4c9c0] rounded-lg shadow-lg z-10"
+                        className="absolute top-full mt-2 w-full bg-secondary border border-gray-200 rounded-lg shadow-lg z-10 overflow-hidden"
                         variants={dropdownVariants}
                         initial="hidden"
                         animate="visible"
                         exit="hidden"
                       >
+                        {/* Section Header */}
+                        <div className="px-4 py-2 bg-primary/10 border-b border-gray-200">
+                          <h3 className="font-medium text-primary">
+                            {translations.booking.selectLocationType}
+                          </h3>
+                        </div>
+
+                        {/* Location Options */}
                         {["outdoor", "indoor", "both"].map((place) => {
                           const placeData = places.find(
                             (p) => p.value === place
@@ -395,22 +404,103 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
                           return (
                             <label
                               key={place}
-                              className="flex items-center gap-2 p-2 hover:bg-primary cursor-pointer"
+                              className={`flex items-center gap-3 p-3 hover:bg-primary/10 cursor-pointer transition-colors ${
+                                selectedPlace === place ? "bg-primary" : ""
+                              }`}
                             >
+                              <div className="flex items-center">
+                                {/* Custom styled radio button */}
+                                <div
+                                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                                    selectedPlace === place
+                                      ? "border-secondary bg-primary"
+                                      : "border-secondary bg-primary "
+                                  }`}
+                                >
+                                  {selectedPlace === place && (
+                                    <div className="w-2 h-2 rounded-full bg-secondary"></div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Location Icon and Text */}
+                              <div className="flex items-center gap-2">
+                                {/* Icon based on location type */}
+                                {place === "indoor" && (
+                                  <svg
+                                    className={`w-5 h-5 ${
+                                      selectedPlace === place
+                                        ? "text-secondary"
+                                        : "text-primary"
+                                    }`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                                    />
+                                  </svg>
+                                )}
+                                {place === "outdoor" && (
+                                  <svg
+                                    className={`w-5 h-5 ${
+                                      selectedPlace === place
+                                        ? "text-secondary"
+                                        : "text-primary"
+                                    }`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                                    />
+                                  </svg>
+                                )}
+                                {place === "both" && (
+                                  <svg
+                                    className={`w-5 h-5 ${
+                                      selectedPlace === place
+                                        ? "text-secondary"
+                                        : "text-primary"
+                                    }`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M8 7l4-4m0 0l4 4m-4-4v18m-3-3H5a2 2 0 01-2-2V6a2 2 0 012-2h4m6 0h4a2 2 0 012 2v10a2 2 0 01-2 2h-4"
+                                    />
+                                  </svg>
+                                )}
+
+                                <span className="text-gray-800">
+                                  {currentLocale === "ar" &&
+                                  placeData?.translatedLabel
+                                    ? placeData.translatedLabel
+                                    : placeData?.label}
+                                </span>
+                              </div>
+
+                              {/* Hidden actual radio input for form submission */}
                               <input
-                                type="checkbox"
+                                type="radio"
                                 name="place"
-                                value={place} // Always use English for value
+                                value={place}
                                 checked={selectedPlace === place}
                                 onChange={() => handlePlaceChange(place)}
-                                className="mr-2 w-4 h-4 border border-[#c2937b] rounded-sm appearance-none checked:bg-primary checked:border-[#685651]"
+                                className="sr-only"
                               />
-                              <span className="text-[#685651]">
-                                {currentLocale === "ar" &&
-                                placeData?.translatedLabel
-                                  ? placeData.translatedLabel
-                                  : placeData?.label}
-                              </span>
                             </label>
                           );
                         })}

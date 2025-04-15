@@ -10,6 +10,7 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { Dropdown } from "primereact/dropdown";
+import DatePicker from "react-datepicker";
 
 interface PersonalData {
   fullName: string;
@@ -21,7 +22,9 @@ interface PersonalData {
   imageOfPlace: string[]; // Store URLs instead of File objects
   dressColor: string[];
   place: string;
+  age?: number;
   length: number;
+  birthDate?: string; // Optional field for birth date
 }
 
 interface PersonalDataProps {
@@ -42,6 +45,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           notes: "",
           noOfPeople: 1,
           place: "",
+          age: "",
           imageOfPlace: [], // Initialize as empty array for URLs
         };
   });
@@ -100,6 +104,10 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     imageOfPlace: Yup.array().of(
       Yup.string().required(`${translations.booking.an_image_URL_is_required}`)
     ),
+    birthDate: Yup.date()
+      .nullable()
+      .max(new Date(), `${translations.booking.birth_date_cannot_be_in_future}`)
+      .optional(),
   });
 
   useEffect(() => {
@@ -295,6 +303,21 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     }
   };
 
+  const calculateAge = (birthDate: Date): number => {
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  };
+
   return (
     <motion.div
       className="flex items-center justify-center h-full max-[500px]:p-1 p-4"
@@ -388,7 +411,46 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               </div>
             )}
           </motion.div>
-
+          {/* Birth Date (Optional) */}
+          <motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              {translations.booking.birth_date} (Optional)
+            </label>
+            <DatePicker
+              selected={
+                formData.birthDate ? new Date(formData.birthDate) : null
+              }
+              onChange={(date: Date | null) => {
+                setFormData({
+                  ...formData,
+                  birthDate: date
+                    ? date.toISOString().split("T")[0]
+                    : undefined,
+                  age: date ? calculateAge(date) : undefined,
+                });
+              }}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Select birth date"
+              className={`w-full p-2 border rounded ${
+                errors.birthDate ? "border-red-500" : "border-primary"
+              }`}
+              maxDate={new Date()} // Can't select future dates
+              showYearDropdown
+              scrollableYearDropdown
+              yearDropdownItemNumber={100}
+              dropdownMode="select"
+            />
+            {formData.age && (
+              <div className="text-sm text-gray-500 mt-1">
+                Age: {formData.age} years
+              </div>
+            )}
+          </motion.div>
           {/* Number of People Invited */}
           <motion.div
             className="flex flex-col"

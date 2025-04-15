@@ -78,6 +78,7 @@ interface RootState {
         event: string;
         package: string;
         eventDesign: string;
+        deposite: string;
         city: string;
         quotation: string;
         date: string;
@@ -386,12 +387,12 @@ const BookedEvents = () => {
                   ] || event.orderStatus
                 : event.orderStatus}
             </div>
-            {event.orderStatus === "completed" && (
+            {event.orderStatus === "pending" && (
               <button
                 className="bg-green-500 w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg hover:bg-green-600 text-center md:py-2 md:rounded-xl md:text-lg"
                 onClick={handlePaymentClick}
               >
-                {translations.booking.pay}
+                {translations.booking.deposite}
               </button>
             )}
             {event.orderStatus === "pending" && (
@@ -492,8 +493,12 @@ const BookedEvents = () => {
       <PaymentModal
         isOpen={isPaymentModalOpen}
         onClose={handleCloseModal}
-        name="Sample Name"
+        name="Bank Name"
         accountNumber="1904637294923"
+        onPaymentComplete={(receiptUrls) => {
+          // Handle the uploaded receipt URLs
+          console.log("Receipts uploaded:", receiptUrls);
+        }}
       />
       {/* Reject Confirmation Modal */}
       {isRejectModalOpen && (

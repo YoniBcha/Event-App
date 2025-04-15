@@ -156,7 +156,7 @@ const BulkTable: React.FC<BulkTableProps> = ({
                             className="w-4 h-4 border sm:w-6 sm:h-6"
                             style={{ backgroundColor: color }}
                           ></div>
-                          <span className="text-xs sm:text-sm">{color}</span>
+                          {/* <span className="text-xs sm:text-sm">{color}</span> */}
                         </div>
                       ))}
                     </div>
