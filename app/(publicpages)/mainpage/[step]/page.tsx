@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
@@ -47,6 +48,8 @@ export default function MainPage() {
   const { step } = useParams<{ step: string }>();
   const currentStep = parseInt(step, 10); // Convert step to number
   const router = useRouter();
+  const [cartItems, setCartItems] = useState<Record<string, any>>({});
+  const [showCart, setShowCart] = useState(false);
   const dispatch = useDispatch();
   const [logoutUserMutation] = useLogoutUserMutation();
   const { data: userInfo, error: userInfoError } = useGetUserInfoQuery<any>({});
@@ -72,6 +75,42 @@ export default function MainPage() {
 
   // Retrieve state from sessionStorage on component mount
   const [loading, setLoading] = useState(true); // Add a loading state
+  useEffect(() => {
+    const updateCart = () => {
+      const items: Record<string, any> = {};
+
+      const bookingData = sessionStorage.getItem("bookingData");
+      if (bookingData) items.bookingData = JSON.parse(bookingData);
+
+      const selectedDesignId = sessionStorage.getItem("selectedDesignId");
+      if (selectedDesignId) items.selectedDesignId = selectedDesignId;
+
+      const selectedPackageId = sessionStorage.getItem("selectedPackageId");
+      if (selectedPackageId) items.selectedPackageId = selectedPackageId;
+
+      const eventPackageAdditions = sessionStorage.getItem(
+        "eventPackageAdditions"
+      );
+      if (eventPackageAdditions)
+        items.eventPackageAdditions = JSON.parse(eventPackageAdditions);
+
+      const extraServices = sessionStorage.getItem("extraServices");
+      if (extraServices) items.extraServices = JSON.parse(extraServices);
+
+      const personalData = sessionStorage.getItem("personalData");
+      if (personalData) items.personalData = JSON.parse(personalData);
+
+      setCartItems(items);
+    };
+    updateCart();
+    window.addEventListener("storage", updateCart);
+    return () => window.removeEventListener("storage", updateCart);
+  }, []);
+
+  const clearCart = () => {
+    sessionStorage.clear();
+    setCartItems({});
+  };
 
   useEffect(() => {
     // Retrieve state from sessionStorage

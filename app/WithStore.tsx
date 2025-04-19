@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { ReactNode, useEffect } from "react";
@@ -7,6 +8,9 @@ import store from "@/store/index";
 import { useGetThemeColorQuery } from "@/store/endpoints/apiSlice";
 import { fetchThemeFromAPI } from "@/store/themeSlice";
 import NetworkStatus from "@/components/NetworkStatus";
+import CartManager from "@/components/CartManager";
+import Cart from "@/components/Cart";
+
 // import SplashCursor from "@/components/animation/SplashCursor";
 
 interface WithStoreProps {
@@ -19,6 +23,7 @@ const WithStore = ({ children }: WithStoreProps) => {
       <Provider store={store}>
         <ThemeFetcherAndApplier />
         <NetworkStatus />
+        <CartManager />
         {children}
       </Provider>
     </div>

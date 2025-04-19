@@ -17,6 +17,10 @@ import { updateProfileEndpoints } from "./updateProfile";
 import { getSingleSelfBookedEventsEndpoints } from "./getSingleSelfBookedEventsEndpoints";
 import { getSingleDesignGalleryEndpoints } from "./getSingleDesignsGallery";
 import { cancelOrderEndpoints } from "./cancelOrderEndpoints";
+import { depositeEndpoints } from "./deposit";
+import { getMyDepositEndpoints } from "./getMyDeposits";
+import { getDepositAmountEndpoints } from "./getDepositeAmount";
+
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -45,12 +49,15 @@ export const apiSlice = createApi({
     ...getExtraServiceEndpoint(builder),
     ...contactUsEndpoints(builder),
     ...bookEventEndpoints(builder),
+    ...depositeEndpoints(builder),
+    ...getMyDepositEndpoints(builder),
     ...preBookEventEndpoints(builder),
     ...userEndpoints(builder),
     ...changePasswordEndpoints(builder),
     ...cancelOrderEndpoints(builder),
     ...updateProfileEndpoints(builder),
     ...getSingleSelfBookedEventsEndpoints(builder),
+    ...getDepositAmountEndpoints(builder),
     ...getSingleDesignGalleryEndpoints(builder),
     ...getSelfBookedEventsEndpoints(builder), // ✅ Added new API endpoint
   }),
@@ -70,13 +77,16 @@ export const {
   useGetPackageDetailQuery,
   useGetAdditionalEndpointsQuery,
   useGetExtraServiceQuery,
+  useDepositeMutation,
   useChangePasswordMutation,
   useUpdateProfileMutation,
   useContactUsMutation,
   useGetDancerQuery,
   useGetOrganizerQuery,
+  useGetDepositAmountQuery,
   useGetDjQuery,
   useGetUserInfoQuery,
+  useGetMyDepositQuery,
   useBookEventMutation,
   usePreBookEventMutation,
   useCancelOrderMutation,

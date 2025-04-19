@@ -15,6 +15,7 @@ import { FaUser, FaBoxOpen, FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
 import { FaHome, FaFileAlt, FaUsers, FaComments, FaBook } from "react-icons/fa";
 import { MdLanguage } from "react-icons/md";
 import { FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
+import Cart from "./Cart";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -237,7 +238,7 @@ function Header() {
         </div>
 
         {/* Right Side Icons (Language Toggle and Avatar) */}
-        <div className="sm:flex gap-3 items-center">
+        <div className="sm:flex   gap-3 items-center">
           <div className="sm:flex hidden">
             <div
               className={`flex justify-center items-center h-6 w-6 rounded-sm cursor-pointer ${
@@ -260,76 +261,82 @@ function Header() {
               ع
             </div>
           </div>
-          <div
-            className="h-10 w-10 rounded-full bg-gray-200 cursor-pointer circle-button"
-            onClick={toggleAvatarDropdown}
-          >
-            <AnimatePresence>
-              {isAvatarDropdownOpen && (
-                <motion.div
-                  ref={avatarDropdownRef}
-                  className={`absolute ${
-                    currentLocale === "ar"
-                      ? "md:left-20 left-[2rem]"
-                      : "md:right-20 right-[2rem]"
-                  } top-16 mt-2 w-48 backdrop-blur-xl bg-gradient-to-r from-secondary to-white border border-primary shadow-lg rounded-md overflow-hidden z-50`}
-                  variants={dropdownVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                >
-                  <ul className="text-sm text-primary w-full">
-                    {isAuthenticated ? (
-                      <>
-                        {/* Profile */}
-                        <li className="flex items-center px-3 gap-2 w-full hover:bg-secondary">
-                          <FaUser className="text-primary" size={18} />{" "}
-                          {/* Profile Icon */}
-                          <Link
-                            href="/sidebar/profile"
-                            className="block w-full py-2 cursor-pointer"
-                          >
-                            {translations.sidebar.profile}
-                          </Link>
-                        </li>
 
-                        {/* My Orders */}
-                        <li className="flex items-center w-full px-3 gap-2 hover:bg-secondary">
-                          <FaBoxOpen className="text-primary" size={18} />{" "}
-                          {/* My Orders Icon */}
-                          <Link
-                            href="/sidebar/my-orders"
-                            className="block w-full py-2 cursor-pointer"
-                          >
-                            {translations.sidebar.myOrders}
-                          </Link>
-                        </li>
+          <div className="flex flex-row gap-3 items-center">
+            <div>
+              <Cart />
+            </div>
+            <div
+              className="h-10 w-10 rounded-full bg-gray-200 cursor-pointer circle-button"
+              onClick={toggleAvatarDropdown}
+            >
+              <AnimatePresence>
+                {isAvatarDropdownOpen && (
+                  <motion.div
+                    ref={avatarDropdownRef}
+                    className={`absolute ${
+                      currentLocale === "ar"
+                        ? "md:left-20 left-[2rem]"
+                        : "md:right-20 right-[2rem]"
+                    } top-16 mt-2 w-48 backdrop-blur-xl bg-gradient-to-r from-secondary to-white border border-primary shadow-lg rounded-md overflow-hidden z-50`}
+                    variants={dropdownVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    <ul className="text-sm text-primary w-full">
+                      {isAuthenticated ? (
+                        <>
+                          {/* Profile */}
+                          <li className="flex items-center px-3 gap-2 w-full hover:bg-secondary">
+                            <FaUser className="text-primary" size={18} />{" "}
+                            {/* Profile Icon */}
+                            <Link
+                              href="/sidebar/profile"
+                              className="block w-full py-2 cursor-pointer"
+                            >
+                              {translations.sidebar.profile}
+                            </Link>
+                          </li>
 
-                        {/* Logout */}
+                          {/* My Orders */}
+                          <li className="flex items-center w-full px-3 gap-2 hover:bg-secondary">
+                            <FaBoxOpen className="text-primary" size={18} />{" "}
+                            {/* My Orders Icon */}
+                            <Link
+                              href="/sidebar/my-orders"
+                              className="block w-full py-2 cursor-pointer"
+                            >
+                              {translations.sidebar.myOrders}
+                            </Link>
+                          </li>
+
+                          {/* Logout */}
+                          <li
+                            className="flex gap-3 w-full px-4 py-2 hover:bg-secondary cursor-pointer"
+                            onClick={handleLogout}
+                          >
+                            <FaSignOutAlt className="text-primary" size={18} />{" "}
+                            {/* Logout Icon */}
+                            <p>{translations.sidebar.logout}</p>
+                          </li>
+                        </>
+                      ) : (
+                        /* Login */
                         <li
-                          className="flex gap-3 w-full px-4 py-2 hover:bg-secondary cursor-pointer"
-                          onClick={handleLogout}
+                          className="flex gap-3 w-full px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={handleLogin}
                         >
-                          <FaSignOutAlt className="text-primary" size={18} />{" "}
-                          {/* Logout Icon */}
-                          <p>{translations.sidebar.logout}</p>
+                          <FaSignInAlt className="text-primary" size={18} />{" "}
+                          {/* Login Icon */}
+                          <p>{translations.sidebar.login}</p>
                         </li>
-                      </>
-                    ) : (
-                      /* Login */
-                      <li
-                        className="flex gap-3 w-full px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={handleLogin}
-                      >
-                        <FaSignInAlt className="text-primary" size={18} />{" "}
-                        {/* Login Icon */}
-                        <p>{translations.sidebar.login}</p>
-                      </li>
-                    )}
-                  </ul>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                      )}
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </motion.div>

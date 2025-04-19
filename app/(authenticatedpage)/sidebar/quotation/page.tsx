@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import BulkTable from "@/components/tables/table1";
 import BulkTable2 from "@/components/tables/table2";
@@ -125,7 +126,7 @@ function Quotation() {
   // };
 
   const statusTranslations = {
-    pending: translations.booking.pending,
+    underReview: translations.booking.underReview,
     completed: translations.booking.completed,
     rejected: translations.booking.rejected,
     cancelled: translations.booking.cancelled,
@@ -163,7 +164,7 @@ function Quotation() {
           ? "bg-green-500 text-white"
           : data.bookedEvents.orderStatus === "rejected"
           ? "bg-red-500 text-white"
-          : data.bookedEvents.orderStatus === "pending"
+          : data.bookedEvents.orderStatus === "underReview"
           ? "bg-yellow-500 text-black animate-zoom"
           : "bg-gray-500 text-white"
       }`}
@@ -201,6 +202,7 @@ function Quotation() {
                 date: data.bookedEvents.date,
                 eventType: data.bookedEvents.eventType,
                 eventDesign: data.bookedEvents.eventDesign,
+                additions: data.bookedEvents.eventPackage.additions,
               }}
             />
           ) : (
@@ -213,7 +215,7 @@ function Quotation() {
           </div>
           <BulkTable2
             eventPackageAdditions={data?.bookedEvents?.priceDetails?.additions}
-            extraServices={data?.bookedEvents?.priceDetails?.extraServices}
+            extraServices={data?.bookedEvents?.extraServices}
           />
 
           {/* Total Price Table */}

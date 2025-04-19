@@ -36,6 +36,7 @@ interface Event {
   };
   city: string;
   date: string;
+
   eventType: {
     nameOfEvent: string;
     translatedNameOfEvent: string;
@@ -65,6 +66,7 @@ interface Event {
 
 interface ApiResponse {
   bookedEvents: Event[];
+  _id: string;
   total: number;
   status: boolean;
   message: string;
@@ -101,7 +103,7 @@ interface RootState {
         newest: string;
         oldest: string;
         all: string;
-        pending: any;
+        underReview: any;
         completed: string;
         rejected: string;
         cancelled: string;
@@ -117,8 +119,11 @@ const BookedEvents = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(5);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [selectedOrderForPayment, setSelectedOrderForPayment] =
+    useState<string>("");
+  const [selectedState, setSelectedState] = useState<string>("");
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = useState<string>("");
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
@@ -136,7 +141,7 @@ const BookedEvents = () => {
     (state: RootState) => state.language.translations
   );
   const statusTranslations = {
-    pending: translations.booking.pending,
+    underReview: translations.booking.underReview,
     completed: translations.booking.completed,
     rejected: translations.booking.rejected,
     cancelled: translations.booking.cancelled,
@@ -157,8 +162,8 @@ const BookedEvents = () => {
   const filterOptions = [
     { label: translations.booking.all, value: "all", icon: <FaFilter /> },
     {
-      label: translations.booking.pending,
-      value: "pending",
+      label: translations.booking.underReview,
+      value: "underReview",
       icon: <FaFilter />,
     },
     {
@@ -195,7 +200,9 @@ const BookedEvents = () => {
     refetch();
   };
 
-  const handlePaymentClick = () => {
+  const handlePaymentClick = (orderId: string, orderStatus: string) => {
+    setSelectedOrderForPayment(orderId);
+    setSelectedState(orderStatus);
     setIsPaymentModalOpen(true);
   };
 
@@ -387,15 +394,17 @@ const BookedEvents = () => {
                   ] || event.orderStatus
                 : event.orderStatus}
             </div>
-            {event.orderStatus === "pending" && (
+            {event.orderStatus === "underReview" && (
               <button
                 className="bg-green-500 w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg hover:bg-green-600 text-center md:py-2 md:rounded-xl md:text-lg"
-                onClick={handlePaymentClick}
+                onClick={() =>
+                  handlePaymentClick(event._id, event?.orderStatus)
+                }
               >
                 {translations.booking.deposite}
               </button>
             )}
-            {event.orderStatus === "pending" && (
+            {event.orderStatus === "underReview" && (
               <button
                 className="bg-red-500 w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg hover:bg-red-600 text-center md:py-2 md:rounded-xl md:text-lg"
                 onClick={() => handleRejectClick(event._id)}
@@ -494,10 +503,12 @@ const BookedEvents = () => {
         isOpen={isPaymentModalOpen}
         onClose={handleCloseModal}
         name="Bank Name"
+        status={selectedState}
         accountNumber="1904637294923"
+        orderId={selectedOrderForPayment}
         onPaymentComplete={(receiptUrls) => {
-          // Handle the uploaded receipt URLs
           console.log("Receipts uploaded:", receiptUrls);
+          refetch(); // Refresh the list after payment
         }}
       />
       {/* Reject Confirmation Modal */}

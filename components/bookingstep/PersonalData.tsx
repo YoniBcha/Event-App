@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -22,9 +23,9 @@ interface PersonalData {
   imageOfPlace: string[]; // Store URLs instead of File objects
   dressColor: string[];
   place: string;
-  age?: number;
+  age?: string;
   length: number;
-  birthDate?: string; // Optional field for birth date
+  birthDate?: number; // Optional field for birth date
 }
 
 interface PersonalDataProps {
@@ -46,6 +47,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           noOfPeople: 1,
           place: "",
           age: "",
+          birthDate: 0,
           imageOfPlace: [], // Initialize as empty array for URLs
         };
   });
@@ -104,10 +106,37 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     imageOfPlace: Yup.array().of(
       Yup.string().required(`${translations.booking.an_image_URL_is_required}`)
     ),
-    birthDate: Yup.date()
-      .nullable()
-      .max(new Date(), `${translations.booking.birth_date_cannot_be_in_future}`)
-      .optional(),
+
+    age: Yup.string()
+      .required(translations.booking.birth_date_is_required)
+      .test(
+        "is-valid-date",
+        translations.booking.invalid_date_format,
+        (value) => {
+          if (!value) return false;
+          const date = new Date(value);
+          return !isNaN(date.getTime());
+        }
+      )
+      .test(
+        "is-adult",
+        translations.booking.must_be_at_least_18_years_old,
+        (value) => {
+          if (!value) return false;
+          const birthDate = new Date(value);
+          const today = new Date();
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+
+          if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && today.getDate() < birthDate.getDate())
+          ) {
+            age--;
+          }
+          return age >= 18;
+        }
+      ),
   });
 
   useEffect(() => {
@@ -131,7 +160,42 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
   useEffect(() => {
     sessionStorage.setItem("personalData", JSON.stringify(formData));
   }, [formData]);
+  const handleBirthDateChange = (date: Date | null) => {
+    if (!date) {
+      setFormData({
+        ...formData,
+        age: "",
+        birthDate: 0,
+      });
+      return;
+    }
 
+    const dateString = date.toISOString().split("T")[0];
+    const today = new Date();
+    let age = today.getFullYear() - date.getFullYear();
+    const monthDiff = today.getMonth() - date.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < date.getDate())
+    ) {
+      age--;
+    }
+
+    setFormData({
+      ...formData,
+      age: dateString,
+      birthDate: age,
+    });
+
+    if (errors.age || errors.birthDate) {
+      setErrors((prev) => ({
+        ...prev,
+        age: "",
+        birthDate: "",
+      }));
+    }
+  };
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -303,14 +367,21 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     }
   };
 
-  const calculateAge = (birthDate: Date): number => {
+  const calculateAge = (birthDate: string): number => {
+    if (!birthDate) return 0;
+
     const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const birthDateObj = new Date(birthDate);
+
+    // If the birth date is invalid, return 0
+    if (isNaN(birthDateObj.getTime())) return 0;
+
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
 
     if (
       monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
     ) {
       age--;
     }
@@ -419,38 +490,32 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             transition={{ delay: 0.4, duration: 0.3 }}
           >
             <label className="font-medium text-tertiary text-md mb-2">
-              {translations.booking.birth_date} (Optional)
+              {translations.booking.birth_date} *
             </label>
             <DatePicker
-              selected={
-                formData.birthDate ? new Date(formData.birthDate) : null
-              }
-              onChange={(date: Date | null) => {
-                setFormData({
-                  ...formData,
-                  birthDate: date
-                    ? date.toISOString().split("T")[0]
-                    : undefined,
-                  age: date ? calculateAge(date) : undefined,
-                });
-              }}
+              selected={formData.age ? new Date(formData.age) : null}
+              onChange={handleBirthDateChange}
               dateFormat="yyyy-MM-dd"
               placeholderText="Select birth date"
               className={`w-full p-2 border rounded ${
-                errors.birthDate ? "border-red-500" : "border-primary"
+                errors.age ? "border-red-500" : "border-primary"
               }`}
-              maxDate={new Date()} // Can't select future dates
+              maxDate={new Date()}
               showYearDropdown
               scrollableYearDropdown
               yearDropdownItemNumber={100}
               dropdownMode="select"
             />
-            {formData.age && (
+            {errors.age && (
+              <div className="text-red-500 text-sm mt-1">{errors.age}</div>
+            )}
+            {formData.birthDate && formData.birthDate > 0 && (
               <div className="text-sm text-gray-500 mt-1">
-                Age: {formData.age} years
+                Age: {formData.birthDate} years
               </div>
             )}
           </motion.div>
+
           {/* Number of People Invited */}
           <motion.div
             className="flex flex-col"

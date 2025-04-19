@@ -4,11 +4,13 @@ import { apiSlice } from "./endpoints/apiSlice"; // Your API slice
 import languageReducer from "./language"; // Your language reducer
 import themeReducer from "./themeSlice"; // Import your theme slice reducer
 import { setupListeners } from "@reduxjs/toolkit/query";
+import cartReducer from "./cartSlice";
 
 const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer, // RTK Query API slice
     language: languageReducer, // Language reducer
+    cart: cartReducer,
     theme: themeReducer, // Add your theme reducer here
     ...rootReducer, // Any other reducers (ensure rootReducer is an object)
   },

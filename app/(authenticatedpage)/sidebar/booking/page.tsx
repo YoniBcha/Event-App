@@ -19,6 +19,7 @@ import { logoutUser } from "@/store/authReducer";
 import toast from "react-hot-toast";
 
 interface Payload {
+  fullData: any;
   place: string;
   date: string;
   city: string;
@@ -30,6 +31,7 @@ interface Payload {
   translatedTypeName: string;
   translatedPackageName: string;
   priceAfterVat: number;
+
   vatAmount: number;
   eventType: string | null;
   eventDesign: string | null;
@@ -45,11 +47,14 @@ interface Payload {
     servicesProvider_id: string;
     packageName: string;
     translatedPackageName: string;
+    serviceName: string;
+    translatedServiceName: string;
   }[];
 
   personalData: {
     fullName: string;
     mobileNumber: string;
+    age: number;
     secondMobileNumber?: string;
     favoriteColors: string[];
     dressColor: string[];
@@ -74,6 +79,7 @@ const MyOrdersContent = () => {
   const dispatch = useDispatch();
   const [payload, setPayload] = useState<Payload | null>(null);
   const [payloads, setPayloads] = useState<Payload | null>(null);
+  const [fullData, setFulldata] = useState<any | null>(null);
   const [bookEvent, { isLoading, isError }] = useBookEventMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const translations = useSelector((state: any) => state.language.translations);
@@ -137,8 +143,8 @@ const MyOrdersContent = () => {
         preBookEvent(decodedPayload)
           .unwrap()
           .then((result: any) => {
-            console.log("PreBook Event Result:", result);
             setPayloads(result.bookedEvent);
+            setFulldata(result.fullData);
           })
           .catch((error: any) => {
             console.error("PreBook Event Error:", error);
@@ -233,6 +239,7 @@ const MyOrdersContent = () => {
       ? translatedValue
       : defaultValue;
   };
+
   return (
     <div className="p-8 bg-gradient-to-br from-gray-50 to-gray-200 rounded-xl shadow-lg">
       <h1 className="text-3xl font-extrabold text-gray-900 mb-8">
@@ -256,22 +263,22 @@ const MyOrdersContent = () => {
                 {
                   label: translations.booking.eventType,
                   value: renderValue(
-                    payloads.eventType || "", // Provide a default value to avoid null
-                    payloads.translatedEventType || undefined // Ensure it remains undefined if null
+                    fullData?.eventType?.nameOfEvent || "", // Correct path to event type name
+                    fullData?.eventType?.translatedNameOfEvent || undefined
                   ),
                 },
                 {
                   label: translations.booking.eventDesign,
                   value: renderValue(
-                    payloads.eventDesign || "",
-                    payloads.translatedEventDesign || undefined
+                    fullData?.eventDesign?.eventDesign || "", // Correct path to event design name
+                    fullData?.eventDesign?.translatedEventDesign || undefined
                   ),
                 },
                 {
                   label: translations.booking.eventPackage,
                   value: renderValue(
-                    payloads.eventPackage || "",
-                    payloads.translatedEventPackage || undefined
+                    fullData?.eventPackage?.packageName || "",
+                    fullData?.eventPackage?.translatedPackageName || undefined
                   ),
                 },
               ].map((item, index) => (
@@ -349,6 +356,10 @@ const MyOrdersContent = () => {
                 {
                   label: translations.booking.fullName,
                   value: payloads.personalData.fullName,
+                },
+                {
+                  label: translations.booking.age,
+                  value: payloads.personalData.age,
                 },
                 {
                   label: translations.booking.mobileNumber,
@@ -589,8 +600,12 @@ const MyOrdersContent = () => {
                           {translations.booking.service}
                         </th>
                         <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
+                          {translations.serviceName}
+                        </th>
+                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
                           {translations.booking.provider}
                         </th>
+
                         <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
                           {translations.booking.price}
                         </th>
@@ -614,7 +629,15 @@ const MyOrdersContent = () => {
                                 service.translatedPackageName
                               )}
                             </td>
+
+                            <td className="py-2 px-4">
+                              {renderValue(
+                                service.serviceName,
+                                service.translatedServiceName
+                              )}
+                            </td>
                             <td className="py-2 px-4">{service.provider}</td>
+
                             <td className="py-2 px-4 text-right">
                               {service.price}
                               <Image
