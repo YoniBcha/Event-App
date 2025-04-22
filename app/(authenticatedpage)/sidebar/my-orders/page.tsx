@@ -22,7 +22,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "react-toastify/dist/ReactToastify.css";
-
+import { FaCheckCircle } from "react-icons/fa";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 interface Event {
@@ -81,6 +81,9 @@ interface RootState {
         package: string;
         eventDesign: string;
         deposite: string;
+        underProcessing: string;
+        paymentSent: string;
+        accepted: string;
         city: string;
         quotation: string;
         date: string;
@@ -92,6 +95,7 @@ interface RootState {
         areyousuretocancelthisorder: string;
         sampleName: string;
         confirm: string;
+        paymentApproved: string;
         paymentInformation: string;
         name: string;
         close: string;
@@ -141,6 +145,9 @@ const BookedEvents = () => {
     (state: RootState) => state.language.translations
   );
   const statusTranslations = {
+    accepted: translations.booking.accepted,
+    paymentSent: translations.booking.paymentSent,
+    underProcessing: translations.booking.underProcessing,
     underReview: translations.booking.underReview,
     completed: translations.booking.completed,
     rejected: translations.booking.rejected,
@@ -163,6 +170,16 @@ const BookedEvents = () => {
     { label: translations.booking.all, value: "all", icon: <FaFilter /> },
     {
       label: translations.booking.underReview,
+      value: "underReview",
+      icon: <FaFilter />,
+    },
+    {
+      label: translations.booking.accepted,
+      value: "underReview",
+      icon: <FaFilter />,
+    },
+    {
+      label: translations.booking.underProcessing,
       value: "underReview",
       icon: <FaFilter />,
     },
@@ -387,14 +404,24 @@ const BookedEvents = () => {
             </div>
           </div>
           <div className="flex flex-wrap md:flex-col gap-3 border-l-4 max-md:border-none border-primary md:pl-5 pl-1">
-            <div className="bg-primary w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-lg">
+            <div
+              className={`bg-primary w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg text-center md:py-2 md:rounded-xl md:text-lg ${
+                event.orderStatus === "paymentSent" ? "cursor-pointer" : ""
+              }`}
+              onClick={
+                event.orderStatus === "paymentSent"
+                  ? () => handlePaymentClick(event._id, event?.orderStatus)
+                  : undefined
+              }
+            >
               {currentLocale === "ar"
                 ? statusTranslations[
                     event.orderStatus as keyof typeof statusTranslations
                   ] || event.orderStatus
                 : event.orderStatus}
             </div>
-            {event.orderStatus === "underReview" && (
+
+            {event.orderStatus === "accepted" && (
               <button
                 className="bg-green-500 w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg hover:bg-green-600 text-center md:py-2 md:rounded-xl md:text-lg"
                 onClick={() =>
@@ -404,14 +431,15 @@ const BookedEvents = () => {
                 {translations.booking.deposite}
               </button>
             )}
-            {event.orderStatus === "underReview" && (
-              <button
-                className="bg-red-500 w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg hover:bg-red-600 text-center md:py-2 md:rounded-xl md:text-lg"
-                onClick={() => handleRejectClick(event._id)}
-              >
-                {translations.booking.cancel}
-              </button>
-            )}
+            {event.orderStatus === "underReview" ||
+              (event.orderStatus === "accepted" && (
+                <button
+                  className="bg-red-500 w-40 p-1 max-md:h-fit max-sm:text-sm text-lg text-white rounded-lg hover:bg-red-600 text-center md:py-2 md:rounded-xl md:text-lg"
+                  onClick={() => handleRejectClick(event._id)}
+                >
+                  {translations.booking.cancel}
+                </button>
+              ))}
             <div className="bg-[#dedede] p-1 max-md:h-fit text-lg max-sm:text-sm text-white rounded-lg hover:text-primary cursor-pointer text-center md:py-2 md:rounded-xl md:text-lg">
               <Link
                 href={{
@@ -422,6 +450,15 @@ const BookedEvents = () => {
                 {translations.booking.quotation}
               </Link>
             </div>
+            {event.orderStatus === "complete" && (
+              <div className="flex flex-row gap-2 items-center justify-center text-green-500 text-center  w-full">
+                <div className="text-green-500 text-lg ">
+                  <FaCheckCircle />
+                </div>
+                <div>{translations.booking.paymentApproved}</div>
+              </div>
+            )}
+
             <div className="mt-5 max-md:mt-1 flex justify-start">
               <p className="text-primary font-semibold text-center">
                 {translations.booking.date}:
@@ -556,6 +593,7 @@ const BookedEvents = () => {
           </div>
         </div>
       )}
+
       {/* Toast Container */}
       <ToastContainer position="top-right" autoClose={3000} />
     </div>

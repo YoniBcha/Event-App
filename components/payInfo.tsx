@@ -174,7 +174,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
         if (depositResponse.status) {
           onPaymentComplete(uploadedUrls);
-          setPaymentStatus("underProcessing");
+          setPaymentStatus("paymentSent");
           onApprovalChange?.("underReview");
           toast.success("Payment submitted successfully!");
         }
@@ -187,11 +187,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   };
 
-  const approvePayment = () => {
-    setPaymentStatus("approved");
-    onApprovalChange?.("approved");
-    toast.success("Payment approved successfully!");
-  };
+  // const approvePayment = () => {
+  //   setPaymentStatus("underProcess");
+  //   onApprovalChange?.("approved");
+  //   toast.success("Payment approved successfully!");
+  // };
 
   if (!isOpen) return null;
 
@@ -214,7 +214,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <div className="flex justify-center items-center h-40 sm:h-64">
             <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
           </div>
-        ) : paymentStatus === "underReview" ? (
+        ) : paymentStatus === "accepted" ? (
           <>
             <div className="mb-4 sm:mb-6 bg-secondary p-3 sm:p-4 rounded-lg border border-primary">
               <h1 className="text-primary text-lg sm:text-xl font-bold">
@@ -344,7 +344,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               </button>
             </div>
           </>
-        ) : paymentStatus === "underProcessing" ? (
+        ) : paymentStatus === "paymentSent" ? (
           <div className="text-center py-4 sm:py-6">
             <div className="text-yellow-500 text-4xl sm:text-5xl mb-3 sm:mb-4">
               <FaClock className="inline-block" />
@@ -361,12 +361,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
                 className="bg-gray-200 text-gray-800 px-4 py-1 sm:py-2 rounded-md text-sm sm:text-base"
               >
                 {translations.booking.close}
-              </button>
-              <button
-                onClick={approvePayment}
-                className="bg-primary text-white px-4 py-1 sm:py-2 rounded-md text-sm sm:text-base"
-              >
-                Approve (Demo)
               </button>
             </div>
           </div>

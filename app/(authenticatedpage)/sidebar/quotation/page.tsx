@@ -10,7 +10,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import html2pdf from "html2pdf.js";
-
+import { FaCheckCircle } from "react-icons/fa";
 function Quotation() {
   const [logo, setLogo] = useState("/path/to/default/logo.png");
   const searchParams = useSearchParams();
@@ -178,7 +178,14 @@ function Quotation() {
             </div>
           )}
         </div>
-
+        {data?.bookedEvents?.orderStatus === "completed" && (
+          <div className="flex flex-row gap-2   justify-start text-green-500 text-start  w-full">
+            <div className="text-green-500 text-lg ">
+              <FaCheckCircle />
+            </div>
+            <div>{translations.booking.paymentApproved}</div>
+          </div>
+        )}
         {/* Logo (Centered) */}
         <div className="flex-grow flex justify-center py-2">
           <Image src={logo} alt="Logo" width={80} height={40} />
@@ -215,7 +222,7 @@ function Quotation() {
           </div>
           <BulkTable2
             eventPackageAdditions={data?.bookedEvents?.priceDetails?.additions}
-            extraServices={data?.bookedEvents?.extraServices}
+            extraServices={data?.bookedEvents?.priceDetails?.extraServices}
           />
 
           {/* Total Price Table */}

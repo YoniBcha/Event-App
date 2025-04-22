@@ -58,9 +58,9 @@ function Header() {
     }
   }, []);
 
-  const handleClick = () => {
-    sessionStorage.clear(); // Clears all sessionStorage data
-  };
+  // const handleClick = () => {
+  //   sessionStorage.clear(); // Clears all sessionStorage data
+  // };
 
   const toggleAvatarDropdown = () => {
     setIsAvatarDropdownOpen(!isAvatarDropdownOpen);
@@ -207,7 +207,7 @@ function Header() {
                 : ""
             }`}
             href={"/mainpage/1"}
-            onClick={handleClick} // Clears sessionStorage on click
+            // onClick={handleClick} // Clears sessionStorage on click
           >
             {translations.sidebar.booking}
           </Link>
@@ -461,7 +461,7 @@ function Header() {
                   href="/mainpage/1"
                   onClick={() => {
                     toggleDrawer();
-                    handleClick();
+                    // handleClick();
                   }}
                 >
                   <div className="flex items-center gap-2">
