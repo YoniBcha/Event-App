@@ -77,6 +77,43 @@
   "total_price_after_vat": "Total Price After VAT",
   "back_online": "You are back online!",
   "offline": "You are offline. Please check your internet connection.",
+  "cart": {
+    "viewBooking": "View Booking",
+    "resumeBooking": "Resume Booking",
+    "bookingSummary": "Booking Summary",
+    "resumeButton": "Resume Booking (Step ",
+    "event": "Event",
+    "sections": {
+      "eventDetails": "Event Details",
+      "selectedDesign": "Selected Design",
+      "selectedPackage": "Selected Package",
+      "packageAdditions": "Package Additions",
+      "extraServices": "Extra Services",
+      "personalInfo": "Personal Info"
+    },
+    "lables": {
+      "event": "Event",
+      "city": "City",
+      "place": "Place",
+      "date": "Date",
+      "designName": "Design Name",
+      "packageName": "Package Name",
+      "serviceName": "Service Name",
+      "providerName": "Provider Name",
+      "name": "Name",
+      "phone": "Phone",
+      "secondPhone": "Second Phone",
+      "people": "People",
+      "age": "Age",
+      "birthDate": "Birth Date",
+      "favoriteColors": "Favorite Colors",
+      "dressColors": "Dress Colors",
+      "notes": "Notes",
+      "imagesOfPlace": "Images of Place"
+    },
+    "clearButton": "Clear All Booking Data",
+    "notAvailable": "—"
+  },
   "login": {
     "title": "Welcome Back!!",
     "emailUsernamePlaceholder": "Email or Username",

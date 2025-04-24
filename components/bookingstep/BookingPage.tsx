@@ -15,9 +15,12 @@ import { useGetEventTypesQuery } from "@/store/endpoints/apiSlice";
 import { MdEventNote } from "react-icons/md";
 
 interface FormData {
+  [x: string]: any;
   city: string;
   place: string;
   event: string;
+  eventName?: string;
+  translatedEventName?: string;
   date: Date | null;
 }
 
@@ -172,10 +175,22 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
     setShowEventDropdown(false);
   };
 
-  const onSubmit = (data: FormData) => {
-    const payload = { ...data };
-    setBookingPageData(payload);
+  const onSubmit = (formData: FormData) => {
+    // Get the selected event data from the query result
+    const selectedEventData = data?.eventTypes?.find(
+      (event: any) => event._id === formData.event
+    );
 
+    // Create the payload with both event ID and name
+    const payload = {
+      ...formData,
+      eventName:
+        currentLocale === "ar"
+          ? selectedEventData?.translatedNameOfEvent
+          : selectedEventData?.nameOfEvent,
+    };
+
+    setBookingPageData(payload);
     console.log(JSON.stringify(payload, null, 2));
   };
 

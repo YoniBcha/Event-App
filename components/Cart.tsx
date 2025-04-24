@@ -15,7 +15,34 @@ export default function Cart() {
   const dispatch = useDispatch();
   const { items, visible } = useSelector((state: any) => state.cart);
   const [isOpen, setIsOpen] = useState(false);
+  const currentLocale = useSelector(
+    (state: any) => state.language.currentLocale
+  );
 
+  const translations = useSelector((state: any) => state.language.translations);
+  const places = [
+    {
+      value: "outdoor",
+      label: "Outdoor",
+      translatedLabel: "في الهواء الطلق",
+    },
+    {
+      value: "indoor",
+      label: "Indoor",
+      translatedLabel: "داخلي",
+    },
+    {
+      value: "both",
+      label: "Both",
+      translatedLabel: "كلاهما",
+    },
+  ];
+
+  const saudiCities = [
+    { value: "Jeddah", label: "Jeddah", translatedLabel: "جدة" },
+    { value: "Makkah", label: "Makkah", translatedLabel: "مكة" },
+    { value: "Riyadh", label: "Riyadh", translatedLabel: "الرياض" },
+  ];
   const countCompletedSteps = () => {
     let count = 1;
     if (items.bookingData) count++;
@@ -56,7 +83,14 @@ export default function Cart() {
   if (!visible) {
     return null;
   }
-
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <div className="relative z-50">
       {/* Cart Icon Button */}
@@ -68,9 +102,11 @@ export default function Cart() {
         <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
           {countCompletedSteps()}
         </span>
-        <span className="absolute right-full top-1/2 -translate-y-1/2 mr-2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-          {pathname.includes("/mainpage/") ? "View Booking" : "Resume Booking"}
-        </span>
+        {/* <span className="absolute right-full top-1/2 -translate-y-1/2 mr-2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+          {pathname.includes("/mainpage/")
+            ? translations.cart.viewBooking
+            : translations.cart.resumeBooking}
+        </span> */}
       </button>
 
       {/* Cart Drawer */}
@@ -98,7 +134,7 @@ export default function Cart() {
                 {/* Header */}
                 <div className="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
                   <h3 className="text-xl font-bold text-gray-800">
-                    Booking Summary
+                    {translations.cart.bookingSummary}
                   </h3>
                   <button
                     onClick={handleToggleCart}
@@ -123,7 +159,7 @@ export default function Cart() {
                           onClick={handleResume}
                           className="w-full py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
                         >
-                          Resume Booking (Step {getResumeStep()})
+                          {translations.cart.resumeButton} {getResumeStep()})
                         </button>
                       </motion.div>
                     )}
@@ -136,24 +172,53 @@ export default function Cart() {
                         className="bg-gray-50 p-4 rounded-lg"
                       >
                         <h4 className="font-semibold text-primary mb-2">
-                          1. Event Details
+                          1. {translations.cart.sections.eventDetails}
                         </h4>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <p>
-                            <span className="text-gray-500">City:</span>{" "}
-                            {items.bookingData.city}
+                            <span className="text-gray-500">
+                              {translations.cart.lables.event}:
+                            </span>{" "}
+                            {items.bookingData.eventName}
                           </p>
                           <p>
-                            <span className="text-gray-500">Place:</span>{" "}
-                            {items.bookingData.place}
+                            <span className="text-gray-500">
+                              {translations.cart.lables.city}:
+                            </span>{" "}
+                            {items?.bookingData?.city
+                              ? renderValue(
+                                  saudiCities.find(
+                                    (city) =>
+                                      city.value === items.bookingData.city
+                                  )?.label || "",
+                                  saudiCities.find(
+                                    (city) =>
+                                      city.value === items.bookingData.city
+                                  )?.translatedLabel || ""
+                                )
+                              : ""}
                           </p>
                           <p>
-                            <span className="text-gray-500">Event:</span>{" "}
-                            {items.bookingData.event}
+                            <span className="text-gray-500">
+                              {translations.cart.lables.place}:
+                            </span>{" "}
+                            {renderValue(
+                              places.find(
+                                (place) =>
+                                  place.value === items?.bookingData?.place
+                              )?.label || "",
+                              places.find(
+                                (place) =>
+                                  place.value === items?.bookingData?.place
+                              )?.translatedLabel || ""
+                            )}
                           </p>
+
                           {items.bookingData.date && (
                             <p>
-                              <span className="text-gray-500">Date:</span>{" "}
+                              <span className="text-gray-500">
+                                {translations.cart.lables.date}:
+                              </span>{" "}
                               {new Date(
                                 items.bookingData.date
                               ).toLocaleDateString()}
@@ -171,11 +236,13 @@ export default function Cart() {
                         className="bg-gray-50 p-4 rounded-lg"
                       >
                         <h4 className="font-semibold text-primary mb-2">
-                          2. Selected Design
+                          2. {translations.cart.sections.selectedDesign}
                         </h4>
                         <p className="text-sm">
-                          <span className="text-gray-500">Design ID:</span>{" "}
-                          {items.selectedDesignId}
+                          <span className="text-gray-500">
+                            {translations.cart.lables.designName}:
+                          </span>{" "}
+                          {items?.selectedDesignId?.name}
                         </p>
                       </motion.div>
                     )}
@@ -188,16 +255,18 @@ export default function Cart() {
                         className="bg-gray-50 p-4 rounded-lg"
                       >
                         <h4 className="font-semibold text-primary mb-2">
-                          3. Selected Package
+                          3. {translations.cart.sections.selectedPackage}
                         </h4>
                         <p className="text-sm">
-                          <span className="text-gray-500">Package ID:</span>{" "}
-                          {items.selectedPackageId}
+                          <span className="text-gray-500">
+                            {translations.cart.lables.packageName}:
+                          </span>{" "}
+                          {items.selectedPackageId.name}
                         </p>
                       </motion.div>
                     )}
 
-                    {items.eventPackageAdditions && (
+                    {items?.eventPackageAdditions?.length > 0 && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -205,7 +274,7 @@ export default function Cart() {
                         className="bg-gray-50 p-4 rounded-lg"
                       >
                         <h4 className="font-semibold text-primary mb-2">
-                          4. Package Additions
+                          4. {translations.cart.sections.packageAdditions}
                         </h4>
                         <ul className="space-y-2 text-sm">
                           {items.eventPackageAdditions.map(
@@ -225,7 +294,7 @@ export default function Cart() {
                       </motion.div>
                     )}
 
-                    {items.extraServices?.extraServices && (
+                    {items.extraServices?.extraServices?.length > 0 && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -233,14 +302,48 @@ export default function Cart() {
                         className="bg-gray-50 p-4 rounded-lg"
                       >
                         <h4 className="font-semibold text-primary mb-2">
-                          5. Extra Services
+                          5. {translations.cart.sections.extraServices}
                         </h4>
-                        <ul className="space-y-2 text-sm">
+                        <ul className="space-y-4 text-sm">
                           {items.extraServices.extraServices.map(
-                            (service: any, index: number) => (
-                              <li key={index} className="flex items-center">
-                                <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
-                                {service.packageName}
+                            (service: any, idx: number) => (
+                              <li
+                                key={idx}
+                                className="bg-gray-50 p-3 rounded-lg"
+                              >
+                                <div className="grid grid-cols-2 gap-2">
+                                  <p>
+                                    <span className="text-gray-500">
+                                      {translations.cart.lables.serviceName}:
+                                    </span>{" "}
+                                    {renderValue(
+                                      service.serviceName,
+                                      service.translatedServiceName
+                                    )}
+                                  </p>
+
+                                  {/* <p>
+                                    <span className="text-gray-500">
+                                      Provider ID:
+                                    </span>{" "}
+                                    {service.servicesProvider_id}
+                                  </p> */}
+                                  <p>
+                                    <span className="text-gray-500">
+                                      {translations.cart.lables.providerName}:
+                                    </span>{" "}
+                                    {service.providerName}
+                                  </p>
+                                  <p>
+                                    <span className="text-gray-500">
+                                      {translations.cart.lables.packageName}:
+                                    </span>{" "}
+                                    {renderValue(
+                                      service.packageName,
+                                      service.translatedPackageName
+                                    )}
+                                  </p>
+                                </div>
                               </li>
                             )
                           )}
@@ -256,21 +359,122 @@ export default function Cart() {
                         className="bg-gray-50 p-4 rounded-lg"
                       >
                         <h4 className="font-semibold text-primary mb-2">
-                          6. Personal Info
+                          6. {translations.cart.sections.personalInfo}
                         </h4>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <p>
-                            <span className="text-gray-500">Name:</span>{" "}
-                            {items.personalData.fullName}
+                            <span className="text-gray-500">
+                              {translations.cart.lables.name}:
+                            </span>{" "}
+                            {items.personalData.fullName || "—"}
                           </p>
                           <p>
-                            <span className="text-gray-500">Phone:</span>{" "}
-                            {items.personalData.mobileNumber}
+                            <span className="text-gray-500">
+                              {translations.cart.lables.Phone}:
+                            </span>{" "}
+                            {items.personalData.mobileNumber || "—"}
                           </p>
                           <p>
-                            <span className="text-gray-500">People:</span>{" "}
+                            <span className="text-gray-500">
+                              {translations.cart.lables.secondPhone}:
+                            </span>{" "}
+                            {items.personalData.secondMobileNumber || "—"}
+                          </p>
+                          <p>
+                            <span className="text-gray-500">
+                              {translations.cart.lables.people}:
+                            </span>{" "}
                             {items.personalData.noOfPeople}
                           </p>
+                          <p>
+                            <span className="text-gray-500">
+                              {translations.cart.lables.palace}:
+                            </span>{" "}
+                            {items.personalData.place || "—"}
+                          </p>
+                          <p>
+                            <span className="text-gray-500">
+                              {translations.cart.lables.age}:
+                            </span>{" "}
+                            {items.personalData.age || "—"}
+                          </p>
+                          {/* <p>
+                            <span className="text-gray-500">Birth Date:</span>{" "}
+                            {items.personalData.birthDate
+                              ? new Date(
+                                  items.personalData.birthDate
+                                ).toLocaleDateString()
+                              : "—"}
+                          </p> */}
+                          <div className="col-span-2">
+                            <span className="text-gray-500">
+                              {translations.cart.lables.favoriteColors}:
+                            </span>
+                            <div className="mt-1 flex flex-wrap gap-2">
+                              {items.personalData.favoriteColors.length > 0 ? (
+                                items.personalData.favoriteColors.map(
+                                  (color: string, idx: number) => (
+                                    <span
+                                      key={idx}
+                                      className="w-6 h-6 rounded-full border"
+                                      style={{ backgroundColor: color }}
+                                      title={color}
+                                    />
+                                  )
+                                )
+                              ) : (
+                                <span className="ml-2">—</span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="col-span-2">
+                            <span className="text-gray-500">
+                              {translations.cart.lables.dressColors}:
+                            </span>
+                            <div className="mt-1 flex flex-wrap gap-2">
+                              {items.personalData.dressColor.length > 0 ? (
+                                items.personalData.dressColor.map(
+                                  (color: string, idx: number) => (
+                                    <span
+                                      key={idx}
+                                      className="w-6 h-6 rounded-full border"
+                                      style={{ backgroundColor: color }}
+                                      title={color}
+                                    />
+                                  )
+                                )
+                              ) : (
+                                <span className="ml-2">—</span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="col-span-2">
+                            <span className="text-gray-500">
+                              {translations.cart.lables.notes}:
+                            </span>{" "}
+                            {items.personalData.notes || "—"}
+                          </div>
+                          {items.personalData.imageOfPlace.length > 0 && (
+                            <div className="col-span-2">
+                              <span className="text-gray-500">
+                                {translations.cart.lables.imageOfPlace}:
+                              </span>
+                              <div className="mt-2 flex space-x-2 overflow-x-auto">
+                                {items.personalData.imageOfPlace.map(
+                                  (url: string, i: number) => (
+                                    <img
+                                      key={i}
+                                      src={url}
+                                      alt={`Place ${i + 1}`}
+                                      className="w-24 h-16 object-cover rounded"
+                                    />
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </motion.div>
                     )}
@@ -288,7 +492,8 @@ export default function Cart() {
                     onClick={handleClearCart}
                     className="w-full py-2 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium"
                   >
-                    Clear All Booking Data
+                    {}
+                    {translations.cart.clearButton}
                   </button>
                 </motion.div>
               </div>

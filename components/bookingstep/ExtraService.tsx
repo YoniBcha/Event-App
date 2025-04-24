@@ -41,7 +41,14 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
   onBack,
 }) => {
   const [selectedServices, setSelectedServices] = useState<
-    { serviceName: string; providerId: string; packageName: string }[]
+    {
+      serviceName: string;
+      translatedServiceName?: string;
+      providerId: string;
+      providerName: string;
+      packageName: string;
+      translatedPackageName?: string;
+    }[]
   >([]);
   const [currentService, setCurrentService] = useState<string | null>(null);
   const [currentProvider, setCurrentProvider] = useState<string | null>(null);
@@ -165,30 +172,45 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
     }
   };
 
-  const handlePackageSelect = (packageName: string) => {
+  const handlePackageSelect = (pkg: Package) => {
     const updatedServices = [...selectedServices];
     const existingServiceIndex = updatedServices.findIndex(
       (s) => s.serviceName === currentService
     );
 
+    // Find the provider
+    const provider = serviceProviders.find((p) => p._id === currentProvider);
+    // Find the service
+    const serviceData = data?.extraServices.find(
+      (s: any) => s.serviceName === currentService
+    );
+
     if (existingServiceIndex !== -1) {
       // If the service already exists, update its package
-      if (updatedServices[existingServiceIndex].packageName === packageName) {
+      if (
+        updatedServices[existingServiceIndex].packageName === pkg.packageName
+      ) {
         // Unselect the package if it's already selected
         updatedServices.splice(existingServiceIndex, 1);
       } else {
         updatedServices[existingServiceIndex] = {
           serviceName: currentService!,
+          translatedServiceName: serviceData?.translatedServiceName,
           providerId: currentProvider!,
-          packageName,
+          providerName: provider?.providerName || "",
+          packageName: pkg.packageName,
+          translatedPackageName: pkg.translatedPackageName,
         };
       }
     } else {
-      // Add a new service with the selected package
+      // Add a new service with all the selected information
       updatedServices.push({
         serviceName: currentService!,
+        translatedServiceName: serviceData?.translatedServiceName,
         providerId: currentProvider!,
-        packageName,
+        providerName: provider?.providerName || "",
+        packageName: pkg.packageName,
+        translatedPackageName: pkg.translatedPackageName,
       });
     }
 
@@ -208,14 +230,33 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
     const selectedData = skip
       ? { extraServices: [] } // Pass the correct structure when skipping
       : {
-          extraServices: selectedServices.map((service) => ({
-            servicesProvider_id: service.providerId,
-            packageName: service.packageName,
-            translatedPackageName: packages.find(
-              (pkg) => pkg.packageName === service.packageName
-            )?.translatedPackageName, // Add translated package name
-          })),
+          extraServices: selectedServices.map((service) => {
+            // Find the provider
+            const provider = serviceProviders.find(
+              (p) => p._id === service.providerId
+            );
+
+            // Find the service
+            const serviceData = data?.extraServices.find(
+              (s: any) => s.serviceName === service.serviceName
+            );
+
+            // Find the package
+            const pkg = packages.find(
+              (p) => p.packageName === service.packageName
+            );
+
+            return {
+              servicesProvider_id: service.providerId,
+              providerName: provider?.providerName || "",
+              serviceName: service.serviceName,
+              translatedServiceName: serviceData?.translatedServiceName,
+              packageName: service.packageName,
+              translatedPackageName: pkg?.translatedPackageName,
+            };
+          }),
         };
+
     onExtraServiceSelect(selectedData); // Pass the entire object
   };
 
@@ -386,7 +427,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                         ? "border-b-2 border-primary bg-secondary"
                         : "bg-white"
                     }`}
-                    onClick={() => handlePackageSelect(pkg.packageName)}
+                    onClick={() => handlePackageSelect(pkg)}
                     variants={{
                       hover: {
                         scale: 1.05,

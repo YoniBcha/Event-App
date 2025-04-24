@@ -46,6 +46,7 @@ interface Payload {
   extraServices: {
     servicesProvider_id: string;
     packageName: string;
+    providerName: string;
     translatedPackageName: string;
     serviceName: string;
     translatedServiceName: string;
@@ -331,11 +332,24 @@ const MyOrdersContent = () => {
                     <span className="font-medium text-gray-600">
                       {translations.booking.service} {index + 1}:
                     </span>
+
+                    <span className="ml-2 text-gray-800">
+                      {renderValue(
+                        service.serviceName,
+                        service.translatedServiceName
+                      )}{" "}
+                      /
+                    </span>
+
+                    <span className="ml-2 text-gray-800">
+                      {service.providerName} /
+                    </span>
+
                     <span className="ml-2 text-gray-800">
                       {renderValue(
                         service.packageName,
                         service.translatedPackageName
-                      )}
+                      )}{" "}
                     </span>
                   </div>
                 ))

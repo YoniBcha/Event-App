@@ -25,10 +25,9 @@ interface Design {
   updatedAt: string;
   __v: number;
 }
-
 interface ChooseDesignsProps {
   id: string;
-  onNext: (selectedDesignId: string | null) => void;
+  onNext: (selectedDesign: { id: string | null; name: string | null }) => void;
   onBackClick: () => void;
 }
 
@@ -65,9 +64,17 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
   //   setIsModalOpen(true);
   // };
 
-  const handleCardClick = (designId: string) => {
-    setSelectedDesignId(designId); // Set the selected design ID
-    onNext(designId); // Trigger the next step
+  const handleCardClick = (design: Design) => {
+    setSelectedDesignId(design._id);
+    const selectedDesign = {
+      id: design._id,
+      name:
+        currentLocale === "ar"
+          ? design.translatedEventDesign
+          : design.eventDesign,
+    };
+    // sessionStorage.setItem("selectedDesign", JSON.stringify(selectedDesign));
+    onNext(selectedDesign);
   };
 
   // const closeModal = () => {
@@ -98,9 +105,10 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
       : defaultValue;
   };
   useEffect(() => {
-    const selectedDesignId = sessionStorage.getItem("selectedDesignId");
-    if (selectedDesignId) {
-      setSelectedDesignId(selectedDesignId);
+    const selectedDesign = sessionStorage.getItem("selectedDesignId");
+    if (selectedDesign) {
+      const parsedDesign = JSON.parse(selectedDesign);
+      setSelectedDesignId(parsedDesign.id);
     }
   }, [setSelectedDesignId]);
 
@@ -192,7 +200,7 @@ function ChooseDesigns({ id, onNext, onBackClick }: ChooseDesignsProps) {
                       ? "border-2 border-primary scale-105"
                       : "border border-gray-300"
                   }`}
-                  onClick={() => handleCardClick(design._id)}
+                  onClick={() => handleCardClick(design)}
                   variants={slideVariants}
                   initial="hidden"
                   animate="visible"

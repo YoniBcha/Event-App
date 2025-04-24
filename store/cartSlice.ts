@@ -4,8 +4,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface CartState {
   items: {
     bookingData?: any;
-    selectedDesignId?: string | null;
-    selectedPackageId?: string | null;
+    selectedDesignId?: any[]; // Changed from selectedDesignId
+    selectedPackageId?: any[];
     eventPackageAdditions?: any[];
     extraServices?: any;
     personalData?: any;

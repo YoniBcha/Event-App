@@ -43,7 +43,14 @@ interface PersonalData {
   dressColor: string[];
   place: string;
 }
-
+interface SelectedDesign {
+  id: string;
+  name: string;
+}
+interface selectedPackage {
+  id: string;
+  name: string;
+}
 export default function MainPage() {
   const { step } = useParams<{ step: string }>();
   const currentStep = parseInt(step, 10); // Convert step to number
@@ -59,10 +66,10 @@ export default function MainPage() {
     event: "",
     date: null,
   });
-  const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
-  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
-    null
-  );
+  const [selectedDesignId, setSelectedDesignId] =
+    useState<SelectedDesign | null>(null);
+  const [selectedPackageId, setSelectedPackageId] =
+    useState<selectedPackage | null>(null);
   const [eventPackageAdditions, setEventPackageAdditions] = useState<
     EventPackageAddition[]
   >([]);
@@ -121,12 +128,12 @@ export default function MainPage() {
 
     const storedSelectedDesignId = sessionStorage.getItem("selectedDesignId");
     if (storedSelectedDesignId) {
-      setSelectedDesignId(storedSelectedDesignId);
+      setSelectedDesignId(JSON.parse(storedSelectedDesignId));
     }
 
     const storedSelectedPackageId = sessionStorage.getItem("selectedPackageId");
     if (storedSelectedPackageId) {
-      setSelectedPackageId(storedSelectedPackageId);
+      setSelectedPackageId(JSON.parse(storedSelectedPackageId));
     }
 
     const storedEventPackageAdditions = sessionStorage.getItem(
@@ -233,15 +240,18 @@ export default function MainPage() {
     router.push("/mainpage/2");
   };
 
-  const handleDesignSelect = (designId: string | null) => {
-    setSelectedDesignId(designId);
-    sessionStorage.setItem("selectedDesignId", designId || "");
+  const handleDesignSelect = (selectedDesign: any) => {
+    setSelectedDesignId(selectedDesign.id);
+    sessionStorage.setItem("selectedDesignId", JSON.stringify(selectedDesign));
     router.push("/mainpage/3");
   };
 
-  const handlePackageSelect = (packageId: string | null) => {
-    setSelectedPackageId(packageId);
-    sessionStorage.setItem("selectedPackageId", packageId || "");
+  const handlePackageSelect = (selectedPackage: any) => {
+    setSelectedPackageId(selectedPackage?.id);
+    sessionStorage.setItem(
+      "selectedPackageId",
+      JSON.stringify(selectedPackage) || ""
+    );
     router.push("/mainpage/4");
   };
 
@@ -279,14 +289,14 @@ export default function MainPage() {
   const handlePersonalDataSubmit = async (data: PersonalData) => {
     try {
       setPersonalData(data);
-      console.log(JSON.stringify(extraServices, null, 2));
+
       const payload = {
         place: bookingData.place,
         date: bookingData.date, // Check if date is valid
         city: bookingData.city,
         eventType: bookingData.event,
-        eventDesign: selectedDesignId,
-        eventPackage: selectedPackageId,
+        eventDesign: selectedDesignId?.id,
+        eventPackage: selectedPackageId?.id,
         eventPackageAdditions: eventPackageAdditions,
         extraServices: extraServices.extraServices,
         personalData: data,
@@ -382,7 +392,7 @@ export default function MainPage() {
             >
               <ChoosePackage
                 place={bookingData.place}
-                eventDesign={selectedDesignId}
+                eventDesign={selectedDesignId?.id}
                 eventType={bookingData.event}
                 onNext={handlePackageSelect}
                 onBackClick={handleBack}
@@ -400,7 +410,7 @@ export default function MainPage() {
               transition={{ duration: 0.3 }}
             >
               <PackageDetails
-                packageId={selectedPackageId}
+                packageId={selectedPackageId?.id}
                 onNextClick={handlePackageDetailsNext}
                 onBack={handleBack}
               />
@@ -417,7 +427,7 @@ export default function MainPage() {
               transition={{ duration: 0.3 }}
             >
               <ChooseAdditional
-                packageId={selectedPackageId ?? ""}
+                packageId={selectedPackageId.id ?? ""}
                 onBack={handleBack}
                 onSubmit={handleAdditionalDataSubmit}
               />

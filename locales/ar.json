@@ -77,7 +77,42 @@
   "total_price_after_vat": "السعر الإجمالي بعد الضريبة",
   "back_online": "أنت متصل بالإنترنت",
   "offline": "أنت غير متصل بالإنترنت. يرجى التحقق من اتصالك بالإنترنت.",
-
+  "cart": {
+    "viewBooking": "عرض الحجز",
+    "resumeBooking": "استئناف الحجز",
+    "bookingSummary": "ملخص الحجز",
+    "resumeButton": "استئناف الحجز (الخطوة  ",
+    "sections": {
+      "eventDetails": "تفاصيل الحدث",
+      "selectedDesign": "التصميم المختار",
+      "selectedPackage": "الباقة المختارة",
+      "packageAdditions": "إضافات الباقة",
+      "extraServices": "خدمات إضافية",
+      "personalInfo": "المعلومات الشخصية"
+    },
+    "lables": {
+      "event": "الحدث",
+      "city": "المدينة",
+      "place": "المكان",
+      "date": "التاريخ",
+      "designName": "اسم التصميم",
+      "packageName": "اسم الباقة",
+      "serviceName": "اسم الخدمة",
+      "providerName": "اسم المزود",
+      "name": "الاسم",
+      "phone": "الهاتف",
+      "secondPhone": "هاتف ثان",
+      "people": "الأشخاص",
+      "age": "العمر",
+      "birthDate": "تاريخ الميلاد",
+      "favoriteColors": "الألوان المفضلة",
+      "dressColors": "ألوان الملابس",
+      "notes": "ملاحظات",
+      "imagesOfPlace": "صور المكان"
+    },
+    "clearButton": "مسح جميع بيانات الحجز",
+    "notAvailable": "—"
+  },
   "login": {
     "title": "مرحبًا بعودتك!!",
     "emailUsernamePlaceholder": "البريد الإلكتروني أو اسم المستخدم",

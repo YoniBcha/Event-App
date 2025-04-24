@@ -8,8 +8,6 @@ export default function CartManager() {
   const dispatch = useDispatch();
 
   const syncCart = () => {
-    console.log("Syncing cart data from sessionStorage..."); // Debug log
-
     const items: Record<string, any> = {};
 
     // Sync all booking-related session storage items
@@ -17,10 +15,11 @@ export default function CartManager() {
     if (bookingData) items.bookingData = JSON.parse(bookingData);
 
     const selectedDesignId = sessionStorage.getItem("selectedDesignId");
-    if (selectedDesignId) items.selectedDesignId = selectedDesignId;
+    if (selectedDesignId) items.selectedDesignId = JSON.parse(selectedDesignId);
 
     const selectedPackageId = sessionStorage.getItem("selectedPackageId");
-    if (selectedPackageId) items.selectedPackageId = selectedPackageId;
+    if (selectedPackageId)
+      items.selectedPackageId = JSON.parse(selectedPackageId);
 
     const eventPackageAdditions = sessionStorage.getItem(
       "eventPackageAdditions"
@@ -46,10 +45,10 @@ export default function CartManager() {
       extraServices ||
       (personalData && !sessionStorage.getItem("bookingCompleted"));
 
-    console.log("Cart sync results:", {
-      items,
-      hasIncompleteBooking,
-    }); // Debug log
+    // console.log("Cart sync results:", {
+    //   items,
+    //   hasIncompleteBooking,
+    // }); // Debug log
 
     // Update Redux store
     dispatch(

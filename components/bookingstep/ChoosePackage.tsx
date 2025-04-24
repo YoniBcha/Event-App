@@ -43,7 +43,7 @@ interface ChoosePackageProps {
   place: string;
   eventType: string;
   eventDesign: string;
-  onNext: (selectedPackageId: string | null) => void;
+  onNext: (selectedPackage: { id: string | null; name: string | null }) => void;
   onBackClick: () => void;
 }
 
@@ -196,8 +196,15 @@ function ChoosePackage({
         galleryData?.singleGallery?.images?.length
     );
   };
-  const handleCardClick = (packageId: string) => {
-    setSelectedPackageId(packageId);
+  const handleCardClick = (eventPackage: Package) => {
+    const selectedPackage = {
+      id: eventPackage._id,
+      name:
+        currentLocale === "ar"
+          ? eventPackage.translatedPackageName
+          : eventPackage.packageName,
+    };
+    onNext(selectedPackage);
   };
 
   // const closeModal = () => {
@@ -490,7 +497,7 @@ function ChoosePackage({
                   variants={cardVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  onClick={() => onNext(eventPackage._id)}
+                  onClick={() => handleCardClick(eventPackage)}
                   key={eventPackage._id || index}
                 >
                   {/* First Row: Image and Package Details */}
@@ -580,7 +587,7 @@ function ChoosePackage({
               {packages.map((eventPackage: Package, index: number) => (
                 <SwiperSlide
                   key={eventPackage._id || index}
-                  onClick={() => onNext(eventPackage._id)}
+                  onClick={() => handleCardClick(eventPackage)}
                 >
                   <motion.div
                     className={`flex flex-col items-center cursor-pointer p-2 rounded-lg transition-all duration-300 ${
