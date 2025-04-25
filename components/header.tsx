@@ -267,7 +267,8 @@ function Header() {
               <Cart />
             </div>
             <div
-              className="h-10 w-10 rounded-full bg-gray-200 cursor-pointer circle-button"
+              className="h-10 w-10 rounded-full bg-cover bg-center cursor-pointer circle-button"
+              style={{ backgroundImage: "url('/pp1.jpg')" }}
               onClick={toggleAvatarDropdown}
             >
               <AnimatePresence>

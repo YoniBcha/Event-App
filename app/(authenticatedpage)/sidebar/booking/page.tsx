@@ -300,17 +300,24 @@ const MyOrdersContent = () => {
             <div className="text-gray-700 space-y-3">
               {payloads?.eventPackageAdditions?.length > 0 ? (
                 payloads.eventPackageAdditions.map((addition, index) => (
-                  <div key={index} className="flex items-center">
-                    <span className="font-medium text-gray-600">
-                      {translations.booking.addition} {index + 1}:
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 overflow-hidden"
+                  >
+                    <span className="font-medium text-gray-600 flex-shrink-0">
+                      {index + 1}:
                     </span>
-                    <span className=" flex text-center text-gray-800">
-                      {renderValue(
-                        addition.additionTypeName,
-                        addition.translatedTypeName
-                      )}{" "}
-                      (Quantity: {addition.quantity})
-                    </span>
+                    <div className="flex items-baseline gap-1 min-w-0">
+                      <span className="text-gray-800 truncate">
+                        {renderValue(
+                          addition.additionTypeName,
+                          addition.translatedTypeName
+                        )}
+                      </span>
+                      <span className="text-gray-600 whitespace-nowrap text-sm flex-shrink-0">
+                        (Qx: {addition.quantity})
+                      </span>
+                    </div>
                   </div>
                 ))
               ) : (

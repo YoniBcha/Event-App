@@ -450,7 +450,7 @@ const BookedEvents = () => {
                 {translations.booking.quotation}
               </Link>
             </div>
-            {event.orderStatus === "complete" && (
+            {event.orderStatus === "paymentApproved" && (
               <div className="flex flex-row gap-2 items-center justify-center text-green-500 text-center  w-full">
                 <div className="text-green-500 text-lg ">
                   <FaCheckCircle />

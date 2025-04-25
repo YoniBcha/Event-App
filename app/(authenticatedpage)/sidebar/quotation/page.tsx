@@ -146,39 +146,70 @@ function Quotation() {
         className="p-4 rounded-md bg-[#fffff4] w-full max-w-[800px] mx-auto relative" // Add `relative` for positioning
       >
         {/* Header Section */}
-        <div className="flex justify-between items-center mb-4">
-          {/* Date of Creation */}
-          <div>
-            {translations.date_of_creation}:{" "}
-            {moment(data?.bookedEvents?.createdAt).format("MMMM DD, YYYY")}
+        <div className="relative mb-4">
+          {/* Container for small devices (flex-col) */}
+          <div className="flex flex-col sm:hidden">
+            {/* Status at top-right for mobile */}
+            {data?.bookedEvents && (
+              <div
+                className={`text-sm font-semibold px-3 py-1 rounded-full border self-end mb-2 ${
+                  data.bookedEvents.orderStatus === "completed"
+                    ? "bg-green-500 text-white"
+                    : data.bookedEvents.orderStatus === "rejected"
+                    ? "bg-red-500 text-white"
+                    : data.bookedEvents.orderStatus === "underReview"
+                    ? "bg-yellow-500 text-black animate-zoom"
+                    : "bg-gray-500 text-white"
+                }`}
+              >
+                {currentLocale === "ar"
+                  ? statusTranslations[
+                      data.bookedEvents
+                        .orderStatus as keyof typeof statusTranslations
+                    ] || data.bookedEvents.orderStatus
+                  : data.bookedEvents.orderStatus}
+              </div>
+            )}
+
+            {/* Date below for mobile */}
+            <div className="text-sm sm:text-base">
+              {translations.date_of_creation}:{" "}
+              {moment(data?.bookedEvents?.createdAt).format("MMMM DD, YYYY")}
+            </div>
           </div>
 
-          {/* Status in the Top-Right Corner */}
-          {data && data.bookedEvents && (
-            <div
-              id="status-section" // Add ID for exclusion
-              className={`text-sm font-semibold px-3 py-1 rounded-full border absolute top-4 
-      ${currentLocale === "ar" ? "left-4" : "right-4"} 
-      ${
-        data.bookedEvents.orderStatus === "completed"
-          ? "bg-green-500 text-white"
-          : data.bookedEvents.orderStatus === "rejected"
-          ? "bg-red-500 text-white"
-          : data.bookedEvents.orderStatus === "underReview"
-          ? "bg-yellow-500 text-black animate-zoom"
-          : "bg-gray-500 text-white"
-      }`}
-            >
-              {currentLocale === "ar"
-                ? statusTranslations[
-                    data.bookedEvents
-                      .orderStatus as keyof typeof statusTranslations
-                  ] || data.bookedEvents.orderStatus
-                : data.bookedEvents.orderStatus}
+          {/* Container for larger devices (flex-row justify-between) */}
+          <div className="hidden sm:flex justify-between items-center">
+            {/* Date on left */}
+            <div className="text-sm sm:text-base">
+              {translations.date_of_creation}:{" "}
+              {moment(data?.bookedEvents?.createdAt).format("MMMM DD, YYYY")}
             </div>
-          )}
+
+            {/* Status on right */}
+            {data?.bookedEvents && (
+              <div
+                className={`text-sm font-semibold px-3 py-1 rounded-full border ${
+                  data.bookedEvents.orderStatus === "completed"
+                    ? "bg-green-500 text-white"
+                    : data.bookedEvents.orderStatus === "rejected"
+                    ? "bg-red-500 text-white"
+                    : data.bookedEvents.orderStatus === "underReview"
+                    ? "bg-yellow-500 text-black animate-zoom"
+                    : "bg-gray-500 text-white"
+                }`}
+              >
+                {currentLocale === "ar"
+                  ? statusTranslations[
+                      data.bookedEvents
+                        .orderStatus as keyof typeof statusTranslations
+                    ] || data.bookedEvents.orderStatus
+                  : data.bookedEvents.orderStatus}
+              </div>
+            )}
+          </div>
         </div>
-        {data?.bookedEvents?.orderStatus === "completed" && (
+        {data?.bookedEvents?.orderStatus === "paymentApproved" && (
           <div className="flex flex-row gap-2   justify-start text-green-500 text-start  w-full">
             <div className="text-green-500 text-lg ">
               <FaCheckCircle />
