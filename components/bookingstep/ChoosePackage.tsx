@@ -69,6 +69,7 @@ function ChoosePackage({
 
   const [selectedImage, setSelectedImage] = useState<any>("");
   // const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const { data: galleryData, isLoading: isGalleryLoading } =
     useGetSingleDesignGalleryQuery<any>(
@@ -131,7 +132,24 @@ function ChoosePackage({
 
   //   fetchDesigns();
   // }, []);
+  const getDescription = () => {
+    // Provide empty string as fallback if values are undefined
+    const fullDescription = renderValue(
+      selectedImage?.singleGallery?.description || "",
+      selectedImage?.singleGallery?.translatedDescription || ""
+    ).replace(/\n/g, "<br />");
 
+    if (
+      typeof window !== "undefined" &&
+      window.innerWidth < 768 &&
+      !isExpanded
+    ) {
+      return fullDescription.length > 150
+        ? `${fullDescription.substring(0, 150)}...`
+        : fullDescription;
+    }
+    return fullDescription;
+  };
   const cardVariants = {
     hover: {
       scale: 1.05,
@@ -314,12 +332,14 @@ function ChoosePackage({
   // );
 
   const renderValue = (
-    defaultValue: string,
+    defaultValue: string | undefined,
     translatedValue: string | undefined
   ) => {
-    return currentLocale === "ar" && translatedValue
-      ? translatedValue
-      : defaultValue;
+    // Provide empty string as fallback if both are undefined
+    const defaultVal = defaultValue || "";
+    const translatedVal = translatedValue || "";
+
+    return currentLocale === "ar" && translatedVal ? translatedVal : defaultVal;
   };
   return (
     <div className="flex flex-col justify-center items-center gap-4 h-full">
@@ -449,7 +469,7 @@ function ChoosePackage({
                             .translatedEventDesign
                         )}
                       </h3>
-                      <div
+                      {/* <div
                         className="mt-2 p-2 text-sm md:text-base overflow-hidden"
                         style={{ wordWrap: "break-word" }}
                         dangerouslySetInnerHTML={{
@@ -459,7 +479,33 @@ function ChoosePackage({
                               ?.translatedDescription || "" // Fallback to empty string if undefined
                           ).replace(/\n/g, "<br />"),
                         }}
+                      /> */}
+
+                      <div
+                        className="mt-2 p-2 text-sm md:text-base overflow-hidden"
+                        style={{ wordWrap: "break-word" }}
+                        dangerouslySetInnerHTML={{
+                          __html: getDescription(),
+                        }}
                       />
+                      {typeof window !== "undefined" &&
+                        window.innerWidth < 570 &&
+                        renderValue(
+                          selectedImage?.singleGallery?.description,
+                          selectedImage?.singleGallery?.translatedDescription
+                        ).length > 50 && (
+                          <button
+                            onClick={(e) => {
+                              setIsExpanded(!isExpanded);
+                              e.stopPropagation();
+                            }}
+                            className="text-primary font-semibold text-sm mt-1"
+                          >
+                            {isExpanded
+                              ? translations.see_less
+                              : translations.see_more}
+                          </button>
+                        )}
                     </div>
                   </motion.div>
                 </>

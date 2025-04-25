@@ -134,7 +134,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           ) {
             age--;
           }
-          return age >= 18;
+          return age >= 18 && age <= 100;
         }
       ),
   });

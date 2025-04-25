@@ -328,29 +328,37 @@ const MyOrdersContent = () => {
             <div className="text-gray-700 space-y-3">
               {payloads.extraServices.length > 0 ? (
                 payloads.extraServices.map((service, index) => (
-                  <div key={index} className="flex items-center">
+                  <div key={index} className="grid grid-cols-2 gap-2">
                     <span className="font-medium text-gray-600">
                       {translations.booking.service} {index + 1}:
                     </span>
 
-                    <span className="ml-2 text-gray-800">
+                    <p>
+                      <span className="text-gray-500">
+                        {translations.cart.lables.serviceName}:
+                      </span>{" "}
                       {renderValue(
                         service.serviceName,
                         service.translatedServiceName
-                      )}{" "}
-                      /
-                    </span>
+                      )}
+                    </p>
 
-                    <span className="ml-2 text-gray-800">
-                      {service.providerName} /
-                    </span>
+                    <p>
+                      <span className="text-gray-500">
+                        {translations.cart.lables.providerName}:
+                      </span>{" "}
+                      {service.providerName}
+                    </p>
 
-                    <span className="ml-2 text-gray-800">
+                    <p>
+                      <span className="text-gray-500">
+                        {translations.cart.lables.packageName}:
+                      </span>{" "}
                       {renderValue(
                         service.packageName,
                         service.translatedPackageName
-                      )}{" "}
-                    </span>
+                      )}
+                    </p>
                   </div>
                 ))
               ) : (
@@ -518,164 +526,169 @@ const MyOrdersContent = () => {
 
               {/* Additions */}
               {payloads.priceDetails.additions.length > 0 && (
-                <div className="flex flex-col items-center">
-                  <span className="font-medium w-full flex text-start text-gray-600 ">
-                    {translations.booking.addition}:{" "}
+                <div className="flex flex-col items-center w-full">
+                  <span className="font-medium w-full text-start text-gray-600 mb-2">
+                    {translations.booking.addition}:
                   </span>
-                  <table className="w-full  rounded-lg overflow-hidden">
-                    <thead>
-                      <tr className="bg-primary">
-                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
-                          {translations.booking.addition}
-                        </th>
-                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
-                          {translations.booking.type}
-                        </th>
-                        <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
-                          {translations.booking.quantity}
-                        </th>
-                        <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
-                          {translations.booking.unit_price}
-                        </th>
-                        <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
-                          {translations.booking.total}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="border border-gray-200">
-                      {payloads.priceDetails.additions.map(
-                        (addition: any, index: number) => (
-                          <tr
-                            key={index}
-                            className={`${
-                              index !==
-                              payloads.priceDetails.additions.length - 1
-                                ? "border-b border-gray-200"
-                                : ""
-                            }`}
-                          >
-                            <td className="py-2 px-4">
-                              {renderValue(
-                                addition.name,
-                                addition.translatedAdditionName
-                              )}
-                            </td>
-                            <td className="py-2 px-4">
-                              {renderValue(
-                                addition.type,
-                                addition.translatedTypeName
-                              )}
-                            </td>
-                            <td className="py-2 px-4 text-right">
-                              {addition.quantity}
-                            </td>
-                            <td className="py-2 px-4 flex flex-row items-center justify-center text-right">
-                              {addition.unitPrice}
-                              <Image
-                                src="/images/SR.png"
-                                alt="SR"
-                                width={15}
-                                height={3}
-                                className={`ml-1 inline ${
-                                  currentLocale === "ar" ? "scale-x-[-1]" : ""
-                                }`}
-                              />
-                            </td>
-                            <td className="py-2 px-4  text-right">
-                              {addition.totalPrice}
-                              <Image
-                                src="/images/SR.png"
-                                alt="SR"
-                                width={15}
-                                height={3}
-                                className={`ml-1 inline ${
-                                  currentLocale === "ar" ? "scale-x-[-1]" : ""
-                                }`}
-                              />
-                            </td>
-                          </tr>
-                        )
-                      )}
-                    </tbody>
-                  </table>
+                  <div className="w-full overflow-x-auto">
+                    <table className="w-full min-w-[700px] md:min-w-0 rounded-lg">
+                      <thead>
+                        <tr className="bg-primary">
+                          <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                            {translations.booking.addition}
+                          </th>
+                          <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                            {translations.booking.type}
+                          </th>
+                          <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                            {translations.booking.quantity}
+                          </th>
+                          <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                            {translations.booking.unit_price}
+                          </th>
+                          <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                            {translations.booking.total}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="border border-gray-200">
+                        {payloads.priceDetails.additions.map(
+                          (addition: any, index: number) => (
+                            <tr
+                              key={index}
+                              className={`
+                  ${
+                    index !== payloads.priceDetails.additions.length - 1
+                      ? "border-b border-gray-200"
+                      : ""
+                  }
+                `}
+                            >
+                              <td className="py-2 px-4 whitespace-nowrap">
+                                {renderValue(
+                                  addition.name,
+                                  addition.translatedAdditionName
+                                )}
+                              </td>
+                              <td className="py-2 px-4 whitespace-nowrap">
+                                {renderValue(
+                                  addition.type,
+                                  addition.translatedTypeName
+                                )}
+                              </td>
+                              <td className="py-2 px-4 text-right whitespace-nowrap">
+                                {addition.quantity}
+                              </td>
+                              <td className="py-2 px-4 text-right whitespace-nowrap">
+                                {addition.unitPrice}
+                                <Image
+                                  src="/images/SR.png"
+                                  alt="SR"
+                                  width={15}
+                                  height={3}
+                                  className={`ml-1 inline ${
+                                    currentLocale === "ar" ? "scale-x-[-1]" : ""
+                                  }`}
+                                />
+                              </td>
+                              <td className="py-2 px-4 text-right whitespace-nowrap">
+                                {addition.totalPrice}
+                                <Image
+                                  src="/images/SR.png"
+                                  alt="SR"
+                                  width={15}
+                                  height={3}
+                                  className={`ml-1 inline ${
+                                    currentLocale === "ar" ? "scale-x-[-1]" : ""
+                                  }`}
+                                />
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
 
               {/* Extra Services */}
               {payloads.priceDetails.extraServices.length > 0 && (
-                <div className="flex flex-col items-center">
-                  <span className="font-medium w-full flex text-start text-gray-600 ">
+                <div className="flex flex-col items-center w-full">
+                  <span className="font-medium w-full text-start text-gray-600 mb-2">
                     {translations.booking.extraServices}:
                   </span>
-                  <table className="w-full  rounded-lg overflow-hidden">
-                    <thead>
-                      <tr className="bg-primary">
-                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
-                          {translations.booking.service}
-                        </th>
-                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
-                          {translations.serviceName}
-                        </th>
-                        <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200">
-                          {translations.booking.provider}
-                        </th>
-
-                        <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200">
-                          {translations.booking.price}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="border border-gray-200">
-                      {payloads.priceDetails.extraServices.map(
-                        (service: any, index: number) => (
-                          <tr
-                            key={index}
-                            className={`${
-                              index !==
-                              payloads.priceDetails.extraServices.length - 1
-                                ? "border-b border-gray-200"
-                                : ""
-                            }`}
-                          >
-                            <td className="py-2 px-4">
-                              {renderValue(
-                                service.package,
-                                service.translatedPackageName
-                              )}
-                            </td>
-
-                            <td className="py-2 px-4">
-                              {renderValue(
-                                service.serviceName,
-                                service.translatedServiceName
-                              )}
-                            </td>
-                            <td className="py-2 px-4">{service.provider}</td>
-
-                            <td className="py-2 px-4 text-right">
-                              {service.price}
-                              <Image
-                                src="/images/SR.png"
-                                alt="SR"
-                                width={15}
-                                height={3}
-                                className={`ml-1 inline ${
-                                  currentLocale === "ar" ? "scale-x-[-1]" : ""
-                                }`}
-                              />
-                            </td>
-                          </tr>
-                        )
-                      )}
-                    </tbody>
-                  </table>
+                  <div className="w-full overflow-x-auto">
+                    <table className="w-full min-w-[600px] md:min-w-0 rounded-lg">
+                      <thead>
+                        <tr className="bg-primary">
+                          <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                            {translations.booking.service}
+                          </th>
+                          <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                            {translations.serviceName}
+                          </th>
+                          <th className="py-2 px-4 text-left font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                            {translations.booking.provider}
+                          </th>
+                          <th className="py-2 px-4 text-right font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                            {translations.booking.price}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="border border-gray-200">
+                        {payloads.priceDetails.extraServices.map(
+                          (service: any, index: number) => (
+                            <tr
+                              key={index}
+                              className={`
+                  ${
+                    index !== payloads.priceDetails.extraServices.length - 1
+                      ? "border-b border-gray-200"
+                      : ""
+                  }
+                `}
+                            >
+                              <td className="py-2 px-4 whitespace-nowrap">
+                                {renderValue(
+                                  service.package,
+                                  service.translatedPackageName
+                                )}
+                              </td>
+                              <td className="py-2 px-4 whitespace-nowrap">
+                                {renderValue(
+                                  service.serviceName,
+                                  service.translatedServiceName
+                                )}
+                              </td>
+                              <td className="py-2 px-4 whitespace-nowrap">
+                                {service.provider}
+                              </td>
+                              <td className="py-2 px-4 text-right whitespace-nowrap">
+                                {service.price}
+                                <Image
+                                  src="/images/SR.png"
+                                  alt="SR"
+                                  width={15}
+                                  height={3}
+                                  className={`ml-1 inline ${
+                                    currentLocale === "ar" ? "scale-x-[-1]" : ""
+                                  }`}
+                                />
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
 
               {/* Total Price Before VAT */}
               <div className="flex flex-row w-full items-center justify-center">
-                <div className="w-1/2"></div>
-                <table className="w-1/2">
+                <div className="md:w-1/2"></div>
+                <table className="md:w-1/2 w-full overflow-x-auto">
                   <tbody className="w-full border border-gray-200 rounded-lg overflow-hidden">
                     {/* Total Price Before VAT */}
                     <tr className="border-b border-gray-200">

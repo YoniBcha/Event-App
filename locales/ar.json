@@ -190,7 +190,7 @@
   },
   "booking": {
     "birth_date_is_required": "تاريخ الميلاد مطلوب",
-    "must_be_at_least_18_years_old": "يجب أن يكون عمرك 18 عامًا على الأقل",
+    "must_be_at_least_18_years_old": "يجب أن يكون عمرك 18 سنة على الأقل وألا يتجاوز 100 سنة",
     "selectLocationType": "اختر نوع الموقع",
     "iAgreeToTerms": "أوافق على الشروط والأحكام",
     "continueToOrder": "تابع إلى الطلب",

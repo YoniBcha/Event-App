@@ -191,7 +191,7 @@
   },
   "booking": {
     "birth_date_is_required": "Birth date is required",
-    "must_be_at_least_18_years_old": "You must be at least 18 years old",
+    "must_be_at_least_18_years_old": "You must be at least 18 years old and not over 100",
     "age": "Age",
     "selectLocationType": "Select Location Type",
     "iAgreeToTerms": "I agree to the terms and conditions",

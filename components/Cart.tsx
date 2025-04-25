@@ -169,7 +169,11 @@ export default function Cart() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="bg-gray-50 p-4 rounded-lg"
+                        className="bg-gray-50 p-4 rounded-lg cursor-pointer"
+                        onClick={() => {
+                          router.push("/mainpage/1");
+                          setIsOpen(false);
+                        }}
                       >
                         <h4 className="font-semibold text-primary mb-2">
                           1. {translations.cart.sections.eventDetails}
@@ -233,7 +237,11 @@ export default function Cart() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="bg-gray-50 p-4 rounded-lg"
+                        className="bg-gray-50 p-4 rounded-lg cursor-pointer"
+                        onClick={() => {
+                          router.push("/mainpage/2");
+                          setIsOpen(false);
+                        }}
                       >
                         <h4 className="font-semibold text-primary mb-2">
                           2. {translations.cart.sections.selectedDesign}
@@ -252,7 +260,11 @@ export default function Cart() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="bg-gray-50 p-4 rounded-lg"
+                        className="bg-gray-50 p-4 rounded-lg cursor-pointer"
+                        onClick={() => {
+                          router.push("/mainpage/3");
+                          setIsOpen(false);
+                        }}
                       >
                         <h4 className="font-semibold text-primary mb-2">
                           3. {translations.cart.sections.selectedPackage}
@@ -271,7 +283,11 @@ export default function Cart() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="bg-gray-50 p-4 rounded-lg"
+                        className="bg-gray-50 p-4 rounded-lg cursor-pointer"
+                        onClick={() => {
+                          router.push("/mainpage/5");
+                          setIsOpen(false);
+                        }}
                       >
                         <h4 className="font-semibold text-primary mb-2">
                           4. {translations.cart.sections.packageAdditions}
@@ -299,7 +315,11 @@ export default function Cart() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
-                        className="bg-gray-50 p-4 rounded-lg"
+                        className="bg-gray-50 p-4 rounded-lg cursor-pointer"
+                        onClick={() => {
+                          router.push("/mainpage/6");
+                          setIsOpen(false);
+                        }}
                       >
                         <h4 className="font-semibold text-primary mb-2">
                           5. {translations.cart.sections.extraServices}
@@ -356,7 +376,11 @@ export default function Cart() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
-                        className="bg-gray-50 p-4 rounded-lg"
+                        className="bg-gray-50 p-4 rounded-lg cursor-pointer"
+                        onClick={() => {
+                          router.push("/mainpage/7");
+                          setIsOpen(false);
+                        }}
                       >
                         <h4 className="font-semibold text-primary mb-2">
                           6. {translations.cart.sections.personalInfo}
@@ -370,7 +394,7 @@ export default function Cart() {
                           </p>
                           <p>
                             <span className="text-gray-500">
-                              {translations.cart.lables.Phone}:
+                              {translations.cart.lables.phone}:
                             </span>{" "}
                             {items.personalData.mobileNumber || "—"}
                           </p>
@@ -388,7 +412,7 @@ export default function Cart() {
                           </p>
                           <p>
                             <span className="text-gray-500">
-                              {translations.cart.lables.palace}:
+                              {translations.cart.lables.place}:
                             </span>{" "}
                             {items.personalData.place || "—"}
                           </p>
@@ -459,7 +483,7 @@ export default function Cart() {
                           {items.personalData.imageOfPlace.length > 0 && (
                             <div className="col-span-2">
                               <span className="text-gray-500">
-                                {translations.cart.lables.imageOfPlace}:
+                                {translations.cart.lables.imagesOfPlace}:
                               </span>
                               <div className="mt-2 flex space-x-2 overflow-x-auto">
                                 {items.personalData.imageOfPlace.map(
