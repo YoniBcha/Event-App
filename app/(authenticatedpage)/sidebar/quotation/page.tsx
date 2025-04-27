@@ -494,14 +494,14 @@ function Quotation() {
             </button>
           </div>
 
-          {/* <PDFViewer>
+          <PDFViewer>
             <QuotationPDF
               data={data}
               translations={translations}
               currentLocale={currentLocale}
               logo={logo}
             />
-          </PDFViewer> */}
+          </PDFViewer>
         </div>
       </div>
     </div>

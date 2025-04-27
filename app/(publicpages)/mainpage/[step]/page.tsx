@@ -42,6 +42,7 @@ interface PersonalData {
   imageOfPlace: string[]; // Store URLs instead of File objects
   dressColor: string[];
   place: string;
+  couponCode?:string;
 }
 interface SelectedDesign {
   id: string;
@@ -300,6 +301,7 @@ export default function MainPage() {
         eventPackageAdditions: eventPackageAdditions,
         extraServices: extraServices.extraServices,
         personalData: data,
+        couponCode: data.couponCode,
       };
 
       console.log("Payload to be sent:", payload);

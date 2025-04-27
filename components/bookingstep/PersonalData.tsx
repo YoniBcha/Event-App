@@ -26,6 +26,7 @@ interface PersonalData {
   age?: string;
   length: number;
   birthDate?: number; // Optional field for birth date
+  couponCode?:string;
 }
 
 interface PersonalDataProps {
@@ -49,6 +50,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           age: "",
           birthDate: 0,
           imageOfPlace: [], // Initialize as empty array for URLs
+          couponCode:"",
         };
   });
 
@@ -812,7 +814,29 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             )}
           </motion.div>
         </div>
-
+<motion.div
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
+          >
+            <label className="font-medium text-tertiary text-md mb-2">
+              {/* {translations.booking.fullName} */}
+              Coupon Code(Optional)
+            </label>
+            <input
+              type="text"
+              name="couponCode"
+              value={formData.couponCode}
+              onChange={handleInputChange}
+              className={`border outline-none ${
+                errors.couponCode ? "border-red-500" : "border-primary"
+              } input-field`}
+            />
+            {errors.couponCode && (
+              <div className="text-red-500 text-sm mt-1">{errors.couponCode}</div>
+            )}
+          </motion.div>
         {/* Notes */}
         <motion.div
           className="mt-6"
