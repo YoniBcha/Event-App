@@ -1,0 +1,54 @@
+// // components/PDFDownloadButton.tsx
+// "use client";
+// import dynamic from "next/dynamic";
+// import { type ReactElement } from "react";
+// import { DocumentProps } from "react-pdf";
+
+// // Dynamically import PDFDownloadLink to avoid SSR issues
+// const PDFDownloadLink = dynamic(
+//   () => import("@react-pdf/renderer").then((mod) => mod.PDFDownloadLink),
+//   {
+//     ssr: false,
+//     loading: () => (
+//       <button disabled className="download-button">
+//         Preparing PDF generator...
+//       </button>
+//     ),
+//   }
+// );
+
+// interface PDFDownloadButtonProps {
+//   document: ReactElement;
+//   fileName: string;
+//   className?: string;
+// }
+
+// export default function PDFDownloadButton({
+//   document,
+//   fileName,
+//   className = "download-button",
+// }: PDFDownloadButtonProps) {
+//   return (
+//     <PDFDownloadLink
+//       document={document as ReactElement<DocumentProps>}
+//       fileName={fileName}
+//       className={className}
+//     >
+//       {({ loading, error }) => {
+//         if (error) {
+//           console.error("PDF generation error:", error);
+//           return (
+//             <button disabled className={className}>
+//               Failed to generate PDF
+//             </button>
+//           );
+//         }
+//         return (
+//           <button disabled={loading} className={className}>
+//             {loading ? "Generating PDF..." : "Download PDF"}
+//           </button>
+//         );
+//       }}
+//     </PDFDownloadLink>
+//   );
+// }
