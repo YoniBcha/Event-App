@@ -71,6 +71,8 @@
   "print": "Print",
   "total_price_before_vat": "Total Price Before VAT",
   "vat_15": "VAT 15%",
+  "hasDiscount": "Has Discount",
+  "discount": "Discount",
   "no_booked_events": "No booked events data available",
   "read": "READ",
   "download": "Download",

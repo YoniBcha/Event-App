@@ -394,6 +394,23 @@ function Quotation() {
                     </td>
                   </tr>
 
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 px-3 border-r border-gray-100">
+                      {translations.discount}
+                    </td>
+                    <td className="flex py-2 px-3 justify-center items-center border-r border-gray-100">
+                      {data?.bookedEvents?.discountAmount}{" "}
+                      <Image
+                        src="/images/SR.png"
+                        alt="SR"
+                        width={10}
+                        height={10}
+                        className={`ml-1 ${
+                          currentLocale === "ar" ? "scale-x-[-1]" : ""
+                        }`}
+                      />
+                    </td>
+                  </tr>
                   <tr>
                     <td className="py-2 px-3 border-r border-gray-100">
                       {translations.total_price_after_vat}
@@ -429,12 +446,16 @@ function Quotation() {
                 ))}
             </ul>
             <div className="flex justify-between mt-6">
-              <div>
-                <p className="font-semibold">{translations.client_signature}</p>
-                <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
+              <div className="text-center felx flex-col gap-3">
+                <div className="font-semibold mb-7">
+                  {translations.client_signature}
+                </div>
+                <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-40"></div>
               </div>
-              <div>
-                <p className="font-semibold">{translations.fenzo_events}</p>
+              <div className="text-center felx flex-col gap-3">
+                <div className="font-semibold mb-7">
+                  {translations.fenzo_events}
+                </div>
                 <div className="mt-2 border-b-2 border-dashed border-gray-500 w-20 md:w-48"></div>
               </div>
             </div>

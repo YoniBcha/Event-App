@@ -71,6 +71,8 @@
   "print": "طباعة",
   "total_price_before_vat": "السعر الإجمالي قبل الضريبة",
   "vat_15": "ضريبة القيمة المضافة 15%",
+  "discount": "الخصم",
+  "hasDiscount": "لديه خصم",
   "no_booked_events": "لا توجد بيانات حجوزات متاحة",
   "read": "قراءة",
   "download": "تحميل",

@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import {
@@ -291,12 +290,13 @@ const QuotationPDF = ({ data, translations, currentLocale, logo }: any) => {
                                 backgroundColor: color,
                                 marginRight: 3,
                                 padding: 5,
+                                border: "1px solid gray",
                                 color: "transparent",
                               }}
                             >
                               color
                             </Text>
-                            <Text>,</Text>
+                            <Text> </Text>
                           </View>
                         )
                       )}
@@ -316,13 +316,14 @@ const QuotationPDF = ({ data, translations, currentLocale, logo }: any) => {
                                 height: 10,
                                 backgroundColor: color,
                                 marginRight: 3,
+                                border: "1px solid gray",
                                 padding: 5,
                                 color: "transparent",
                               }}
                             >
                               color
                             </Text>
-                            <Text>,</Text>
+                            <Text> </Text>
                           </View>
                         )
                       )}
@@ -623,6 +624,15 @@ const QuotationPDF = ({ data, translations, currentLocale, logo }: any) => {
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={{ fontSize: 12 }}>
                   {data?.bookedEvents?.vatAmount}
+                </Text>
+                <Image src="/images/SR.png" style={styles.currencySymbol} />
+              </View>
+            </View>
+            <View style={styles.priceRow}>
+              <Text style={{ fontSize: 12 }}>{translations?.discount}</Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ fontSize: 12 }}>
+                  {data?.bookedEvents?.discountAmount}
                 </Text>
                 <Image src="/images/SR.png" style={styles.currencySymbol} />
               </View>

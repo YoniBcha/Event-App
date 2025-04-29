@@ -25,6 +25,7 @@ interface Payload {
   city: string;
   priceDetails: any;
   priceBeforeVat: number;
+  discountAmount: number;
   translatedEventType: string;
   translatedEventDesign: string;
   translatedEventPackage: string;
@@ -697,6 +698,27 @@ const MyOrdersContent = () => {
                 <div className="md:w-1/2"></div>
                 <table className="md:w-1/2 w-full overflow-x-auto">
                   <tbody className="w-full border border-gray-200 rounded-lg overflow-hidden">
+                    <tr className="border-b border-gray-200">
+                      <td className="py-2 pl-4 border-r border-gray-200">
+                        <span className="font-medium text-gray-600">
+                          {translations.discount}:
+                        </span>
+                      </td>
+                      <td className="py-2 pr-4 text-right">
+                        <span className="text-gray-800 flex items-center justify-end">
+                          {payloads.discountAmount}
+                          <Image
+                            src="/images/SR.png"
+                            alt="SR"
+                            width={15}
+                            height={3}
+                            className={`ml-1 ${
+                              currentLocale === "ar" ? "scale-x-[-1]" : ""
+                            }`}
+                          />
+                        </span>
+                      </td>
+                    </tr>
                     {/* Total Price Before VAT */}
                     <tr className="border-b border-gray-200">
                       <td className="py-2 pl-4 border-r border-gray-200">

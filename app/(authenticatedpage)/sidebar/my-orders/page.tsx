@@ -24,6 +24,7 @@ import "primeicons/primeicons.css";
 import "react-toastify/dist/ReactToastify.css";
 import { FaCheckCircle } from "react-icons/fa";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import { MdLocalOffer } from "react-icons/md";
 
 interface Event {
   _id: string;
@@ -35,6 +36,7 @@ interface Event {
     notes?: string;
   };
   city: string;
+  discountAmount: number;
   date: string;
 
   eventType: {
@@ -75,12 +77,14 @@ interface ApiResponse {
 interface RootState {
   language: {
     translations: {
+      hasDiscount: string;
       booking: {
         myReservation: string;
         event: string;
         package: string;
         eventDesign: string;
         deposite: string;
+
         underProcessing: string;
         paymentSent: string;
         accepted: string;
@@ -179,8 +183,8 @@ const BookedEvents = () => {
       icon: <FaFilter />,
     },
     {
-      label: translations.booking.underProcessing,
-      value: "underReview",
+      label: translations.booking.paymentSent,
+      value: "paymentSent",
       icon: <FaFilter />,
     },
     {
@@ -401,6 +405,27 @@ const BookedEvents = () => {
                 <p className="text-gray-400">{translations.booking.city}:</p>
                 <p className="text-primary pl-2">{event.city}</p>
               </div>
+
+              {event.discountAmount && (
+                <div className="flex">
+                  <p className="text-green-600 flex items-center font-bold ">
+                    <MdLocalOffer className="text-green-600" size={17} />
+                    {translations.hasDiscount}:
+                  </p>
+                  <p className="text-primary flex items-center font-bold pl-2">
+                    {event.discountAmount}
+                    <Image
+                      src="/images/SR.png"
+                      alt="SR"
+                      width={15}
+                      height={3}
+                      className={`ml-1 ${
+                        currentLocale === "ar" ? "scale-x-[-1]" : ""
+                      }`}
+                    />
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex flex-wrap md:flex-col gap-3 border-l-4 max-md:border-none border-primary md:pl-5 pl-1">
