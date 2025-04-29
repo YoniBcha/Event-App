@@ -698,7 +698,10 @@ const MyOrdersContent = () => {
                 <div className="md:w-1/2"></div>
                 <table className="md:w-1/2 w-full overflow-x-auto">
                   <tbody className="w-full border border-gray-200 rounded-lg overflow-hidden">
-                    <tr className="border-b border-gray-200">
+
+                    {
+                      payloads?.discountAmount > 0 && (
+                        <tr className="border-b border-gray-200">
                       <td className="py-2 pl-4 border-r border-gray-200">
                         <span className="font-medium text-gray-600">
                           {translations.discount}:
@@ -719,6 +722,9 @@ const MyOrdersContent = () => {
                         </span>
                       </td>
                     </tr>
+                      )
+                    }
+                    
                     {/* Total Price Before VAT */}
                     <tr className="border-b border-gray-200">
                       <td className="py-2 pl-4 border-r border-gray-200">

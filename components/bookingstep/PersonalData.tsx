@@ -12,7 +12,13 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import { Dropdown } from "primereact/dropdown";
 import DatePicker from "react-datepicker";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
+const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift();
+};
 interface PersonalData {
   fullName: string;
   mobileNumber: string;
@@ -26,7 +32,7 @@ interface PersonalData {
   age?: string;
   length: number;
   birthDate?: number; // Optional field for birth date
-  couponCode?:string;
+  couponCode?: string;
 }
 
 interface PersonalDataProps {
@@ -50,10 +56,10 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           age: "",
           birthDate: 0,
           imageOfPlace: [], // Initialize as empty array for URLs
-          couponCode:"",
+          couponCode: "",
         };
   });
-
+  const [couponStatus, setCouponStatus] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showFavoriteColorPicker, setShowFavoriteColorPicker] = useState(false);
   const [showDressColorPicker, setShowDressColorPicker] = useState(false);
@@ -318,37 +324,52 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
       // Step 1: Validate the entire form data before proceeding
       await validationSchema.validate(formData, { abortEarly: false });
 
-      // Step 2: Check if there are already uploaded images in session storage
-      if (formData?.length > 0 && formData.imageOfPlace.length > 0) {
-        await onSubmit(formData); // Submit the existing data
+      // Step 2: Prepare form data - only include coupon if valid
+      const submissionData = {
+        ...formData,
+        // Only include coupon data if it exists and is valid
+        ...(couponStatus === "valid" && formData.couponCode
+          ? { couponCode: formData.couponCode }
+          : { couponCode: undefined }), // Explicitly remove if not valid
+      };
+
+      // Step 3: Check if there are already uploaded images in session storage
+      if (
+        submissionData?.length > 0 &&
+        submissionData.imageOfPlace.length > 0
+      ) {
+        await onSubmit(submissionData); // Submit the existing data
         return;
       }
 
-      // Step 3: Upload images and get URLs (only if validation passes)
+      // Step 4: Upload images and get URLs (only if validation passes)
       const uploadedUrls = await uploadImages(selectedImages);
 
       console.log("Uploaded URLs:", JSON.stringify(uploadedUrls, null, 2));
 
-      if (uploadedUrls?.length === 0 && formData?.imageOfPlace.length == 0) {
+      if (
+        uploadedUrls?.length === 0 &&
+        submissionData?.imageOfPlace.length == 0
+      ) {
         toast.error(`${translations.booking.no_images_were_uploaded}`);
         setLoading(false); // Stop loading on error
         return;
       }
 
-      // Step 4: Update formData with uploaded image URLs
+      // Step 5: Update formData with uploaded image URLs
       const updatedFormData = {
-        ...formData,
-        imageOfPlace: [...formData.imageOfPlace, ...uploadedUrls],
+        ...submissionData, // Use the submissionData that already has proper coupon handling
+        imageOfPlace: [...submissionData.imageOfPlace, ...uploadedUrls],
       };
 
-      // Step 5: Update the state with the new form data
+      // Step 6: Update the state with the new form data
       setFormData(updatedFormData);
 
-      // Step 6: Submit the form data (only if all fields are valid)
+      // Step 7: Submit the form data (only if all fields are valid)
       await onSubmit(updatedFormData); // Ensure onSubmit is awaited
       setErrors({});
 
-      // Step 7: Clear selected images and previews after successful submission
+      // Step 8: Clear selected images and previews after successful submission
       setSelectedImages([]);
       setPreviewImages([]);
     } catch (validationErrors) {
@@ -391,6 +412,37 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     return age;
   };
 
+  const handleCheckCoupon = async () => {
+    if (!formData.couponCode) return;
+
+    try {
+      setCouponStatus("checking");
+      const token = getCookie("token");
+
+      const response = await fetch(
+        `https://eventapp-back-cr86.onrender.com/api/v1/event/checkCoupon/${formData.couponCode}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (data.status) {
+        setCouponStatus("valid");
+        // You might want to store the coupon details in your form state
+        // form.setFieldsValue({ couponDetails: data });
+      } else {
+        setCouponStatus("invalid");
+      }
+    } catch (error) {
+      console.error("Error checking coupon:", error);
+      setCouponStatus("invalid");
+    }
+  };
   return (
     <motion.div
       className="flex items-center justify-center h-full max-[500px]:p-1 p-4"
@@ -814,29 +866,103 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             )}
           </motion.div>
         </div>
-<motion.div
-            className="flex flex-col"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1, duration: 0.3 }}
-          >
-            <label className="font-medium text-tertiary text-md mb-2">
-              {/* {translations.booking.fullName} */}
-              Coupon Code(Optional)
-            </label>
-            <input
-              type="text"
-              name="couponCode"
-              value={formData.couponCode}
-              onChange={handleInputChange}
-              className={`border outline-none ${
-                errors.couponCode ? "border-red-500" : "border-primary"
-              } input-field`}
-            />
+        <motion.div
+          className="flex flex-col"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1, duration: 0.3 }}
+        >
+          <label className="font-medium text-tertiary text-md mb-2">
+            Coupon Code (Optional)
+          </label>
+          <div className="flex gap-2 items-center">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                name="couponCode"
+                value={formData.couponCode}
+                onChange={handleInputChange}
+                className={`w-full border outline-none rounded-lg px-4 py-2 ${
+                  errors.couponCode
+                    ? "border-red-500"
+                    : couponStatus === "valid"
+                    ? "border-green-500 bg-green-50"
+                    : couponStatus === "invalid"
+                    ? "border-red-500 bg-red-50"
+                    : "border-primary"
+                } transition-colors duration-300`}
+                placeholder="Enter coupon code"
+              />
+              {couponStatus === "valid" && (
+                <FaCheckCircle className="h-5 w-5 text-green-500 absolute right-3 top-2.5" />
+              )}
+              {couponStatus === "invalid" && (
+                <FaTimesCircle className="h-5 w-5 text-red-500 absolute right-3 top-2.5" />
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleCheckCoupon}
+              disabled={
+                !formData?.couponCode?.trim() || couponStatus === "checking"
+              }
+              className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
+                !formData?.couponCode?.trim() || couponStatus === "checking"
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-primary hover:bg-primary-dark text-white"
+              }`}
+            >
+              {couponStatus === "checking" ? (
+                <span className="flex items-center gap-2">
+                  <svg
+                    className="animate-spin h-4 w-4 text-current"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Checking...
+                </span>
+              ) : (
+                "Validate"
+              )}
+            </button>
+          </div>
+
+          <div className="min-h-6 mt-1">
             {errors.couponCode && (
-              <div className="text-red-500 text-sm mt-1">{errors.couponCode}</div>
+              <p className="text-red-500 text-sm">{errors.couponCode}</p>
             )}
-          </motion.div>
+
+            {couponStatus === "valid" && (
+              <p className="text-green-600 text-sm flex items-center gap-1">
+                <FaCheckCircle className="h-4 w-4" />
+                Coupon applied successfully!
+              </p>
+            )}
+
+            {couponStatus === "invalid" && (
+              <p className="text-red-500 text-sm flex items-center gap-1">
+                <FaTimesCircle className="h-4 w-4" />
+                Invalid coupon code
+              </p>
+            )}
+          </div>
+        </motion.div>
         {/* Notes */}
         <motion.div
           className="mt-6"

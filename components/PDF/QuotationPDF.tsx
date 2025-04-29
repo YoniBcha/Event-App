@@ -628,15 +628,18 @@ const QuotationPDF = ({ data, translations, currentLocale, logo }: any) => {
                 <Image src="/images/SR.png" style={styles.currencySymbol} />
               </View>
             </View>
-            <View style={styles.priceRow}>
-              <Text style={{ fontSize: 12 }}>{translations?.discount}</Text>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={{ fontSize: 12 }}>
-                  {data?.bookedEvents?.discountAmount}
-                </Text>
-                <Image src="/images/SR.png" style={styles.currencySymbol} />
+            {data?.bookedEvents?.discountAmount && (
+              <View style={styles.priceRow}>
+                <Text style={{ fontSize: 12 }}>{translations?.discount}</Text>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text style={{ fontSize: 12 }}>
+                    {data?.bookedEvents?.discountAmount}
+                  </Text>
+                  <Image src="/images/SR.png" style={styles.currencySymbol} />
+                </View>
               </View>
-            </View>
+            )}
+
             <View style={[styles.priceRow, { borderBottomWidth: 0 }]}>
               <Text style={{ fontSize: 12 }}>
                 {translations?.total_price_after_vat}

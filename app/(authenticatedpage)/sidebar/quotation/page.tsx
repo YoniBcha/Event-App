@@ -394,23 +394,26 @@ function Quotation() {
                     </td>
                   </tr>
 
-                  <tr className="border-b border-gray-100">
-                    <td className="py-2 px-3 border-r border-gray-100">
-                      {translations.discount}
-                    </td>
-                    <td className="flex py-2 px-3 justify-center items-center border-r border-gray-100">
-                      {data?.bookedEvents?.discountAmount}{" "}
-                      <Image
-                        src="/images/SR.png"
-                        alt="SR"
-                        width={10}
-                        height={10}
-                        className={`ml-1 ${
-                          currentLocale === "ar" ? "scale-x-[-1]" : ""
-                        }`}
-                      />
-                    </td>
-                  </tr>
+                  {data?.bookedEvents?.discountAmount && (
+                    <tr className="border-b border-gray-100">
+                      <td className="py-2 px-3 border-r border-gray-100">
+                        {translations.discount}
+                      </td>
+                      <td className="flex py-2 px-3 justify-center items-center border-r border-gray-100">
+                        {data?.bookedEvents?.discountAmount}{" "}
+                        <Image
+                          src="/images/SR.png"
+                          alt="SR"
+                          width={10}
+                          height={10}
+                          className={`ml-1 ${
+                            currentLocale === "ar" ? "scale-x-[-1]" : ""
+                          }`}
+                        />
+                      </td>
+                    </tr>
+                  )}
+
                   <tr>
                     <td className="py-2 px-3 border-r border-gray-100">
                       {translations.total_price_after_vat}
