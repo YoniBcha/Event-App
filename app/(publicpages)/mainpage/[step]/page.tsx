@@ -42,7 +42,7 @@ interface PersonalData {
   imageOfPlace: string[]; // Store URLs instead of File objects
   dressColor: string[];
   place: string;
-  couponCode?:string;
+  couponCode?: string;
 }
 interface SelectedDesign {
   id: string;

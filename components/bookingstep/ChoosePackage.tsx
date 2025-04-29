@@ -564,27 +564,29 @@ function ChoosePackage({
                     {/* Package Name, Price, and Description (60% width) */}
                     <div className="w-[60%] flex flex-col justify-start">
                       {/* Package Name and Price */}
-                      <div className="flex flex-row gap-2 w-full justify-between pt-4 items-center md:flex-col lg:flex-row md:items-start">
-                        {/* Package Name */}
-                        <div className="text-sm sm:text-base lg:text-xl font-extrabold text-tertiary flex-shrink-0">
+                      <div className="flex flex-col gap-2 w-full pt-4 lg:flex-row lg:justify-between lg:items-center xl:flex-row">
+                        {/* Package Name - Always takes full width on mobile, then adjusts on larger screens */}
+                        <div className="text-sm font-extrabold text-tertiary sm:text-sm   xl:text-lg sm:flex-1 sm:min-w-0 sm:pr-2">
                           {renderValue(
                             eventPackage.packageName,
                             eventPackage.translatedPackageName
                           )}
                         </div>
 
-                        {/* Price and Currency Image */}
-                        <div className="flex flex-row items-center text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl font-extrabold text-tertiary">
-                          {eventPackage.packagePrice}
-                          <span className="pt-[0.2rem]">
+                        {/* Price and Currency Image - Better alignment and spacing */}
+                        <div className="flex items-center justify-end sm:justify-start text-sm font-extrabold text-tertiary sm:text-base md:text-lg lg:text-xl gap-1 sm:gap-2">
+                          <span className="whitespace-nowrap text-sm sm:text-sm md:text-lg  xl:text-lg">
+                            {eventPackage.packagePrice}
+                          </span>
+                          <span className="flex-shrink-0">
                             <Image
                               src="/images/SR.png"
                               alt="SR"
                               width={20}
                               height={20}
-                              className={
+                              className={`w-4 h-4 sm:w-5 sm:h-5 ${
                                 currentLocale === "ar" ? "scale-x-[-1]" : ""
-                              }
+                              }`}
                             />
                           </span>
                         </div>
@@ -593,7 +595,7 @@ function ChoosePackage({
                       {/* Description (Truncated) */}
                       {eventPackage.description && (
                         <div
-                          className="mt-2 text-xs sm:text-sm md:text-base text-gray-600 truncate"
+                          className="mt-2 text-sm sm:text-sm   xl:text-lg text-gray-600 truncate"
                           title={eventPackage.description}
                         >
                           {eventPackage.description.length > 20

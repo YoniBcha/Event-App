@@ -289,7 +289,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                         {addition.typeDetail.map((type) => (
                           <div
                             key={type._id}
-                            className="flex items-center justify-between"
+                            className="flex items-center hover:shadow-sm justify-between"
                           >
                             <div className="flex items-center gap-2">
                               {/* Clickable Image */}
@@ -302,33 +302,38 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                               >
                                 <Image
                                   src={type.typePicture}
-                                  width={20}
-                                  height={20}
+                                  width={30}
+                                  height={30}
                                   alt={type.typeName}
                                   className="hover:scale-105 duration-200 border border-primary"
                                 />
                               </div>
-                              <div className="text-primary text-sm">
-                                {renderValue(
-                                  type.typeName,
-                                  type.translatedTypeName
-                                )}
+                              <div className="flex flex-col">
+                                <div className="text-primary text-sm">
+                                  {renderValue(
+                                    type.typeName,
+                                    type.translatedTypeName
+                                  )}
+                                </div>
+
+                                <div className="flex items-center gap-1 ">
+                                  <div className="font-bold">{type.price}</div>
+                                  <Image
+                                    src="/images/SR.png"
+                                    alt="SR"
+                                    width={10}
+                                    height={10}
+                                    className={` ${
+                                      currentLocale === "ar"
+                                        ? "scale-x-[-1]"
+                                        : ""
+                                    }`}
+                                  />
+                                </div>
                               </div>
                             </div>
 
                             {/* Price and Currency Image Container */}
-                            <div className="flex items-center gap-1 ">
-                              <div className="font-bold">{type.price}</div>
-                              <Image
-                                src="/images/SR.png"
-                                alt="SR"
-                                width={10}
-                                height={10}
-                                className={` ${
-                                  currentLocale === "ar" ? "scale-x-[-1]" : ""
-                                }`}
-                              />
-                            </div>
 
                             {/* Quantity Controls */}
                             <div className="flex items-center gap-2">

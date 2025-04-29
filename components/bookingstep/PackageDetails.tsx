@@ -188,11 +188,14 @@ function PackageDetails({
                       animate={{ scale: 1 }}
                       exit={{ scale: 0.8 }}
                       transition={{ duration: 0.3 }}
-                      className="relative bg-white flex flex-col p-6 rounded-lg shadow-lg max-w-[90%] max-h-[90%] overflow-y-auto"
+                      className="relative bg-white flex flex-col p-6  rounded-lg shadow-lg max-w-[90%] max-h-[90%] overflow-y-auto"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <h2 className="text-xl font-semibold text-primary mb-4 break-words">
-                        {selectedItem?.typeName}
+                      <h2 className="text-xl font-semibold text-primary mb-4 mt-5 break-words">
+                        {renderValue(
+                          selectedItem?.typeName,
+                          selectedItem?.translatedTypeName
+                        )}
                       </h2>
                       <div className="flex-1 flex items-center justify-center">
                         <Image
