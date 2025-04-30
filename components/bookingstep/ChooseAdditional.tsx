@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useGetAdditionalEndpointsQuery } from "@/store/endpoints/apiSlice";
@@ -23,8 +24,9 @@ interface Addition {
 
 interface EventPackageAddition {
   additionId: string;
+  additionTypeId: string; // Changed to use ID
   additionTypeName: string;
-  translatedTypeName: string; // Add this field
+  translatedTypeName: string;
   quantity: number;
 }
 
@@ -42,7 +44,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [, setHasSelection] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null); // Moved to the top
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
@@ -74,13 +76,8 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
       const eventPackageAdditions: EventPackageAddition[] =
         JSON.parse(storedAdditions);
       const initialQuantities = eventPackageAdditions.reduce((acc, item) => {
-        const addition = data?.packageAdditions.find(
-          (addition) => addition._id === item.additionId
-        );
-        if (addition) {
-          const key = `${addition.additionName}-${item.additionTypeName}`;
-          acc[key] = item.quantity;
-        }
+        const key = `${item.additionId}-${item.additionTypeId}`; // Use IDs instead of names
+        acc[key] = item.quantity;
         return acc;
       }, {} as Record<string, number>);
       setQuantities(initialQuantities);
@@ -92,16 +89,16 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   const packageAdditions: Addition[] =
     data && "packageAdditions" in data ? data.packageAdditions : [];
 
-  const handleCategoryClick = (category: string) => {
-    setSelectedCategory(selectedCategory === category ? null : category);
+  const handleCategoryClick = (categoryId: string) => {
+    setSelectedCategory(selectedCategory === categoryId ? null : categoryId);
   };
 
   const handleQuantityChange = (
-    category: string,
-    type: string,
+    additionId: string,
+    typeId: string,
     delta: number
   ) => {
-    const key = `${category}-${type}`;
+    const key = `${additionId}-${typeId}`;
     const newQuantity = (quantities[key] || 0) + delta;
     const updatedQuantities = {
       ...quantities,
@@ -111,8 +108,12 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
     setHasSelection(Object.values(updatedQuantities).some((qty) => qty > 0));
   };
 
-  const handleInputChange = (category: string, type: string, value: number) => {
-    const key = `${category}-${type}`;
+  const handleInputChange = (
+    additionId: string,
+    typeId: string,
+    value: number
+  ) => {
+    const key = `${additionId}-${typeId}`;
     const updatedQuantities = { ...quantities, [key]: value < 0 ? 0 : value };
     setQuantities(updatedQuantities);
     setHasSelection(Object.values(updatedQuantities).some((qty) => qty > 0));
@@ -128,42 +129,41 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
   }
 
   const handleImageClick = (imageUrl: string) => {
-    setSelectedImage(imageUrl); // Open the modal with the clicked image
+    setSelectedImage(imageUrl);
   };
 
   const closeModal = () => {
-    setSelectedImage(null); // Close the modal
+    setSelectedImage(null);
   };
+
   const handleNextClick = () => {
     const eventPackageAdditions: EventPackageAddition[] = Object.keys(
       quantities
     )
       .map((key) => {
-        const [additionName, ...typeParts] = key.split("-");
-        const typeName = typeParts.join("-");
+        const [additionId, typeId] = key.split("-");
 
         const addition = packageAdditions.find(
-          (addition) => addition.additionName === additionName
+          (addition) => addition._id === additionId
         );
 
         if (!addition) {
-          console.error(`Addition not found: ${additionName}`);
+          console.error(`Addition not found: ${additionId}`);
           return null;
         }
 
-        const type = addition.typeDetail.find(
-          (type) => type.typeName === typeName
-        );
+        const type = addition.typeDetail.find((type) => type._id === typeId);
 
         if (!type) {
-          console.error(`Type not found: ${typeName}`);
+          console.error(`Type not found: ${typeId}`);
           return null;
         }
 
         return {
-          additionId: addition._id,
-          additionTypeName: typeName,
-          translatedTypeName: type.translatedTypeName, // Add translated type name
+          additionId: additionId,
+          additionTypeId: typeId, // Include type ID
+          additionTypeName: type.typeName,
+          translatedTypeName: type.translatedTypeName,
           quantity: quantities[key],
         };
       })
@@ -230,7 +230,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
               <div
                 key={addition._id}
                 className="flex flex-col cursor-pointer"
-                onClick={() => handleCategoryClick(addition.additionName)}
+                onClick={() => handleCategoryClick(addition._id)} // Use ID instead of name
               >
                 <div className="flex flex-row bg-secondary rounded-lg">
                   <div className="flex items-center justify-center w-1/4 bg-secondary font-bold rounded-lg">
@@ -243,12 +243,10 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                   </div>
                   <div className="flex items-center justify-between w-full py-3">
                     <div className="text-primary font-semibold px-7 text-lg">
-                      {
-                        renderValue(
-                          addition?.additionName,
-                          addition?.translatedAdditionName
-                        ) // Ensure this path is correct
-                      }
+                      {renderValue(
+                        addition?.additionName,
+                        addition?.translatedAdditionName
+                      )}
                     </div>
                     <div className="pr-3">
                       <svg
@@ -257,9 +255,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                         height="24"
                         viewBox="0 0 24 24"
                         className={`transition-transform duration-200 ${
-                          selectedCategory === addition.additionName
-                            ? "rotate-180"
-                            : ""
+                          selectedCategory === addition._id ? "rotate-180" : ""
                         }`}
                       >
                         <rect width="24" height="24" fill="none" />
@@ -277,7 +273,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                 </div>
 
                 <AnimatePresence>
-                  {selectedCategory === addition.additionName && (
+                  {selectedCategory === addition._id && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
@@ -292,12 +288,11 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                             className="flex items-center hover:shadow-sm justify-between"
                           >
                             <div className="flex items-center gap-2">
-                              {/* Clickable Image */}
                               <div
                                 onClick={(event) => {
                                   handleImageClick(type.typePicture);
                                   event.stopPropagation();
-                                }} // Open modal on click
+                                }}
                                 className="cursor-zoom-in"
                               >
                                 <Image
@@ -333,17 +328,14 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                               </div>
                             </div>
 
-                            {/* Price and Currency Image Container */}
-
-                            {/* Quantity Controls */}
                             <div className="flex items-center gap-2">
                               <button
                                 className="px-2 rounded-lg bg-[#ffffff] hover:bg-primary hover:text-white text-gray-400"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleQuantityChange(
-                                    addition.additionName,
-                                    type.typeName,
+                                    addition._id, // Use ID
+                                    type._id, // Use ID
                                     -1
                                   );
                                 }}
@@ -355,14 +347,14 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                                 className="w-12 text-center border rounded-lg tracking-widest outline-none focus:ring-2 focus:ring-primary appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 value={
                                   quantities[
-                                    `${addition.additionName}-${type.typeName}`
+                                    `${addition._id}-${type._id}` // Use IDs
                                   ] || 0
                                 }
                                 onChange={(e) => {
                                   e.stopPropagation();
                                   handleInputChange(
-                                    addition.additionName,
-                                    type.typeName,
+                                    addition._id, // Use ID
+                                    type._id, // Use ID
                                     parseInt(e.target.value, 10)
                                   );
                                 }}
@@ -374,8 +366,8 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleQuantityChange(
-                                    addition.additionName,
-                                    type.typeName,
+                                    addition._id, // Use ID
+                                    type._id, // Use ID
                                     1
                                   );
                                 }}
@@ -390,7 +382,6 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                   )}
                 </AnimatePresence>
 
-                {/* Small Fixed-Size Image Modal */}
                 <AnimatePresence>
                   {selectedImage && (
                     <motion.div
@@ -399,20 +390,20 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.3 }}
                       className="fixed inset-0 flex items-center justify-center bg-black/20 bg-opacity-50 z-50"
-                      onClick={closeModal} // Close modal when clicking outside
+                      onClick={closeModal}
                     >
                       <motion.div
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
                         exit={{ scale: 0.8 }}
                         transition={{ duration: 0.3 }}
-                        className="relative bg-white p-4 rounded-lg shadow-lg w-[300px] h-[300px] flex items-center justify-center" // Fixed size
-                        onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking inside
+                        className="relative bg-white p-4 rounded-lg shadow-lg w-[300px] h-[300px] flex items-center justify-center"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Image
                           src={selectedImage}
                           alt="Selected Image"
-                          width={250} // Adjust image size to fit modal
+                          width={250}
                           height={250}
                           className="object-contain w-full h-full"
                         />
