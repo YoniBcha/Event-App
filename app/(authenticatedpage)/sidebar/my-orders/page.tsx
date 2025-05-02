@@ -406,24 +406,24 @@ const BookedEvents = () => {
                 <p className="text-primary pl-2">{event.city}</p>
               </div>
 
-              {event.discountAmount && (
-                <div className="flex">
-                  <p className="text-green-600 flex items-center font-bold ">
+              {event.discountAmount > 0 && (
+                <div className="flex w-full">
+                  <div className="text-green-600 flex items-center font-bold ">
                     <MdLocalOffer className="text-green-600" size={17} />
                     {translations.hasDiscount}:
-                  </p>
-                  <p className="text-primary flex items-center font-bold pl-2">
-                    {event.discountAmount}
-                    <Image
-                      src="/images/SR.png"
-                      alt="SR"
-                      width={15}
-                      height={3}
-                      className={`ml-1 ${
-                        currentLocale === "ar" ? "scale-x-[-1]" : ""
-                      }`}
-                    />
-                  </p>
+                    <span className="text-primary flex items-center font-bold pl-2">
+                      {event.discountAmount}
+                      <Image
+                        src="/images/SR.png"
+                        alt="SR"
+                        width={15}
+                        height={3}
+                        className={`ml-1 ${
+                          currentLocale === "ar" ? "scale-x-[-1]" : ""
+                        }`}
+                      />
+                    </span>
+                  </div>
                 </div>
               )}
             </div>

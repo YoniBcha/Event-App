@@ -514,7 +514,7 @@ function Quotation() {
               className="rounded-xl bg-primary mt-2 text-white px-10 py-1 w-fit cursor-pointer"
               onClick={handleDownload}
             >
-              download
+              {translations.download}
             </button>
           </div>
 

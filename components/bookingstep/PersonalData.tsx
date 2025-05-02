@@ -39,7 +39,7 @@ interface PersonalDataProps {
   onSubmit: (personalData: PersonalData) => void;
 }
 
-function PersonalData({ onSubmit }: PersonalDataProps) {
+export default function PersonalData({ onSubmit }: PersonalDataProps) {
   const [formData, setFormData] = useState<PersonalData>(() => {
     const savedData = sessionStorage.getItem("personalData");
     return savedData
@@ -550,7 +550,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
               selected={formData.age ? new Date(formData.age) : null}
               onChange={handleBirthDateChange}
               dateFormat="yyyy-MM-dd"
-              placeholderText="Select birth date"
+              placeholderText={translations.select_birth_date}
               className={`w-full p-2 border rounded ${
                 errors.age ? "border-red-500" : "border-primary"
               }`}
@@ -653,7 +653,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                     setErrors((prevErrors) => ({ ...prevErrors, place: "" }));
                   }
                 }}
-                placeholder="Enter your choice"
+                placeholder={translations.enter_your_choice}
                 className={`border outline-none mt-2 ${
                   errors.place ? "border-red-500" : "border-primary"
                 } input-field`}
@@ -873,7 +873,7 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
           transition={{ delay: 0.1, duration: 0.3 }}
         >
           <label className="font-medium text-tertiary text-md mb-2">
-            Coupon Code (Optional)
+            {translations.couponCodeOptional}
           </label>
           <div className="flex gap-2 items-center">
             <div className="relative flex-1">
@@ -891,13 +891,23 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                     ? "border-red-500 bg-red-50"
                     : "border-primary"
                 } transition-colors duration-300`}
-                placeholder="Enter coupon code"
+                placeholder={translations.enterCoupon}
               />
               {couponStatus === "valid" && (
                 <FaCheckCircle className="h-5 w-5 text-green-500 absolute right-3 top-2.5" />
               )}
               {couponStatus === "invalid" && (
-                <FaTimesCircle className="h-5 w-5 text-red-500 absolute right-3 top-2.5" />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, couponCode: "" }))
+                  }
+                  className={`absolute ${
+                    currentLocale == "ar" ? "left-3" : "right-3"
+                  }  top-2.5 text-red-500 hover:text-red-700`}
+                >
+                  <FaTimesCircle className="h-5 w-5" />
+                </button>
               )}
             </div>
 
@@ -935,10 +945,10 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Checking...
+                  {translations.checking}
                 </span>
               ) : (
-                "Validate"
+                translations.validate
               )}
             </button>
           </div>
@@ -951,14 +961,14 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
             {couponStatus === "valid" && (
               <p className="text-green-600 text-sm flex items-center gap-1">
                 <FaCheckCircle className="h-4 w-4" />
-                Coupon applied successfully!
+                {translations.couponApplied}
               </p>
             )}
 
             {couponStatus === "invalid" && (
               <p className="text-red-500 text-sm flex items-center gap-1">
                 <FaTimesCircle className="h-4 w-4" />
-                Invalid coupon code
+                {translations.invalidCoupon}
               </p>
             )}
           </div>
@@ -1029,5 +1039,3 @@ function PersonalData({ onSubmit }: PersonalDataProps) {
     </motion.div>
   );
 }
-
-export default PersonalData;
