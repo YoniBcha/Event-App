@@ -394,7 +394,7 @@ function Quotation() {
                     </td>
                   </tr>
 
-                  {data?.bookedEvents?.discountAmount && (
+                  {data?.bookedEvents?.discountAmount > 0 && (
                     <tr className="border-b border-gray-100">
                       <td className="py-2 px-3 border-r border-gray-100">
                         {translations.discount}

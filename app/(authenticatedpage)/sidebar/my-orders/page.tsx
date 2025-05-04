@@ -151,7 +151,7 @@ const BookedEvents = () => {
   const statusTranslations = {
     accepted: translations.booking.accepted,
     paymentSent: translations.booking.paymentSent,
-    underProcessing: translations.booking.underProcessing,
+    paymentApproved: translations.booking.underProcessing,
     underReview: translations.booking.underReview,
     completed: translations.booking.completed,
     rejected: translations.booking.rejected,
@@ -185,6 +185,11 @@ const BookedEvents = () => {
     {
       label: translations.booking.paymentSent,
       value: "paymentSent",
+      icon: <FaFilter />,
+    },
+     {
+      label: translations.booking.underProcessing,
+      value: "paymentApproved",
       icon: <FaFilter />,
     },
     {

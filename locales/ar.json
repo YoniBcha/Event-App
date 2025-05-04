@@ -323,7 +323,7 @@
     "provider": "المزود",
     "price": "السعر",
     "accepted": "مقبول",
-    "underProcessing": "قيد المعالجة",
+    "underProcessing": "الدفع مقبول",
     "paymentSent": "تم إرسال الدفع",
     "completed": "مكتمل",
     "cancelled": "ملغى",
