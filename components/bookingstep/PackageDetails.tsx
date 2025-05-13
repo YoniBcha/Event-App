@@ -181,8 +181,12 @@ function PackageDetails({
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
                     className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-50 z-50"
-                    onClick={() => setIsModalOpen(false)}
-                  >
+                      // onClick={() => setIsModalOpen(false)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                  
                     <motion.div
                       initial={{ scale: 0.8 }}
                       animate={{ scale: 1 }}

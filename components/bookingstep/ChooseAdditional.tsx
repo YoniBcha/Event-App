@@ -389,8 +389,11 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="fixed inset-0 flex items-center justify-center bg-black/20 bg-opacity-50 z-50"
-                      onClick={closeModal}
+                      className="fixed inset-0 flex items-center justify-center bg-black/5 bg-opacity-50 z-50"
+                      // onClick={closeModal}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
                     >
                       <motion.div
                         initial={{ scale: 0.8 }}

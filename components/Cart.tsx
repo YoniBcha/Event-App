@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { clearCart } from "@/store/cartSlice";
 import { useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function Cart() {
   const router = useRouter();
@@ -96,9 +97,17 @@ export default function Cart() {
       {/* Cart Icon Button */}
       <button
         onClick={handleToggleCart}
-        className="bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary-dark transition-all duration-300 relative group"
+        className="bg-primary flex justify-center items-center text-white p-3 rounded-full shadow-lg hover:bg-primary-dark transition-all duration-300 relative group"
       >
-        <FaShoppingCart size={20} />
+         <Image
+                src={"/images/icon-buy1.png"}
+                alt={currentLocale === "ar" ? "Arrow Left" : "Arrow Right"}
+                width={20} // Adjust width as needed
+                height={20} // Adjust height as needed
+                className={`text-xl items-center ${
+                  currentLocale === "ar" ? "scale-x-[-1]" : ""
+                }`} // Add any additional styling here
+              />
         <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
           {countCompletedSteps()}
         </span>
