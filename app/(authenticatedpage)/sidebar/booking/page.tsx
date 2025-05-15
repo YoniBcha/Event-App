@@ -94,7 +94,21 @@ const MyOrdersContent = () => {
   const [showTermsModal, setShowTermsModal] = useState(false);
   const submitButtonRef = useRef<HTMLDivElement>(null);
   const [hasScrolledToButton, setHasScrolledToButton] = useState(false);
+const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+// Add these functions to handle the delete confirmation
+const handleDeleteClick = () => {
+  setIsDeleteModalOpen(true);
+};
+
+const handleConfirmDelete = () => {
+  setIsDeleteModalOpen(false);
+  handleDelete(); // Your existing delete function
+};
+
+const handleCancelDelete = () => {
+  setIsDeleteModalOpen(false);
+};
   // Scroll handler
   // useEffect(() => {
   //   const handleScroll = () => {
@@ -830,7 +844,7 @@ const MyOrdersContent = () => {
 
             {/* Delete Button */}
             <motion.button
-              onClick={handleDelete}
+              onClick={handleDeleteClick} 
               className="px-3 py-2 rounded-xl text-lg font-semibold bg-red-500 hover:bg-red-600 text-white transition-colors duration-200"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -869,6 +883,50 @@ const MyOrdersContent = () => {
           </motion.button>
         </div>
       </Modal>
+      <Modal isOpen={isDeleteModalOpen} onClose={handleCancelDelete}>
+  <div className="flex flex-col items-center bg-secondary p-8 rounded-xl shadow-lg">
+    <div className="mb-6 text-red-500">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-16 w-16"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+        />
+      </svg>
+    </div>
+    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+      {translations.booking.confirmDelete}
+    </h2>
+    <p className="text-gray-600 text-center mb-6">
+      {translations.booking.deleteWarning}
+    </p>
+    <div className="flex gap-4">
+      <motion.button
+        onClick={handleCancelDelete}
+        className="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg font-semibold hover:bg-gray-400 transition-colors duration-200"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {translations.cancel}
+      </motion.button>
+      <motion.button
+        onClick={handleConfirmDelete}
+        className="px-6 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors duration-200"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {translations.delete}
+      </motion.button>
+    </div>
+  </div>
+</Modal>
       {/* Terms and Conditions */}
     </div>
   );

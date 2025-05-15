@@ -187,10 +187,10 @@ const LoginContent: React.FC<any> = ({
           </p>
         </Link>
 
-        <div className="flex items-center justify-center text-sm text-[#7c6d68]">
+        {/* <div className="flex items-center justify-center text-sm text-[#7c6d68]">
           <input type="checkbox" className="mr-2" />
           <span>{translations.login.agreeCondition}</span>
-        </div>
+        </div> */}
       </div>
       <ToastContainer />
     </div>
