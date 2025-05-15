@@ -24,7 +24,7 @@ import { getDepositAmountEndpoints } from "./getDepositeAmount";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://eventapp-back-cr86.onrender.com/api/v1",
+    baseUrl: "https://test-fenzo-app.onrender.com/api/v1",
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
