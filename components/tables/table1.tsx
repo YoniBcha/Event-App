@@ -231,7 +231,7 @@ const BulkTable: React.FC<BulkTableProps> = ({
             {/* Additions Row */}
             <tr className="border-b border-[#EFE7DF]">
               <th className="border-r border-[#EFE7DF] px-2 py-2 font-extrabold sm:px-4 sm:py-3">
-                {translations.additions || "Additions"}
+                {translations.booking.addition}
               </th>
               <td className="px-2 py-2 font-medium text-primary sm:px-4 sm:py-3">
                 {rowData.additions.length > 0 ? (

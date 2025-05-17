@@ -74,12 +74,23 @@ const Home: React.FC = () => {
         <motion.div className="text-start" variants={itemVariants}>
           {translations.welcome}
         </motion.div>
-        <motion.div
-          className="text-5xl text-primary max-sm:text-3xl font-bold"
-          variants={itemVariants}
-        >
-          {translations.fenzo}
-        </motion.div>
+        <div className="w-full flex justify-between items-center">
+          <motion.div
+            className="text-5xl text-primary max-sm:text-3xl font-bold"
+            variants={itemVariants}
+          >
+            {translations.fenzo}
+          </motion.div>
+          <motion.button
+            className="p-2 text-gray-100 bg-primary mr-14 self-start hover:bg-secondary hover:text-primary rounded"
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => router.push("/mainpage/1")}
+          >
+            {translations.startJourney}
+          </motion.button>
+        </div>
         <motion.div variants={itemVariants}>
           {translations.subTitle1}
         </motion.div>
@@ -110,15 +121,6 @@ const Home: React.FC = () => {
           </div>
 
           {/* Button positioned below bars */}
-          <motion.button
-            className="p-2 text-gray-100 bg-primary  self-start hover:bg-secondary hover:text-primary rounded"
-            variants={itemVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => router.push("/mainpage/1")}
-          >
-            {translations.startJourney}
-          </motion.button>
         </div>
       </motion.div>
 

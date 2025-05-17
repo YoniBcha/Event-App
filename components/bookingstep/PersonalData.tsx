@@ -734,6 +734,27 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
                 </div>
               </div>
               <div className="self-stretch px-8 pt-6 pb-8 justify-end items-center gap-4 inline-flex">
+                {/* Add this new button */}
+                <div className="rounded-md justify-center items-center flex">
+                  <div className="px-2 py-1.5 flex-col justify-center items-center gap-2 inline-flex">
+                    <label
+                      htmlFor="imageInput"
+                      className="text-white bg-primary hover:bg-secondary dark:text-white cursor-pointer rounded-xl px-4 py-1.5 text-sm font-medium font-['Inter'] leading-normal tracking-tight"
+                    >
+                      {translations.booking.add_images}
+                    </label>
+                    <input
+                      id="imageInput"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => handleImageSelection(e.target.files)}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+
+                {/* Existing Clear Images button */}
                 <div className="rounded-md justify-center items-center flex">
                   <div className="px-2 py-1.5 flex-col justify-center items-center gap-2 inline-flex">
                     <div

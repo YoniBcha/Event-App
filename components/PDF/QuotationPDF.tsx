@@ -396,7 +396,7 @@ const QuotationPDF = ({ data, translations, currentLocale, logo }: any) => {
                   ),
                 },
                 {
-                  label: translations?.additions || "Additions",
+                  label: translations?.booking.addition,
                   value: (
                     <View>
                       {data?.bookedEvents?.eventPackage?.additions?.length >
