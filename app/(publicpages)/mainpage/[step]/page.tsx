@@ -304,7 +304,7 @@ export default function MainPage() {
         couponCode: data.couponCode,
       };
 
-      console.log("Payload to be sent:", payload);
+      
 
       sessionStorage.setItem("payload", JSON.stringify(payload));
 

@@ -152,7 +152,6 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
-        console.log("Loaded data from sessionStorage:", parsedData); // Debugging
         setFormData(parsedData);
 
         // Set preview images if imageOfPlace exists
@@ -344,9 +343,7 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
 
       // Step 4: Upload images and get URLs (only if validation passes)
       const uploadedUrls = await uploadImages(selectedImages);
-
-      console.log("Uploaded URLs:", JSON.stringify(uploadedUrls, null, 2));
-
+      
       if (
         uploadedUrls?.length === 0 &&
         submissionData?.imageOfPlace.length == 0

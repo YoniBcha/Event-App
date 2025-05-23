@@ -191,7 +191,6 @@ const BookingPage = ({ setBookingPageData }: BookingPageProps) => {
     };
 
     setBookingPageData(payload);
-    console.log(JSON.stringify(payload, null, 2));
   };
 
   // Framer Motion Variants
