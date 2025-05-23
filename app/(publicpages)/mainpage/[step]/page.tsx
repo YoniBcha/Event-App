@@ -14,7 +14,7 @@ import ExtraService from "@/components/bookingstep/ExtraService";
 import PersonalDataComonents from "@/components/bookingstep/PersonalData";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  useGetUserInfoQuery,
+  useLazyGetUserInfoQuery,
   useLogoutUserMutation,
 } from "@/store/endpoints/apiSlice";
 import { logoutUser } from "@/store/authReducer";
@@ -60,7 +60,7 @@ export default function MainPage() {
   const [showCart, setShowCart] = useState(false);
   const dispatch = useDispatch();
   const [logoutUserMutation] = useLogoutUserMutation();
-  const { data: userInfo, error: userInfoError } = useGetUserInfoQuery<any>({});
+  const [getUserInfo, { data: userInfo }] = useLazyGetUserInfoQuery();
   const [bookingData, setBookingData] = useState<FormData>({
     city: "",
     place: "",
@@ -308,11 +308,13 @@ export default function MainPage() {
 
       sessionStorage.setItem("payload", JSON.stringify(payload));
 
+      const userInfoResponse = await getUserInfo({}) as any;
+
       if (
-        userInfo?.message === "Session expired" ||
-        userInfo?.message === "User Unauthorized" ||
-        userInfoError?.data?.message === "Session expired" ||
-        userInfoError?.data?.message === "User Unauthorized"
+        userInfoResponse?.message === "Session expired" ||
+        userInfoResponse?.message === "User Unauthorized" ||
+        userInfoResponse?.error?.data?.message === "Session expired" ||
+        userInfoResponse?.error?.data?.message === "User Unauthorized"
       ) {
         await logoutUserMutation({}).unwrap();
         dispatch(logoutUser());
@@ -332,7 +334,7 @@ export default function MainPage() {
           );
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Navigation error:", error);
     }
   };

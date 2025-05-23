@@ -86,6 +86,7 @@ export const {
   useGetDepositAmountQuery,
   useGetDjQuery,
   useGetUserInfoQuery,
+  useLazyGetUserInfoQuery,
   useGetMyDepositQuery,
   useBookEventMutation,
   usePreBookEventMutation,

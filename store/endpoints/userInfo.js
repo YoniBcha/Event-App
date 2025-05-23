@@ -5,4 +5,11 @@ export const userEndpoints = (builder) => ({
       method: "GET",
     }),
   }),
+  // Add this lazy version
+  getUserInfoLazy: builder.mutation({
+    query: () => ({
+      url: "user/getUserInfo",
+      method: "GET",
+    }),
+  }),
 });
