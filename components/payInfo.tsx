@@ -138,7 +138,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         const formData = new FormData();
         formData.append("images", file);
         const response = await fetch(
-          "https://eventapp-back-cr86.onrender.com/api/v1/admin/upload",
+          "https://test-fenzo-app.onrender.com/api/v1/admin/upload",
           {
             method: "POST",
             body: formData,
