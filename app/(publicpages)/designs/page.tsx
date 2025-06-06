@@ -41,7 +41,7 @@ function ChooseDesigns() {
     const fetchDesigns = async () => {
       try {
         const response = await fetch(
-          "https://test-fenzo-app.onrender.com/api/v1/event/getDesignsGallery"
+          "https://fenzoappprod.onrender.com/api/v1/event/getDesignsGallery"
         );
         if (!response.ok) throw new Error("Failed to fetch designs");
 

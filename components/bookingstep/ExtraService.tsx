@@ -121,7 +121,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
       );
       if (service) {
         fetch(
-          `https://test-fenzo-app.onrender.com/api/v1/event/getExtraServiceProviders/${service._id}`
+          `https://fenzoappprod.onrender.com/api/v1/event/getExtraServiceProviders/${service._id}`
         )
           .then((response) => response.json())
           .then((data) => {
@@ -140,7 +140,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
   useEffect(() => {
     if (currentProvider) {
       fetch(
-        `https://test-fenzo-app.onrender.com/api/v1/event/getSingleServiceProvider/${currentProvider}`
+        `https://fenzoappprod.onrender.com/api/v1/event/getSingleServiceProvider/${currentProvider}`
       )
         .then((response) => response.json())
         .then((data) => {

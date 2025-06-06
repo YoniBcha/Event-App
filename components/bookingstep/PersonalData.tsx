@@ -293,7 +293,7 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
 
       try {
         const response = await fetch(
-          "https://test-fenzo-app.onrender.com/api/v1/admin/upload",
+          "https://fenzoappprod.onrender.com/api/v1/admin/upload",
           {
             method: "POST",
             body: formData,
@@ -417,7 +417,7 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
       const token = getCookie("token");
 
       const response = await fetch(
-        `https://test-fenzo-app.onrender.com/api/v1/event/checkCoupon/${formData.couponCode}`,
+        `https://fenzoappprod.onrender.com/api/v1/event/checkCoupon/${formData.couponCode}`,
         {
           method: "POST",
           headers: {
