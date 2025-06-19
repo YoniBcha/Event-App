@@ -102,7 +102,7 @@ const Home: React.FC = () => {
           <div className="flex justify-center items-center gap-2 lg:gap-16">
             <CircularProgressBar
               value={86}
-              label="Weddings Designed"
+              label={translations.weddingsDesigned}
               primaryColor="text-primary"
               secondaryColor="text-secondary"
               size={100}
@@ -111,7 +111,7 @@ const Home: React.FC = () => {
             />
             <CircularProgressBar
               value={70}
-              label="Happy Clients"
+              label={translations.happyClients}
               primaryColor="text-primary"
               secondaryColor="text-secondary"
               strokeWidth={4}

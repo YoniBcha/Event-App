@@ -21,11 +21,11 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  const [currentLocale, setCurrentLocale] = useState("en"); // Default to "en"
+  const [currentLocale, setCurrentLocale] = useState("ar"); // Default to "en"
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedLocale = localStorage.getItem("locale") || "en";
+      const storedLocale = localStorage.getItem("locale") || "ar";
       setCurrentLocale(storedLocale);
     }
   }, []);

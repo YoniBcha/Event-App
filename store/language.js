@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import arTranslations from "@/locales/ar.json" assert { type: "json" };
 import enTranslations from "@/locales/en.json" assert { type: "json" };
 
-const DEFAULT_LOCALE = "en";
+const DEFAULT_LOCALE = "ar";
 
 const getStoredLocale = () => {
   if (typeof window !== "undefined") {
