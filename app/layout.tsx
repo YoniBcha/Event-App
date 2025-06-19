@@ -25,8 +25,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedLocale = localStorage.getItem("locale") || "ar";
+      const storedLocale = localStorage.getItem("locale") as any;
       setCurrentLocale(storedLocale);
+      localStorage.setItem("locale", storedLocale);
     }
   }, []);
 
