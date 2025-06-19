@@ -53,7 +53,7 @@ function Header() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedLocale = localStorage.getItem("locale") || "en";
+      const storedLocale = localStorage.getItem("locale") || "ar";
       setCurrentLocale(storedLocale);
     }
   }, []);

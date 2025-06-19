@@ -1,33 +1,30 @@
 "use client";
-// import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Withstore from "./WithStore";
 import { ReactNode, useEffect, useState } from "react";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
- 
 interface RootLayoutProps {
   children: ReactNode;
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  const [currentLocale, setCurrentLocale] = useState("ar"); // Default to "en"
+  const [currentLocale, setCurrentLocale] = useState("ar"); // Default to "ar"
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedLocale = localStorage.getItem("locale") as any;
-      setCurrentLocale(storedLocale);
-      localStorage.setItem("locale", storedLocale);
+      // Check if locale exists in localStorage
+      const storedLocale = localStorage.getItem("locale");
+      
+      // If no locale is stored, it's the first visit - set to "ar"
+      if (!storedLocale) {
+        localStorage.setItem("locale", "ar");
+        setCurrentLocale("ar");
+      } else {
+        // If locale exists, use the stored value
+        setCurrentLocale(storedLocale);
+      }
     }
   }, []);
 
