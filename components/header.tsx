@@ -268,7 +268,7 @@ function Header() {
             </div>
             <div
               className="h-10 w-10 rounded-full bg-cover bg-center cursor-pointer circle-button"
-              style={{ backgroundImage: "url('/pp1.jpg')" }}
+              style={{ backgroundImage: "url('/pp2.jpg')" }}
               onClick={toggleAvatarDropdown}
             >
               <AnimatePresence>

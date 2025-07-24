@@ -529,13 +529,12 @@ export default function Cart() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 }}
-                  className="p-4 border-t sticky bottom-0 flex flex-row justify-between px-1 bg-white"
+                  className="p-4 border-t sticky bottom-0 flex flex-row justify-between px-1 bg-white gap-3"
                 >
                   <button
                     onClick={handleClearCart}
                     className="w-full py-2 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium"
                   >
-                    {}
                     {translations.cart.clearButton}
                   </button>
 
