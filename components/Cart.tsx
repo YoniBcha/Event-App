@@ -64,11 +64,11 @@ export default function Cart() {
     return 1;
   };
 
-  const handleResume = () => {
-    const step = getResumeStep();
-    router.push(`/mainpage/${step}`);
-    setIsOpen(false);
-  };
+  // const handleResume = () => {
+  //   const step = getResumeStep();
+  //   router.push(`/mainpage/${step}`);
+  //   setIsOpen(false);
+  // };
 
   const handleClearCart = () => {
     dispatch(clearCart());
@@ -78,6 +78,12 @@ export default function Cart() {
 
   const handleToggleCart = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleContinue = () => {
+    const step = getResumeStep();
+    router.push(`/mainpage/${step}`);
+    setIsOpen(false);
   };
 
   if (!visible) {
@@ -98,15 +104,15 @@ export default function Cart() {
         onClick={handleToggleCart}
         className="bg-primary flex justify-center items-center text-white p-3 rounded-full shadow-lg hover:bg-primary-dark transition-all duration-300 relative group"
       >
-         <Image
-                src={"/images/icon-buy1.png"}
-                alt={currentLocale === "ar" ? "Arrow Left" : "Arrow Right"}
-                width={20} // Adjust width as needed
-                height={20} // Adjust height as needed
-                className={`text-xl items-center ${
-                  currentLocale === "ar" ? "scale-x-[-1]" : ""
-                }`} // Add any additional styling here
-              />
+        <Image
+          src={"/images/icon-buy1.png"}
+          alt={currentLocale === "ar" ? "Arrow Left" : "Arrow Right"}
+          width={20} // Adjust width as needed
+          height={20} // Adjust height as needed
+          className={`text-xl items-center ${
+            currentLocale === "ar" ? "scale-x-[-1]" : ""
+          }`} // Add any additional styling here
+        />
         <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
           {countCompletedSteps()}
         </span>
@@ -144,6 +150,7 @@ export default function Cart() {
                   <h3 className="text-xl font-bold text-gray-800">
                     {translations.cart.bookingSummary}
                   </h3>
+
                   <button
                     onClick={handleToggleCart}
                     className="text-gray-500 hover:text-gray-700 transition-colors"
@@ -155,8 +162,12 @@ export default function Cart() {
                 {/* Content */}
                 <div className="flex-1 p-4 overflow-y-auto">
                   <div className="space-y-6">
+                    {/* Note for users they can click cards to navigate for that specific step*/}
+                    <h1 className="italic text-center">
+                      {translations.resume_note}
+                    </h1>
                     {/* Always show resume button when not on the booking flow */}
-                    {!pathname.includes("/mainpage/") && (
+                    {/* {!pathname.includes("/mainpage/") && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -170,7 +181,7 @@ export default function Cart() {
                           {translations.cart.resumeButton} {getResumeStep()})
                         </button>
                       </motion.div>
-                    )}
+                    )} */}
 
                     {items.bookingData && (
                       <motion.div
@@ -518,7 +529,7 @@ export default function Cart() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 }}
-                  className="p-4 border-t sticky bottom-0 bg-white"
+                  className="p-4 border-t sticky bottom-0 flex flex-row justify-between px-1 bg-white"
                 >
                   <button
                     onClick={handleClearCart}
@@ -526,6 +537,13 @@ export default function Cart() {
                   >
                     {}
                     {translations.cart.clearButton}
+                  </button>
+
+                  <button
+                    onClick={handleContinue}
+                    className="w-full py-2 bg-primary text-white hover:bg-secondary rounded-lg transition-colors text-sm font-medium"
+                  >
+                    {translations.continue}
                   </button>
                 </motion.div>
               </div>
