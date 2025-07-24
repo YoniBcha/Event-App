@@ -6,12 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 
 import { clearCart } from "@/store/cartSlice";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function Cart() {
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const dispatch = useDispatch();
   const { items, visible } = useSelector((state: any) => state.cart);
   const [isOpen, setIsOpen] = useState(false);
