@@ -58,7 +58,7 @@ const Home: React.FC = () => {
         <motion.div
           className="w-1/3 h-80"
           style={{
-            backgroundImage: "url('/b1.png')",
+            backgroundImage: "url('/b2.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
