@@ -15,7 +15,12 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "./swiper-custom.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaSortAmountDownAlt,
+  FaSortAmountUpAlt,
+} from "react-icons/fa";
 
 interface Package {
   _id: string;
@@ -524,6 +529,29 @@ function ChoosePackage({
         {translations.booking.choosePackage}
       </div>
 
+      <div className="max-[550px]:w-full max-lg:w-4/5 md:w-[85%] lg:w-3/4 flex flex-col">
+        <div className="text-primary py-2 font-bold">
+          {translations.sort_by}
+        </div>
+        <div className="flex flex-row justify-between">
+          <div
+            className={`flex   ${
+              currentLocale == "en" ? "flex-row" : "flex-row-reverse"
+            } items-center gap-1 py-2 px-4 bg-primary md:text-lg text-sm rounded-lg text-white text-center`}
+          >
+            <FaSortAmountUpAlt className="w-4 h-4" />
+            <div>{translations.low_to_high}</div>
+          </div>
+          <div
+            className={`flex   ${
+              currentLocale == "en" ? "flex-row" : "flex-row-reverse"
+            } items-center gap-1 py-2 px-4 bg-white md:text-lg text-sm rounded-lg text-primary text-center`}
+          >
+            <FaSortAmountDownAlt className="w-4 h-4" />
+            <div>{translations.high_to_low}</div>
+          </div>
+        </div>
+      </div>
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
