@@ -18,6 +18,7 @@ import {
   useLogoutUserMutation,
 } from "@/store/endpoints/apiSlice";
 import { logoutUser } from "@/store/authReducer";
+import ProgressSteps from "@/components/ProgressSteps";
 
 interface FormData {
   city: string;
@@ -304,11 +305,9 @@ export default function MainPage() {
         couponCode: data.couponCode,
       };
 
-      
-
       sessionStorage.setItem("payload", JSON.stringify(payload));
 
-      const userInfoResponse = await getUserInfo({}) as any;
+      const userInfoResponse = (await getUserInfo({})) as any;
 
       if (
         userInfoResponse?.message === "Session expired" ||
@@ -353,6 +352,7 @@ export default function MainPage() {
 
   return (
     <main className="w-full">
+      <ProgressSteps currentStep={currentStep} totalSteps={8} />
       <section className="h-full w-full">
         <AnimatePresence mode="wait">
           {currentStep === 1 && (

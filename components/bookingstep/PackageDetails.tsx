@@ -181,12 +181,11 @@ function PackageDetails({
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
                     className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-50 z-50"
-                      // onClick={() => setIsModalOpen(false)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                  
+                    // onClick={() => setIsModalOpen(false)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
                     <motion.div
                       initial={{ scale: 0.8 }}
                       animate={{ scale: 1 }}
@@ -278,7 +277,7 @@ function PackageDetails({
         {/* Back Button */}
         <motion.button
           onClick={onBack}
-          className=" flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
+          className=" flex items-center py-2 px-4 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
           variants={{
             hover: {
               scale: 1.05,
@@ -301,11 +300,12 @@ function PackageDetails({
               <AiOutlineLeft size={20} />
             )}
           </span>
+          <span>{translations.booking.backBtn}</span>
         </motion.button>
 
         <motion.button
           onClick={handleNextClick}
-          className=" flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
+          className=" flex items-center  py-2 px-4 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
           variants={{
             hover: {
               scale: 1.05,
@@ -321,6 +321,7 @@ function PackageDetails({
           whileHover="hover"
           whileTap="tap"
         >
+          <span>{translations.booking.nextBtn}</span>
           <span className="">
             {currentLocale === "ar" ? (
               <AiOutlineLeft size={20} />

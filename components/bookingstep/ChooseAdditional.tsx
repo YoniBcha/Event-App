@@ -440,7 +440,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
         <div className="flex flex-row gap-5 my-2 md:mt-10">
           <motion.button
             onClick={onBack}
-            className=" flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
+            className=" flex items-center py-2 px-4 rounded-lg  text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
             variants={{
               hover: {
                 scale: 1.05,
@@ -463,11 +463,12 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
                 <AiOutlineLeft size={20} />
               )}
             </span>
+            <span>{translations.booking.backBtn}</span>
           </motion.button>
 
           <motion.button
             onClick={handleNextClick}
-            className={` flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary`}
+            className={` flex items-center py-2 px-4 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary`}
             variants={{
               hover: {
                 scale: 1.05,
@@ -483,6 +484,7 @@ function ChooseAdditional({ onSubmit, onBack }: ChooseAdditionalProps) {
             whileHover={"hover"}
             whileTap={"tap"}
           >
+            <span>{translations.booking.nextBtn}</span>
             <span className="">
               {currentLocale === "ar" ? (
                 <AiOutlineLeft size={20} />

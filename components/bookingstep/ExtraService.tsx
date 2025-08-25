@@ -497,7 +497,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
         <div className="flex justify-center items-center gap-5 my-5 md:my-10">
           <motion.button
             onClick={onBack}
-            className=" flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
+            className=" flex items-center py-2 px-4 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
             variants={{
               hover: {
                 scale: 1.05,
@@ -520,11 +520,12 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
                 <AiOutlineLeft size={20} />
               )}
             </span>
+            <span>{translations.booking.backBtn}</span>
           </motion.button>
           {selectedServices.length < 1 && (
             <motion.button
               onClick={() => handleDone(true)} // Call handleDone with skip=true
-              className="flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
+              className="flex items-center py-2 px-4 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
               variants={{
                 hover: {
                   scale: 1.05,
@@ -540,6 +541,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
               whileHover="hover"
               whileTap="tap"
             >
+              <span>{translations.booking.nextBtn}</span>
               <span className="">
                 {currentLocale === "ar" ? (
                   <AiOutlineLeft size={20} />
@@ -553,7 +555,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
           {selectedServices.length > 0 && (
             <motion.button
               onClick={() => handleDone(false)} // Call handleDone with skip=false
-              className="flex items-center p-2 rounded-full text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
+              className="flex items-center py-2 px-4 rounded-lg text-white cursor-pointer bg-primary hover:bg-secondary hover:text-primary"
               variants={{
                 hover: {
                   scale: 1.05,
@@ -569,6 +571,7 @@ const ParentComponent: React.FC<ExtraServiceProps> = ({
               whileHover="hover"
               whileTap="tap"
             >
+              <span>{translations.booking.nextBtn}</span>
               <span className="">
                 {currentLocale === "ar" ? (
                   <AiOutlineLeft size={20} />
