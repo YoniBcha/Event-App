@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useContactUsMutation } from "@/store/endpoints/apiSlice";
-import { toast,ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import React from "react";
 import { useSelector } from "react-redux";
 import Image from "next/image";
@@ -36,23 +36,23 @@ interface RootState {
   language: {
     translations: {
       contact: {
-      "contactUs": string;
-      "callUs": string;
-      "callSub": string;
-      "chatWithUs": string;
-      "chatSub": string;
-      "startChat": string;
-      "startEmail": string;
-      "startInsta": string;
-      "visitUs": string;
-      "visitSub": string;
-      "saudiArabia": string;
-      "fullName": string;
-      "email": string;
-      "phoneNumber": string;
-      "Message": string;
-      "sendMessage": string;
-      "sending": string;
+        contactUs: string;
+        callUs: string;
+        callSub: string;
+        chatWithUs: string;
+        chatSub: string;
+        startChat: string;
+        startEmail: string;
+        startInsta: string;
+        visitUs: string;
+        visitSub: string;
+        saudiArabia: string;
+        fullName: string;
+        email: string;
+        phoneNumber: string;
+        Message: string;
+        sendMessage: string;
+        sending: string;
       };
     };
   };
@@ -83,15 +83,23 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl md:mx-auto p-6">
+      <Image
+        src="/images/Rectangle.png"
+        alt="Contact Us"
+        width={1000}
+        height={1000}
+        className="w-full h-36 md:h-60 mb-8 object-fit"
+      />
       <h1 className="text-3xl font-bold text-center text-primary mb-8">
-       {translations.contact.contactUs}
+        {translations.contact.contactUs}
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="flex md:flex-row flex-col-reverse gap-6 mb-8">
         <div>
           <div className="mb-8">
-            <h2 className="text-xl text-[#7f7f7f] font-semibold">{
-              translations.contact.callUs}</h2>
+            <h2 className="text-xl text-[#7f7f7f] font-semibold">
+              {translations.contact.callUs}
+            </h2>
             <p className="text-[#7f7f7f] font-regular mt-1">
               {translations.contact.callSub}
             </p>
@@ -192,7 +200,9 @@ const ContactUs = () => {
             </div>
           </div>
           <div>
-            <h2 className="text-xl text-[#7f7f7f] font-semibold">{translations.contact.visitUs} </h2>
+            <h2 className="text-xl text-[#7f7f7f] font-semibold">
+              {translations.contact.visitUs}{" "}
+            </h2>
             <p className="text-[#7f7f7f] font-regular mt-1">
               {translations.contact.visitSub}{" "}
             </p>
@@ -219,8 +229,9 @@ const ContactUs = () => {
                     <circle cx="6.5" cy="6.5" r="2.5" />
                   </g>
                 </svg>
-                <p className="text-primary underline text-lg">{
-                  translations.contact.saudiArabia}</p>
+                <p className="text-primary underline text-lg">
+                  {translations.contact.saudiArabia}
+                </p>
               </div>
             </div>
           </div>
@@ -295,7 +306,9 @@ const ContactUs = () => {
               disabled={isSubmitting}
               className="w-full bg-primary text-white px-4 py-2 hover:bg-secondary hover:text-primary transition rounded-full cursor-pointer"
             >
-              {isSubmitting ? translations.contact.sending : translations.contact.sendMessage}
+              {isSubmitting
+                ? translations.contact.sending
+                : translations.contact.sendMessage}
             </button>
           </form>
         </div>
