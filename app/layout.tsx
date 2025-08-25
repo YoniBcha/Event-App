@@ -16,7 +16,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     if (typeof window !== "undefined") {
       // Check if locale exists in localStorage
       const storedLocale = localStorage.getItem("locale");
-      
+
       // If no locale is stored, it's the first visit - set to "ar"
       if (!storedLocale) {
         localStorage.setItem("locale", "ar");
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang={currentLocale} dir={currentLocale === "ar" ? "rtl" : "ltr"}>
       <head>
-        <link rel="icon" href="/pp.jpg" />
+        <link rel="icon" href="/profile-icon-02.png" />
       </head>
 
       <body className={`antialiased px-4 md:px-20  `}>

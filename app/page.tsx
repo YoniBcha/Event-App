@@ -41,7 +41,7 @@ const Home: React.FC = () => {
         <motion.div
           className="w-1/3 h-80"
           style={{
-            backgroundImage: "url('/images/Rectangle 2202.png')",
+            backgroundImage: "url('/b1.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
         <motion.div
           className="w-1/3 h-80"
           style={{
-            backgroundImage: "url('/images/Rectangle 220.png')",
+            backgroundImage: "url('/b1.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -59,7 +59,7 @@ const Home: React.FC = () => {
         <motion.div
           className="w-1/3 h-80"
           style={{
-            backgroundImage: "url('/images/recr.png')",
+            backgroundImage: "url('/b3.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -128,7 +128,7 @@ const Home: React.FC = () => {
         <motion.div
           className="w-1/3"
           style={{
-            backgroundImage: "url('/images/Rectangle 2202.png')",
+            backgroundImage: "url('/b2.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -137,7 +137,7 @@ const Home: React.FC = () => {
         <motion.div
           className="w-1/3"
           style={{
-            backgroundImage: "url('/images/Rectangle 220.png')",
+            backgroundImage: "url('/b1.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -146,7 +146,7 @@ const Home: React.FC = () => {
         <motion.div
           className="w-1/3"
           style={{
-            backgroundImage: "url('/images/recr.png')",
+            backgroundImage: "url('/b3.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
