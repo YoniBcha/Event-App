@@ -20,6 +20,7 @@ import { cancelOrderEndpoints } from "./cancelOrderEndpoints";
 import { depositeEndpoints } from "./deposit";
 import { getMyDepositEndpoints } from "./getMyDeposits";
 import { getDepositAmountEndpoints } from "./getDepositeAmount";
+import { bestSellingPackages } from "./bestSellingPackages";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -51,6 +52,7 @@ export const apiSlice = createApi({
     ...bookEventEndpoints(builder),
     ...depositeEndpoints(builder),
     ...getMyDepositEndpoints(builder),
+    ...bestSellingPackages(builder),
     ...preBookEventEndpoints(builder),
     ...userEndpoints(builder),
     ...changePasswordEndpoints(builder),
@@ -92,6 +94,7 @@ export const {
   usePreBookEventMutation,
   useCancelOrderMutation,
   useGetSingleSelfBookedEventsQuery,
+  useGetBestSellingPackagesQuery,
   useGetSingleDesignGalleryQuery,
   useGetSelfBookedEventsQuery,
   useLogoutUserMutation,
