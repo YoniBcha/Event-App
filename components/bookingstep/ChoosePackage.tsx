@@ -533,14 +533,14 @@ function ChoosePackage({
         <div className="text-primary py-2 font-bold">
           {translations.sort_by}
         </div>
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row gap-5 justify-between">
           <div
             className={`flex   ${
               currentLocale == "en" ? "flex-row" : "flex-row-reverse"
             } items-center gap-1 py-2 px-4 bg-primary md:text-lg text-sm rounded-lg text-white text-center`}
           >
             <FaSortAmountUpAlt className="w-4 h-4" />
-            <div>{translations.low_to_high}</div>
+            <div className="text-xs md:text-lg">{translations.low_to_high}</div>
           </div>
           <div
             className={`flex   ${
