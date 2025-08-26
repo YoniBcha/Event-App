@@ -20,6 +20,7 @@ const contactSchema = yup.object().shape({
     .email("Invalid email address")
     .required("Email is required"),
   phone: yup.string().required("Phone number is required"),
+  complaintTitle: yup.string().required("Complaint title is required"),
   message: yup
     .string()
     .min(10, "Message must be at least 10 characters")
@@ -30,6 +31,7 @@ interface ContactFormInputs {
   name: string;
   email: string;
   phone: string;
+  complaintTitle: string;
   message: string;
 }
 interface RootState {
@@ -37,6 +39,7 @@ interface RootState {
     translations: {
       contact: {
         contactUs: string;
+        complaintTitle: string;
         callUs: string;
         callSub: string;
         chatWithUs: string;
@@ -84,13 +87,15 @@ const ContactUs = () => {
 
   return (
     <div className="max-w-4xl md:mx-auto p-6">
-      <Image
-        src="/images/Rectangle.png"
-        alt="Contact Us"
-        width={1000}
-        height={1000}
-        className="w-full h-36 md:h-60 mb-8 object-fit"
-      />
+      <div className="self-center h-[14rem] md:h-[24rem] w-full mb-5 relative">
+        <Image
+          src={"/images/pic4.jpg"}
+          alt="About Image"
+          layout="fill"
+          objectFit="cover"
+        />
+      </div>
+
       <h1 className="text-3xl font-bold text-center text-primary mb-8">
         {translations.contact.contactUs}
       </h1>
@@ -157,7 +162,7 @@ const ContactUs = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     d="M9.5 13c13.687 13.574 14.825 13.09 29 0"
-                    strokeWidth="1"
+                    strokeWidth="4"
                   />
                   <rect
                     width="37"
@@ -170,7 +175,7 @@ const ContactUs = () => {
                     strokeLinejoin="round"
                     rx="4"
                     ry="4"
-                    strokeWidth="1"
+                    strokeWidth="4"
                   />
                 </svg>
                 <p className="text-primary underline text-lg">
@@ -210,8 +215,8 @@ const ContactUs = () => {
               <div className="flex items-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="21"
-                  height="21"
+                  width="24"
+                  height="24"
                   viewBox="0 0 21 21"
                   className="-ml-1"
                 >
@@ -223,7 +228,7 @@ const ContactUs = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     transform="translate(4 2)"
-                    strokeWidth="1"
+                    strokeWidth="2"
                   >
                     <path d="m6.5 16.54l.631-.711Q8.205 14.6 9.064 13.49l.473-.624Q12.5 8.875 12.5 6.533C12.5 3.201 9.814.5 6.5.5s-6 2.701-6 6.033q0 2.342 2.963 6.334l.473.624a55 55 0 0 0 2.564 3.05" />
                     <circle cx="6.5" cy="6.5" r="2.5" />
@@ -285,6 +290,26 @@ const ContactUs = () => {
                 <p className="text-red-500 text-sm">{errors.phone.message}</p>
               )}
             </div>
+
+            <div>
+              <label
+                htmlFor="complaintTitle"
+                className="block text-sm font-medium text-gray-700"
+              >
+                {translations.contact.complaintTitle}
+              </label>
+              <input
+                {...register("complaintTitle")}
+                type="text"
+                className="border rounded-lg px-3 border-[#e0bfb8] w-full py-2 mt-1 focus:outline-none focus:ring-[#e0bfb8] focus:border-[#e0bfb8] bg-secondary"
+              />
+              {errors.complaintTitle && (
+                <p className="text-red-500 text-sm">
+                  {errors.complaintTitle.message}
+                </p>
+              )}
+            </div>
+
             <div>
               <label
                 htmlFor="message"

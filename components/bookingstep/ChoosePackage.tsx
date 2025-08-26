@@ -59,10 +59,12 @@ function ChoosePackage({
   onNext,
   onBackClick,
 }: ChoosePackageProps) {
+  const [sortByPrice, setSortByPrice] = useState<"asc" | "desc">("asc");
   const { data, error, isLoading } = useGetPackageQuery({
     eventDesign,
     eventType,
     place,
+    sortByPrice,
   });
 
   // const [isModalOpen, setIsModalOpen] = useState(false);
@@ -535,20 +537,34 @@ function ChoosePackage({
         </div>
         <div className="flex flex-row gap-5 justify-between">
           <div
-            className={`flex   ${
+            onClick={() => setSortByPrice("asc")}
+            className={`flex cursor-pointer  ${
               currentLocale == "en" ? "flex-row" : "flex-row-reverse"
-            } items-center gap-1 py-2 px-4 bg-primary md:text-lg text-sm rounded-lg text-white text-center`}
+            } 
+            ${
+              sortByPrice == "asc"
+                ? "bg-primary text-white"
+                : "bg-white text-primary"
+            }
+            items-center gap-1 py-2 px-4  md:text-lg text-sm rounded-lg  text-center`}
           >
             <FaSortAmountUpAlt className="w-4 h-4" />
             <div className="text-xs md:text-lg">{translations.low_to_high}</div>
           </div>
           <div
-            className={`flex   ${
+            onClick={() => setSortByPrice("desc")}
+            className={`flex cursor-pointer  ${
               currentLocale == "en" ? "flex-row" : "flex-row-reverse"
-            } items-center gap-1 py-2 px-4 bg-white md:text-lg text-sm rounded-lg text-primary text-center`}
+            } 
+           ${
+             sortByPrice == "desc"
+               ? "bg-primary text-white"
+               : "bg-white text-primary"
+           }
+            items-center gap-1 py-2 px-4  md:text-lg text-sm rounded-lg  text-center`}
           >
             <FaSortAmountDownAlt className="w-4 h-4" />
-            <div>{translations.high_to_low}</div>
+            <div className="text-xs md:text-lg">{translations.high_to_low}</div>
           </div>
         </div>
       </div>

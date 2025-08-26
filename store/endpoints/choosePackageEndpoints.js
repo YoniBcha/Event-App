@@ -1,9 +1,9 @@
 export const ChoosePackageEndpoints = (builder) => ({
   getPackage: builder.query({
-    query: ({ eventDesign, eventType, place }) => ({
+    query: ({ eventDesign, eventType, place, sortByPrice }) => ({
       url: "event/getEventPackage",
       method: "GET",
-      params: { eventDesign, eventType, place }, 
+      params: { eventDesign, eventType, place, sortByPrice },
     }),
   }),
 });
