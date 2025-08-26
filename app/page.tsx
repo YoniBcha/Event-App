@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useGetBestSellingPackagesQuery } from "@/store/endpoints/apiSlice";
+import Link from "next/link";
 
 const Home: React.FC = () => {
   const currentLocale = useSelector(
@@ -113,17 +114,22 @@ const Home: React.FC = () => {
 
           {/* Social icons container */}
           <div className="w-full flex justify-around items-center py-9 gap-5 md:gap-16">
-            <div className="flex flex-col items-center gap-3 text-center">
+            <Link
+              href="https://www.instagram.com/fenzo_events"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-3 text-center"
+            >
               <Image
-                src="/instagram icon.png"
-                alt="Instagram"
-                width={80}
-                height={80}
+              src="/instagram icon.png"
+              alt="Instagram"
+              width={80}
+              height={80}
               />
               <div className="font-semibold max-md:text-sm text-primary">
-                {translations.instagram}
+              {translations.instagram}
               </div>
-            </div>
+            </Link>
             <div className="flex flex-col items-center gap-3 text-center">
               <Image src="/new.png" alt="Events" width={80} height={80} />
               <div className="font-semibold max-md:text-sm text-primary">
@@ -171,9 +177,9 @@ const Home: React.FC = () => {
           className="w-full px-4 md:px-8 mt-8"
           variants={containerVariants}
         >
-          <h2 className="text-primary font-bold mb-6 text-start">
+          <p className="text-primary text-xl font-bold mb-6 text-start">
             {translations.most_sold}
-          </h2>
+          </p>
 
           {/* Grid layout for packages */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
