@@ -50,6 +50,15 @@ const Home: React.FC = () => {
         <motion.div
           className="w-1/3 h-80"
           style={{
+            backgroundImage: "url('/b3.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+          variants={imageVariants}
+        ></motion.div>
+        <motion.div
+          className="w-1/3 h-80"
+          style={{
             backgroundImage: "url('/b1.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -60,15 +69,6 @@ const Home: React.FC = () => {
           className="w-1/3 h-80"
           style={{
             backgroundImage: "url('/b2.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-          variants={imageVariants}
-        ></motion.div>
-        <motion.div
-          className="w-1/3 h-80"
-          style={{
-            backgroundImage: "url('/b3.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -114,6 +114,12 @@ const Home: React.FC = () => {
 
           {/* Social icons container */}
           <div className="w-full flex justify-around items-center py-9 gap-5 md:gap-16">
+                        <div className="flex flex-col items-center gap-3 text-center">
+              <Image src="/images/new.png" alt="Events" width={85} height={85} />
+              <div className="font-semibold max-md:text-sm text-primary">
+                {translations.new}
+              </div>
+            </div>
             <Link
               href="https://www.instagram.com/fenzo_events"
               target="_blank"
@@ -121,21 +127,15 @@ const Home: React.FC = () => {
               className="flex flex-col items-center gap-3 text-center"
             >
               <Image
-              src="/instagram icon.png"
+              src="/images/instagram icon.png"
               alt="Instagram"
-              width={80}
-              height={80}
+              width={85}
+              height={85}
               />
               <div className="font-semibold max-md:text-sm text-primary">
               {translations.instagram}
               </div>
             </Link>
-            <div className="flex flex-col items-center gap-3 text-center">
-              <Image src="/new.png" alt="Events" width={80} height={80} />
-              <div className="font-semibold max-md:text-sm text-primary">
-                {translations.new}
-              </div>
-            </div>
           </div>
         </motion.div>
 
@@ -177,48 +177,48 @@ const Home: React.FC = () => {
           className="w-full px-4 md:px-8 mt-8"
           variants={containerVariants}
         >
-          <p className="text-primary text-xl font-bold mb-6 text-start">
+          <p className="text-primary font-bold mb-6 text-start text-3xl">
             {translations.most_sold}
           </p>
 
           {/* Grid layout for packages */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {data?.data?.map((item: any) => (
-              <motion.div
-                key={item.id}
-                className="flex flex-col items-center  transition cursor-pointer"
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-                onClick={() => router.push(`/package/${item.id}`)}
-              >
-                {/* Image on Top */}
-                {item?.image?.[0] ? (
-                  <Image
-                    src={item.image[0]}
-                    alt={item.title || "package image"}
-                    width={80}
-                    height={80}
-                    className="rounded-2xl object-cover w-36 h-36"
-                  />
-                ) : (
-                  <div className="w-36 h-36 flex items-center justify-center bg-gray-100 rounded-lg text-gray-400 text-xs">
-                    No Image
+          <div>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              {data?.data?.map((item: any, idx: number) => (
+                <motion.div
+                  key={item.id ?? idx}
+                  className="flex flex-col items-center  transition cursor-pointer"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => router.push(`/package/${item.id}`)}
+                >
+                  {/* Image on Top */}
+                  {item?.image?.[0] ? (
+                    <Image
+                      src={item.image[0]}
+                      alt={item.title || "package image"}
+                      width={80}
+                      height={80}
+                      className="rounded-2xl object-cover w-36 h-36"
+                    />
+                  ) : (
+                    <div className="w-36 h-36 flex items-center justify-center bg-gray-100 rounded-lg text-gray-400 text-xs">
+                      No Image
+                    </div>
+                  )}
+                  {/* Package Name */}
+                  <div className="mt-2 text-sm text-primary font-semibold text-center line-clamp-2">
+                    {currentLocale === "en"
+                      ? item.packageName
+                      : item.translatedPackageName}
                   </div>
-                )}
-
-                {/* Package Name */}
-                <div className="mt-2 text-sm text-primary font-semibold text-center line-clamp-2">
-                  {currentLocale === "en"
-                    ? item.packageName
-                    : item.translatedPackageName}
-                </div>
-
-                {/* Package Price */}
-                <div className="mt-1 text-primary text-sm text-center">
-                  {item.packagePrice} SAR
-                </div>
-              </motion.div>
-            ))}
+                  {/* Package Price */}
+                  <div className="mt-1 text-primary text-sm text-center">
+                    {item.packagePrice} SAR
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </motion.div>
       )}
