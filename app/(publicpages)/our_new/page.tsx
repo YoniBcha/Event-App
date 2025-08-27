@@ -13,6 +13,7 @@ interface RootState {
     translations: {
       sidebar: {
         designs: string;
+        follow_our_news: string;
       };
     };
   };
@@ -87,7 +88,7 @@ function ChooseNewDesigns() {
         />
       </div>
       <div className="text-primary font-bold text-xl md:text-3xl pt-5 text-center">
-        {translations.sidebar.designs}
+        {translations.sidebar.follow_our_news}
       </div>
 
       {isLoading ? (
