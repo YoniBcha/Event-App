@@ -241,7 +241,7 @@ function ChoosePackage({
   //   setIsGridView(!isGridView);
   // };
 
-  if (error) return <p>Failed to load packages</p>;
+  if (error) return <p>Failed to load packages </p>;
 
   const packages = (data as { eventPackages: Package[] })?.eventPackages || [];
 

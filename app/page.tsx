@@ -121,13 +121,13 @@ const Home: React.FC = () => {
               className="flex flex-col items-center gap-3 text-center"
             >
               <Image
-              src="/instagram icon.png"
-              alt="Instagram"
-              width={80}
-              height={80}
+                src="/instagram icon.png"
+                alt="Instagram"
+                width={80}
+                height={80}
               />
               <div className="font-semibold max-md:text-sm text-primary">
-              {translations.instagram}
+                {translations.instagram}
               </div>
             </Link>
             <div className="flex flex-col items-center gap-3 text-center">
@@ -189,7 +189,7 @@ const Home: React.FC = () => {
                 className="flex flex-col items-center  transition cursor-pointer"
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
-                onClick={() => router.push(`/package/${item.id}`)}
+                // onClick={() => router.push(`/package/${item.id}`)}
               >
                 {/* Image on Top */}
                 {item?.image?.[0] ? (

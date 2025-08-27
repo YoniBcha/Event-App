@@ -81,6 +81,7 @@ export default function MainPage() {
     (state: any) => state.language.currentLocale
   );
   const authenticateUser = useSelector((state: any) => state.auth.user);
+  const [hasAutoSelectedDesign, setHasAutoSelectedDesign] = useState(false);
 
   // Retrieve state from sessionStorage on component mount
   const [loading, setLoading] = useState(true); // Add a loading state
@@ -157,6 +158,49 @@ export default function MainPage() {
 
     setLoading(false); // Set loading to false after retrieving state
   }, []);
+
+  // Handle pre-selected design from design gallery
+  useEffect(() => {
+    if (loading || hasAutoSelectedDesign) return;
+
+    // Check if we're on the design selection step (step 2) and have a pre-selected design
+    if (currentStep === 2 && bookingData.event) {
+      const preSelectedDesign = sessionStorage.getItem("preSelectedDesign");
+
+      if (preSelectedDesign) {
+        try {
+          const designData = JSON.parse(preSelectedDesign);
+          if (designData && designData.length >= 2) {
+            const [designId, designName] = designData;
+
+            // Create selected design object
+            const selectedDesign = {
+              id: designId,
+              name: designName,
+            };
+
+            // Set the selected design
+            setSelectedDesignId(selectedDesign.id);
+            sessionStorage.setItem(
+              "selectedDesignId",
+              JSON.stringify(selectedDesign)
+            );
+
+            // Mark that we've auto-selected to prevent infinite loop
+            setHasAutoSelectedDesign(true);
+
+            // Remove the pre-selected design from sessionStorage
+            sessionStorage.removeItem("preSelectedDesign");
+
+            // Navigate to the next step (package selection)
+            router.push("/mainpage/3");
+          }
+        } catch (error) {
+          console.error("Error parsing preSelectedDesign:", error);
+        }
+      }
+    }
+  }, [currentStep, bookingData, loading, hasAutoSelectedDesign, router]);
 
   // Handle direct navigation
   useEffect(() => {
@@ -278,15 +322,6 @@ export default function MainPage() {
     sessionStorage.setItem("extraServices", JSON.stringify(selectedService));
     router.push("/mainpage/7");
   };
-
-  //  const handleExtraServiceSelect = (selectedService: ExtraServiceData) => {
-  //    setExtraServices((prev) => {
-  //      const updatedServices = [...prev, selectedService];
-  //      sessionStorage.setItem("extraServices", JSON.stringify(updatedServices));
-  //      router.push("/mainpage/7");
-  //      return updatedServices;
-  //    });
-  //  };
 
   const handlePersonalDataSubmit = async (data: PersonalData) => {
     try {
