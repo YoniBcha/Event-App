@@ -109,7 +109,7 @@ const ContactUs = () => {
         {translations.contact.contactUs}
       </h1>
       <div className="flex md:flex-row flex-col-reverse gap-6 mb-8">
-        <div>
+        <div className="w-full md:w-1/2">
           <div className="mb-8">
             <h2 className="text-xl text-[#7f7f7f] font-semibold">
               {translations.contact.callUs}
@@ -250,7 +250,7 @@ const ContactUs = () => {
             </div>
           </div>
         </div>
-        <div className="mt-3">
+        <div className="mt-3 w-full md:w-1/2">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             <div>
               <label
