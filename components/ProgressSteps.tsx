@@ -8,7 +8,7 @@ interface ProgressStepsProps {
   totalSteps?: number;
 }
 
-const ProgressSteps = ({ currentStep, totalSteps = 8 }: ProgressStepsProps) => {
+const ProgressSteps = ({ currentStep, totalSteps = 7 }: ProgressStepsProps) => {
   const [steps, setSteps] = useState<number[]>([]);
 
   useEffect(() => {

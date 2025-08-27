@@ -387,7 +387,7 @@ export default function MainPage() {
 
   return (
     <main className="w-full">
-      <ProgressSteps currentStep={currentStep} totalSteps={8} />
+      <ProgressSteps currentStep={currentStep} totalSteps={7} />
       <section className="h-full w-full">
         <AnimatePresence mode="wait">
           {currentStep === 1 && (
