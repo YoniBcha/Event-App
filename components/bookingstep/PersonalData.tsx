@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
+import { Wheel } from "@uiw/react-color";
 import { ChromePicker, ColorResult } from "react-color";
 import { motion } from "framer-motion";
 import { FaPlus, FaTrash } from "react-icons/fa";
@@ -14,6 +15,41 @@ import { Dropdown } from "primereact/dropdown";
 import DatePicker from "react-datepicker";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
+const predefinedColors = [
+  // Row 1
+  "#FF0000",
+  "#FF4000",
+  "#FF8000",
+  "#FFBF00",
+  "#FFFF00",
+  "#BFFF00",
+  "#80FF00",
+  "#40FF00",
+  "#00FF00",
+  "#00FF40",
+  // Row 2
+  "#00FF80",
+  "#00FFBF",
+  "#00FFFF",
+  "#00BFFF",
+  "#0080FF",
+  "#0040FF",
+  "#0000FF",
+  "#4000FF",
+  "#8000FF",
+  "#BF00FF",
+  // Row 3
+  "#FF00FF",
+  "#FF00BF",
+  "#FF0080",
+  "#FF0040",
+  "#FF0000",
+  "#FFFFFF",
+  "#CCCCCC",
+  "#999999",
+  "#666666",
+  "#000000",
+];
 const getCookie = (name: string) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -203,6 +239,14 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
       }));
     }
   };
+
+  const handleFavoriteColorChange = (color: any) => {
+    setSelectedFavoriteColor(color.hex);
+  };
+
+  const handleDressColorChange = (color: any) => {
+    setSelectedDressColor(color.hex);
+  };
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -212,14 +256,6 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
     if (errors[name]) {
       setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
     }
-  };
-
-  const handleFavoriteColorChange = (color: ColorResult) => {
-    setSelectedFavoriteColor(color.hex);
-  };
-
-  const handleDressColorChange = (color: ColorResult) => {
-    setSelectedDressColor(color.hex);
   };
 
   const addColor = (field: "favoriteColors" | "dressColor", color: string) => {
@@ -343,7 +379,7 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
 
       // Step 4: Upload images and get URLs (only if validation passes)
       const uploadedUrls = await uploadImages(selectedImages);
-      
+
       if (
         uploadedUrls?.length === 0 &&
         submissionData?.imageOfPlace.length == 0
@@ -774,7 +810,7 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
 
           {/* Favorite Colors */}
           <motion.div
-            className="flex flex-col"
+            className="flex flex-col mb-4"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.7, duration: 0.3 }}
@@ -782,47 +818,61 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
             <label className="font-medium text-tertiary text-md mb-2">
               {translations.booking.favorite_Colors}
             </label>
-            <div className="flex items-center gap-2">
-              {/* Color Preview */}
-              <div
-                className="w-10 h-10 rounded-lg cursor-pointer border border-primary"
-                style={{
-                  backgroundColor: selectedFavoriteColor,
-                }}
-                onClick={() =>
-                  setShowFavoriteColorPicker(!showFavoriteColorPicker)
-                }
-              />
+
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-3">
+              {/* Wheel Color Picker */}
+              <div className="flex-shrink-0 mx-auto md:mx-0">
+                <Wheel
+                  color={selectedFavoriteColor}
+                  onChange={handleFavoriteColorChange}
+                  width={150}
+                  height={150}
+                />
+              </div>
+
+              {/* Predefined Colors Grid */}
+              <div className="grid grid-cols-10 gap-2">
+                {predefinedColors.map((color, index) => (
+                  <div
+                    key={index}
+                    className="w-4 h-4  md:w-5 md:h-5 rounded-full cursor-pointer border border-gray-300 shadow-sm hover:scale-110 transition-transform"
+                    style={{ backgroundColor: color }}
+                    onClick={() => addColor("favoriteColors", color)}
+                    title={color}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-4">
+              {/* Selected Colors Preview */}
+              <div className="flex flex-wrap gap-4 flex-1">
+                {formData.favoriteColors.map((color, index) => (
+                  <div
+                    key={index}
+                    className="md:w-6 w-4 h-4 md:h-6 rounded-full ring-2 ring-offset-1 cursor-pointer relative group flex-shrink-0 shadow-md"
+                    style={{ backgroundColor: color }}
+                    onClick={() => removeColor("favoriteColors", color)}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-40 rounded-full">
+                      <FaTrash className="text-white text-xs" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               {/* + Button to Add Color */}
               <button
                 onClick={() =>
                   addColor("favoriteColors", selectedFavoriteColor)
                 }
-                className="p-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors duration-200"
+                className="md:p-3 p-2  rounded-full bg-primary text-white hover:bg-secondary transition-colors duration-200 flex-shrink-0 shadow-md"
+                title="Add current color"
               >
                 <FaPlus />
               </button>
             </div>
-            {/* Color Picker */}
-            {showFavoriteColorPicker && (
-              <div className="mt-2">
-                <ChromePicker
-                  color={selectedFavoriteColor}
-                  onChange={handleFavoriteColorChange}
-                />
-              </div>
-            )}
-            {/* Display Selected Favorite Colors */}
-            <div className="flex flex-wrap mt-2">
-              {formData.favoriteColors.map((color, index) => (
-                <div
-                  key={index}
-                  className="w-6 h-6 rounded-full m-1 cursor-pointer"
-                  style={{ backgroundColor: color }}
-                  onClick={() => removeColor("favoriteColors", color)}
-                />
-              ))}
-            </div>
+
             {errors.favoriteColors && (
               <div className="text-red-500 text-sm mt-1">
                 {errors.favoriteColors}
@@ -830,9 +880,8 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
             )}
           </motion.div>
 
-          {/* Dress Colors */}
           <motion.div
-            className="flex flex-col"
+            className="flex flex-col mb-3"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.8, duration: 0.3 }}
@@ -840,43 +889,59 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
             <label className="font-medium text-tertiary text-md mb-2">
               {translations.booking.dress_Colors}
             </label>
-            <div className="flex items-center gap-2">
-              {/* Color Preview */}
-              <div
-                className="w-10 h-10 rounded-lg cursor-pointer border border-primary"
-                style={{
-                  backgroundColor: selectedDressColor,
-                }}
-                onClick={() => setShowDressColorPicker(!showDressColorPicker)}
-              />
+
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-3">
+              {/* Wheel Color Picker */}
+              <div className="flex-shrink-0 mx-auto md:mx-0">
+                <Wheel
+                  color={selectedDressColor}
+                  onChange={handleDressColorChange}
+                  width={150}
+                  height={150}
+                />
+              </div>
+
+              {/* Predefined Colors Grid */}
+              <div className="grid grid-cols-10 gap-2">
+                {predefinedColors.map((color, index) => (
+                  <div
+                    key={index}
+                    className="w-4 h-4 md:w-5 md:h-5 rounded-full cursor-pointer border border-gray-300 shadow-sm hover:scale-110 transition-transform"
+                    style={{ backgroundColor: color }}
+                    onClick={() => addColor("dressColor", color)}
+                    title={color}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-4">
+              {/* Selected Colors Preview */}
+              <div className="flex flex-wrap gap-4 flex-1">
+                {formData?.dressColor?.map((color, index) => (
+                  <div
+                    key={index}
+                    className="md:w-6 w-4 h-4 md:h-6 rounded-full ring-2 ring-offset-1 cursor-pointer relative group flex-shrink-0 shadow-md"
+                    style={{ backgroundColor: color }}
+                    onClick={() => removeColor("dressColor", color)}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-40 rounded-full">
+                      <FaTrash className="text-white text-xs" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               {/* + Button to Add Color */}
               <button
                 onClick={() => addColor("dressColor", selectedDressColor)}
-                className="p-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors duration-200"
+                className="md:p-3 p-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors duration-200 flex-shrink-0 shadow-md"
+                title="Add current color"
               >
                 <FaPlus />
               </button>
             </div>
-            {/* Color Picker */}
-            {showDressColorPicker && (
-              <div className="mt-2">
-                <ChromePicker
-                  color={selectedDressColor}
-                  onChange={handleDressColorChange}
-                />
-              </div>
-            )}
-            {/* Display Selected Dress Colors */}
-            <div className="flex flex-wrap mt-2">
-              {formData?.dressColor?.map((color, index) => (
-                <div
-                  key={index}
-                  className="w-6 h-6 rounded-full m-1 cursor-pointer"
-                  style={{ backgroundColor: color }}
-                  onClick={() => removeColor("dressColor", color)}
-                />
-              ))}
-            </div>
+
             {errors.dressColor && (
               <div className="text-red-500 text-sm mt-1">
                 {errors.dressColor}
@@ -885,7 +950,7 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
           </motion.div>
         </div>
         <motion.div
-          className="flex flex-col"
+          className="flex flex-col "
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1, duration: 0.3 }}

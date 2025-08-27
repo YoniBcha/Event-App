@@ -13,6 +13,7 @@
     "@iconify/react": "^5.2.0",
     "@react-pdf/renderer": "^4.3.0",
     "@reduxjs/toolkit": "^2.5.1",
+    "@uiw/react-color": "^2.8.0",
     "framer-motion": "^12.4.2",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.3",
