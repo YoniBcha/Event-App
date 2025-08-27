@@ -71,7 +71,7 @@ function ChooseNewDesigns() {
   }, []);
 
   const handleImageClick = (id: string) => {
-    router.push(`/designs/${id}`);
+    router.push(`/our_new/${id}`);
   };
 
   if (error) return <p>Failed to load designs</p>;

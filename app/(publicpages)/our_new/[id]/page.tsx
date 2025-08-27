@@ -11,7 +11,7 @@ export default function NewDesignPage() {
   const router = useRouter();
   const id = params.id as string; // Get the id from params
   const { data: designData, isLoading: isGalleryLoading } =
-    useGetSingleDesignGalleryQuery<any>({ id, designId: "" });
+    useGetSingleDesignGalleryQuery<any>({ id: "", designId: id });
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
