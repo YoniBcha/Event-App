@@ -195,7 +195,7 @@ const Home: React.FC = () => {
                   className="flex flex-col items-center  transition cursor-pointer"
                   variants={itemVariants}
                   whileHover={{ scale: 1.02 }}
-                  onClick={() => router.push(`/package/${item.id}`)}
+                  // onClick={() => router.push(`/package/${item.id}`)}
                 >
                   {/* Image on Top */}
                   {item?.image?.[0] ? (
