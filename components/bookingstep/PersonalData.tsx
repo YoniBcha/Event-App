@@ -835,7 +835,7 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
                 {predefinedColors.map((color, index) => (
                   <div
                     key={index}
-                    className="w-4 h-4  md:w-5 md:h-5 rounded-full cursor-pointer border border-gray-300 shadow-sm hover:scale-110 transition-transform"
+                    className="w-5 h-5 rounded-full cursor-pointer border border-gray-300 shadow-sm hover:scale-110 transition-transform"
                     style={{ backgroundColor: color }}
                     onClick={() => addColor("favoriteColors", color)}
                     title={color}
@@ -906,7 +906,7 @@ export default function PersonalData({ onSubmit }: PersonalDataProps) {
                 {predefinedColors.map((color, index) => (
                   <div
                     key={index}
-                    className="w-4 h-4 md:w-5 md:h-5 rounded-full cursor-pointer border border-gray-300 shadow-sm hover:scale-110 transition-transform"
+                    className="w-5 h-5 rounded-full cursor-pointer border border-gray-300 shadow-sm hover:scale-110 transition-transform"
                     style={{ backgroundColor: color }}
                     onClick={() => addColor("dressColor", color)}
                     title={color}
