@@ -182,6 +182,16 @@ function Header() {
           </Link>
           <Link
             className={`hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg ${
+              pathname.startsWith("/our_new")
+                ? "font-bold border-b-2 border-primary text-primary"
+                : ""
+            }`}
+            href={"/our_new"}
+          >
+            {translations.sidebar.our_new}
+          </Link>
+          <Link
+            className={`hover:text-gray-500 hover:-translate-y-1 duration-200 text-lg ${
               pathname === "/about"
                 ? "font-bold border-b-2 border-primary text-primary"
                 : ""
@@ -426,6 +436,25 @@ function Header() {
                       }`}
                     >
                       {translations.sidebar.designs}
+                    </div>
+                  </div>
+                </Link>
+                <Link href="/our_new" onClick={toggleDrawer}>
+                  <div className="flex justify-start items-center gap-1">
+                    <Image
+                      src={"/Frame.png"}
+                      alt="Our New"
+                      width={26}
+                      height={26}
+                    />
+                    <div
+                      className={`hover:text-gray-500 ${
+                        pathname.startsWith("/our_new")
+                          ? "font-bold border-b-2 border-primary text-primary"
+                          : ""
+                      }`}
+                    >
+                      {translations.sidebar.our_new}
                     </div>
                   </div>
                 </Link>

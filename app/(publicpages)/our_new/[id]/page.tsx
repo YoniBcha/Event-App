@@ -6,7 +6,7 @@ import { useGetSingleDesignGalleryQuery } from "@/store/endpoints/apiSlice";
 import { useParams, useRouter } from "next/navigation"; // Use useParams instead of useSearchParams
 import { useSelector } from "react-redux";
 
-export default function DesignPage() {
+export default function NewDesignPage() {
   const params = useParams(); // Retrieve params
   const router = useRouter();
   const id = params.id as string; // Get the id from params
@@ -15,7 +15,6 @@ export default function DesignPage() {
   const currentLocale = useSelector(
     (state: any) => state.language.currentLocale
   );
-  const translations = useSelector((state: any) => state.language.translations);
   const renderValue = (
     defaultValue: string,
     translatedValue: string | undefined
@@ -55,6 +54,17 @@ export default function DesignPage() {
 
   return (
     <div className="flex flex-col gap-6 sm:p-4 p-1">
+      {/* Display First Image */}
+      {designData?.singleGallery?.images?.[0] && (
+        <div className="relative w-full h-64 max-sm:w-full mx-auto lg:w-[50%] max-md:w-[85%] max-lg:w-[70%]">
+          <Image
+            src={designData.singleGallery.images[0]}
+            alt="First Gallery Image"
+            fill
+            objectFit="cover"
+          />
+        </div>
+      )}
       {/* Title and Description Section */}
       <div className="text-center">
         <h1 className="text-2xl font-bold text-primary">
@@ -80,12 +90,12 @@ export default function DesignPage() {
           onClick={handleBooking}
           className="py-2 px-4 bg-primary hover:bg-secondary text-white rounded-lg text-center cursor-pointer"
         >
-          {translations.booking.bookBtn}
+          Book Now
         </div>
       </div>
 
       {/* Image Grid */}
-      <div className="grid grid-cols-1 mb-3 mx-auto max-sm:w-full lg:w-[75%] max-md:w-[85%] max-lg:w-[80%] min-[350px]:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full px-10 sm:px-16 md:px-16">
+      <div className="grid grid-cols-1 mb-3 mx-auto max-sm:w-full lg:w-[75%] max-md:w-[85%] max-lg:w-[80%]  min-[350px]:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full sm:px-4">
         {designData?.singleGallery?.images.map(
           (image: string, index: number) => (
             <div

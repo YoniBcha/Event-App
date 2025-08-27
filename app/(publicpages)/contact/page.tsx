@@ -86,10 +86,19 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="max-w-4xl md:mx-auto p-6">
-      <div className="self-center h-[14rem] md:h-[24rem] w-full mb-5 relative">
+    <div className="max-w-4xl md:mx-auto [@media(min-width:644px)]:p-6">
+      {/* <div className="self-center h-[14rem] md:h-[24rem] w-full mb-5 relative">
         <Image
-          src={"/images/pic4.jpg"}
+          src={"/Frame 24.png"}
+          alt="About Image"
+          layout="fill"
+          objectFit="cover"
+        />
+      </div> */}
+
+      <div className="self-center h-[10rem] md:h-[20rem] w-full mb-5  relative">
+        <Image
+          src={"/Frame 24.png"}
           alt="About Image"
           layout="fill"
           objectFit="cover"
