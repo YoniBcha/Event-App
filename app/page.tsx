@@ -202,8 +202,8 @@ const Home: React.FC = () => {
                     <Image
                       src={item.image[0]}
                       alt={item.title || "package image"}
-                      width={80}
-                      height={80}
+                      width={1000}
+                      height={1000}
                       className="rounded-2xl object-cover w-36 h-36"
                     />
                   ) : (
