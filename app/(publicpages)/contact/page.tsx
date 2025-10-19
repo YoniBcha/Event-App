@@ -132,7 +132,9 @@ const ContactUs = () => {
                   stroke="#c9a08a"
                 />
               </svg>
-              <p className="text-primary font-medium">+966 50 065 9305</p>
+              <a href="tel:+00966541316088" className="text-primary font-medium">
+                +00966541316088
+              </a>
             </div>
           </div>
           <div className="mb-8">
@@ -152,9 +154,14 @@ const ContactUs = () => {
                     objectFit="cover"
                   />
                 </div>
-                <p className="text-primary underline text-lg">
+                <a
+                  href="https://wa.me/00966541316088"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline text-lg"
+                >
                   {translations.contact.startChat}
-                </p>
+                </a>
               </div>
               <div className="flex items-center gap-2">
                 <svg
@@ -187,9 +194,13 @@ const ContactUs = () => {
                     strokeWidth="4"
                   />
                 </svg>
-                <p className="text-primary underline text-lg">
-                  {translations.contact.startEmail}{" "}
-                </p>
+            <a
+      href="mailto:info@fenzoevents.com.sa"
+      className="text-primary underline text-lg"
+    >
+      {translations.contact.startEmail}
+    </a>
+
               </div>
               <div className="flex items-center gap-2">
                 <svg
@@ -207,9 +218,14 @@ const ContactUs = () => {
                     stroke="#c9a08a"
                   />
                 </svg>
-                <p className="text-primary underline text-lg">
-                  {translations.contact.startInsta}{" "}
-                </p>
+                <a
+                  href="https://www.instagram.com/fenzo_events/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline text-lg"
+                >
+                  {translations.contact.startInsta}
+                </a>
               </div>
             </div>
           </div>
