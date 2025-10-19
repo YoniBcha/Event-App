@@ -155,7 +155,7 @@ const ContactUs = () => {
                   />
                 </div>
                 <a
-                  href="https://wa.me/00966541316088"
+                  href="https://wa.me/966541316088"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary underline text-lg"
