@@ -191,6 +191,23 @@ const Home: React.FC = () => {
     setSelectedImage(allPackageImages[newIndex]);
   };
 
+  // Search Icon Component
+  const SearchIcon = () => (
+    <svg
+      className="w-8 h-8 text-white"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3-3H7"
+      />
+    </svg>
+  );
+
   return (
     <motion.div
       className="w-full flex flex-col"
@@ -438,12 +455,9 @@ const Home: React.FC = () => {
               {/* Scrollable Content Area */}
               <div className="flex-1 overflow-y-auto">
                 <div className="p-6">
-                  {/* Package Images with improved gallery */}
+                  {/* Package Images with improved gallery and search icon */}
                   {packageData?.image?.length > 0 && (
                     <div className="mb-8">
-                      {/* <h3 className="text-lg font-semibold text-primary mb-4">
-                        {translations.gallery || "Package Images"}
-                      </h3> */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {packageData.image.map((img: string, index: number) => (
                           <div
@@ -462,21 +476,12 @@ const Home: React.FC = () => {
                               fill
                               className="object-cover transition-transform duration-300 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300" />
+                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300" />
+                            {/* Search Icon Overlay */}
                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              <svg
-                                className="w-12 h-12 text-white opacity-70"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3-3H7"
-                                />
-                              </svg>
+                              <div className="bg-black bg-opacity-50 rounded-full p-3 transform group-hover:scale-110 transition-transform duration-300">
+                                <SearchIcon />
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -509,7 +514,7 @@ const Home: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Event Types and Designs with improved layout */}
+                  {/* Event Types and Designs with improved layout and search icons */}
                   {packageData?.TypeAndDesign?.length > 0 && (
                     <div className="mb-8">
                       <h3 className="text-lg font-semibold text-primary mb-4 flex items-center">
@@ -547,7 +552,13 @@ const Home: React.FC = () => {
                                       fill
                                       className="object-cover group-hover:scale-110 transition-transform duration-300"
                                     />
-                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300" />
+                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300" />
+                                    {/* Search Icon Overlay */}
+                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                      <div className="bg-black bg-opacity-60 rounded-full p-1 transform group-hover:scale-110 transition-transform duration-300">
+                                        <SearchIcon />
+                                      </div>
+                                    </div>
                                   </div>
                                 )}
                                 <h4 className="font-semibold text-primary text-lg">
@@ -561,7 +572,7 @@ const Home: React.FC = () => {
                                 {typeDesign.eventDesign.map((design: any) => (
                                   <div
                                     key={design._id}
-                                    className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200 cursor-pointer group"
+                                    className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200 cursor-pointer group relative"
                                     onClick={() =>
                                       design.image &&
                                       handleImageClick(
@@ -578,6 +589,25 @@ const Home: React.FC = () => {
                                           fill
                                           className="object-cover"
                                         />
+                                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300" />
+                                        {/* Search Icon Overlay */}
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                          <div className="bg-black bg-opacity-60 rounded-full p-1 transform group-hover:scale-110 transition-transform duration-300">
+                                            <svg
+                                              className="w-3 h-3 text-white"
+                                              fill="none"
+                                              stroke="currentColor"
+                                              viewBox="0 0 24 24"
+                                            >
+                                              <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3-3H7"
+                                              />
+                                            </svg>
+                                          </div>
+                                        </div>
                                       </div>
                                     )}
                                     <span className="text-sm font-medium text-gray-700 flex-1">
@@ -585,21 +615,6 @@ const Home: React.FC = () => {
                                         ? design.eventDesign
                                         : design.translatedEventDesign}
                                     </span>
-                                    {design.image && (
-                                      <svg
-                                        className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                        />
-                                      </svg>
-                                    )}
                                   </div>
                                 ))}
                               </div>
@@ -654,7 +669,7 @@ const Home: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Additions with enhanced cards */}
+                  {/* Additions with enhanced cards and search icons */}
                   {packageData?.additions?.length > 0 && (
                     <div className="mb-8">
                       <h3 className="text-lg font-semibold text-primary mb-4 flex items-center">
@@ -696,7 +711,25 @@ const Home: React.FC = () => {
                                       fill
                                       className="object-contain group-hover:scale-110 transition-transform duration-300"
                                     />
-                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 rounded-lg" />
+                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 rounded-lg" />
+                                    {/* Search Icon Overlay */}
+                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                      <div className="bg-black bg-opacity-60 rounded-full p-1 transform group-hover:scale-110 transition-transform duration-300">
+                                        <svg
+                                          className="w-4 h-4 text-white"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3-3H7"
+                                          />
+                                        </svg>
+                                      </div>
+                                    </div>
                                   </div>
                                 )}
                                 <div className="flex-1 min-w-0">
@@ -745,21 +778,12 @@ const Home: React.FC = () => {
                                         fill
                                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                                       />
-                                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300" />
+                                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300" />
+                                      {/* Search Icon Overlay */}
                                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <svg
-                                          className="w-6 h-6 text-white opacity-70"
-                                          fill="none"
-                                          stroke="currentColor"
-                                          viewBox="0 0 24 24"
-                                        >
-                                          <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                          />
-                                        </svg>
+                                        <div className="bg-black bg-opacity-60 rounded-full p-2 transform group-hover:scale-110 transition-transform duration-300">
+                                          <SearchIcon />
+                                        </div>
                                       </div>
                                     </div>
                                   )}
@@ -818,54 +842,6 @@ const Home: React.FC = () => {
                 />
               </div>
 
-              {/* Navigation Arrows */}
-              {/* {allPackageImages.length > 1 && (
-                <>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigateImage("prev");
-                    }}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition-all duration-200 z-10"
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigateImage("next");
-                    }}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition-all duration-200 z-10"
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-                </>
-              )} */}
-
               {/* Close Button */}
               <button
                 onClick={closeImageViewer}
@@ -886,51 +862,10 @@ const Home: React.FC = () => {
                 </svg>
               </button>
 
-              {/* Image Counter */}
-              {/* {allPackageImages.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
-                  {currentImageIndex + 1} / {allPackageImages.length}
-                </div>
-              )} */}
-
               {/* Image Alt Text */}
               <div className="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm max-w-md truncate">
                 {selectedImage.alt}
               </div>
-
-              {/* Thumbnail Strip */}
-              {/* {allPackageImages.length > 1 && (
-                <div className="absolute bottom-4 left-4 right-4 flex justify-center space-x-2 overflow-x-auto py-2">
-                  {allPackageImages.map((img, index) => (
-                    <button
-                      key={index}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedImage(img);
-                      }}
-                      className={`flex-shrink-0 w-16 h-16 relative rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                        img.url === selectedImage.url
-                          ? "border-white border-opacity-80 scale-110"
-                          : "border-transparent border-opacity-0 hover:border-white hover:border-opacity-50"
-                      }`}
-                    >
-                      <Image
-                        src={img.url}
-                        alt={`Thumbnail ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                      <div
-                        className={`absolute inset-0 ${
-                          img.url === selectedImage.url
-                            ? "bg-white bg-opacity-20"
-                            : "bg-black bg-opacity-30"
-                        } transition-all duration-200`}
-                      />
-                    </button>
-                  ))}
-                </div>
-              )} */}
             </motion.div>
           </motion.div>
         )}
