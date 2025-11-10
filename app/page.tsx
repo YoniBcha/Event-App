@@ -358,7 +358,7 @@ const Home: React.FC = () => {
 
           {/* Grid layout for packages */}
           <div>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-4">
               {data?.data?.map((item: any, idx: number) => (
                 <motion.div
                   key={item.id ?? idx}
@@ -374,7 +374,7 @@ const Home: React.FC = () => {
                       alt={item.title || "package image"}
                       width={1000}
                       height={1000}
-                      className="rounded-2xl object-cover w-36 h-36"
+                      className="rounded-2xl object-cover w-[6rem] h-[6rem] md:w-36 md:h-36"
                     />
                   ) : (
                     <div className="w-36 h-36 flex items-center justify-center bg-gray-100 rounded-lg text-gray-400 text-xs">
