@@ -156,7 +156,7 @@
     "verfySubtitle": "Enter your details to receive a verification code.",
     "sendOtp": "Send OTP",
     "verifyAccount": "Verify Your Account!",
-    "verifyAccountSubtitel": "Enter the 4-digit verification code sent to your phone.",
+    "verifyAccountSubtitel": "Enter the code 0000 to verify your phone number.",
     "forgotSubtitle": "Please enter your email to reset the password",
     "resetPassword": "Reset Password",
     "LoginSuccess": "Login Successful",
